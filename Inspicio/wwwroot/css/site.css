@@ -14,9 +14,12 @@
 input,
 select,
 textarea {
-    max-width: 280px;
+  max-width:280px;
+  width:100%;
 }
-
+.create-img input:not(.btn), .create-img select, .create-img textarea{
+    max-width:none !important;
+}
 /* Carousel */
 .carousel-caption p {
     font-size: 20px;

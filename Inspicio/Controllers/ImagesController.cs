@@ -7,16 +7,34 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Inspicio.Models;
 using Inspicio.Models.ImageViewModels;
+using Microsoft.AspNetCore.Http;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
 
 namespace Inspicio.Controllers
 {
     public class ImagesController : Controller
     {
         private readonly InspicioContext _context;
-
-        public ImagesController(InspicioContext context)
+        private readonly IHostingEnvironment _environment;
+        public ImagesController(InspicioContext context, IHostingEnvironment env)
         {
-            _context = context;    
+            _context = context;
+            _environment = env;
+        }
+        // Method below saves the uploaded image to 'wwwroot/uploads'
+        [HttpPost]
+        public async Task<IActionResult> Upload(IFormFile file)
+        {
+            var uploads = Path.Combine(_environment.WebRootPath, "uploads");
+            if (file.Length > 0)
+            {
+                using (var fileStream = new FileStream(Path.Combine(uploads, file.FileName), FileMode.Create))
+                {
+                    await file.CopyToAsync(fileStream);
+                }
+            }
+            return RedirectToAction("Index");
         }
 
         // GET: Images

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Inspicio.Controllers
 {
+    
     public class HomeController : Controller
     {
         public IActionResult Index()
