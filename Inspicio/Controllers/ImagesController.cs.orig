@@ -7,9 +7,17 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Inspicio.Data;
 using Inspicio.Models.ImageViewModels;
+<<<<<<< HEAD
+using Microsoft.AspNetCore.Http;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Authorization;
+=======
+>>>>>>> master
 
 namespace Inspicio.Controllers
 {
+    [Authorize]
     public class ImagesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -45,6 +53,10 @@ namespace Inspicio.Controllers
 
         // GET: Images/Create
         public IActionResult Create()
+        {
+            return View();
+        }
+        public IActionResult ViewImage()
         {
             return View();
         }
