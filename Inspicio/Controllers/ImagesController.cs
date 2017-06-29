@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Inspicio.Models;
+using Inspicio.Data;
 using Inspicio.Models.ImageViewModels;
 using Microsoft.AspNetCore.Http;
 using System.IO;
@@ -17,9 +18,9 @@ namespace Inspicio.Controllers
     [Authorize]
     public class ImagesController : Controller
     {
-        private readonly InspicioContext _context;
-        private readonly IHostingEnvironment _environment;
-        public ImagesController(InspicioContext context, IHostingEnvironment env)
+        private readonly ApplicationDbContext _context;
+
+        public ImagesController(ApplicationDbContext context)
         {
             _context = context;
             _environment = env;
@@ -37,6 +38,7 @@ namespace Inspicio.Controllers
                 }
             }
             return RedirectToAction("Index");
+            _context = context;    
         }
 
         // GET: Images
@@ -78,7 +80,7 @@ namespace Inspicio.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,UpRating,DownRating,ImageData,Description")] Image image)
+        public async Task<IActionResult> Create([Bind("ID,ImageTitle,ImageData,ImageDescription,ImageUpRating,ImageDownRating")] Image image)
         {
             if (ModelState.IsValid)
             {
@@ -110,7 +112,7 @@ namespace Inspicio.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,UpRating,DownRating,ImageData,Description")] Image image)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,ImageTitle,ImageData,ImageDescription,ImageUpRating,ImageDownRating")] Image image)
         {
             if (id != image.ID)
             {
