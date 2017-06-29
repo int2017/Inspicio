@@ -5,36 +5,18 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Inspicio.Models;
+using Inspicio.Data;
 using Inspicio.Models.ImageViewModels;
-using Microsoft.AspNetCore.Http;
-using System.IO;
-using Microsoft.AspNetCore.Hosting;
 
 namespace Inspicio.Controllers
 {
     public class ImagesController : Controller
     {
-        private readonly InspicioContext _context;
-        private readonly IHostingEnvironment _environment;
-        public ImagesController(InspicioContext context, IHostingEnvironment env)
+        private readonly ApplicationDbContext _context;
+
+        public ImagesController(ApplicationDbContext context)
         {
-            _context = context;
-            _environment = env;
-        }
-        // Method below saves the uploaded image to 'wwwroot/uploads'
-        [HttpPost]
-        public async Task<IActionResult> Upload(IFormFile file)
-        {
-            var uploads = Path.Combine(_environment.WebRootPath, "uploads");
-            if (file.Length > 0)
-            {
-                using (var fileStream = new FileStream(Path.Combine(uploads, file.FileName), FileMode.Create))
-                {
-                    await file.CopyToAsync(fileStream);
-                }
-            }
-            return RedirectToAction("Index");
+            _context = context;    
         }
 
         // GET: Images
@@ -72,7 +54,7 @@ namespace Inspicio.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,UpRating,DownRating,ImageData,Description")] Image image)
+        public async Task<IActionResult> Create([Bind("ID,ImageTitle,ImageData,ImageDescription,ImageUpRating,ImageDownRating")] Image image)
         {
             if (ModelState.IsValid)
             {
@@ -104,7 +86,7 @@ namespace Inspicio.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,UpRating,DownRating,ImageData,Description")] Image image)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,ImageTitle,ImageData,ImageDescription,ImageUpRating,ImageDownRating")] Image image)
         {
             if (id != image.ID)
             {

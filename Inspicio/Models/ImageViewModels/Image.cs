@@ -8,9 +8,10 @@ namespace Inspicio.Models.ImageViewModels
     public class Image
     {
         public int ID { get; set; }
-        public int UpRating { get; set; }
-        public int DownRating { get; set; }
+        public string ImageTitle { get; set; }
         public string ImageData { get; set; }
-        public string Description { get; set; }
+        public string ImageDescription { get; set; }
+        public int ImageUpRating { get; set; }
+        public int ImageDownRating { get; set; }
     }
 }

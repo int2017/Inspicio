@@ -13,17 +13,10 @@
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <input type="hidden" asp-for="ID" />
         <div class="form-group">
-            <label asp-for="UpRating" class="col-md-2 control-label"></label>
+            <label asp-for="ImageTitle" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="UpRating" class="form-control" />
-                <span asp-validation-for="UpRating" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="DownRating" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="DownRating" class="form-control" />
-                <span asp-validation-for="DownRating" class="text-danger"></span>
+                <input asp-for="ImageTitle" class="form-control" />
+                <span asp-validation-for="ImageTitle" class="text-danger"></span>
             </div>
         </div>
         <div class="form-group">
@@ -34,10 +27,24 @@
             </div>
         </div>
         <div class="form-group">
-            <label asp-for="Description" class="col-md-2 control-label"></label>
+            <label asp-for="ImageDescription" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
+                <input asp-for="ImageDescription" class="form-control" />
+                <span asp-validation-for="ImageDescription" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="ImageUpRating" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="ImageUpRating" class="form-control" />
+                <span asp-validation-for="ImageUpRating" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="ImageDownRating" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="ImageDownRating" class="form-control" />
+                <span asp-validation-for="ImageDownRating" class="text-danger"></span>
             </div>
         </div>
         <div class="form-group">
