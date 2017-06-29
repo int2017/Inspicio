@@ -14,11 +14,11 @@
 input,
 select,
 textarea {
-  max-width:280px;
-  width:100%;
+ /* max-width:280px;
+  width:100%;*/
 }
 .create-img input:not(.btn), .create-img select, .create-img textarea{
-    max-width:none !important;
+    max-width:none ;
 }
 /* Carousel */
 .carousel-caption p {
@@ -50,4 +50,49 @@ textarea {
     .carousel-caption {
         display: none;
     }
+}
+.dash-project > h3 {
+    display: inline;
+}
+
+.notification-img{
+    font-size:24px;
+    margin:15px;
+    align-self:center;
+}
+.dashboard {
+    background-color: rgba(204, 204, 204, 0.53);
+    border-radius: 2px;
+    padding:0;
+}
+.row-eq-height {
+    align-items:center;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+}
+.dash-filter select{
+    width:50%;
+    display:inline-block;
+    
+}
+.dashboard > .row-eq-height {
+    border-bottom: 1px solid #b5b5b5;
+}
+.checkbox-inline{
+    margin:0 15px;
+}
+
+.closed {
+    background-color: rgba(144, 75, 75, 0.47);
+}
+.completed {
+    background-color: rgba(155, 199, 169, 0.47);
+}
+.your {
+    background-color: rgba(255, 255, 255, 0.47);
+}
+.waiting {
+    background-color: rgba(232, 215, 9, 0.17);
 }

@@ -10,9 +10,11 @@ using Inspicio.Models.ImageViewModels;
 using Microsoft.AspNetCore.Http;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Inspicio.Controllers
 {
+    [Authorize]
     public class ImagesController : Controller
     {
         private readonly InspicioContext _context;

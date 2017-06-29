@@ -11,6 +11,10 @@
   <PropertyGroup>
     <UserSecretsId>aspnet-Inspicio-7cf4a1f2-4f99-4914-8940-605b905d14d4</UserSecretsId>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="wwwroot\js\filter.js" />
+  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="dropzone" Version="4.2.0" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.0.0" />
