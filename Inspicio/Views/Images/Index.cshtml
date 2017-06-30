@@ -13,7 +13,7 @@
     <thead>
         <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.Content)
+                   @Html.DisplayNameFor(model => model.Content)
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.Rating)
@@ -31,7 +31,7 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Content)
+                <img style="max-height: 100px; max-width: 100px;" src="@item.Content" />
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Rating)

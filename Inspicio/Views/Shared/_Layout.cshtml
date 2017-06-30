@@ -19,6 +19,11 @@
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
     </environment>
     @Html.Raw(JavaScriptSnippet.FullScript)
+
+
+    <script type="text/javascript" src="~/js/dropzone.js"></script>
+    <script type="text/javascript" src="~/js/filter.js"></script>
+
 </head>
 <body>
     <nav class="navbar navbar-inverse navbar-fixed-top">
@@ -73,29 +78,6 @@
         <script src="~/js/site.min.js" asp-append-version="true"></script>
     </environment>
 
-    @RenderSection("Scripts", required: false)
-    <script type="text/javascript" src="~/js/dropzone.js"></script>
-   
-    <script type="text/javascript" src="~/js/filter.js"></script>
-    <script>
-       
-        Dropzone.autoDiscover = false;
-        var myDropzone = new Dropzone(".dropzone", {
-            maxFiles: 1,
-            thumbnailWidth: null,
-            thumbnailHeight: null,
-            init: function () {
-                this.on("complete", function (file) {
-                    
-                    
-                    dropzoneBackground();
-                });
-            },
-            url: "Upload"
-
-        });
-        myDropzone.on("maxfilesexceeded", function (file) { this.removeFile(file); });
-    </script>
-    
+    @RenderSection("Scripts", required: false)    
 </body>
 </html>
