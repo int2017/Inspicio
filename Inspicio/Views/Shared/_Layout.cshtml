@@ -75,14 +75,19 @@
 
     @RenderSection("Scripts", required: false)
     <script type="text/javascript" src="~/js/dropzone.js"></script>
-    <script type="text/javascript" src="~/js/dropzoneImageStretch.js"></script>
+   
+    <script type="text/javascript" src="~/js/filter.js"></script>
     <script>
        
         Dropzone.autoDiscover = false;
         var myDropzone = new Dropzone(".dropzone", {
             maxFiles: 1,
+            thumbnailWidth: null,
+            thumbnailHeight: null,
             init: function () {
                 this.on("complete", function (file) {
+                    
+                    
                     dropzoneBackground();
                 });
             },
