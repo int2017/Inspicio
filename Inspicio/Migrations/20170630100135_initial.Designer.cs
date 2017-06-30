@@ -5,10 +5,10 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Inspicio.Data;
 
-namespace Inspicio.Data.Migrations
+namespace Inspicio.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20170629152144_initial")]
+    [Migration("20170630100135_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -72,19 +72,17 @@ namespace Inspicio.Data.Migrations
                     b.Property<int>("CommentID")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("Id");
+
                     b.Property<int>("ImageID");
 
                     b.Property<string>("Message");
 
-                    b.Property<int>("UserId");
-
-                    b.Property<string>("UserId1");
-
                     b.HasKey("CommentID");
 
-                    b.HasIndex("ImageID");
+                    b.HasIndex("Id");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("ImageID");
 
                     b.ToTable("Comment");
                 });
@@ -216,14 +214,14 @@ namespace Inspicio.Data.Migrations
 
             modelBuilder.Entity("Inspicio.Models.Comment", b =>
                 {
+                    b.HasOne("Inspicio.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("Id");
+
                     b.HasOne("Inspicio.Models.Image", "Image")
-                        .WithMany("Comments")
+                        .WithMany()
                         .HasForeignKey("ImageID")
                         .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("Inspicio.Models.ApplicationUser", "User")
-                        .WithMany("Comments")
-                        .HasForeignKey("UserId1");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRoleClaim<string>", b =>

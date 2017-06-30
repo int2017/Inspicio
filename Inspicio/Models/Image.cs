@@ -13,6 +13,5 @@ namespace Inspicio.Models
         public string Description { get; set; }
         public string Title { get; set; }
 
-        public ICollection<Comment> Comments { get; set; }
     }
 }
