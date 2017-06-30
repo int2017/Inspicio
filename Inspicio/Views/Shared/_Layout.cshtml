@@ -20,9 +20,8 @@
     </environment>
     @Html.Raw(JavaScriptSnippet.FullScript)
 
-
     <script type="text/javascript" src="~/js/dropzone.js"></script>
-    <script type="text/javascript" src="~/js/filter.js"></script>
+
 
 </head>
 <body>
@@ -79,5 +78,7 @@
     </environment>
 
     @RenderSection("Scripts", required: false)    
+   
+    <script type="text/javascript" src="~/js/filter.js"></script>
 </body>
 </html>
