@@ -9,6 +9,8 @@
     <environment names="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
         <link rel="stylesheet" href="~/css/site.css" />
+        
+        <link rel="stylesheet" href="~/css/dropzone.css" />
     </environment>
     <environment names="Staging,Production">
         <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/css/bootstrap.min.css"
@@ -72,5 +74,23 @@
     </environment>
 
     @RenderSection("Scripts", required: false)
+    <script type="text/javascript" src="~/js/dropzone.js"></script>
+    <script type="text/javascript" src="~/js/dropzoneImageStretch.js"></script>
+    <script>
+       
+        Dropzone.autoDiscover = false;
+        var myDropzone = new Dropzone(".dropzone", {
+            maxFiles: 1,
+            init: function () {
+                this.on("complete", function (file) {
+                    dropzoneBackground();
+                });
+            },
+            url: "Upload"
+
+        });
+        myDropzone.on("maxfilesexceeded", function (file) { this.removeFile(file); });
+    </script>
+    
 </body>
 </html>

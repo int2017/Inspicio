@@ -7,15 +7,33 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Inspicio.Data;
 using Inspicio.Models;
+using System.IO;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Hosting;
 
 namespace Inspicio.Controllers
 {
     public class ImagesController : Controller
     {
+        IHostingEnvironment _environment;
+        [HttpPost]
+        public async Task<IActionResult> Upload(IFormFile file)
+        {
+            var uploads = Path.Combine(_environment.WebRootPath, "uploads");
+            if (file.Length > 0)
+            {
+                using (var fileStream = new FileStream(Path.Combine(uploads, file.FileName), FileMode.Create))
+                {
+                    await file.CopyToAsync(fileStream);
+                }
+            }
+            return RedirectToAction("Index");
+        }
         private readonly ApplicationDbContext _context;
 
-        public ImagesController(ApplicationDbContext context)
+        public ImagesController(ApplicationDbContext context, IHostingEnvironment _environment)
         {
+            this._environment = _environment;
             _context = context;    
         }
 
