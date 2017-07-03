@@ -46,7 +46,7 @@
 
                 <div class="form-group" style="margin-top:15px;">
 
-                    <input type="submit" value="Create" class="btn btn-default" />
+                    <input type="submit" value="Create" class="btn btn-success" />
 
                 </div>
             </div>
@@ -72,19 +72,19 @@
 
     function encodeBase64(file) {
 
-        var location = $(".dz-image > img").attr("src");
-        $(".dropzone").css("background-image", "url(" + location + ")");
-
         if (file) {
-
+            
             var FR = new FileReader();
 
             FR.addEventListener("load", function (e) {
                 document.getElementById("b64").value = e.target.result;
+                $(".dropzone").css("background-image", "url(" + e.target.result + ")");
             });
 
             FR.readAsDataURL(file);
+            
         }
+        
     }
 
     Dropzone.autoDiscover = false;
@@ -96,12 +96,14 @@
         init: function () {
             this.on("addedfile", function (file) {
                 encodeBase64(myDropzone.files[0]);
+                
             });
         },
 
         // Function to be called on the server
         url: "doNothing"
     });
+
     myDropzone.on("maxfilesexceeded", function (file) { this.removeFile(file); });
 </script>
 

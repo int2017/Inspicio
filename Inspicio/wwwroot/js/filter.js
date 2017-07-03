@@ -2,6 +2,7 @@
     
     var n = 0;
     if ($(this).attr("id") === "all") {
+        $("#filters :checkbox").prop("checked", false);
         $(".dash-project").show();
         $("#all:checkbox").prop("checked", true);
     }

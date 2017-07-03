@@ -13,12 +13,7 @@ hr {
 }
 
 /* Set widths on the form inputs since otherwise they're 100% wide */
-input,
-select,
-textarea {
-    /* max-width:280px;
-  width:100%;*/
-}
+
 
 .create-img input:not(.btn), .create-img select, .create-img textarea {
     max-width: none;
@@ -126,9 +121,7 @@ textarea {
     margin:10px 0;
     padding:10px 0;
 }
-.comment {
-    /*border-bottom: 1px solid #c1c1c1;*/
-}
+
 .comment > div:first-child {
     border-right: 1px solid #c1c1c1;
 }
@@ -141,7 +134,7 @@ textarea {
 #submit-comment {
     position: absolute;
     right: 10px;
-    top: 0px;
+    top: 0;
     height: 100%;
     display: flex;
     width: 50px;
