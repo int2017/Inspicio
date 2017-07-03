@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace Inspicio.Migrations
 {
-    public partial class initial : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -42,6 +42,7 @@ namespace Inspicio.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Content = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true),
+                    Id = table.Column<int>(nullable: false),
                     Rating = table.Column<int>(nullable: false),
                     Title = table.Column<string>(nullable: true)
                 },
@@ -125,9 +126,12 @@ namespace Inspicio.Migrations
                 {
                     CommentID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    ChildId = table.Column<int>(nullable: false),
                     Id = table.Column<string>(nullable: true),
                     ImageID = table.Column<int>(nullable: false),
-                    Message = table.Column<string>(nullable: true)
+                    Message = table.Column<string>(nullable: true),
+                    ParentId = table.Column<int>(nullable: false),
+                    Timestamp = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
