@@ -153,3 +153,10 @@ textarea {
 .login-page input{
     max-width: 280px;
 }
+#thumb-container {
+    padding: 15px 0;
+}
+#thumb-container i {
+    font-size: 24px;
+    cursor:pointer;
+}

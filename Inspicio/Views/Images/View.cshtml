@@ -5,10 +5,23 @@
 <h2>@Model.Title</h2>
 
 <div class="container-fluid">
-    <div class="row-eq-height">
+    <div class="row">
         <div class="col-md-4">
             <h4>By : Creator Name</h4>
             <h5>Status: Open</h5>
+            <div id="thumb-container" class="row">
+                <div class="col-md-2">
+                    <!--If the user has already voted either thumbs up or down,change the fill to black-->
+                    <i class="fa fa-thumbs-o-down" aria-hidden="true"></i>
+                    <br/>
+                    5
+                </div>
+                <div class="col-md-2">
+                    <i class="fa fa-thumbs-o-up" aria-hidden="true"></i>
+                    <br />
+                    6
+                </div>
+                </div>
         </div>
         <!--IF the image is created by the user-->
         <div class="col-md-8 text-right">
@@ -25,6 +38,7 @@
     <div class="row">
         <div class="col-md-10 col-md-offset-1" id="image-container">
             <img src="@Url.Content(Model.Content)" title="@Model.Title" alt="@Model.Title" class="img-responsive" />
+               
         </div>
     </div>
    
