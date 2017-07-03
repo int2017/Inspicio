@@ -71,11 +71,17 @@ namespace Inspicio.Migrations
                     b.Property<int>("CommentID")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<int>("ChildId");
+
                     b.Property<string>("Id");
 
                     b.Property<int>("ImageID");
 
                     b.Property<string>("Message");
+
+                    b.Property<int>("ParentId");
+
+                    b.Property<DateTime>("Timestamp");
 
                     b.HasKey("CommentID");
 
@@ -94,6 +100,8 @@ namespace Inspicio.Migrations
                     b.Property<string>("Content");
 
                     b.Property<string>("Description");
+
+                    b.Property<int>("Id");
 
                     b.Property<int>("Rating");
 
