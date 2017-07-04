@@ -54,6 +54,15 @@ namespace Inspicio.Controllers
             return View();
         }
 
+        [HttpGet]
+        public async Task<string> GetCurrentUserId()
+        {
+            ApplicationUser usr = await GetCurrentUserAsync();
+            return usr?.Id;
+        }
+
+        private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
+
         //
         // POST: /Account/Login
         [HttpPost]

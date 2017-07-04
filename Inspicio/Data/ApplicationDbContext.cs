@@ -20,11 +20,15 @@ namespace Inspicio.Data
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Image> Images { get; set; }
 
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<ApplicationUser>().ToTable("User");
-            modelBuilder.Entity<Comment>().ToTable("Comment");
-            modelBuilder.Entity<Image>().ToTable("Image");
+            modelBuilder.Entity<ApplicationUser>().HasMany(a => a.Images);
+            modelBuilder.Entity<ApplicationUser>().HasMany(a => a.Comments);
+            modelBuilder.Entity<Image>().HasMany(i => i.Comments).WithOne(i => i.Images);
+
+            //modelBuilder.Entity<Comment>().ToTable("Comment");
+            //modelBuilder.Entity<Image>().ToTable("Image");
 
             base.OnModelCreating(modelBuilder);
         }
