@@ -10,8 +10,12 @@ using Inspicio.Models;
 using System.IO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Hosting;
+<<<<<<< HEAD
 using Microsoft.AspNetCore.Identity;
+
+=======
 using Microsoft.AspNetCore.Authorization;
+>>>>>>> c1c93fffe6e629b52d7dc010f25fc678dc8c7345
 namespace Inspicio.Controllers
 {
     [Authorize]
