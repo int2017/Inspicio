@@ -6,22 +6,23 @@ using System.Threading.Tasks;
 
 namespace Inspicio.Models
 {
-    
+
     public class Comment
     {
         public int CommentID { get; set; }
-        public int ImageID { get; set; }
+        //public int ImageID { get; set; }
         // public string UserId { get; set; }
         public string Message { get; set; }
         public DateTime Timestamp { get; set; }
-        public int ParentId { get; set; }
-        public int ChildId { get; set; }
-
+        public string ParentId { get; set; }
+        public string ChildId { get; set; }
 
         [ForeignKey("Id")]
-        public ApplicationUser User { get; set; }
+        public ApplicationUser ApplicationUser { get; set; }
+
         [ForeignKey("ImageID")]
-        public Image Image { get; set; }
+        public Image Images { get; set; }
+
     }
 
 }

@@ -71,15 +71,15 @@ namespace Inspicio.Migrations
                     b.Property<int>("CommentID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("ChildId");
+                    b.Property<string>("ChildId");
 
                     b.Property<string>("Id");
 
-                    b.Property<int>("ImageID");
+                    b.Property<int?>("ImageID");
 
                     b.Property<string>("Message");
 
-                    b.Property<int>("ParentId");
+                    b.Property<string>("ParentId");
 
                     b.Property<DateTime>("Timestamp");
 
@@ -89,7 +89,7 @@ namespace Inspicio.Migrations
 
                     b.HasIndex("ImageID");
 
-                    b.ToTable("Comment");
+                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("Inspicio.Models.Image", b =>
@@ -101,7 +101,7 @@ namespace Inspicio.Migrations
 
                     b.Property<string>("Description");
 
-                    b.Property<int>("Id");
+                    b.Property<string>("OwnerId");
 
                     b.Property<int>("Rating");
 
@@ -109,7 +109,9 @@ namespace Inspicio.Migrations
 
                     b.HasKey("ImageID");
 
-                    b.ToTable("Image");
+                    b.HasIndex("OwnerId");
+
+                    b.ToTable("Images");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRole", b =>
@@ -221,14 +223,20 @@ namespace Inspicio.Migrations
 
             modelBuilder.Entity("Inspicio.Models.Comment", b =>
                 {
-                    b.HasOne("Inspicio.Models.ApplicationUser", "User")
-                        .WithMany()
+                    b.HasOne("Inspicio.Models.ApplicationUser", "ApplicationUser")
+                        .WithMany("Comments")
                         .HasForeignKey("Id");
 
-                    b.HasOne("Inspicio.Models.Image", "Image")
-                        .WithMany()
-                        .HasForeignKey("ImageID")
-                        .OnDelete(DeleteBehavior.Cascade);
+                    b.HasOne("Inspicio.Models.Image", "Images")
+                        .WithMany("Comments")
+                        .HasForeignKey("ImageID");
+                });
+
+            modelBuilder.Entity("Inspicio.Models.Image", b =>
+                {
+                    b.HasOne("Inspicio.Models.ApplicationUser", "ApplicationUsers")
+                        .WithMany("Images")
+                        .HasForeignKey("OwnerId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRoleClaim<string>", b =>

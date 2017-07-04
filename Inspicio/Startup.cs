@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using Inspicio.Data;
 using Inspicio.Models;
 using Inspicio.Services;
+using Microsoft.AspNetCore.Identity;
 
 namespace Inspicio
 {

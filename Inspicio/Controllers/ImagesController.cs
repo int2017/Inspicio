@@ -10,20 +10,24 @@ using Inspicio.Models;
 using System.IO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 
 namespace Inspicio.Controllers
 {
     public class ImagesController : Controller
     {
+        private readonly UserManager<ApplicationUser> _userManager;
 
         IHostingEnvironment _environment;
 
         private readonly ApplicationDbContext _context;
 
-        public ImagesController(ApplicationDbContext context, IHostingEnvironment _environment)
+        public ImagesController(ApplicationDbContext context, IHostingEnvironment _environment, UserManager<ApplicationUser> userManager)
         {
             this._environment = _environment;
-            _context = context;    
+            _context = context;
+            _userManager = userManager;
+
         }
 
         // GET: Images
@@ -63,8 +67,10 @@ namespace Inspicio.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ImageID,Content,Rating,Description,Title")] Image image)
         {
+            var a = _userManager.GetUserId(HttpContext.User);
+            image.OwnerId = a;
             if (ModelState.IsValid)
-            {
+            {        
                 _context.Add(image);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
