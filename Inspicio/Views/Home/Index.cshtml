@@ -5,9 +5,9 @@
 <div class="container ">
     <h1 class="text-center"> Dashboard </h1>
     <div class="container-fluid dashboard">
-        <div class="row-eq-height dash-filter">
-            <div class="col-md-2 text-center"> <h4>Filter : </h4></div>
-            <div class="col-md-6 text-center" id="filters">
+        <div class="row dash-filter">
+            <div class="col-xs-4 col-sm-2 col-md-2 text-center"> <h4>Filter : </h4></div>
+            <div class="col-xs-8 col-sm-6 col-md-6 " id="filters">
 
                 <label class="checkbox-inline filter-button" ><input id="all" type="checkbox" checked />All</label>
                 <label class="checkbox-inline filter-button" ><input type="checkbox" value="closed"/>Closed</label>
@@ -15,9 +15,8 @@
                 <label class="checkbox-inline filter-button" ><input type="checkbox" value="your"/>Your</label>
 
             </div>
-            <div class="col-md-4 text-center">
-
-                <label for="sel1">Order by:</label>
+            <div class="col-xs-4 col-sm-2 col-md-2 text-center"> <h4>Order by: </h4></div>
+            <div class="col-xs-8 col-sm-4 col-md-2">
                 <select class="form-control" id="sel1">
                     <option>1</option>
                     <option>2</option>
@@ -31,21 +30,21 @@
         <!-- Insert foreach (var x in projects) cycle below -->
         <!-- Filters/The type of the project will be added to the row below as a class-->
         <div class="row-eq-height dash-project filter your">
-            <div class="col-md-3">
+            <div class="col-xs-3 col-sm-3 col-md-3">
                 <h3 class="text-left">Project title</h3>
                 <p>Date created : 2017/05/02</p>
             </div>
-            <div class="col-md-4 text-right ">
+            <div class="col-xs-4 col-sm-4 col-md-4 text-right ">
                 <!-- Exclamation mark - show if the there are updates in the project -->
                 <span class="glyphicon glyphicon-exclamation-sign notification-img" aria-hidden="true"></span>
                 <!-- Number of members -->
                 <span class="glyphicon glyphicon-user notification-img" aria-hidden="true"></span> : 5
             </div>
-            <div class="col-md-3 text-right">
+            <div class="col-xs-3 col-sm-3 col-md-3 text-right">
                 <p>Number of features : 50</p>
                 <p>Features completed : 50</p>
             </div>
-            <div class="col-md-2 text-right">
+            <div class="col-xs-2 col-sm-2 col-md-2 text-right">
                 <p>By : User name</p>
                 <!-- Add the option to leave the project? ( Leave the group of reviewers for the project ) -->
                 <p>Leave...?</p>
@@ -53,21 +52,21 @@
 
         </div>
         <div class="row-eq-height dash-project filter closed">
-            <div class="col-md-3">
+            <div class="col-xs-3 col-sm-3 col-md-3">
                 <h3 class="text-left">Project title</h3>
                 <p>Date created : 2017/05/02</p>
             </div>
-            <div class="col-md-4 text-right ">
+            <div class="col-xs-4 col-sm-4 col-md-4 text-right ">
                 <!-- Exclamation mark - show if the there are updates in the project -->
                 <span class="glyphicon glyphicon-exclamation-sign notification-img" aria-hidden="true"></span>
                 <!-- Number of members -->
                 <span class="glyphicon glyphicon-user notification-img" aria-hidden="true"></span> : 5
             </div>
-            <div class="col-md-3 text-right">
+            <div class="col-xs-3 col-sm-3 col-md-3 text-right">
                 <p>Number of features : 50</p>
                 <p>Features completed : 50</p>
             </div>
-            <div class="col-md-2 text-right">
+            <div class="col-xs-2 col-sm-2 col-md-2 text-right">
                 <p>By : User name</p>
                 <!-- Add the option to leave the project? ( Leave the group of reviewers for the project ) -->
                 <p>Leave...?</p>

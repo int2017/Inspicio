@@ -42,13 +42,7 @@ hr {
     width: 100%;
 }
 
-/* Hide/rearrange for smaller screens */
-@media screen and (max-width: 767px) {
-    /* Hide captions */
-    .carousel-caption {
-        display: none;
-    }
-}
+
 
 .dash-project > h3 {
     display: inline;
@@ -75,10 +69,20 @@ hr {
 }
 
 .dash-filter select {
-    width: 50%;
+    width: 90%;
     display: inline-block;
 }
-
+.dash-filter {
+    padding: 5px;
+    align-items: center;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+}
+.dash-filter [class^="col-"]{
+    margin:10px 0;
+}
 .dashboard > .row-eq-height {
     border-bottom: 1px solid #b5b5b5;
 }
@@ -133,12 +137,13 @@ hr {
 }
 #submit-comment {
     position: absolute;
-    right: 10px;
+    right: 4px;
     top: 0;
     height: 100%;
     display: flex;
     width: 50px;
     border-right: 0;
+    z-index:500;
 }
 #submit-comment>i{
     margin:auto;
@@ -151,5 +156,79 @@ hr {
 }
 #thumb-container i {
     font-size: 24px;
-    cursor:pointer;
+}
+#image-container{
+    padding:0;
+}
+.image-controls button{
+    margin:5px 0;
+    width:48%;
+    height:40px;
+}
+#imageMap{
+    height:100%;
+    width:100%;
+    position:absolute;
+    background:transparent;
+    max-height:100%;
+    max-width:100%;
+}
+.leaflet-popup-content, .leaflet-popup-content textarea{
+    font-size: 11px;
+}
+.hidden{
+    display:none;
+    z-index:-500 !important;
+}
+.comment-popup-input {
+    padding-top: 5px;
+     border-top: 1px solid #cecece; 
+}
+.comment-popup-input textarea{
+    padding-right:40px;
+}
+    .comment-popup-input button {
+        position: absolute !important;
+        height: 100%;
+        top: 0;
+        right: 0;
+        z-index: 500 !important;
+    }
+.image-controls{
+    padding:10px 0;
+}
+.leaflet-control{
+    display:none !important;
+}
+
+
+#image-description {
+    margin: 20px 0;
+    border-right: 1px solid #d4d4d4;
+}
+#image-description p {
+    font-size: 16px;
+}
+
+@media screen and (max-width: 767px) {
+    /* Hide captions */
+    .carousel-caption {
+        display: none;
+    }
+
+    h3 {
+        font-size: 1.4em;
+    }
+
+    #sel1 {
+        width: 80%;
+    }
+
+    .dash-filter {
+        display: block;
+    }
+
+    #image-description {
+        border-right: none;
+    }
 }

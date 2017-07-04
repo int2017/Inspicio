@@ -5,81 +5,81 @@
 <h2>@Model.Title</h2>
 
 <div class="container-fluid">
-    <div class="row">
-        <div class="col-md-4">
-            <h4>By : Creator Name</h4>
-            <h5>Status: Open</h5>
-            <div id="thumb-container" class="row">
-                <div class="col-md-2">
-                    <!--If the user has already voted either thumbs up or down,change the fill to black-->
-                    <i class="fa fa-thumbs-o-down" aria-hidden="true"></i>
-                    <br/>
-                    5
-                </div>
-                <div class="col-md-2">
-                    <i class="fa fa-thumbs-o-up" aria-hidden="true"></i>
-                    <br />
-                    6
-                </div>
-                </div>
-        </div>
-        <!--IF the image is created by the user-->
-        <div class="col-md-8 text-right">
-           <!--IF project is open-->
-            <button class="btn btn-danger" type="submit" id="changeState">Close</button>
-            <!--ELSE-->
-             <!--<button class="btn btn-success" type="submit" id="changeState">Open</button>-->
-        </div>
-        <!--END-->
-    </div>  
-        <hr />
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <input type="hidden" asp-for="ImageID" />
-    <div class="row">
-        <div class="col-md-10 col-md-offset-1" id="image-container">
-            <img src="@Url.Content(Model.Content)" title="@Model.Title" alt="@Model.Title" class="img-responsive" />
-               
-        </div>
-    </div>
-   
+
     <hr />
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="ImageID" />
     <div class="row">
-        <div id="image-description" class="col-md-10 col-md-offset-1">
-            <h3 class="text-center">Description</h3>
-            <p>@Model.Description </p>
-        </div>
-    </div>
-    <hr/>
-    <div id="comment-section">
-        <!-- foreach cycle for comments goes here -->
-        <div class="row-eq-height comment">
-            <div class="col-md-2">
-                <h3>User</h3>
-                <p>2017/07/03</p>
+        <div class="col-md-8">
+            <div class="row">
+                <div class="col-md-12" id="image-container">
+                    <div id="imageMap"></div>
+                    <img src="@Url.Content(Model.Content)" title="@Model.Title" alt="@Model.Title" class="img-responsive" />
+
+                </div>
+
             </div>
-            <div class="col-md-10">
-               <p>This is my comment hey ho hey ho</p> 
+            <div class="row">
+                <div id="image-description" class="col-md-12">
+                    <h3>Description</h3>
+                    <p>@Model.Description </p>
+                </div>
             </div>
         </div>
-        <hr />
-        <!-- ends here -->
-        <div class="row" id="new-comment">
-            <div class="col-md-10 col-md-offset-1 input-group">
-                <textarea class="form-control" id="comment-textarea" rows="5" placeholder="Comment..."></textarea>
-                <span class="input-group-btn">
-                    <button class="btn btn-default" type="submit" id="submit-comment">
-                        <i class="glyphicon glyphicon-share-alt"></i>
-                    </button>
-                </span>
+
+        <div class="col-md-4">
+            <div class="row image-controls">
+                <div class="col-xs-12 col-sm-12 col-md-12 text-center">
+                    <h4>By : Creator Name</h4> <h5>Status: Open</h5>
+                    <div id="thumb-container">
+
+                        <!--If the user has already voted either thumbs up or down,change the fill to black-->
+                        <div class="btn-group" style="width:99%">
+                            <button type="button" class="btn btn-success"> <i class="fa fa-thumbs-o-down" aria-hidden="true"></i> : 5</button>
+                            <button type="button" class="btn btn-danger"><i class="fa fa-thumbs-o-up" aria-hidden="true"></i> : 5</button>
+                        </div>
+                        <br />
+                        <div class="btn-group" style="width:99%">
+                            <button type="button" class="btn btn-info " onclick="popupState()">Hide markers</button>
+                            <!--IF the image is created by the user--> <!--IF project is open-->
+                            <button class="btn btn-warning " type="submit">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="comment-section">
+                <!-- foreach cycle for comments goes here -->
+                <div class="row-eq-height comment">
+                    <div class="col-xs-4 col-sm-4 col-md-4">
+                        <h3>User</h3>
+                        <p>2017/07/03</p>
+                    </div>
+                    <div class="col-xs-8 col-sm-8 col-md-8">
+                        <p>This is my comment hey ho hey ho</p>
+                    </div>
+                </div>
+                <hr />
+                <!-- ends here -->
+                <div class="row" id="new-comment">
+                    <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1 input-group">
+                        <textarea class="form-control" id="comment-textarea" rows="5" placeholder="Comment..."></textarea>
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="submit" id="submit-comment">
+                                <i class="glyphicon glyphicon-share-alt"></i>
+                            </button>
+                        </span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
     <div>
         <a asp-action="Index">Back to List</a>
     </div>
-    </div>
+</div>
 
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+<script type="text/javascript" src="~/js/pinComments.js"></script>
