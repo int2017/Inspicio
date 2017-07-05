@@ -163,5 +163,17 @@ namespace Inspicio.Controllers
         {
             return _context.Images.Any(e => e.ImageID == id);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Comment([FromBody] Comment comment)
+        {
+            var a = _userManager.GetUserId(HttpContext.User);
+            //comment. = a;
+            
+            comment.Timestamp = System.DateTime.Now;
+            _context.Add(comment);
+            await _context.SaveChangesAsync();
+            return PartialView(comment);
+        }
     }
 }

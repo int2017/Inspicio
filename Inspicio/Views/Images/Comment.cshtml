@@ -1,0 +1,15 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model Comment
+
+<div class="row-eq-height comment">
+    <div class="col-xs-4 col-sm-4 col-md-4">
+        <h3>@Model.ApplicationUser</h3>
+        <p>@Model.Timestamp</p>
+    </div>
+    <div class="col-xs-8 col-sm-8 col-md-8">
+        <p>@Model.Message</p>
+    </div>
+</div>
+<hr />

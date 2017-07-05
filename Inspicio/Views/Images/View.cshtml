@@ -48,17 +48,14 @@
                 </div>
             </div>
             <div id="comment-section">
-                <!-- foreach cycle for comments goes here -->
-                <div class="row-eq-height comment">
-                    <div class="col-xs-4 col-sm-4 col-md-4">
-                        <h3>User</h3>
-                        <p>2017/07/03</p>
-                    </div>
-                    <div class="col-xs-8 col-sm-8 col-md-8">
-                        <p>This is my comment hey ho hey ho</p>
-                    </div>
-                </div>
-                <hr />
+                <!-- omments go here -->
+                @foreach (Comment c in Model.Comments)
+                {
+                    if (c != null && c.Images.ImageID == Model.ImageID)
+                    {
+                        Html.Partial("~/Views,Images/Comment", c);
+                    }
+                }
                 <!-- ends here -->
                 <div class="row" id="new-comment">
                     <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1 input-group">
