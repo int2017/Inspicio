@@ -1,0 +1,87 @@
+@model IEnumerable<Inspicio.Models.Image>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Viewing All</h2>
+<br />
+<p>
+    <a asp-action="Create">Create Review</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+               
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+
+<<<<<<< HEAD
+            <th>
+                @Html.DisplayNameFor(model => model.DownRating)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UpRating)
+            </th>
+=======
+        
+>>>>>>> temp
+   
+            <th>
+
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+
+@foreach (var item in Model) {
+        <tr>
+
+            <td>
+                <a asp-action="View" asp-route-id="@item.ImageID">
+                    <img style="max-height: 100px; max-width: 100px;" src="@item.Content" />
+                </a>
+                
+            </td>
+
+            <td>
+                <a asp-action="View" asp-route-id="@item.ImageID">
+                    @Html.DisplayFor(modelItem => item.Title)
+                </a>
+            </td>
+
+            <td>
+                <a asp-action="View" asp-route-id="@item.ImageID">
+                    @Html.DisplayFor(modelItem => item.Description)
+                 </a>
+            </td>
+
+           
+<<<<<<< HEAD
+            <td>
+                <a asp-action="View" asp-route-id="@item.ImageID">
+                    @Html.DisplayFor(modelItem => item.UpRating)
+                </a>
+            </td>
+            <td>
+                <a asp-action="View" asp-route-id="@item.ImageID">
+                    @Html.DisplayFor(modelItem => item.DownRating)
+                </a>
+            </td>
+=======
+         
+>>>>>>> temp
+          
+        </tr>
+}
+
+    </tbody>
+</table>

@@ -10,12 +10,8 @@ using Inspicio.Models;
 using System.IO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Hosting;
-<<<<<<< HEAD
 using Microsoft.AspNetCore.Identity;
-
-=======
 using Microsoft.AspNetCore.Authorization;
->>>>>>> c1c93fffe6e629b52d7dc010f25fc678dc8c7345
 namespace Inspicio.Controllers
 {
     [Authorize]
@@ -32,13 +28,27 @@ namespace Inspicio.Controllers
             this._environment = _environment;
             _context = context;
             _userManager = userManager;
-
         }
 
         // GET: Images
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Images.ToListAsync());
+
+            // Only images with the user id set as the owner should be passed into the view
+            var UserID = _userManager.GetUserId(HttpContext.User);
+
+            var allImages =  _context.Images;
+            List<Image> images = new List<Image>();
+
+            foreach (Image image in allImages)
+            {
+                if(image.OwnerId == UserID)
+                {
+                    images.Add(image);
+                }
+            }
+
+            return View(images);
         }
 
         // GET: Images/Details/5
@@ -70,17 +80,23 @@ namespace Inspicio.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ImageID,Content,Rating,Description,Title")] Image image)
+        public async Task<IActionResult> Create([Bind("ImageID,Content,DownRating,UpRating,Description,Title")] Image image)
         {
-            var a = _userManager.GetUserId(HttpContext.User);
-            image.OwnerId = a;
             if (ModelState.IsValid)
-            {        
+            {
+                image.OwnerId = _userManager.GetUserId(HttpContext.User);
                 _context.Add(image);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
             return View(image);
+        }
+
+
+        public class DataToBody
+        {
+            public Image Image { get; set; }
+            public List<Comment> Comments { get; set; }
         }
 
         // GET: Images/View/5
@@ -90,22 +106,55 @@ namespace Inspicio.Controllers
             {
                 return NotFound();
             }
-
+            var allComments =  _context.Comments;
+            List<Comment> comments = new List<Comment>();
+            foreach(Comment c in allComments)
+            {
+                if (c.Images != null && c.Images.ImageID == id)
+                {
+                    comments.Add(c);
+                }
+            }
             var image = await _context.Images.SingleOrDefaultAsync(m => m.ImageID == id);
             if (image == null)
             {
                 return NotFound();
             }
-            return View(image);
+<<<<<<< HEAD
+
+            DataToBody DataToBody = new DataToBody();
+            DataToBody.Image = image;
+
+            var allcomments = _context.Comments;
+            List<Comment> comments = new List<Comment>();
+
+            foreach (Comment comment in allcomments)
+            {
+                if (comment.ImageId == id)
+                {
+                    comments.Add(comment);
+                }
+            }
+
+            DataToBody.Comments = comments;
+            return View(DataToBody);
+=======
+            Tuple<Image,List<Comment>> x = new Tuple<Image, List<Comment>>(image,comments);
+            return View(x);
+>>>>>>> temp
         }
+
+
+
 
         // POST: Images/View/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> View(int id, [Bind("ImageID,Content,Rating,Description,Title")] Image image)
+        public async Task<IActionResult> View(int id, [Bind("ImageID,Content,DownRating,UpRating,Description,Title")] Image image)
         {
+
             if (id != image.ImageID)
             {
                 return NotFound();
@@ -167,5 +216,59 @@ namespace Inspicio.Controllers
         {
             return _context.Images.Any(e => e.ImageID == id);
         }
+
+        public class DataFromBody
+        {
+            public String Message { get; set; }
+            public int ImageId { get; set; }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Comment([FromBody] DataFromBody _DataFromBody)
+        {
+<<<<<<< HEAD
+            Comment comment = new Comment();
+
+            var userId = _userManager.GetUserId(HttpContext.User);
+            comment.OwnerId = userId;
+            comment.ImageId = _DataFromBody.ImageId;
+            comment.Message = _DataFromBody.Message;
+=======
+            var a = _userManager.GetUserId(HttpContext.User);
+           // comment.ApplicationUser = a;
+>>>>>>> temp
+            comment.Timestamp = System.DateTime.Now;
+
+            _context.Add(comment);
+            await _context.SaveChangesAsync();
+            return Ok(1);
+        }
+       
+        public class RatingBody
+        {
+            public bool boolean { get; set; }
+            public int ImageID { get; set; }
+        }
+        [HttpPost]
+        public async Task<IActionResult> ChangeRating([FromBody] RatingBody data)
+        {
+            int id = data.ImageID;
+            
+            var image = await _context.Images.SingleOrDefaultAsync(m => m.ImageID == id);
+            if (data.boolean)
+            {
+                image.UpRating++;
+            }
+            else
+            {
+                image.DownRating++;
+            }
+
+            await _context.SaveChangesAsync();
+            return Ok(1);
+        }
+
+        
+
     }
 }

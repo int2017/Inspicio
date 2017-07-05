@@ -1,18 +1,34 @@
+<<<<<<< HEAD
 ﻿@model Inspicio.Controllers.ImagesController.DataToBody
 
 <h2>@Model.Image.Title</h2>
+=======
+﻿@model Tuple<Image, List<Comment>>
+
+
+
+<h2>@Model.Item1.Title</h2>
+>>>>>>> temp
 
 <div class="container-fluid">
 
     <hr />
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<<<<<<< HEAD
     <input id="ImageId"type="hidden" asp-for="@Model.Image.ImageID" />
+=======
+    <input id="imageID" type="hidden" asp-for="Item1.ImageID" />
+>>>>>>> temp
     <div class="row">
         <div class="col-md-8">
             <div class="row">
                 <div class="col-md-12" id="image-container">
                     <div id="imageMap"></div>
+<<<<<<< HEAD
                     <img src="@Url.Content(Model.Image.Content)" title="@Model.Image.Title" alt="@Model.Image.Title" class="img-responsive" />
+=======
+                    <img src="@Url.Content(Model.Item1.Content)" title="@Model.Item1.Title" alt="@Model.Item1.Title" class="img-responsive" />
+>>>>>>> temp
 
                 </div>
 
@@ -20,7 +36,11 @@
             <div class="row">
                 <div id="image-description" class="col-md-12">
                     <h3>Description</h3>
+<<<<<<< HEAD
                     <p>@Model.Image.Description </p>
+=======
+                    <p>@Model.Item1.Description </p>
+>>>>>>> temp
                 </div>
             </div>
         </div>
@@ -33,8 +53,8 @@
 
                         <!--If the user has already voted either thumbs up or down,change the fill to black-->
                         <div  class="btn-group" style="width:99%">
-                            <button type="button" id="thumbs-up" class="btn btn-success thumb"> <i class="fa fa-thumbs-o-up " aria-hidden="true"></i> : <span class="rating">@Model.Image.UpRating</span></button>
-                            <button type="button" id="thumbs-down" class="btn btn-danger thumb"><i class="fa fa-thumbs-o-down " aria-hidden="true"></i> : <span class="rating">@Model.Image.DownRating</span></button>
+                            <button type="button" id="thumbs-up" class="btn btn-success thumb"> <i class="fa fa-thumbs-o-up " aria-hidden="true"></i> : <span class="rating">@Model.Item1.UpRating</span></button>
+                            <button type="button" id="thumbs-down" class="btn btn-danger thumb"><i class="fa fa-thumbs-o-down " aria-hidden="true"></i> : <span class="rating">@Model.Item1.DownRating</span></button>
                         </div>
                         <br />
                         <div class="btn-group" style="width:99%">
@@ -46,6 +66,7 @@
                 </div>
             </div>
             <div id="comment-section">
+<<<<<<< HEAD
                 <!-- comments go here -->
                 @foreach (Comment c in Model.Comments)
                 {
@@ -60,6 +81,10 @@
                     </div>
                     <hr />
                 }
+=======
+               <!-- omments go here -->
+                
+>>>>>>> temp
                 <!-- ends here -->
             </div>
 

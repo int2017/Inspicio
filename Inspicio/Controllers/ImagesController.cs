@@ -106,23 +106,30 @@ namespace Inspicio.Controllers
             {
                 return NotFound();
             }
-            var allComments =  _context.Comments;
-            List<Comment> comments = new List<Comment>();
-            foreach(Comment c in allComments)
-            {
-                if (c.Images != null && c.Images.ImageID == id)
-                {
-                    comments.Add(c);
-                }
-            }
+
             var image = await _context.Images.SingleOrDefaultAsync(m => m.ImageID == id);
             if (image == null)
             {
                 return NotFound();
             }
-            return View(image);
-        }
 
+            DataToBody DataToBody = new DataToBody();
+            DataToBody.Image = image;
+
+            var allcomments = _context.Comments;
+            List<Comment> comments = new List<Comment>();
+
+            foreach (Comment comment in allcomments)
+            {
+                if (comment.ImageId == id)
+                {
+                    comments.Add(comment);
+                }
+            }
+
+            DataToBody.Comments = comments;
+            return View(DataToBody);
+        }
         // POST: Images/View/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -228,7 +235,8 @@ namespace Inspicio.Controllers
             var image = await _context.Images.SingleOrDefaultAsync(m => m.ImageID == id);
             if (data.boolean)
             {
-                image.UpRating++;
+                image.UpRating += 1;
+                Console.Write("");
             }
             else
             {

@@ -14,7 +14,6 @@
     }
     else {
         updateThumbs(false, button);
-        alert("lol");
     }
     $("#" + button + " i").addClass(className);
     
@@ -23,9 +22,10 @@
 function updateThumbs(bool,button) {
     var text = "#" + button + " .rating";
     var image = {
-        "ImageID": $("#imageID").val(),
+        "ImageID": $("#ImageId").val(),
         "boolean" : bool
     };
+    
     $.ajax(
         {
             type: "POST", //HTTP POST Method  

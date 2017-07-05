@@ -44,8 +44,15 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Data\Migrations\" />
+<<<<<<< HEAD
     <Folder Include="Migrations\" />
     <Folder Include="Migrations\" />
+    <Folder Include="Migrations\" />
+    <Folder Include="Migrations\" />
+    <Folder Include="Migrations\" />
+    <Folder Include="Migrations\" />
+=======
+>>>>>>> temp
   </ItemGroup>
 
 </Project>
