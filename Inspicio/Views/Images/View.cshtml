@@ -1,20 +1,20 @@
-﻿@model Inspicio.Models.Image
+﻿@model Tuple<Image, List<Comment>>
 
 
 
-<h2>@Model.Title</h2>
+<h2>@Model.Item1.Title</h2>
 
 <div class="container-fluid">
 
     <hr />
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <input type="hidden" asp-for="ImageID" />
+    <!--<div asp-validation-summary="ModelOnly" class="text-danger"></div>-->
+    <input id="image-id" type="hidden" asp-for="Item1.ImageID" />
     <div class="row">
         <div class="col-md-8">
             <div class="row">
                 <div class="col-md-12" id="image-container">
                     <div id="imageMap"></div>
-                    <img src="@Url.Content(Model.Content)" title="@Model.Title" alt="@Model.Title" class="img-responsive" />
+                    <img src="@Url.Content(Model.Item1.Content)" title="@Model.Item1.Title" alt="@Model.Item1.Title" class="img-responsive" />
 
                 </div>
 
@@ -22,7 +22,7 @@
             <div class="row">
                 <div id="image-description" class="col-md-12">
                     <h3>Description</h3>
-                    <p>@Model.Description </p>
+                    <p>@Model.Item1.Description </p>
                 </div>
             </div>
         </div>
@@ -35,8 +35,8 @@
 
                         <!--If the user has already voted either thumbs up or down,change the fill to black-->
                         <div class="btn-group" style="width:99%">
-                            <button type="button" class="btn btn-success"> <i class="fa fa-thumbs-o-down" aria-hidden="true"></i> : 5</button>
-                            <button type="button" class="btn btn-danger"><i class="fa fa-thumbs-o-up" aria-hidden="true"></i> : 5</button>
+                            <button type="button" id="thumbs-down" class="btn btn-success thumb"> <i class="fa fa-thumbs-o-down " aria-hidden="true"></i> : 5</button>
+                            <button type="button" id="thumbs-up" class="btn btn-danger thumb"><i class="fa fa-thumbs-o-up " aria-hidden="true"></i> : 5</button>
                         </div>
                         <br />
                         <div class="btn-group" style="width:99%">
@@ -48,14 +48,8 @@
                 </div>
             </div>
             <div id="comment-section">
-                <!-- omments go here -->
-                @foreach (Comment c in Model.Comments)
-                {
-                    if (c != null && c.Images.ImageID == Model.ImageID)
-                    {
-                        Html.Partial("~/Views,Images/Comment", c);
-                    }
-                }
+               <!-- omments go here -->
+                
                 <!-- ends here -->
                 <div class="row" id="new-comment">
                     <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1 input-group">

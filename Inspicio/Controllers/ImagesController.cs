@@ -99,13 +99,22 @@ namespace Inspicio.Controllers
             {
                 return NotFound();
             }
-
+            var allComments =  _context.Comments;
+            List<Comment> comments = new List<Comment>();
+            foreach(Comment c in allComments)
+            {
+                if (c.Images != null && c.Images.ImageID == id)
+                {
+                    comments.Add(c);
+                }
+            }
             var image = await _context.Images.SingleOrDefaultAsync(m => m.ImageID == id);
             if (image == null)
             {
                 return NotFound();
             }
-            return View(image);
+            Tuple<Image,List<Comment>> x = new Tuple<Image, List<Comment>>(image,comments);
+            return View(x);
         }
 
         // POST: Images/View/5
@@ -115,6 +124,7 @@ namespace Inspicio.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> View(int id, [Bind("ImageID,Content,Rating,Description,Title")] Image image)
         {
+
             if (id != image.ImageID)
             {
                 return NotFound();
@@ -181,8 +191,7 @@ namespace Inspicio.Controllers
         public async Task<IActionResult> Comment([FromBody] Comment comment)
         {
             var a = _userManager.GetUserId(HttpContext.User);
-            //comment. = a;
-            
+           // comment.ApplicationUser = a;
             comment.Timestamp = System.DateTime.Now;
             _context.Add(comment);
             await _context.SaveChangesAsync();
