@@ -198,8 +198,31 @@ namespace Inspicio.Controllers
             return PartialView(comment);
         }
        
+        public class RatingBody
+        {
+            public bool boolean { get; set; }
+            public int ImageID { get; set; }
+        }
+        [HttpPost]
+        public async Task<IActionResult> ChangeRating([FromBody] RatingBody data)
+        {
+            int id = data.ImageID;
+            
+            var image = await _context.Images.SingleOrDefaultAsync(m => m.ImageID == id);
+            if (data.boolean)
+            {
+                image.UpRating++;
+            }
+            else
+            {
+                image.DownRating++;
+            }
 
-       
-      
+            await _context.SaveChangesAsync();
+            return Ok(1);
+        }
+
+        
+
     }
 }

@@ -5,15 +5,23 @@
     $("#" + button + " i").removeClass(className);
     if (className.toLowerCase().indexOf("-o") > 0) {
         className = className.replace("-o", "");
-        
     }
     else {
-        className = className.slice(0, 12)+ "-o"+ className.slice(12);
+        className = className.slice(0, 12) + "-o" + className.slice(12);
+    }
+    if (button === "thumbs-up") {
+        updateThumbs(true,button)
+    }
+    else {
+        updateThumbs(false, button);
+        alert("lol");
     }
     $("#" + button + " i").addClass(className);
+    
 });
 
-function updateThumbs(bool) {
+function updateThumbs(bool,button) {
+    var text = "#" + button + " .rating";
     var image = {
         "ImageID": $("#imageID").val(),
         "boolean" : bool
@@ -22,11 +30,12 @@ function updateThumbs(bool) {
         {
             type: "POST", //HTTP POST Method  
             url: "../ChangeRating", // Controller/View  
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            data: JSON.stringify(bool,image),
+            contentType: "application/json;",
+            dataType: "text",
+            data: JSON.stringify(image),
             success: function () {
-                alert(result.success);
+                $(text).load(window.location.href + " "+text);
+  
             }
         });
 }

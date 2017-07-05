@@ -7,7 +7,7 @@
 <div class="container-fluid">
 
     <hr />
-    <!--<div asp-validation-summary="ModelOnly" class="text-danger"></div>-->
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <input id="imageID" type="hidden" asp-for="Item1.ImageID" />
     <div class="row">
         <div class="col-md-8">
@@ -34,9 +34,9 @@
                     <div id="thumb-container">
 
                         <!--If the user has already voted either thumbs up or down,change the fill to black-->
-                        <div class="btn-group" style="width:99%">
-                            <button type="button" id="thumbs-down" class="btn btn-success thumb"> <i class="fa fa-thumbs-o-down " aria-hidden="true"></i> : 5</button>
-                            <button type="button" id="thumbs-up" class="btn btn-danger thumb"><i class="fa fa-thumbs-o-up " aria-hidden="true"></i> : 5</button>
+                        <div  class="btn-group" style="width:99%">
+                            <button type="button" id="thumbs-up" class="btn btn-success thumb"> <i class="fa fa-thumbs-o-up " aria-hidden="true"></i> : <span class="rating">@Model.Item1.UpRating</span></button>
+                            <button type="button" id="thumbs-down" class="btn btn-danger thumb"><i class="fa fa-thumbs-o-down " aria-hidden="true"></i> : <span class="rating">@Model.Item1.DownRating</span></button>
                         </div>
                         <br />
                         <div class="btn-group" style="width:99%">
