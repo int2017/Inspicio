@@ -79,6 +79,12 @@ namespace Inspicio
 
             app.UseIdentity();
 
+            //app.Use((ctx, next) =>
+            //{
+                
+            //    return next();
+            //});
+
             // Add external authentication middleware below. To configure them please see https://go.microsoft.com/fwlink/?LinkID=532715
 
             app.UseMvc(routes =>

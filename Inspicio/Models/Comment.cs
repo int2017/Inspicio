@@ -10,17 +10,19 @@ namespace Inspicio.Models
     public class Comment
     {
         public int CommentID { get; set; }
-        //public int ImageID { get; set; }
-        // public string UserId { get; set; }
+
+        public string OwnerId { get; set; }
+        public int ImageId { get; set; }
+
         public string Message { get; set; }
         public DateTime Timestamp { get; set; }
         public string ParentId { get; set; }
         public string ChildId { get; set; }
 
-        [ForeignKey("Id")]
+        [ForeignKey("OwnerId")]
         public ApplicationUser ApplicationUser { get; set; }
 
-        [ForeignKey("ImageID")]
+        [ForeignKey("ImageId")]
         public Image Images { get; set; }
 
     }

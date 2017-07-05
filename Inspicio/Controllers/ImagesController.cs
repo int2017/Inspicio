@@ -80,7 +80,7 @@ namespace Inspicio.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ImageID,Content,Rating,Description,Title")] Image image)
+        public async Task<IActionResult> Create([Bind("ImageID,Content,DownRating,UpRating,Description,Title")] Image image)
         {
             if (ModelState.IsValid)
             {
@@ -90,6 +90,13 @@ namespace Inspicio.Controllers
                 return RedirectToAction("Index");
             }
             return View(image);
+        }
+
+
+        public class DataToBody
+        {
+            public Image Image { get; set; }
+            public List<Comment> Comments { get; set; }
         }
 
         // GET: Images/View/5
@@ -105,15 +112,34 @@ namespace Inspicio.Controllers
             {
                 return NotFound();
             }
-            return View(image);
+
+            DataToBody DataToBody = new DataToBody();
+            DataToBody.Image = image;
+
+            var allcomments = _context.Comments;
+            List<Comment> comments = new List<Comment>();
+
+            foreach (Comment comment in allcomments)
+            {
+                if (comment.ImageId == id)
+                {
+                    comments.Add(comment);
+                }
+            }
+
+            DataToBody.Comments = comments;
+            return View(DataToBody);
         }
+
+
+
 
         // POST: Images/View/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> View(int id, [Bind("ImageID,Content,Rating,Description,Title")] Image image)
+        public async Task<IActionResult> View(int id, [Bind("ImageID,Content,DownRating,UpRating,Description,Title")] Image image)
         {
             if (id != image.ImageID)
             {
@@ -177,13 +203,23 @@ namespace Inspicio.Controllers
             return _context.Images.Any(e => e.ImageID == id);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Comment([FromBody] Comment comment)
+        public class DataFromBody
         {
-            var a = _userManager.GetUserId(HttpContext.User);
-            //comment. = a;
-            
+            public String Message { get; set; }
+            public int ImageId { get; set; }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Comment([FromBody] DataFromBody _DataFromBody)
+        {
+            Comment comment = new Comment();
+
+            var userId = _userManager.GetUserId(HttpContext.User);
+            comment.OwnerId = userId;
+            comment.ImageId = _DataFromBody.ImageId;
+            comment.Message = _DataFromBody.Message;
             comment.Timestamp = System.DateTime.Now;
+
             _context.Add(comment);
             await _context.SaveChangesAsync();
             return PartialView(comment);

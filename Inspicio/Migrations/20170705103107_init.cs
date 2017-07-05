@@ -70,9 +70,10 @@ namespace Inspicio.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Content = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true),
+                    DownRating = table.Column<int>(nullable: false),
                     OwnerId = table.Column<string>(nullable: true),
-                    Rating = table.Column<int>(nullable: false),
-                    Title = table.Column<string>(nullable: true)
+                    Title = table.Column<string>(nullable: true),
+                    UpRating = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -178,9 +179,9 @@ namespace Inspicio.Migrations
                     CommentID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     ChildId = table.Column<string>(nullable: true),
-                    Id = table.Column<string>(nullable: true),
-                    ImageID = table.Column<int>(nullable: true),
+                    ImageId = table.Column<int>(nullable: false),
                     Message = table.Column<string>(nullable: true),
+                    OwnerId = table.Column<string>(nullable: true),
                     ParentId = table.Column<string>(nullable: true),
                     Timestamp = table.Column<DateTime>(nullable: false)
                 },
@@ -188,16 +189,16 @@ namespace Inspicio.Migrations
                 {
                     table.PrimaryKey("PK_Comments", x => x.CommentID);
                     table.ForeignKey(
-                        name: "FK_Comments_AspNetUsers_Id",
-                        column: x => x.Id,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Comments_Images_ImageID",
-                        column: x => x.ImageID,
+                        name: "FK_Comments_Images_ImageId",
+                        column: x => x.ImageId,
                         principalTable: "Images",
                         principalColumn: "ImageID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Comments_AspNetUsers_OwnerId",
+                        column: x => x.OwnerId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -213,14 +214,14 @@ namespace Inspicio.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Comments_Id",
+                name: "IX_Comments_ImageId",
                 table: "Comments",
-                column: "Id");
+                column: "ImageId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Comments_ImageID",
+                name: "IX_Comments_OwnerId",
                 table: "Comments",
-                column: "ImageID");
+                column: "OwnerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Images_OwnerId",

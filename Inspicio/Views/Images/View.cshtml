@@ -1,20 +1,18 @@
-﻿@model Inspicio.Models.Image
+﻿@model Inspicio.Controllers.ImagesController.DataToBody
 
-
-
-<h2>@Model.Title</h2>
+<h2>@Model.Image.Title</h2>
 
 <div class="container-fluid">
 
     <hr />
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <input type="hidden" asp-for="ImageID" />
+    <input id="ImageId"type="hidden" asp-for="@Model.Image.ImageID" />
     <div class="row">
         <div class="col-md-8">
             <div class="row">
                 <div class="col-md-12" id="image-container">
                     <div id="imageMap"></div>
-                    <img src="@Url.Content(Model.Content)" title="@Model.Title" alt="@Model.Title" class="img-responsive" />
+                    <img src="@Url.Content(Model.Image.Content)" title="@Model.Image.Title" alt="@Model.Image.Title" class="img-responsive" />
 
                 </div>
 
@@ -22,7 +20,7 @@
             <div class="row">
                 <div id="image-description" class="col-md-12">
                     <h3>Description</h3>
-                    <p>@Model.Description </p>
+                    <p>@Model.Image.Description </p>
                 </div>
             </div>
         </div>
@@ -48,24 +46,22 @@
                 </div>
             </div>
             <div id="comment-section">
-                <!-- omments go here -->
+                <!-- comments go here -->
                 @foreach (Comment c in Model.Comments)
                 {
-                    if (c != null && c.Images.ImageID == Model.ImageID)
-                    {
-                        Html.Partial("~/Views,Images/Comment", c);
-                    }
+                    <p>@c.Message</p>
                 }
                 <!-- ends here -->
-                <div class="row" id="new-comment">
-                    <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1 input-group">
-                        <textarea class="form-control" id="comment-textarea" rows="5" placeholder="Comment..."></textarea>
-                        <span class="input-group-btn">
-                            <button class="btn btn-default" type="submit" id="submit-comment">
-                                <i class="glyphicon glyphicon-share-alt"></i>
-                            </button>
-                        </span>
-                    </div>
+            </div>
+
+            <div class="row" id="new-comment">
+                <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1 input-group">
+                    <textarea class="form-control" id="comment-textarea" rows="5" placeholder="Comment..."></textarea>
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="submit" id="submit-comment">
+                            <i class="glyphicon glyphicon-share-alt"></i>
+                        </button>
+                    </span>
                 </div>
             </div>
         </div>
