@@ -106,33 +106,22 @@ namespace Inspicio.Controllers
             {
                 return NotFound();
             }
-
+            var allComments =  _context.Comments;
+            List<Comment> comments = new List<Comment>();
+            foreach(Comment c in allComments)
+            {
+                if (c.Images != null && c.Images.ImageID == id)
+                {
+                    comments.Add(c);
+                }
+            }
             var image = await _context.Images.SingleOrDefaultAsync(m => m.ImageID == id);
             if (image == null)
             {
                 return NotFound();
             }
-
-            DataToBody DataToBody = new DataToBody();
-            DataToBody.Image = image;
-
-            var allcomments = _context.Comments;
-            List<Comment> comments = new List<Comment>();
-
-            foreach (Comment comment in allcomments)
-            {
-                if (comment.ImageId == id)
-                {
-                    comments.Add(comment);
-                }
-            }
-
-            DataToBody.Comments = comments;
-            return View(DataToBody);
+            return View(image);
         }
-
-
-
 
         // POST: Images/View/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
@@ -141,6 +130,7 @@ namespace Inspicio.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> View(int id, [Bind("ImageID,Content,DownRating,UpRating,Description,Title")] Image image)
         {
+
             if (id != image.ImageID)
             {
                 return NotFound();
@@ -222,7 +212,34 @@ namespace Inspicio.Controllers
 
             _context.Add(comment);
             await _context.SaveChangesAsync();
+			return Ok(1);
+        }
+       
+        public class RatingBody
+        {
+            public bool boolean { get; set; }
+            public int ImageID { get; set; }
+        }
+        [HttpPost]
+        public async Task<IActionResult> ChangeRating([FromBody] RatingBody data)
+        {
+            int id = data.ImageID;
+            
+            var image = await _context.Images.SingleOrDefaultAsync(m => m.ImageID == id);
+            if (data.boolean)
+            {
+                image.UpRating++;
+            }
+            else
+            {
+                image.DownRating++;
+            }
+
+            await _context.SaveChangesAsync();
             return Ok(1);
         }
+
+        
+
     }
 }
