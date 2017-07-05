@@ -222,7 +222,7 @@ namespace Inspicio.Controllers
 
             _context.Add(comment);
             await _context.SaveChangesAsync();
-            return PartialView(comment);
+            return Ok(1);
         }
     }
 }
