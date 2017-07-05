@@ -11,7 +11,9 @@ namespace Inspicio.Models
         public int ImageID { get; set; }
         public string OwnerId { get; set; }
         public string Content { get; set; }
-        public int Rating { get; set; }
+        // public int Rating { get; set; }
+        public int DownRating { get; set; }
+        public int UpRating { get; set; }
         public string Description { get; set; }
         public string Title { get; set; }
         public ICollection<Comment>Comments { get; set; }

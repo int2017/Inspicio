@@ -15,7 +15,8 @@
 
 function updateThumbs(bool) {
     var image = {
-        "ImageID": "lol"
+        "ImageID": $("#imageID").val(),
+        "boolean" : bool
     };
     $.ajax(
         {
@@ -23,7 +24,7 @@ function updateThumbs(bool) {
             url: "../ChangeRating", // Controller/View  
             contentType: "application/json; charset=utf-8",
             dataType: "json",
-            data: JSON.stringify(bool),
+            data: JSON.stringify(bool,image),
             success: function () {
                 alert(result.success);
             }
