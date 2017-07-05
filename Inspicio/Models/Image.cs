@@ -19,10 +19,5 @@ namespace Inspicio.Models
 
         [ForeignKey("OwnerId")]
         public ApplicationUser ApplicationUsers { get; set; }
-
-
-
-
-
     }
 }

@@ -28,13 +28,27 @@ namespace Inspicio.Controllers
             this._environment = _environment;
             _context = context;
             _userManager = userManager;
-
         }
 
         // GET: Images
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Images.ToListAsync());
+
+            // Only images with the user id set as the owner should be passed into the view
+            var UserID = _userManager.GetUserId(HttpContext.User);
+
+            var allImages =  _context.Images;
+            List<Image> images = new List<Image>();
+
+            foreach (Image image in allImages)
+            {
+                if(image.OwnerId == UserID)
+                {
+                    images.Add(image);
+                }
+            }
+
+            return View(images);
         }
 
         // GET: Images/Details/5
@@ -68,10 +82,9 @@ namespace Inspicio.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ImageID,Content,Rating,Description,Title")] Image image)
         {
-            var a = _userManager.GetUserId(HttpContext.User);
-            image.OwnerId = a;
             if (ModelState.IsValid)
-            {        
+            {
+                image.OwnerId = _userManager.GetUserId(HttpContext.User);
                 _context.Add(image);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
