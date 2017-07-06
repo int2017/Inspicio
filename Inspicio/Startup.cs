@@ -13,6 +13,7 @@ using Inspicio.Data;
 using Inspicio.Models;
 using Inspicio.Services;
 using Microsoft.AspNetCore.Identity;
+using Inspicio.ClaimsPrincipalExtensions;
 
 namespace Inspicio
 {
@@ -56,6 +57,10 @@ namespace Inspicio
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
+
+            // Jack Lloyd [06/07/17]
+            // Registering our new UserClaimsPrincipalFactory in Startup.cs
+            services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, ProfileNameClaimsPrincipalFactory>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

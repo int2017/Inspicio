@@ -9,6 +9,10 @@ namespace Inspicio.Models.AccountViewModels
     public class RegisterViewModel
     {
         [Required]
+        [Display(Name = "Profile Name")]
+        public string ProfileName { get; set; }
+
+        [Required]
         [EmailAddress]
         [Display(Name = "Email")]
         public string Email { get; set; }

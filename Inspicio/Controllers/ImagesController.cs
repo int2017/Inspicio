@@ -93,11 +93,12 @@ namespace Inspicio.Controllers
         }
 
 
-        public class DataToBody
+        public class FullReview
         {
             public Image Image { get; set; }
-            public List<Comment> Comments { get; set; }
+            public List<Tuple<Comment, String>> Comments { get; set; }
         }
+
 
         // GET: Images/View/5
         public async Task<IActionResult> View(int? id)
@@ -107,29 +108,51 @@ namespace Inspicio.Controllers
                 return NotFound();
             }
 
+            // Jack Lloyd 
+            // Fetch the image by the id pass in '/5'
             var image = await _context.Images.SingleOrDefaultAsync(m => m.ImageID == id);
             if (image == null)
             {
                 return NotFound();
             }
 
-            DataToBody DataToBody = new DataToBody();
-            DataToBody.Image = image;
+            // Jack Lloyd 
+            // Create a new FullReview object
+            // This will be passed into the view as the model.
+            FullReview FullReview = new FullReview();
+            FullReview.Image = image;
 
+            // Jack Lloyd 
+            // Fetch all the comments 
+            // This may not be the best way to do this...
             var allcomments = _context.Comments;
-            List<Comment> comments = new List<Comment>();
+
+            // Jack Lloyd 
+            // The FullReview comments holds a tuple holding one comment and one username.
+            List<Tuple<Comment, String>> comments = new List<Tuple<Comment, String>>();
 
             foreach (Comment comment in allcomments)
             {
+                // Jack Lloyd 
+                // We only care about the comments for this image
                 if (comment.ImageId == id)
                 {
-                    comments.Add(comment);
+                    // Jack Lloyd 
+                    // add it and query the user table for the profilename.
+                    comments.Add( new Tuple<Comment, String>(comment, _context.Users.SingleOrDefault(u => u.Id == comment.OwnerId).ProfileName));
                 }
             }
 
-            DataToBody.Comments = comments;
-            return View(DataToBody);
+            // Jack Lloyd 
+            // add the tuple comments to the model to pass in.
+            FullReview.Comments = comments;
+
+            // FullReview model to the View.
+            return View(FullReview);
         }
+
+
+
         // POST: Images/View/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.

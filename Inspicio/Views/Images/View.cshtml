@@ -1,4 +1,4 @@
-﻿@model Inspicio.Controllers.ImagesController.DataToBody
+﻿@model Inspicio.Controllers.ImagesController.FullReview
 
 <h2>@Model.Image.Title</h2>
 
@@ -47,15 +47,16 @@
             </div>
             <div id="comment-section">
                 <!-- comments go here -->
-                @foreach (Comment c in Model.Comments)
+                @foreach ( var c in Model.Comments)
                 {
                     <div class="row-eq-height comment">
                         <div class="col-xs-4 col-sm-4 col-md-4">
-                            <h3>@c.OwnerId</h3>
-                            <p>@c.Timestamp</p>
+                            <h3>@c.Item2</h3>
+                            <p>@c.Item1.Timestamp</p>
                         </div>
+
                         <div class="col-xs-8 col-sm-8 col-md-8">
-                            <p>@c.Message</p>
+                            <p>@c.Item1.Message</p>
                         </div>
                     </div>
                     <hr />
