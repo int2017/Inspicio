@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,10 +13,14 @@ namespace Inspicio.Models
         public int CommentID { get; set; }
 
         public string OwnerId { get; set; }
+
         public int ImageId { get; set; }
 
         public string Message { get; set; }
+
+        [DisplayName("Time Posted")]
         public DateTime Timestamp { get; set; }
+
         public string ParentId { get; set; }
         public string ChildId { get; set; }
 
@@ -24,7 +29,5 @@ namespace Inspicio.Models
 
         [ForeignKey("ImageId")]
         public Image Images { get; set; }
-
     }
-
 }
