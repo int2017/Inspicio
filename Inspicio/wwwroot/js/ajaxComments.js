@@ -1,6 +1,15 @@
 ﻿
+// Allows you to submit text using enter button
+$('#comment-textarea').keypress(function (e) {
+    if (e.which == 13) {
+        $('#submit-comment').click();
+        // prevent duplicate submission
+        return false; 
+    }
+});
+
     //function will be called on button click having id btnsave
-    $("#submit-comment").click(function () {
+$("#submit-comment").click(function () {
 
         var data = {
                 "ImageId": $("#ImageId").val(),
