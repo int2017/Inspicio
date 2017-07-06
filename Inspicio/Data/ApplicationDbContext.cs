@@ -23,6 +23,7 @@ namespace Inspicio.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Review>().HasKey(r => new { r.OwnerId, r.ImageId });
             modelBuilder.Entity<ApplicationUser>().HasMany(a => a.Images);
             modelBuilder.Entity<ApplicationUser>().HasMany(a => a.Comments);
             modelBuilder.Entity<Image>().HasMany(i => i.Comments).WithOne(i => i.Images);

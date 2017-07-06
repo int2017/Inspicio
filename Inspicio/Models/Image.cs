@@ -15,8 +15,9 @@ namespace Inspicio.Models
         public int UpRating { get; set; }
         public string Description { get; set; }
         public string Title { get; set; }
-        public ICollection<Comment>Comments { get; set; }
 
+        public ICollection<Comment>Comments { get; set; }
+        public ICollection<Review> Reviews { get; set; }
 
         [ForeignKey("OwnerId")]
         public ApplicationUser ApplicationUsers { get; set; }

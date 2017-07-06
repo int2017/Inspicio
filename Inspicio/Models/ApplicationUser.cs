@@ -14,6 +14,7 @@ namespace Inspicio.Models
     { 
         public ICollection<Comment> Comments { get; set; }
         public ICollection<Image> Images { get; set; }
+        public ICollection<Review> Reviews { get; set; }
 
     }
 }

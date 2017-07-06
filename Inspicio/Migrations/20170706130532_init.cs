@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace Inspicio.Migrations
 {
-    public partial class migration : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -202,6 +202,32 @@ namespace Inspicio.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Review",
+                columns: table => new
+                {
+                    OwnerId = table.Column<string>(nullable: false),
+                    ImageId = table.Column<int>(nullable: false),
+                    Disliked = table.Column<bool>(nullable: false),
+                    Liked = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Review", x => new { x.OwnerId, x.ImageId });
+                    table.ForeignKey(
+                        name: "FK_Review_Images_ImageId",
+                        column: x => x.ImageId,
+                        principalTable: "Images",
+                        principalColumn: "ImageID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Review_AspNetUsers_OwnerId",
+                        column: x => x.OwnerId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "EmailIndex",
                 table: "AspNetUsers",
@@ -227,6 +253,11 @@ namespace Inspicio.Migrations
                 name: "IX_Images_OwnerId",
                 table: "Images",
                 column: "OwnerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Review_ImageId",
+                table: "Review",
+                column: "ImageId");
 
             migrationBuilder.CreateIndex(
                 name: "RoleNameIndex",
@@ -259,6 +290,9 @@ namespace Inspicio.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Comments");
+
+            migrationBuilder.DropTable(
+                name: "Review");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");

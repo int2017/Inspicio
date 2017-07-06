@@ -116,6 +116,23 @@ namespace Inspicio.Migrations
                     b.ToTable("Images");
                 });
 
+            modelBuilder.Entity("Inspicio.Models.Review", b =>
+                {
+                    b.Property<string>("OwnerId");
+
+                    b.Property<int>("ImageId");
+
+                    b.Property<bool>("Disliked");
+
+                    b.Property<bool>("Liked");
+
+                    b.HasKey("OwnerId", "ImageId");
+
+                    b.HasIndex("ImageId");
+
+                    b.ToTable("Review");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -240,6 +257,19 @@ namespace Inspicio.Migrations
                     b.HasOne("Inspicio.Models.ApplicationUser", "ApplicationUsers")
                         .WithMany("Images")
                         .HasForeignKey("OwnerId");
+                });
+
+            modelBuilder.Entity("Inspicio.Models.Review", b =>
+                {
+                    b.HasOne("Inspicio.Models.Image", "Images")
+                        .WithMany("Reviews")
+                        .HasForeignKey("ImageId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Inspicio.Models.ApplicationUser", "ApplicationUser")
+                        .WithMany("Reviews")
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRoleClaim<string>", b =>
