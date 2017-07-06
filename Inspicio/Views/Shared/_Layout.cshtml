@@ -57,7 +57,6 @@
             <p>&copy; 2017 - Inspicio</p>
         </footer>
     </div>
-
     <environment names="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
@@ -77,13 +76,23 @@
                 integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa">
         </script>
         <script src="~/js/site.min.js" asp-append-version="true"></script>
+
     </environment>
 
     @RenderSection("Scripts", required: false)    
-   
     <script type="text/javascript" src="~/js/filter.js"></script>
-    <script type="text/javascript" src="~/js/pinComments.js"></script>
-    <script type="text/javascript" src="~/js/ajaxComments.js"></script>
     <script type="text/javascript" src="~/js/ajaxThumbs.js"></script>
+    <script type="text/javascript" src="~/js/ajaxComments.js"></script>
+
+    <script type="text/javascript" src="~/js/pinComments.js"></script>
+    <script type="text/javascript" src="~/js/affixFix.js"></script>
+    <script>
+        checkAffix();
+        var maxWidth = $(".img-wrapper").parent().width();
+        $(".img-wrapper").width(maxWidth);
+    </script>
+
+
+  
 </body>
 </html>

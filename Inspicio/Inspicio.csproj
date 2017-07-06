@@ -15,6 +15,7 @@
   <ItemGroup>
     <Content Include="wwwroot\css\JavaScript.js" />
     <Content Include="wwwroot\css\thumbs.js" />
+    <Content Include="wwwroot\js\affixFix.js" />
     <Content Include="wwwroot\js\ajaxComments.js" />
     <Content Include="wwwroot\js\filter.js" />
     <Content Include="wwwroot\js\pinComments.js" />
