@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,17 +17,15 @@ namespace Inspicio.Controllers
     [Authorize]
     public class ImagesController : Controller
     {
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly UserManager<ApplicationUser> UserManager;   
+        private readonly IHostingEnvironment Environment;
+        private readonly ApplicationDbContext Context;
 
-        IHostingEnvironment _environment;
-
-        private readonly ApplicationDbContext _context;
-
-        public ImagesController(ApplicationDbContext context, IHostingEnvironment _environment, UserManager<ApplicationUser> userManager)
+        public ImagesController(ApplicationDbContext Context, IHostingEnvironment Environment, UserManager<ApplicationUser> UserManager)
         {
-            this._environment = _environment;
-            _context = context;
-            _userManager = userManager;
+            this.Environment = Environment;
+            this.Context = Context;
+            this.UserManager = UserManager;
         }
 
         // GET: Images
@@ -35,38 +33,29 @@ namespace Inspicio.Controllers
         {
 
             // Only images with the user id set as the owner should be passed into the view
-            var UserID = _userManager.GetUserId(HttpContext.User);
+            var UserID = UserManager.GetUserId(HttpContext.User);
 
-            var allImages =  _context.Images;
-            List<Image> images = new List<Image>();
-
-            foreach (Image image in allImages)
-            {
-                if(image.OwnerId == UserID)
-                {
-                    images.Add(image);
-                }
-            }
-
-            return View(images);
+            // Jack Lloyd [06/07/17]
+            // Chnaged from getting all images then working out which we want to only getting the ones we want.
+            var AllImages =  Context.Images.Where( i => i.OwnerId == UserID).ToList();
+            return View(AllImages);
         }
 
         // GET: Images/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int? Id)
         {
-            if (id == null)
+            if (Id == null)
             {
                 return NotFound();
             }
 
-            var image = await _context.Images
-                .SingleOrDefaultAsync(m => m.ImageID == id);
-            if (image == null)
+            var Image = await Context.Images.SingleOrDefaultAsync(m => m.ImageID == Id);
+            if (Image == null)
             {
                 return NotFound();
             }
 
-            return View(image);
+            return View(Image);
         }
 
         // GET: Images/Create
@@ -80,38 +69,39 @@ namespace Inspicio.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ImageID,Content,DownRating,UpRating,Description,Title")] Image image)
+        public async Task<IActionResult> Create([Bind("ImageID,Content,DownRating,UpRating,Description,Title")] Image Image)
         {
             if (ModelState.IsValid)
             {
-                image.OwnerId = _userManager.GetUserId(HttpContext.User);
-                _context.Add(image);
-                await _context.SaveChangesAsync();
+                Image.OwnerId = UserManager.GetUserId(HttpContext.User);
+                Context.Add(Image);
+                await Context.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            return View(image);
+            return View(Image);
         }
 
 
         public class FullReview
         {
+            public string OwnerProfileName { get; set; }
             public Image Image { get; set; }
             public List<Tuple<Comment, String>> Comments { get; set; }
         }
 
 
         // GET: Images/View/5
-        public async Task<IActionResult> View(int? id)
+        public async Task<IActionResult> View(int? Id)
         {
-            if (id == null)
+            if (Id == null)
             {
                 return NotFound();
             }
 
             // Jack Lloyd 
             // Fetch the image by the id pass in '/5'
-            var image = await _context.Images.SingleOrDefaultAsync(m => m.ImageID == id);
-            if (image == null)
+            var Image = await Context.Images.SingleOrDefaultAsync(m => m.ImageID == Id);
+            if (Image == null)
             {
                 return NotFound();
             }
@@ -120,32 +110,32 @@ namespace Inspicio.Controllers
             // Create a new FullReview object
             // This will be passed into the view as the model.
             FullReview FullReview = new FullReview();
-            FullReview.Image = image;
 
             // Jack Lloyd 
-            // Fetch all the comments 
-            // This may not be the best way to do this...
-            var allcomments = _context.Comments;
+            // Added OwnerProfileName to be passed into the model.
+            ApplicationUser User = await UserManager.FindByIdAsync(Image.OwnerId);
+            FullReview.OwnerProfileName = User.ProfileName;
+
+            FullReview.Image = Image;
+
+            // Jack Lloyd
+            // Chnaged from getting all comments then working out which we want to only getting the ones we want.
+            var AllComments = Context.Comments.Where(c => c.ImageId == Id);
 
             // Jack Lloyd 
             // The FullReview comments holds a tuple holding one comment and one username.
-            List<Tuple<Comment, String>> comments = new List<Tuple<Comment, String>>();
+            List<Tuple<Comment, String>> Comments = new List<Tuple<Comment, String>>();
 
-            foreach (Comment comment in allcomments)
+            foreach (Comment SingleComment in AllComments)
             {
                 // Jack Lloyd 
-                // We only care about the comments for this image
-                if (comment.ImageId == id)
-                {
-                    // Jack Lloyd 
-                    // add it and query the user table for the profilename.
-                    comments.Add( new Tuple<Comment, String>(comment, _context.Users.SingleOrDefault(u => u.Id == comment.OwnerId).ProfileName));
-                }
+                // add it and query the user table for the profilename.
+                Comments.Add( new Tuple<Comment, String>(SingleComment, Context.Users.SingleOrDefault(u => u.Id == SingleComment.OwnerId).ProfileName));
             }
 
             // Jack Lloyd 
             // add the tuple comments to the model to pass in.
-            FullReview.Comments = comments;
+            FullReview.Comments = Comments;
 
             // FullReview model to the View.
             return View(FullReview);
@@ -158,10 +148,10 @@ namespace Inspicio.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> View(int id, [Bind("ImageID,Content,DownRating,UpRating,Description,Title")] Image image)
+        public async Task<IActionResult> View(int Id, [Bind("ImageID,Content,DownRating,UpRating,Description,Title")] Image Image)
         {
 
-            if (id != image.ImageID)
+            if (Id != Image.ImageID)
             {
                 return NotFound();
             }
@@ -170,12 +160,12 @@ namespace Inspicio.Controllers
             {
                 try
                 {
-                    _context.Update(image);
-                    await _context.SaveChangesAsync();
+                    Context.Update(Image);
+                    await Context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ImageExists(image.ImageID))
+                    if (!ImageExists(Image.ImageID))
                     {
                         return NotFound();
                     }
@@ -186,41 +176,40 @@ namespace Inspicio.Controllers
                 }
                 return RedirectToAction("Index");
             }
-            return View(image);
+            return View(Image);
         }
 
         // GET: Images/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int? Id)
         {
-            if (id == null)
+            if (Id == null)
             {
                 return NotFound();
             }
 
-            var image = await _context.Images
-                .SingleOrDefaultAsync(m => m.ImageID == id);
-            if (image == null)
+            var Image = await Context.Images.SingleOrDefaultAsync(m => m.ImageID == Id);
+            if (Image == null)
             {
                 return NotFound();
             }
 
-            return View(image);
+            return View(Image);
         }
 
         // POST: Images/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int Id)
         {
-            var image = await _context.Images.SingleOrDefaultAsync(m => m.ImageID == id);
-            _context.Images.Remove(image);
-            await _context.SaveChangesAsync();
+            var Image = await Context.Images.SingleOrDefaultAsync(m => m.ImageID == Id);
+            Context.Images.Remove(Image);
+            await Context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
-        private bool ImageExists(int id)
+        private bool ImageExists(int Id)
         {
-            return _context.Images.Any(e => e.ImageID == id);
+            return Context.Images.Any(e => e.ImageID == Id);
         }
 
         public class DataFromBody
@@ -230,18 +219,18 @@ namespace Inspicio.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Comment([FromBody] DataFromBody _DataFromBody)
+        public async Task<IActionResult> Comment([FromBody] DataFromBody DataFromBody)
         {
-            Comment comment = new Comment();
+            Comment Comment = new Comment();
 
-            var userId = _userManager.GetUserId(HttpContext.User);
-            comment.OwnerId = userId;
-            comment.ImageId = _DataFromBody.ImageId;
-            comment.Message = _DataFromBody.Message;
-            comment.Timestamp = System.DateTime.Now;
+            String UserId = UserManager.GetUserId(HttpContext.User);
+            Comment.OwnerId = UserId;
+            Comment.ImageId = DataFromBody.ImageId;
+            Comment.Message = DataFromBody.Message;
+            Comment.Timestamp = System.DateTime.Now;
 
-            _context.Add(comment);
-            await _context.SaveChangesAsync();
+            Context.Add(Comment);
+            await Context.SaveChangesAsync();
 			return Ok(1);
         }
        
@@ -251,26 +240,20 @@ namespace Inspicio.Controllers
             public int ImageID { get; set; }
         }
         [HttpPost]
-        public async Task<IActionResult> ChangeRating([FromBody] RatingBody data)
-        {
-            int id = data.ImageID;
-            
-            var image = await _context.Images.SingleOrDefaultAsync(m => m.ImageID == id);
-            if (data.boolean)
+        public async Task<IActionResult> ChangeRating([FromBody] RatingBody RatingBody)
+        {            
+            var Image = await Context.Images.SingleOrDefaultAsync(m => m.ImageID == RatingBody.ImageID);
+            if (RatingBody.boolean)
             {
-                image.UpRating += 1;
-                Console.Write("");
+                Image.NoOfLikes += 1;
             }
             else
             {
-                image.DownRating++;
+                Image.NoOfDislikes++;
             }
 
-            await _context.SaveChangesAsync();
+            await Context.SaveChangesAsync();
             return Ok(1);
         }
-
-        
-
     }
 }

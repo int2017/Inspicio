@@ -8,7 +8,7 @@ using Inspicio.Data;
 namespace Inspicio.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20170706091359_init")]
+    [Migration("20170706145511_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -104,13 +104,13 @@ namespace Inspicio.Migrations
 
                     b.Property<string>("Description");
 
-                    b.Property<int>("DownRating");
+                    b.Property<int>("NoOfDislikes");
+
+                    b.Property<int>("NoOfLikes");
 
                     b.Property<string>("OwnerId");
 
                     b.Property<string>("Title");
-
-                    b.Property<int>("UpRating");
 
                     b.HasKey("ImageID");
 

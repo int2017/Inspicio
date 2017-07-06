@@ -71,10 +71,10 @@ namespace Inspicio.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Content = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true),
-                    DownRating = table.Column<int>(nullable: false),
+                    NoOfDislikes = table.Column<int>(nullable: false),
+                    NoOfLikes = table.Column<int>(nullable: false),
                     OwnerId = table.Column<string>(nullable: true),
-                    Title = table.Column<string>(nullable: true),
-                    UpRating = table.Column<int>(nullable: false)
+                    Title = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {

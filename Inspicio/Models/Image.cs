@@ -16,10 +16,10 @@ namespace Inspicio.Models
         public string Content { get; set; }
 
         [DisplayName("Dislikes")]
-        public int DownRating { get; set; }
+        public int NoOfDislikes { get; set; }
 
         [DisplayName("Likes")]
-        public int UpRating { get; set; }
+        public int NoOfLikes { get; set; }
 
         public string Description { get; set; }
 
