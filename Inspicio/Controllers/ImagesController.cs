@@ -31,14 +31,21 @@ namespace Inspicio.Controllers
         }
 
         // GET: Images
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string SearchString)
         {
 
             // Only images with the user id set as the owner should be passed into the view
             var UserID = _userManager.GetUserId(HttpContext.User);
 
-            var allImages =  _context.Images;
+            var allImages = from i in _context.Images
+                            select i; ;
+
             List<Image> images = new List<Image>();
+
+            if (!String.IsNullOrEmpty(SearchString))
+            {
+                allImages = allImages.Where(s => s.Title.Contains(SearchString));
+            }
 
             foreach (Image image in allImages)
             {
