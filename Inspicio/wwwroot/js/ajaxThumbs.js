@@ -10,7 +10,7 @@
         className = className.slice(0, 12) + "-o" + className.slice(12);
     }
     if (button === "thumbs-up") {
-        updateThumbs(true,button)
+        updateThumbs(true, button);
     }
     else {
         updateThumbs(false, button);

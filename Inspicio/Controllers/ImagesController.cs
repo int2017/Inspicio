@@ -231,23 +231,64 @@ namespace Inspicio.Controllers
        
         public class RatingBody
         {
+            // UpVote
             public bool boolean { get; set; }
             public int ImageID { get; set; }
         }
         [HttpPost]
-        public async Task<IActionResult> ChangeRating([FromBody] RatingBody data)
+        public async Task<IActionResult> ChangeRating([FromBody] RatingBody data, Review review) 
         {
             int id = data.ImageID;
             
             var image = await _context.Images.SingleOrDefaultAsync(m => m.ImageID == id);
+
+            // if the like button has been pressed
             if (data.boolean)
             {
-                image.UpRating += 1;
-                Console.Write("");
+                // if like is set to false
+                if(review.Liked == false)
+                {
+
+                    if (review.Disliked == true)
+                    {
+                        review.Liked = true;
+                        review.Disliked = false;
+                        image.UpRating++;
+                        if (image.DownRating > 0)
+                        {
+                            image.DownRating--;
+                        }
+                    }
+                    else if (review.Liked == false)
+                    {
+                        review.Liked = true;
+                        review.Disliked = false;
+                        image.UpRating++;
+                    }
+                }  
             }
+
+            // if the dislike button has been pressed
             else
             {
-                image.DownRating++;
+                if (review.Disliked == false)
+                {
+                    if (review.Liked == true)
+                    {
+                        review.Liked = false;
+                        review.Disliked = true;
+                        image.DownRating++;
+                        if (image.UpRating > 0)
+                        {
+                            image.UpRating--;
+                        }
+                    }
+                    else if (review.Liked == false)
+                    {
+                        review.Disliked = true;
+                        image.DownRating++;
+                    }
+                }
             }
 
             await _context.SaveChangesAsync();
