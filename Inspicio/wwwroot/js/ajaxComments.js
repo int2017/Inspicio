@@ -13,9 +13,8 @@ function commentClick (uniqID) {
                 data: JSON.stringify(data),
                 
                 success: function () {
-                    checkAffix();
                     createCommentRow("user", $(".popup-textarea").val(), uniqID);
-                    $("#comment-section").load(window.location.href + " #comment-section");
+                    $(".flex-sidebar").load(window.location.href + " #comment-section");
                     $("#comment-textarea").val("");
                 }
             });
@@ -36,11 +35,17 @@ function commentClickMain() {
             data: JSON.stringify(data),
 
             success: function () {
-                checkAffix();
-                $("#comment-section").load(window.location.href + " #comment-section");
+                $(".flex-sidebar").load(window.location.href + " #comment-section");
                 $("#comment-textarea").val("");
             }
         });
 
 }; 
 
+$('#comment-textarea').keypress(function (e) {
+    if (e.which == 13) {
+        $('#submit-comment').click();
+        // prevent duplicate submission
+        return false; 
+    }
+});

@@ -1,7 +1,4 @@
 ﻿
-if ($(".img-wrapper").first().innerHeight() < $("#comment-section").height())
-    $("img-wrapper").affix({})
-
 //Creates the map
 var imageMap = L.map("imageMap", {
     crs: L.CRS.Simple,
@@ -37,7 +34,6 @@ window.onresize = function (event) {
 
 imageMap.on('click', function (e) {
     mapOnClick(e);
-    
 });
     
 
@@ -64,10 +60,21 @@ function mapOnClick(e) {
     var popup = new L.Popup();
     popup.setContent(createBtn(uniqID));
     popup.options.autoPan = false;
+    marker.on("click", function () {
+        setTimeout(
+            function () {
+                $("#popuptext" + uniqID).focus();
+            }, 50);
+        
+    });
+    popup.on('popupclose', function (e) {
+        alert("nu");
+                    });
     popup.myData = { id: uniqID };
     popups.push(popup);
     marker.bindPopup(popup);
     marker.openPopup();
+    $(".popup-textarea").focus();
 
 }
 //Creates initial text
@@ -76,7 +83,15 @@ function createBtn(uniqID) {
     
     var btn = "<button onclick='commentClick("+uniqID+")' class='btn btn-success popup-btn'> <i class='glyphicon glyphicon-share-alt'></i></button>";
     Math.floor(Math.random() * 100);
-    var strng = "<div id='popup" + uniqID +"' class='container-fluid popup-comment-container'></div> <div class='row comment-popup-input'><div class='col-xs-4 col-sm-4 col-md-4 text-center'>You</div><div class='col-xs-8 col-sm-8 col-md-8 input-group'><textarea  rows='2' class='form-control popup-textarea'></textarea><span class='input-group-btn'> " + btn + " </span></div>";
+    var strng = "<div id='popup" + uniqID + "' class='container-fluid popup-comment-container'></div> <div id=popupinput" + uniqID + "' class='row comment-popup-input'><div class='col-xs-4 col-sm-4 col-md-4 text-center'>You</div><div class='col-xs-8 col-sm-8 col-md-8 input-group'><textarea id='popuptext" + uniqID + "' rows= '2' class='form-control popup-textarea' o id='popuptext" + uniqID + "' ></textarea > <span class='input-group-btn'> " + btn + " </span></div > ";
+    setTimeout(
+        function () {
+            $("#popuptext" + uniqID).keypress(function (e) {
+                if (e.which == 13) {
+                    commentClick(uniqID);
+                }
+            })
+        }, 50);
     return strng;
 }
 
@@ -87,7 +102,8 @@ function createCommentRow(user, comment, uniqID) {
         if (this.myData.id == uniqID) {
             this.setContent(appendRow(row, uniqID));
         }
-    })
+    });
+
     return row;
 }
 
@@ -95,4 +111,7 @@ function appendRow(row, uniqID) {
     var containerFront = "<div id='popup" + uniqID + "' class='container-fluid popup-comment-container'>" + $("#popup" + uniqID).html() + row + "</div>";
     var containerTail = "<div class='row comment-popup-input'>" + $(".comment-popup-input").html() ;
     return containerFront +  containerTail;
+}
+function invalidate() {
+    imageMap.invalidateSize();
 }
