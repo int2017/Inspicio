@@ -72,8 +72,16 @@ namespace Inspicio.Controllers
         {
             if (ModelState.IsValid)
             {
-                Image.OwnerId = _userManager.GetUserId(HttpContext.User);
-                _context.Add(Image);
+                image.OwnerId = _userManager.GetUserId(HttpContext.User);
+                _context.Add(image);
+
+                var review = new Review();
+                review.ImageId = image.ImageID;
+                review.OwnerId = image.OwnerId;
+                review.Liked = false;
+                review.Disliked = false;
+                _context.Add(review);
+
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
@@ -234,20 +242,75 @@ namespace Inspicio.Controllers
        
         public class RatingBody
         {
+            // Boolean is true, if like button pressed
             public bool boolean { get; set; }
             public int ImageID { get; set; }
         }
         [HttpPost]
-        public async Task<IActionResult> ChangeRating([FromBody] RatingBody RatingBody)
-        {            
-            var Image = await _context.Images.SingleOrDefaultAsync(m => m.ImageID == RatingBody.ImageID);
-            if (RatingBody.boolean)
+        public async Task<IActionResult> ChangeRating([FromBody] RatingBody data) 
+        {
+            var userId = _userManager.GetUserId(HttpContext.User);
+            var review = _context.Review.Where(u => u.OwnerId == userId).Where(i => i.ImageId == data.ImageID).SingleOrDefault();
+
+            if( review == null )
             {
-                Image.NoOfLikes += 1;
+                return NotFound();
             }
+
+            int id = data.ImageID;
+            var image = await _context.Images.SingleOrDefaultAsync(m => m.ImageID == id);
+
+            // if the like button has been pressed
+            if (data.boolean)
+            {
+                // if like hasn't already been selected
+                if (review.Liked == false)
+                {
+                    // I
+                    if (review.Disliked == true)
+                    {
+                        review.Liked = true;
+                        review.Disliked = false;
+                        image.NoOfLikes++;
+                        if (image.NoOfDislikes > 0)
+                        {
+                            image.NoOfDislikes--;
+                        }
+                    }
+                    // if both buttons are false, increment likes by 1
+                    else if (review.Liked == false)
+                    {
+                        review.Liked = true;
+                        review.Disliked = false;
+                        image.NoOfLikes++;
+                    }
+                }
+            }
+
+            // if the dislike button has been pressed
             else
             {
-                Image.NoOfDislikes++;
+                // if dislike button hasn't been pressed before
+                if (review.Disliked == false)
+                {
+                    // if the like button was pressed add 1 to dislikes, minus 1 from likes
+                    if (review.Liked == true)
+                    {
+                        review.Liked = false;
+                        review.Disliked = true;
+                        image.NoOfDislikes++;
+                        if (image.NoOfLikes > 0)
+                        {
+                            image.NoOfLikes--;
+                        }
+                    }
+                    // if neither button has been pressed, add 1 to dislikes
+                    else if (review.Liked == false)
+                    {
+                        review.Disliked = true;
+                        image.NoOfDislikes++;
+                    }
+                }
             }
 
             await _context.SaveChangesAsync();

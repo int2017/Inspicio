@@ -16,19 +16,16 @@ namespace Inspicio.Data
         {
         }
 
-        // public DbSet<ApplicationUser> User { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Image> Images { get; set; }
-
+        public DbSet<Review> Review { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Review>().HasKey(r => new { r.OwnerId, r.ImageId });
             modelBuilder.Entity<ApplicationUser>().HasMany(a => a.Images);
             modelBuilder.Entity<ApplicationUser>().HasMany(a => a.Comments);
             modelBuilder.Entity<Image>().HasMany(i => i.Comments).WithOne(i => i.Images);
-
-            //modelBuilder.Entity<Comment>().ToTable("Comment");
-            //modelBuilder.Entity<Image>().ToTable("Image");
 
             base.OnModelCreating(modelBuilder);
         }
