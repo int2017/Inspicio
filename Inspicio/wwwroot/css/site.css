@@ -173,12 +173,10 @@ hr {
 }
 
 #imageMap {
-    height: 100%;
-    width: 100%;
+ 
     position: absolute;
     background: transparent;
-    max-height: 100%;
-    max-width: 100%;
+  
     overflow: visible;
 }
 .leaflet-popup-content, .leaflet-popup-content textarea{
