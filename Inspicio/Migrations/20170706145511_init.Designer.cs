@@ -8,8 +8,8 @@ using Inspicio.Data;
 namespace Inspicio.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20170705134214_migration")]
-    partial class migration
+    [Migration("20170706145511_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -47,6 +47,8 @@ namespace Inspicio.Migrations
                     b.Property<string>("PhoneNumber");
 
                     b.Property<bool>("PhoneNumberConfirmed");
+
+                    b.Property<string>("ProfileName");
 
                     b.Property<string>("SecurityStamp");
 
@@ -102,13 +104,13 @@ namespace Inspicio.Migrations
 
                     b.Property<string>("Description");
 
-                    b.Property<int>("DownRating");
+                    b.Property<int>("NoOfDislikes");
+
+                    b.Property<int>("NoOfLikes");
 
                     b.Property<string>("OwnerId");
 
                     b.Property<string>("Title");
-
-                    b.Property<int>("UpRating");
 
                     b.HasKey("ImageID");
 

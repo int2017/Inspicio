@@ -47,6 +47,8 @@ namespace Inspicio.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed");
 
+                    b.Property<string>("ProfileName");
+
                     b.Property<string>("SecurityStamp");
 
                     b.Property<bool>("TwoFactorEnabled");
@@ -101,13 +103,13 @@ namespace Inspicio.Migrations
 
                     b.Property<string>("Description");
 
-                    b.Property<int>("DownRating");
+                    b.Property<int>("NoOfDislikes");
+
+                    b.Property<int>("NoOfLikes");
 
                     b.Property<string>("OwnerId");
 
                     b.Property<string>("Title");
-
-                    b.Property<int>("UpRating");
 
                     b.HasKey("ImageID");
 
