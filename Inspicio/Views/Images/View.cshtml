@@ -1,4 +1,4 @@
-﻿@model Inspicio.Controllers.ImagesController.DataToBody
+﻿@model Inspicio.Controllers.ImagesController.FullReviewData
 
 
 <div class="view-container">
@@ -45,6 +45,7 @@
                         </div> 
                 </div>
             </div>
+
         
         <div class="flex-sidebar" st>
             <div class="sidebar-menu">
@@ -52,6 +53,7 @@
                     <li id="close-side"><i class="glyphicon glyphicon-menu-left"></i></li>
                     
                 </ul>
+
             </div>
             <div id="comment-section">
 
@@ -61,11 +63,13 @@
                 {
                     <div class="row-eq-height comment">
                         <div class="comment-user col-xs-4 col-sm-4 col-md-4">
-                            <h5 class="username">@c.OwnerId</h5>
-                            <p>@c.Timestamp</p>
+                            <h5 class="username">@c.PosterProfileName</h5>
+                            <p>@c.comment.Timestamp</p>
+
                         </div>
+
                         <div class="col-xs-8 col-sm-8 col-md-8">
-                            <p>@c.Message</p>
+                            <p>@c.comment.Message</p>
                         </div>
                     </div>
                     
@@ -109,7 +113,7 @@
     $(document).ready(function () {
         @foreach ( var c in Model.Comments)
     {
-       <text> createMarkers('@c.Message', '@Model.Image.OwnerId', '@c.Lat', '@c.Lng');</text>
+       <text> createMarkers('@c.comment.Message', '@c.PosterProfileName', '@c.comment.Lat', '@c.comment.Lng');</text>
 
     }
         $("#imageMap").width($("#image-container >img").width());

@@ -8,6 +8,11 @@ namespace Inspicio.Models.AccountViewModels
 {
     public class RegisterViewModel
     {
+        // Error message is needed!
+        [Required]
+        [Display(Name = "Profile Name")]
+        public string ProfileName { get; set; }
+
         [Required]
         [EmailAddress]
         [Display(Name = "Email")]
