@@ -1,86 +1,106 @@
 ﻿@model Inspicio.Controllers.ImagesController.DataToBody
 
-<h2>@Model.Image.Title</h2>
 
-<div class="container-fluid">
 
+<div class="view-container">
+    <h2>@Model.Image.Title</h2>
     <hr />
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <input id="ImageId"type="hidden" asp-for="@Model.Image.ImageID" />
-    <div class="row">
-        <div class="col-md-8">
-            <div class="row">
-                <div class="col-md-12" id="image-container">
-                    <div id="imageMap"></div>
-                    <img src="@Url.Content(Model.Image.Content)" title="@Model.Image.Title" alt="@Model.Image.Title" class="img-responsive" />
-
-                </div>
-
-            </div>
-            <div class="row">
-                <div id="image-description" class="col-md-12">
-                    <h3>Description</h3>
-                    <p>@Model.Image.Description </p>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="row image-controls">
-                <div class="col-xs-12 col-sm-12 col-md-12 text-center">
-                    <h4>By : Creator Name</h4> <h5>Status: Open</h5>
-                    <div id="thumb-container">
-
-                        <!--If the user has already voted either thumbs up or down,change the fill to black-->
-                        <div  class="btn-group" style="width:99%">
-                            <button type="button" id="thumbs-up" class="btn btn-success thumb"> <i class="fa fa-thumbs-o-up " aria-hidden="true"></i> : <span class="rating">@Model.Image.UpRating</span></button>
-                            <button type="button" id="thumbs-down" class="btn btn-danger thumb"><i class="fa fa-thumbs-o-down " aria-hidden="true"></i> : <span class="rating">@Model.Image.DownRating</span></button>
-                        </div>
-                        <br />
-                        <div class="btn-group" style="width:99%">
-                            <button type="button" class="btn btn-info " onclick="popupState()">Hide markers</button>
-                            <!--IF the image is created by the user--> <!--IF project is open-->
-                            <button class="btn btn-warning " type="submit">Close</button>
-                        </div>
+  
+        
+        
+            <div class="img-wrapper"  >
+               
+                    <div id="image-container">
+                        <div id="imageMap"></div>
+                        
+                            <img src="@Url.Content(Model.Image.Content)" title="@Model.Image.Title" alt="@Model.Image.Title"  />
+                        
+                  
                     </div>
+                <a class="lightbox-button" href="@Url.Content(Model.Image.Content)" data-lity data-lity-desc="@Model.Image.Title"><i class="glyphicon glyphicon-resize-full"></i></a>
+                
+                    <div id="image-description"> 
+                       
+                        <h5>Status: Open</h5>
+                        <h4>By : @Model.Image.OwnerId</h4>
+                        <h3>Description</h3>
+                        <p>@Model.Image.Description </p>
+                    </div>
+                
+                    <div class="image-controls text-center">
+                        
+                        <div id="thumb-container">
+
+                            <!--If the user has already voted either thumbs up or down,change the fill to black-->
+                            <div class="row">
+                                <button type="button" id="thumbs-up" class="btn btn-success thumb"> <i class="fa fa-thumbs-o-up " aria-hidden="true"></i> : <span class="rating">@Model.Image.UpRating</span></button>
+                                <button type="button" id="thumbs-down" class="btn btn-danger thumb"><i class="fa fa-thumbs-o-down " aria-hidden="true"></i> : <span class="rating">@Model.Image.DownRating</span></button>
+                            </div>
+                            <div class="row">
+                                <button type="button" class="btn btn-info " onclick="popupState()">Hide markers</button>
+                                <!--IF the image is created by the user--> <!--IF project is open-->
+                                <button class="btn btn-warning " type="submit">Close</button>
+                            </div>
+                        </div> 
                 </div>
+            </div>
+        
+        <div class="flex-sidebar" st>
+            <div class="sidebar-menu">
+                <ul >
+                    <li id="close-side"><i class="glyphicon glyphicon-menu-left"></i></li>
+                    
+                </ul>
             </div>
             <div id="comment-section">
+
                 <!-- comments go here -->
+                <h3 class="text-center">Comment section</h3>
                 @foreach (Comment c in Model.Comments)
                 {
                     <div class="row-eq-height comment">
-                        <div class="col-xs-4 col-sm-4 col-md-4">
-                            <h3>@c.OwnerId</h3>
+                        <div class="comment-user col-xs-4 col-sm-4 col-md-4">
+                            <h5 class="username">@c.OwnerId</h5>
                             <p>@c.Timestamp</p>
                         </div>
                         <div class="col-xs-8 col-sm-8 col-md-8">
                             <p>@c.Message</p>
                         </div>
                     </div>
-                    <hr />
+                    
                 }
                 <!-- ends here -->
-            </div>
 
-            <div class="row" id="new-comment">
-                <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1 input-group">
-                    <textarea class="form-control" id="comment-textarea" rows="5" placeholder="Comment..."></textarea>
-                    <span class="input-group-btn">
-                        <button class="btn btn-default" type="submit" id="submit-comment">
-                            <i class="glyphicon glyphicon-share-alt"></i>
-                        </button>
-                    </span>
+                <div class="row-eq-height" id="new-comment">
+                    <div class="col-xs-12 col-sm-12 col-md-12 input-group">
+                        <textarea class="form-control" id="comment-textarea" rows="5" placeholder="Comment..."></textarea>
+                        <span class="input-group-btn">
+                            <button class="btn btn-success" type="submit" id="submit-comment" onclick="commentClickMain()">
+                                <i class="glyphicon glyphicon-share-alt"></i>
+                            </button>
+                        </span>
+                    </div>
                 </div>
             </div>
+
         </div>
-    </div>
+    
     <div>
         <a asp-action="Index">Back to List</a>
     </div>
 </div>
 
-
+<style>
+    footer{
+        display:none;
+    }
+</style>
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+<script type="text/javascript" src="~/js/ajaxThumbs.js"></script>
+<script type="text/javascript" src="~/js/ajaxComments.js"></script>
+<script type="text/javascript" src="~/js/pinComments.js"></script>
+<script type="text/javascript" src="~/js/sidebar.js"></script>
