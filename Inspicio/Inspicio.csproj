@@ -27,6 +27,7 @@
     <Content Include="wwwroot\images\Inspicio.svg" />
     <Content Include="wwwroot\images\Mountains.jpg" />
     <Content Include="wwwroot\images\Newcastle.jpg" />
+    <Content Include="wwwroot\images\ostrich.jpg" />
     <Content Include="wwwroot\images\ribbon.jpg" />
     <Content Include="wwwroot\js\ajaxComments.js" />
     <Content Include="wwwroot\js\filter.js" />
