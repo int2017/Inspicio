@@ -64,13 +64,13 @@ function createMarker(latlng,clickBool) {
     var uniqID = Math.round(new Date().getTime() + (Math.random() * 100));
     var marker = new L.marker(latlng).addTo(markerGroup);
     var popup = new L.Popup();
-   /* Commented for testing purposes
+   
     //Removes marker if popup is empty
     marker.on('popupclose', function (e) {
         if (($("#popup" + uniqID).html().indexOf("popup-comment")) === -1) {
             imageMap.removeLayer(marker);
         }
-    });*/
+    });
     popup.setContent(createBtn(uniqID));
     popup.options.autoPan = false;
     //Focusing the textarea of the popup

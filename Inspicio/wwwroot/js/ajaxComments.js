@@ -1,4 +1,4 @@
-
+﻿
 function commentClick(uniqID) {
     var locationLat;
     var locationLng;
@@ -8,7 +8,6 @@ function commentClick(uniqID) {
             locationLng = this.getLatLng().lng;
         }
     })
-    alert(locationLat);
     var _DataFromBody = {
                 "ImageId": $("#ImageId").val(),
                 "Message": $(".popup-textarea").val(),
@@ -42,7 +41,6 @@ function commentClickMain() {
         "Lat": null,
         "Lng": null
     }
-    alert(JSON.stringify(_DataFromBody));
     $.ajax(
         {
             type: "POST", //HTTP POST Method  
