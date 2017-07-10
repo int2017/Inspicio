@@ -267,6 +267,7 @@ input:focus {
     box-shadow: 0 0 10px #719ECE;
 }
 .flex-sidebar {
+    max-width: 500px;
     display: flex;
     flex-flow: row wrap;
     position: fixed;
@@ -280,7 +281,7 @@ input:focus {
     transition: all 0.3s linear;
     -moz-transition: all 0.3s linear;
     -webkit-transition: all 0.3s linear;
-    z-index:700;
+    z-index: 700;
 }
 .view-container {
     position: absolute;
@@ -300,6 +301,7 @@ input:focus {
     color: black;
     opacity: 0.4;
     transition: all 0.2s ease-in-out;
+    border: 1px solid #8c8c8c;
 }
     .lightbox-button:hover {
         opacity: 1;

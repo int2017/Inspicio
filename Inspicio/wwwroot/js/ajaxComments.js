@@ -14,7 +14,7 @@ function commentClick (uniqID) {
                 
                 success: function () {
                     createCommentRow("user", $(".popup-textarea").val(), uniqID);
-                    $(".flex-sidebar").load(window.location.href + " #comment-section");
+                    $("#comment-section").load(window.location.href + " #comment-section > * ");
                     $("#comment-textarea").val("");
                 }
             });
@@ -35,7 +35,7 @@ function commentClickMain() {
             data: JSON.stringify(data),
 
             success: function () {
-                $(".flex-sidebar").load(window.location.href + " #comment-section");
+                $("#comment-section").load(window.location.href + " #comment-section > * ");
                 $("#comment-textarea").val("");
             }
         });
