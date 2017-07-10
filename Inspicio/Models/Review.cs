@@ -24,12 +24,6 @@ namespace Inspicio.Models
         [ForeignKey("ImageId"), Column(Order = 1)]
         public Image Images { get; set; }
 
-
-        public Review()
-        {
-            Liked = false;
-            Disliked = false;
-        }
     }
 }
 

@@ -36,7 +36,6 @@ function updateThumbs(bool,button) {
             success: function () {
                 $("#thumbs-up > span").load(window.location.href + " " + "#thumbs-up > span");
                 $("#thumbs-down > span").load(window.location.href + " " + "#thumbs-down > span");
- 
             }
         });
 }

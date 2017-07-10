@@ -93,6 +93,14 @@ namespace Inspicio.Controllers
             {
                 image.OwnerId = _userManager.GetUserId(HttpContext.User);
                 _context.Add(image);
+
+                var review = new Review();
+                review.ImageId = image.ImageID;
+                review.OwnerId = image.OwnerId;
+                review.Liked = false;
+                review.Disliked = false;
+                _context.Add(review);
+
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
@@ -231,7 +239,7 @@ namespace Inspicio.Controllers
        
         public class RatingBody
         {
-            // UpVote
+            // Boolean is true, if like button pressed
             public bool boolean { get; set; }
             public int ImageID { get; set; }
         }
@@ -239,13 +247,12 @@ namespace Inspicio.Controllers
         public async Task<IActionResult> ChangeRating([FromBody] RatingBody data) 
         {
             var userId = _userManager.GetUserId(HttpContext.User);
-
             var review = _context.Review.Where(u => u.OwnerId == userId).Where(i => i.ImageId == data.ImageID).SingleOrDefault();
+
             if( review == null )
             {
                 return NotFound();
             }
-
 
             int id = data.ImageID;
             var image = await _context.Images.SingleOrDefaultAsync(m => m.ImageID == id);
@@ -253,10 +260,10 @@ namespace Inspicio.Controllers
             // if the like button has been pressed
             if (data.boolean)
             {
-                // if like is set to false
+                // if like hasn't already been selected
                 if (review.Liked == false)
                 {
-
+                    // I
                     if (review.Disliked == true)
                     {
                         review.Liked = true;
@@ -267,6 +274,7 @@ namespace Inspicio.Controllers
                             image.DownRating--;
                         }
                     }
+                    // if both buttons are false, increment likes by 1
                     else if (review.Liked == false)
                     {
                         review.Liked = true;
@@ -279,8 +287,10 @@ namespace Inspicio.Controllers
             // if the dislike button has been pressed
             else
             {
+                // if dislike button hasn't been pressed before
                 if (review.Disliked == false)
                 {
+                    // if the like button was pressed add 1 to dislikes, minus 1 from likes
                     if (review.Liked == true)
                     {
                         review.Liked = false;
@@ -291,6 +301,7 @@ namespace Inspicio.Controllers
                             image.UpRating--;
                         }
                     }
+                    // if neither button has been pressed, add 1 to dislikes
                     else if (review.Liked == false)
                     {
                         review.Disliked = true;
@@ -302,8 +313,5 @@ namespace Inspicio.Controllers
             await _context.SaveChangesAsync();
             return Ok(1);
         }
-
-        
-
     }
 }
