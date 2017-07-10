@@ -1,4 +1,4 @@
-﻿@model Inspicio.Controllers.ImagesController.FullReview
+﻿@model Inspicio.Controllers.ImagesController.FullReviewData
 
 <h2>@Model.Image.Title</h2>
 
@@ -47,16 +47,16 @@
             </div>
             <div id="comment-section">
                 <!-- comments go here -->
-                @foreach ( Tuple<Comment, String> c in Model.Comments)
-                {
+                @foreach ( var c in Model.Comments )
+                { 
                     <div class="row-eq-height comment">
                         <div class="col-xs-4 col-sm-4 col-md-4">
-                            <h3>@c.Item2</h3>
-                            <p>@c.Item1.Timestamp</p>
+                            <h3>@c.PosterProfileName</h3>
+                            <p>@c.comment.Timestamp</p>
                         </div>
 
                         <div class="col-xs-8 col-sm-8 col-md-8">
-                            <p>@c.Item1.Message</p>
+                            <p>@c.comment.Message</p>
                         </div>
                     </div>
                     <hr />

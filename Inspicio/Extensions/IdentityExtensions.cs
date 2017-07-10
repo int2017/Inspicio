@@ -17,15 +17,9 @@ namespace Inspicio.Extensions
     {
         public static string GetProfileName(this ClaimsPrincipal user)
         {
-            // Jack Lloyd [06/07/17]
             // ClaimTypes.GivenName returning the ProfileName
-            var profileName = user.Claims.FirstOrDefault(v => v.Type == ClaimTypes.GivenName).Value;
-
-            // Jack Lloyd [06/07/17]
-            // Do the null check here, will avoid having local issues elsewhere.
-            return (profileName != null) ? profileName : String.Empty;
+            // avoiding null issues locally
+            return user.Claims.FirstOrDefault(v => v.Type == ClaimTypes.GivenName).Value ?? string.Empty;
         }
-
-
     }
 }

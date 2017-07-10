@@ -35,8 +35,7 @@ namespace Inspicio.Controllers
             // Only images with the user id set as the owner should be passed into the view
             var UserID = UserManager.GetUserId(HttpContext.User);
 
-            // Jack Lloyd [06/07/17]
-            // Chnaged from getting all images then working out which we want to only getting the ones we want.
+            // Changed from getting all images then working out which we want to only getting the ones we want.
             var AllImages =  Context.Images.Where( i => i.OwnerId == UserID).ToList();
             return View(AllImages);
         }
@@ -82,11 +81,17 @@ namespace Inspicio.Controllers
         }
 
 
-        public class FullReview
+        public class FullReviewData
         {
             public string OwnerProfileName { get; set; }
             public Image Image { get; set; }
-            public List<Tuple<Comment, String>> Comments { get; set; }
+
+            public List<CommentInfo> Comments { get; set; }
+            public class CommentInfo
+            {
+                public String PosterProfileName { get; set; }
+                public Comment comment { get; set; }
+            }
         }
 
 
@@ -97,8 +102,7 @@ namespace Inspicio.Controllers
             {
                 return NotFound();
             }
-
-            // Jack Lloyd 
+            
             // Fetch the image by the id pass in '/5'
             var Image = await Context.Images.SingleOrDefaultAsync(m => m.ImageID == Id);
             if (Image == null)
@@ -106,39 +110,33 @@ namespace Inspicio.Controllers
                 return NotFound();
             }
 
-            // Jack Lloyd 
             // Create a new FullReview object
             // This will be passed into the view as the model.
-            FullReview FullReview = new FullReview();
+            var FullReviewData = new FullReviewData();
+            FullReviewData.Comments = new List<FullReviewData.CommentInfo>();
 
-            // Jack Lloyd 
             // Added OwnerProfileName to be passed into the model.
             ApplicationUser User = await UserManager.FindByIdAsync(Image.OwnerId);
-            FullReview.OwnerProfileName = User.ProfileName;
 
-            FullReview.Image = Image;
+            FullReviewData.OwnerProfileName = User.ProfileName;
+            FullReviewData.Image = Image;
 
-            // Jack Lloyd
-            // Chnaged from getting all comments then working out which we want to only getting the ones we want.
+            // Changed from getting all comments then working out which we want to only getting the ones we want.
             var AllComments = Context.Comments.Where(c => c.ImageId == Id);
-
-            // Jack Lloyd 
-            // The FullReview comments holds a tuple holding one comment and one username.
-            List<Tuple<Comment, String>> Comments = new List<Tuple<Comment, String>>();
-
             foreach (Comment SingleComment in AllComments)
             {
-                // Jack Lloyd 
                 // add it and query the user table for the profilename.
-                Comments.Add( new Tuple<Comment, String>(SingleComment, Context.Users.SingleOrDefault(u => u.Id == SingleComment.OwnerId).ProfileName));
+
+                // add it and query the user table for the profilename.
+                var CommentInfo = new FullReviewData.CommentInfo();
+                CommentInfo.PosterProfileName = Context.Users.Where(u => u.Id == SingleComment.OwnerId).Select(u => u.ProfileName).SingleOrDefault();
+                CommentInfo.comment = SingleComment;
+
+                FullReviewData.Comments.Add(CommentInfo);
             }
 
-            // Jack Lloyd 
-            // add the tuple comments to the model to pass in.
-            FullReview.Comments = Comments;
-
             // FullReview model to the View.
-            return View(FullReview);
+            return View(FullReviewData);
         }
 
 
