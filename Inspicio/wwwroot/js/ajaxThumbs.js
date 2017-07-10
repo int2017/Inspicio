@@ -34,8 +34,9 @@ function updateThumbs(bool,button) {
             dataType: "text",
             data: JSON.stringify(image),
             success: function () {
-                $(text).load(window.location.href + " "+text);
-  
+                $("#thumbs-up > span").load(window.location.href + " " + "#thumbs-up > span");
+                $("#thumbs-down > span").load(window.location.href + " " + "#thumbs-down > span");
+ 
             }
         });
 }

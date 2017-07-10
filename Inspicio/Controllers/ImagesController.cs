@@ -236,17 +236,25 @@ namespace Inspicio.Controllers
             public int ImageID { get; set; }
         }
         [HttpPost]
-        public async Task<IActionResult> ChangeRating([FromBody] RatingBody data, Review review) 
+        public async Task<IActionResult> ChangeRating([FromBody] RatingBody data) 
         {
+            var userId = _userManager.GetUserId(HttpContext.User);
+
+            var review = _context.Review.Where(u => u.OwnerId == userId).Where(i => i.ImageId == data.ImageID).SingleOrDefault();
+            if( review == null )
+            {
+                return NotFound();
+            }
+
+
             int id = data.ImageID;
-            
             var image = await _context.Images.SingleOrDefaultAsync(m => m.ImageID == id);
 
             // if the like button has been pressed
             if (data.boolean)
             {
                 // if like is set to false
-                if(review.Liked == false)
+                if (review.Liked == false)
                 {
 
                     if (review.Disliked == true)
@@ -265,7 +273,7 @@ namespace Inspicio.Controllers
                         review.Disliked = false;
                         image.UpRating++;
                     }
-                }  
+                }
             }
 
             // if the dislike button has been pressed
