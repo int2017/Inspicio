@@ -8,7 +8,7 @@ using Inspicio.Data;
 namespace Inspicio.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20170710143821_init")]
+    [Migration("20170710151647_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

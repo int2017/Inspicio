@@ -9,7 +9,7 @@ var imageMap = L.map("imageMap", {
 var markerGroup = L.layerGroup().addTo(imageMap);
 //Setting the bounds
 var height = $("#image-container img").height();
-var width = $("#image-container img").width(); 
+var width = $("#image-container img").width();
 var bound = [[0, 0], [height, width]];
 
 //Disabling all the controls for the map
@@ -33,7 +33,7 @@ imageMap.setView([0, 0], 1);
 imageMap.on('click', function (e) {
     mapOnClick(e);
 });
-    
+
 
 //Button control
 $(".leaflet-map-pane").attr("id", "map-pane");
@@ -56,15 +56,15 @@ var popupsArray = new Array();
 
 //listener for clicks
 function mapOnClick(e) {
-    createMarker(e.latlng,true);
+    createMarker(e.latlng, true);
 }
 //Creating individual markers. Needed because onClick event sends a different object than createMarkers()
 //clickBool determines wether the markers and popups are created by clicking on map or by fetching data from DB
-function createMarker(latlng,clickBool) {
+function createMarker(latlng, clickBool) {
     var uniqID = Math.round(new Date().getTime() + (Math.random() * 100));
     var marker = new L.marker(latlng).addTo(markerGroup);
     var popup = new L.Popup();
-   
+
     //Removes marker if popup is empty
     marker.on('popupclose', function (e) {
         if (($("#popup" + uniqID).html().indexOf("popup-comment")) === -1) {
@@ -94,9 +94,9 @@ function createMarker(latlng,clickBool) {
 }
 //Creates initial text
 function createBtn(uniqID) {
-    
-    
-    var btn = "<button onclick='commentClick("+uniqID+")' class='btn btn-success popup-btn'> <i class='glyphicon glyphicon-share-alt'></i></button>";
+
+
+    var btn = "<button onclick='commentClick(" + uniqID + ")' class='btn btn-success popup-btn'> <i class='glyphicon glyphicon-share-alt'></i></button>";
     Math.floor(Math.random() * 100);
     var strng = "<div id='popup" + uniqID + "' class='container-fluid popup-comment-container'></div> <div id=popupinput" + uniqID + "' class='row comment-popup-input'><div class='col-xs-4 col-sm-4 col-md-4 text-center'>You</div><div class='col-xs-8 col-sm-8 col-md-8 input-group'><textarea id='popuptext" + uniqID + "' rows= '2' class='form-control popup-textarea' o id='popuptext" + uniqID + "' ></textarea > <span class='input-group-btn'> " + btn + " </span></div > ";
     setTimeout(
