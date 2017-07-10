@@ -177,7 +177,7 @@ namespace Inspicio.Migrations
                 name: "Comments",
                 columns: table => new
                 {
-                    CommentID = table.Column<int>(nullable: false)
+                    CommentId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     ChildId = table.Column<string>(nullable: true),
                     ImageId = table.Column<int>(nullable: false),
@@ -188,7 +188,7 @@ namespace Inspicio.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Comments", x => x.CommentID);
+                    table.PrimaryKey("PK_Comments", x => x.CommentId);
                     table.ForeignKey(
                         name: "FK_Comments_Images_ImageId",
                         column: x => x.ImageId,
@@ -201,6 +201,32 @@ namespace Inspicio.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Review",
+                columns: table => new
+                {
+                    OwnerId = table.Column<string>(nullable: false),
+                    ImageId = table.Column<int>(nullable: false),
+                    Disliked = table.Column<bool>(nullable: false),
+                    Liked = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Review", x => new { x.OwnerId, x.ImageId });
+                    table.ForeignKey(
+                        name: "FK_Review_Images_ImageId",
+                        column: x => x.ImageId,
+                        principalTable: "Images",
+                        principalColumn: "ImageID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Review_AspNetUsers_OwnerId",
+                        column: x => x.OwnerId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -228,6 +254,11 @@ namespace Inspicio.Migrations
                 name: "IX_Images_OwnerId",
                 table: "Images",
                 column: "OwnerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Review_ImageId",
+                table: "Review",
+                column: "ImageId");
 
             migrationBuilder.CreateIndex(
                 name: "RoleNameIndex",
@@ -260,6 +291,9 @@ namespace Inspicio.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Comments");
+
+            migrationBuilder.DropTable(
+                name: "Review");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
