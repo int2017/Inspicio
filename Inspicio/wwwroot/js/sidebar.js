@@ -12,10 +12,7 @@ $("#close-side").click(function () {
         $(".flex-sidebar").addClass("side-hide");
         $(".view-container").addClass("wide"); 
     }
-    setTimeout(
-        function () {
-            invalidate();
-        }, 300);
+  
     
 });
 

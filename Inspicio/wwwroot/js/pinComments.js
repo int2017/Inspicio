@@ -27,9 +27,7 @@ if (imageMap.tap) imageMap.tap.disable();
 imageMap.setView([0, 0], 1);
 
 //Setting the correct size for the map if the window is resized
-window.onresize = function (event) {
-    imageMap.invalidateSize();
-};
+
 
 
 imageMap.on('click', function (e) {
@@ -58,8 +56,16 @@ function mapOnClick(e) {
     var uniqID = Math.round(new Date().getTime() + (Math.random() * 100));
     var marker = new L.marker(e.latlng).addTo(markerGroup);
     var popup = new L.Popup();
+    //Removes marker if popup is empty
+    marker.on('popupclose', function (e) {
+        if (($("#popup" + uniqID).html().indexOf("popup-comment"))===-1) {
+            imageMap.removeLayer(marker);
+        }
+        
+    });
     popup.setContent(createBtn(uniqID));
     popup.options.autoPan = false;
+    //Focusing the textarea of the popup
     marker.on("click", function () {
         setTimeout(
             function () {
@@ -67,9 +73,7 @@ function mapOnClick(e) {
             }, 50);
         
     });
-    popup.on('popupclose', function (e) {
-        alert("nu");
-                    });
+
     popup.myData = { id: uniqID };
     popups.push(popup);
     marker.bindPopup(popup);
@@ -95,9 +99,9 @@ function createBtn(uniqID) {
     return strng;
 }
 
+//Creating a new comment row
 function createCommentRow(user, comment, uniqID) {
     var row = "<div class='row popup-comment'> <div class='col-xs-4 col-sm-4 col-md-4'><p>" + user + "</p></div><div class='col-xs-8 col-sm-8 col-md-8'>" + comment + "</div></div>";
-    
     $(popups).each(function () {
         if (this.myData.id == uniqID) {
             this.setContent(appendRow(row, uniqID));
@@ -106,12 +110,9 @@ function createCommentRow(user, comment, uniqID) {
 
     return row;
 }
-
+//Since the whole popup has to be recreated, this method clones it's previous HTML
 function appendRow(row, uniqID) {
     var containerFront = "<div id='popup" + uniqID + "' class='container-fluid popup-comment-container'>" + $("#popup" + uniqID).html() + row + "</div>";
     var containerTail = "<div class='row comment-popup-input'>" + $(".comment-popup-input").html() ;
     return containerFront +  containerTail;
-}
-function invalidate() {
-    imageMap.invalidateSize();
 }
