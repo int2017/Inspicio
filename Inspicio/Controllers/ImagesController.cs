@@ -37,6 +37,11 @@ namespace Inspicio.Controllers
             
             // Changed from getting all images then working out which we want to only getting the ones we want.
             var AllImages =  _context.Images.Where( i => i.OwnerId == UserID).ToList();
+
+            if (!String.IsNullOrEmpty(SearchString))
+            {
+                AllImages = AllImages.Where(s => s.Title.Contains(SearchString)).ToList();
+            }
             return View(AllImages);
         }
 
