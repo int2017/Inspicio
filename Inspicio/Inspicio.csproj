@@ -22,10 +22,18 @@
   <ItemGroup>
     <Content Include="wwwroot\css\JavaScript.js" />
     <Content Include="wwwroot\css\thumbs.js" />
+    <Content Include="wwwroot\images\eye.jpg" />
+    <Content Include="wwwroot\images\Inspicio bar.png" />
+    <Content Include="wwwroot\images\Inspicio.svg" />
+    <Content Include="wwwroot\images\Mountains.jpg" />
+    <Content Include="wwwroot\images\Newcastle.jpg" />
+    <Content Include="wwwroot\images\ribbon.jpg" />
     <Content Include="wwwroot\js\ajaxComments.js" />
     <Content Include="wwwroot\js\filter.js" />
     <Content Include="wwwroot\js\pinComments.js" />
     <Content Include="wwwroot\js\ajaxThumbs.js" />
+    <Content Include="wwwroot\lib\bootstrap\dist\css\Newcastle.jpg" />
+    <Content Include="wwwroot\scss\Newcastle.jpg" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.0.0" />
