@@ -29,12 +29,12 @@ namespace Inspicio.Controllers
         }
 
         // GET: Images
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string SearchString)
         {
 
             // Only images with the user id set as the owner should be passed into the view
             var UserID = _userManager.GetUserId(HttpContext.User);
-
+            
             // Changed from getting all images then working out which we want to only getting the ones we want.
             var AllImages =  _context.Images.Where( i => i.OwnerId == UserID).ToList();
             return View(AllImages);
