@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace Inspicio.Migrations
 {
-    public partial class migration : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -25,6 +25,7 @@ namespace Inspicio.Migrations
                     PasswordHash = table.Column<string>(nullable: true),
                     PhoneNumber = table.Column<string>(nullable: true),
                     PhoneNumberConfirmed = table.Column<bool>(nullable: false),
+                    ProfileName = table.Column<string>(nullable: true),
                     SecurityStamp = table.Column<string>(nullable: true),
                     TwoFactorEnabled = table.Column<bool>(nullable: false),
                     UserName = table.Column<string>(maxLength: 256, nullable: true)
@@ -70,10 +71,10 @@ namespace Inspicio.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Content = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true),
-                    DownRating = table.Column<int>(nullable: false),
+                    NoOfDislikes = table.Column<int>(nullable: false),
+                    NoOfLikes = table.Column<int>(nullable: false),
                     OwnerId = table.Column<string>(nullable: true),
-                    Title = table.Column<string>(nullable: true),
-                    UpRating = table.Column<int>(nullable: false)
+                    Title = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
