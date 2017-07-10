@@ -17,15 +17,15 @@ namespace Inspicio.Controllers
     [Authorize]
     public class ImagesController : Controller
     {
-        private readonly UserManager<ApplicationUser> UserManager;   
-        private readonly IHostingEnvironment Environment;
-        private readonly ApplicationDbContext Context;
+        private readonly UserManager<ApplicationUser> _userManager;   
+        private readonly IHostingEnvironment _environment;
+        private readonly ApplicationDbContext _context;
 
-        public ImagesController(ApplicationDbContext Context, IHostingEnvironment Environment, UserManager<ApplicationUser> UserManager)
+        public ImagesController(ApplicationDbContext _context, IHostingEnvironment _environment, UserManager<ApplicationUser> _userManager)
         {
-            this.Environment = Environment;
-            this.Context = Context;
-            this.UserManager = UserManager;
+            this._environment = _environment;
+            this._context = _context;
+            this._userManager = _userManager;
         }
 
         // GET: Images
@@ -33,10 +33,10 @@ namespace Inspicio.Controllers
         {
 
             // Only images with the user id set as the owner should be passed into the view
-            var UserID = UserManager.GetUserId(HttpContext.User);
+            var UserID = _userManager.GetUserId(HttpContext.User);
 
             // Changed from getting all images then working out which we want to only getting the ones we want.
-            var AllImages =  Context.Images.Where( i => i.OwnerId == UserID).ToList();
+            var AllImages =  _context.Images.Where( i => i.OwnerId == UserID).ToList();
             return View(AllImages);
         }
 
@@ -48,7 +48,7 @@ namespace Inspicio.Controllers
                 return NotFound();
             }
 
-            var Image = await Context.Images.SingleOrDefaultAsync(m => m.ImageID == Id);
+            var Image = await _context.Images.SingleOrDefaultAsync(m => m.ImageID == Id);
             if (Image == null)
             {
                 return NotFound();
@@ -72,9 +72,9 @@ namespace Inspicio.Controllers
         {
             if (ModelState.IsValid)
             {
-                Image.OwnerId = UserManager.GetUserId(HttpContext.User);
-                Context.Add(Image);
-                await Context.SaveChangesAsync();
+                Image.OwnerId = _userManager.GetUserId(HttpContext.User);
+                _context.Add(Image);
+                await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
             return View(Image);
@@ -104,7 +104,7 @@ namespace Inspicio.Controllers
             }
             
             // Fetch the image by the id pass in '/5'
-            var Image = await Context.Images.SingleOrDefaultAsync(m => m.ImageID == Id);
+            var Image = await _context.Images.SingleOrDefaultAsync(m => m.ImageID == Id);
             if (Image == null)
             {
                 return NotFound();
@@ -116,20 +116,20 @@ namespace Inspicio.Controllers
             FullReviewData.Comments = new List<FullReviewData.CommentInfo>();
 
             // Added OwnerProfileName to be passed into the model.
-            ApplicationUser User = await UserManager.FindByIdAsync(Image.OwnerId);
+            ApplicationUser User = await _userManager.FindByIdAsync(Image.OwnerId);
 
             FullReviewData.OwnerProfileName = User.ProfileName;
             FullReviewData.Image = Image;
 
             // Changed from getting all comments then working out which we want to only getting the ones we want.
-            var AllComments = Context.Comments.Where(c => c.ImageId == Id);
+            var AllComments = _context.Comments.Where(c => c.ImageId == Id);
             foreach (Comment SingleComment in AllComments)
             {
                 // add it and query the user table for the profilename.
 
                 // add it and query the user table for the profilename.
                 var CommentInfo = new FullReviewData.CommentInfo();
-                CommentInfo.PosterProfileName = Context.Users.Where(u => u.Id == SingleComment.OwnerId).Select(u => u.ProfileName).SingleOrDefault();
+                CommentInfo.PosterProfileName = _context.Users.Where(u => u.Id == SingleComment.OwnerId).Select(u => u.ProfileName).SingleOrDefault();
                 CommentInfo.comment = SingleComment;
 
                 FullReviewData.Comments.Add(CommentInfo);
@@ -158,8 +158,8 @@ namespace Inspicio.Controllers
             {
                 try
                 {
-                    Context.Update(Image);
-                    await Context.SaveChangesAsync();
+                    _context.Update(Image);
+                    await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -185,7 +185,7 @@ namespace Inspicio.Controllers
                 return NotFound();
             }
 
-            var Image = await Context.Images.SingleOrDefaultAsync(m => m.ImageID == Id);
+            var Image = await _context.Images.SingleOrDefaultAsync(m => m.ImageID == Id);
             if (Image == null)
             {
                 return NotFound();
@@ -199,15 +199,15 @@ namespace Inspicio.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int Id)
         {
-            var Image = await Context.Images.SingleOrDefaultAsync(m => m.ImageID == Id);
-            Context.Images.Remove(Image);
-            await Context.SaveChangesAsync();
+            var Image = await _context.Images.SingleOrDefaultAsync(m => m.ImageID == Id);
+            _context.Images.Remove(Image);
+            await _context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
         private bool ImageExists(int Id)
         {
-            return Context.Images.Any(e => e.ImageID == Id);
+            return _context.Images.Any(e => e.ImageID == Id);
         }
 
         public class DataFromBody
@@ -221,14 +221,14 @@ namespace Inspicio.Controllers
         {
             Comment Comment = new Comment();
 
-            String UserId = UserManager.GetUserId(HttpContext.User);
+            String UserId = _userManager.GetUserId(HttpContext.User);
             Comment.OwnerId = UserId;
             Comment.ImageId = DataFromBody.ImageId;
             Comment.Message = DataFromBody.Message;
             Comment.Timestamp = System.DateTime.Now;
 
-            Context.Add(Comment);
-            await Context.SaveChangesAsync();
+            _context.Add(Comment);
+            await _context.SaveChangesAsync();
 			return Ok(1);
         }
        
@@ -240,7 +240,7 @@ namespace Inspicio.Controllers
         [HttpPost]
         public async Task<IActionResult> ChangeRating([FromBody] RatingBody RatingBody)
         {            
-            var Image = await Context.Images.SingleOrDefaultAsync(m => m.ImageID == RatingBody.ImageID);
+            var Image = await _context.Images.SingleOrDefaultAsync(m => m.ImageID == RatingBody.ImageID);
             if (RatingBody.boolean)
             {
                 Image.NoOfLikes += 1;
@@ -250,7 +250,7 @@ namespace Inspicio.Controllers
                 Image.NoOfDislikes++;
             }
 
-            await Context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
             return Ok(1);
         }
     }

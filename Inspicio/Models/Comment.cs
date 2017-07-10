@@ -10,7 +10,7 @@ namespace Inspicio.Models
 
     public class Comment
     {
-        public int CommentID { get; set; }
+        public int CommentId { get; set; }
 
         public string OwnerId { get; set; }
 

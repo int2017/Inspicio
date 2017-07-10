@@ -29,19 +29,17 @@ namespace Inspicio.ClaimsPrincipalExtensions
 
         public async override Task<ClaimsPrincipal> CreateAsync( ApplicationUser user )
         {
-
-                // Jack Lloyd [06/07/17]
             // First call the base we originally were calling
             var principal = await base.CreateAsync(user);
 
             // Adding the ProfileName property to Claims.
             ((ClaimsIdentity)principal.Identity).AddClaims(new[]
             {
-                    // ClaimTypes.GivenName, this will be how we access our property when needed
+                // ClaimTypes.GivenName, this will be how we access our property when needed
                 new Claim(ClaimTypes.GivenName, user.ProfileName)
             });
 
-        return principal;
+            return principal;
         }
     }
 }
