@@ -26,6 +26,7 @@
     <Content Include="wwwroot\js\filter.js" />
     <Content Include="wwwroot\js\pinComments.js" />
     <Content Include="wwwroot\js\ajaxThumbs.js" />
+    <Content Include="wwwroot\js\sidebar.js" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.0.0" />
@@ -50,6 +51,10 @@
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="1.0.1" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Migrations\" />
+    <Folder Include="Migrations\" />
+    <Folder Include="Migrations\" />
+    <Folder Include="Migrations\" />
     <Folder Include="Migrations\" />
   </ItemGroup>
 </Project>

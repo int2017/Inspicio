@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace Inspicio.Migrations
 {
-    public partial class init : Migration
+    public partial class MyMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -181,6 +181,8 @@ namespace Inspicio.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     ChildId = table.Column<string>(nullable: true),
                     ImageId = table.Column<int>(nullable: false),
+                    Lat = table.Column<float>(nullable: false),
+                    Lng = table.Column<float>(nullable: false),
                     Message = table.Column<string>(nullable: true),
                     OwnerId = table.Column<string>(nullable: true),
                     ParentId = table.Column<string>(nullable: true),

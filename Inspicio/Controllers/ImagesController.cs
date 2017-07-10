@@ -222,20 +222,24 @@ namespace Inspicio.Controllers
         {
             public String Message { get; set; }
             public int ImageId { get; set; }
+            public float Lat { get; set; }
+            public float Lng { get; set; }
         }
 
         [HttpPost]
         public async Task<IActionResult> Comment([FromBody] DataFromBody DataFromBody)
         {
-            Comment Comment = new Comment();
+            Comment comment = new Comment();
 
-            String UserId = _userManager.GetUserId(HttpContext.User);
-            Comment.OwnerId = UserId;
-            Comment.ImageId = DataFromBody.ImageId;
-            Comment.Message = DataFromBody.Message;
-            Comment.Timestamp = System.DateTime.Now;
+            var userId = _userManager.GetUserId(HttpContext.User);
+            comment.OwnerId = userId;
+            comment.ImageId = DataFromBody.ImageId;
+            comment.Message = DataFromBody.Message;
+            comment.Timestamp = System.DateTime.Now;
+            comment.Lat = DataFromBody.Lat;
+            comment.Lng = DataFromBody.Lng;
+            _context.Add(comment);
 
-            _context.Add(Comment);
             await _context.SaveChangesAsync();
 			return Ok(1);
         }
@@ -245,6 +249,7 @@ namespace Inspicio.Controllers
             // Boolean is true, if like button pressed
             public bool boolean { get; set; }
             public int ImageID { get; set; }
+
         }
         [HttpPost]
         public async Task<IActionResult> ChangeRating([FromBody] RatingBody data) 

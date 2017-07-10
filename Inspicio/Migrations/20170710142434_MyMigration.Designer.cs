@@ -8,8 +8,8 @@ using Inspicio.Data;
 namespace Inspicio.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20170710125209_init")]
-    partial class init
+    [Migration("20170710142434_MyMigration")]
+    partial class MyMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -77,6 +77,10 @@ namespace Inspicio.Migrations
                     b.Property<string>("ChildId");
 
                     b.Property<int>("ImageId");
+
+                    b.Property<float>("Lat");
+
+                    b.Property<float>("Lng");
 
                     b.Property<string>("Message");
 

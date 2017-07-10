@@ -77,6 +77,10 @@ namespace Inspicio.Migrations
 
                     b.Property<int>("ImageId");
 
+                    b.Property<float>("Lat");
+
+                    b.Property<float>("Lng");
+
                     b.Property<string>("Message");
 
                     b.Property<string>("OwnerId");
