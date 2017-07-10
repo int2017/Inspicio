@@ -19,7 +19,7 @@
     
 });
 
-function updateThumbs(bool,button) {
+function updateThumbs( bool, button ) {
     var text = "#" + button + " .rating";
     var image = {
         "ImageID": $("#ImageId").val(),

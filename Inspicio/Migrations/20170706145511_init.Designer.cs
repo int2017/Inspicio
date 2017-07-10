@@ -8,9 +8,10 @@ using Inspicio.Data;
 namespace Inspicio.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170706145511_init")]
+    partial class init
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.2")
@@ -116,23 +117,6 @@ namespace Inspicio.Migrations
                     b.HasIndex("OwnerId");
 
                     b.ToTable("Images");
-                });
-
-            modelBuilder.Entity("Inspicio.Models.Review", b =>
-                {
-                    b.Property<string>("OwnerId");
-
-                    b.Property<int>("ImageId");
-
-                    b.Property<bool>("Disliked");
-
-                    b.Property<bool>("Liked");
-
-                    b.HasKey("OwnerId", "ImageId");
-
-                    b.HasIndex("ImageId");
-
-                    b.ToTable("Review");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRole", b =>
@@ -259,19 +243,6 @@ namespace Inspicio.Migrations
                     b.HasOne("Inspicio.Models.ApplicationUser", "ApplicationUsers")
                         .WithMany("Images")
                         .HasForeignKey("OwnerId");
-                });
-
-            modelBuilder.Entity("Inspicio.Models.Review", b =>
-                {
-                    b.HasOne("Inspicio.Models.Image", "Images")
-                        .WithMany("Reviews")
-                        .HasForeignKey("ImageId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("Inspicio.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany("Reviews")
-                        .HasForeignKey("OwnerId")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRoleClaim<string>", b =>
