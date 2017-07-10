@@ -23,7 +23,7 @@
                     <div id="image-description"> 
                        
                         <h5>Status: Open</h5>
-                        <h4>By : @Model.Image.OwnerId</h4>
+                        <h4>By : @Model.OwnerProfileName</h4>
                         <h3>Description</h3>
                         <p>@Model.Image.Description </p>
                     </div>
@@ -34,8 +34,8 @@
 
                             <!--If the user has already voted either thumbs up or down,change the fill to black-->
                             <div class="row">
-                                <button type="button" id="thumbs-up" class="btn btn-success thumb"> <i class="fa fa-thumbs-o-up " aria-hidden="true"></i> : <span class="rating">@Model.Image.UpRating</span></button>
-                                <button type="button" id="thumbs-down" class="btn btn-danger thumb"><i class="fa fa-thumbs-o-down " aria-hidden="true"></i> : <span class="rating">@Model.Image.DownRating</span></button>
+                                <button type="button" id="thumbs-up" class="btn btn-success thumb"> <i class="fa fa-thumbs-o-up " aria-hidden="true"></i> : <span class="rating">@Model.Image.NoOfLikes</span></button>
+                                <button type="button" id="thumbs-down" class="btn btn-danger thumb"><i class="fa fa-thumbs-o-down " aria-hidden="true"></i> : <span class="rating">@Model.Image.NoOfDislikes</span></button>
                             </div>
                             <div class="row">
                                 <button type="button" class="btn btn-info " onclick="popupState()">Hide markers</button>
@@ -59,7 +59,7 @@
 
                 <!-- comments go here -->
                 <h3 class="text-center">Comment section</h3>
-                @foreach (Comment c in Model.Comments)
+                @foreach (var c in Model.Comments)
                 {
                     <div class="row-eq-height comment">
                         <div class="comment-user col-xs-4 col-sm-4 col-md-4">

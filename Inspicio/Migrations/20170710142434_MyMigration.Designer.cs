@@ -8,8 +8,8 @@ using Inspicio.Data;
 namespace Inspicio.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20170710120024_CommentNulls")]
-    partial class CommentNulls
+    [Migration("20170710142434_MyMigration")]
+    partial class MyMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -48,6 +48,8 @@ namespace Inspicio.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed");
 
+                    b.Property<string>("ProfileName");
+
                     b.Property<string>("SecurityStamp");
 
                     b.Property<bool>("TwoFactorEnabled");
@@ -69,7 +71,7 @@ namespace Inspicio.Migrations
 
             modelBuilder.Entity("Inspicio.Models.Comment", b =>
                 {
-                    b.Property<int>("CommentID")
+                    b.Property<int>("CommentId")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("ChildId");
@@ -88,7 +90,7 @@ namespace Inspicio.Migrations
 
                     b.Property<DateTime>("Timestamp");
 
-                    b.HasKey("CommentID");
+                    b.HasKey("CommentId");
 
                     b.HasIndex("ImageId");
 
@@ -106,19 +108,36 @@ namespace Inspicio.Migrations
 
                     b.Property<string>("Description");
 
-                    b.Property<int>("DownRating");
+                    b.Property<int>("NoOfDislikes");
+
+                    b.Property<int>("NoOfLikes");
 
                     b.Property<string>("OwnerId");
 
                     b.Property<string>("Title");
-
-                    b.Property<int>("UpRating");
 
                     b.HasKey("ImageID");
 
                     b.HasIndex("OwnerId");
 
                     b.ToTable("Images");
+                });
+
+            modelBuilder.Entity("Inspicio.Models.Review", b =>
+                {
+                    b.Property<string>("OwnerId");
+
+                    b.Property<int>("ImageId");
+
+                    b.Property<bool>("Disliked");
+
+                    b.Property<bool>("Liked");
+
+                    b.HasKey("OwnerId", "ImageId");
+
+                    b.HasIndex("ImageId");
+
+                    b.ToTable("Review");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRole", b =>
@@ -245,6 +264,19 @@ namespace Inspicio.Migrations
                     b.HasOne("Inspicio.Models.ApplicationUser", "ApplicationUsers")
                         .WithMany("Images")
                         .HasForeignKey("OwnerId");
+                });
+
+            modelBuilder.Entity("Inspicio.Models.Review", b =>
+                {
+                    b.HasOne("Inspicio.Models.Image", "Images")
+                        .WithMany("Reviews")
+                        .HasForeignKey("ImageId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Inspicio.Models.ApplicationUser", "ApplicationUser")
+                        .WithMany("Reviews")
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRoleClaim<string>", b =>

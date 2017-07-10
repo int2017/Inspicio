@@ -123,6 +123,7 @@ function createCommentRow(user, comment, uniqID) {
 }
 //Since the whole popup has to be recreated, this method clones it's previous HTML
 function appendRow(row, uniqID) {
+
     var containerFront = "<div id='popup" + uniqID + "' class='container-fluid popup-comment-container'>" + $("#popup" + uniqID).html() + row + "</div>";
     var containerTail = "<div class='row comment-popup-input'>" + $(".comment-popup-input").html();
     return containerFront + containerTail;
@@ -133,6 +134,7 @@ function createMarkers(comment, userId, lat, lng) {
     if (lat != 0 && lng != 0) {
         var latlng = L.latLng(lat, lng);
         var uniqID = createMarker(latlng, false);
+        createBtn(uniqID);
         createCommentRow(userId, comment, uniqID);
     }
 }

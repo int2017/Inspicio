@@ -233,11 +233,11 @@ namespace Inspicio.Controllers
 
             var userId = _userManager.GetUserId(HttpContext.User);
             comment.OwnerId = userId;
-            comment.ImageId = _DataFromBody.ImageId;
-            comment.Message = _DataFromBody.Message;
+            comment.ImageId = DataFromBody.ImageId;
+            comment.Message = DataFromBody.Message;
             comment.Timestamp = System.DateTime.Now;
-            comment.Lat = _DataFromBody.Lat;
-            comment.Lng = _DataFromBody.Lng;
+            comment.Lat = DataFromBody.Lat;
+            comment.Lng = DataFromBody.Lng;
             _context.Add(comment);
 
             await _context.SaveChangesAsync();

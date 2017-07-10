@@ -8,20 +8,19 @@ function commentClick(uniqID) {
             locationLng = this.getLatLng().lng;
         }
     })
-    var _DataFromBody = {
+    var DataFromBody = {
                 "ImageId": $("#ImageId").val(),
                 "Message": $(".popup-textarea").val(),
                 "Lat" : locationLat,
                 "Lng" : locationLng
     }
-        alert(JSON.stringify(_DataFromBody));
         $.ajax(
             {
                 type: "POST", //HTTP POST Method  
                 url: "../Comment", // Controller/View  
                 contentType: "application/json;",
                 dataType: "text",
-                data: JSON.stringify(_DataFromBody),
+                data: JSON.stringify(DataFromBody),
                 
                 success: function () {
                     createCommentRow("user", $(".popup-textarea").val(), uniqID);
@@ -35,7 +34,7 @@ function commentClick(uniqID) {
 }; 
 
 function commentClickMain() {
-    var _DataFromBody = {
+    var DataFromBody = {
         "ImageId": $("#ImageId").val(),
         "Message": $("#comment-textarea").val(),
         "Lat": null,
@@ -47,7 +46,7 @@ function commentClickMain() {
             url: "../Comment", // Controller/View  
             contentType: "application/json;",
             dataType: "text",
-            data: JSON.stringify(_DataFromBody),
+            data: JSON.stringify(DataFromBody),
             success: function () {
                 $("#comment-section").load(window.location.href + " #comment-section > * ");
                 $("#comment-textarea").val("");
