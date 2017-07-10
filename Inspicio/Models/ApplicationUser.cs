@@ -11,9 +11,12 @@ namespace Inspicio.Models
 {
     // Add profile data for application users by adding properties to the ApplicationUser class
     public class ApplicationUser : IdentityUser
-    { 
+    {
+        // Added ProfileName column to the user table [AspNetUsers]
+        public string ProfileName { get; set; }
+
         public ICollection<Comment> Comments { get; set; }
         public ICollection<Image> Images { get; set; }
-
+        public ICollection<Review> Reviews { get; set; }
     }
 }

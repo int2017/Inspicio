@@ -28,6 +28,8 @@
     <script src="https://unpkg.com/leaflet@1.1.0/dist/leaflet.js"
             integrity="sha512-mNqn2Wg7tSToJhvHcqfzLMU6J4mkOImSPTxVZAdo+lcPlk+GhZmYgACEe0x35K7YzW1zJ7XyJV/TT1MrdXvMcA=="
             crossorigin=""></script>
+
+    <script src="~/lib/jquery/dist/jquery.js"></script>
 </head>
 <body>
     <nav class="navbar navbar-inverse navbar-fixed-top">
@@ -59,7 +61,7 @@
     </div>
 
     <environment names="Development">
-        <script src="~/lib/jquery/dist/jquery.js"></script>
+        
         <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
         <script src="~/js/site.js" asp-append-version="true"></script>
     </environment>
@@ -80,10 +82,7 @@
     </environment>
 
     @RenderSection("Scripts", required: false)    
-   
-    <script type="text/javascript" src="~/js/filter.js"></script>
-    <script type="text/javascript" src="~/js/pinComments.js"></script>
-    <script type="text/javascript" src="~/js/ajaxComments.js"></script>
-    <script type="text/javascript" src="~/js/ajaxThumbs.js"></script>
+
+
 </body>
 </html>
