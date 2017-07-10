@@ -70,7 +70,7 @@ namespace Inspicio.Migrations
 
             modelBuilder.Entity("Inspicio.Models.Comment", b =>
                 {
-                    b.Property<int>("CommentID")
+                    b.Property<int>("CommentId")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("ChildId");
@@ -85,7 +85,7 @@ namespace Inspicio.Migrations
 
                     b.Property<DateTime>("Timestamp");
 
-                    b.HasKey("CommentID");
+                    b.HasKey("CommentId");
 
                     b.HasIndex("ImageId");
 
