@@ -1,9 +1,12 @@
-﻿
+
 function commentClick (uniqID) {
         var data = {
                 "ImageId": $("#ImageId").val(),
-                "Message": $(".popup-textarea").val()
+                "Message": $(".popup-textarea").val()          
         }
+
+         
+
         $.ajax(
             {
                 type: "POST", //HTTP POST Method  
@@ -16,8 +19,10 @@ function commentClick (uniqID) {
                     createCommentRow("user", $(".popup-textarea").val(), uniqID);
                     $("#comment-section").load(window.location.href + " #comment-section > * ");
                     $("#comment-textarea").val("");
+
                 }
-            });
+
+              });
 
 }; 
 
