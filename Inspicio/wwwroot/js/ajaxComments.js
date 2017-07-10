@@ -1,4 +1,4 @@
-﻿
+
 function commentClick(uniqID) {
     var locationLat;
     var locationLng;
@@ -28,8 +28,10 @@ function commentClick(uniqID) {
                     createCommentRow("user", $(".popup-textarea").val(), uniqID);
                     $("#comment-section").load(window.location.href + " #comment-section > * ");
                     $("#comment-textarea").val("");
+
                 }
-            });
+
+              });
 
 }; 
 

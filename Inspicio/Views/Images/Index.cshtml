@@ -9,6 +9,14 @@
 <p>
     <a asp-action="Create">Create Review</a>
 </p>
+
+<form asp-controller="Images" asp-action="Index">
+    <p>
+        Title: <input type="text" name="SearchString">
+        <input type="submit" value="Filter" />
+    </p>
+</form>
+
 <table class="table">
     <thead>
         <tr>
