@@ -299,7 +299,7 @@ input:focus {
     left: 0;
     background-color: white;
     color: black;
-    opacity: 0.4;
+    opacity: 0.6;
     transition: all 0.2s ease-in-out;
     border: 1px solid #8c8c8c;
 }

@@ -13,7 +13,8 @@ namespace Inspicio.Models
 
         public string OwnerId { get; set; }
         public int ImageId { get; set; }
-
+        public float Lat { get; set; }
+        public float Lng { get; set; }
         public string Message { get; set; }
         public DateTime Timestamp { get; set; }
         public string ParentId { get; set; }

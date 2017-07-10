@@ -204,6 +204,8 @@ namespace Inspicio.Controllers
         {
             public String Message { get; set; }
             public int ImageId { get; set; }
+            public float Lat { get; set; }
+            public float Lng { get; set; }
         }
 
         [HttpPost]
@@ -216,7 +218,8 @@ namespace Inspicio.Controllers
             comment.ImageId = _DataFromBody.ImageId;
             comment.Message = _DataFromBody.Message;
             comment.Timestamp = System.DateTime.Now;
-
+            comment.Lat = _DataFromBody.Lat;
+            comment.Lng = _DataFromBody.Lng;
             _context.Add(comment);
             await _context.SaveChangesAsync();
 			return Ok(1);
@@ -226,6 +229,7 @@ namespace Inspicio.Controllers
         {
             public bool boolean { get; set; }
             public int ImageID { get; set; }
+
         }
         [HttpPost]
         public async Task<IActionResult> ChangeRating([FromBody] RatingBody data)

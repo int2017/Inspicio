@@ -1,7 +1,6 @@
 ﻿@model Inspicio.Controllers.ImagesController.DataToBody
 
 
-
 <div class="view-container">
     <h2>@Model.Image.Title</h2>
     <hr />
@@ -97,6 +96,7 @@
         display:none;
     }
 </style>
+
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
@@ -104,3 +104,15 @@
 <script type="text/javascript" src="~/js/ajaxComments.js"></script>
 <script type="text/javascript" src="~/js/pinComments.js"></script>
 <script type="text/javascript" src="~/js/sidebar.js"></script>
+<script>
+
+    $(document).ready(function () {
+        @foreach ( var c in Model.Comments)
+    {
+       <text> createMarkers('@c.Message', '@Model.Image.OwnerId', '@c.Lat', '@c.Lng');</text>
+
+    }
+        $("#imageMap").width($("#image-container >img").width());
+        $("#imageMap").height($("#image-container >img").height());
+    })
+</script>

@@ -49,20 +49,28 @@ function popupState() {
         imageMap.off('click');
     }
 }
-//Array of all the popups
-var popups = new Array();
+//Array of all the popups and markers
+var markersArray = new Array();
+var popupsArray = new Array();
+
+
 //listener for clicks
 function mapOnClick(e) {
+    createMarker(e.latlng,true);
+}
+//Creating individual markers. Needed because onClick event sends a different object than createMarkers()
+//clickBool determines wether the markers and popups are created by clicking on map or by fetching data from DB
+function createMarker(latlng,clickBool) {
     var uniqID = Math.round(new Date().getTime() + (Math.random() * 100));
-    var marker = new L.marker(e.latlng).addTo(markerGroup);
+    var marker = new L.marker(latlng).addTo(markerGroup);
     var popup = new L.Popup();
+   /* Commented for testing purposes
     //Removes marker if popup is empty
     marker.on('popupclose', function (e) {
-        if (($("#popup" + uniqID).html().indexOf("popup-comment"))===-1) {
+        if (($("#popup" + uniqID).html().indexOf("popup-comment")) === -1) {
             imageMap.removeLayer(marker);
         }
-        
-    });
+    });*/
     popup.setContent(createBtn(uniqID));
     popup.options.autoPan = false;
     //Focusing the textarea of the popup
@@ -71,15 +79,18 @@ function mapOnClick(e) {
             function () {
                 $("#popuptext" + uniqID).focus();
             }, 50);
-        
+
     });
-
     popup.myData = { id: uniqID };
-    popups.push(popup);
+    popupsArray.push(popup);
+    markersArray.push(marker);
     marker.bindPopup(popup);
-    marker.openPopup();
-    $(".popup-textarea").focus();
-
+    marker.myData = { id: uniqID };
+    if (clickBool) {
+        marker.openPopup();
+        $(".popup-textarea").focus();
+    }
+    return uniqID;
 }
 //Creates initial text
 function createBtn(uniqID) {
@@ -91,7 +102,7 @@ function createBtn(uniqID) {
     setTimeout(
         function () {
             $("#popuptext" + uniqID).keypress(function (e) {
-                if (e.which == 13) {
+                if (e.which === 13) {
                     commentClick(uniqID);
                 }
             })
@@ -102,8 +113,8 @@ function createBtn(uniqID) {
 //Creating a new comment row
 function createCommentRow(user, comment, uniqID) {
     var row = "<div class='row popup-comment'> <div class='col-xs-4 col-sm-4 col-md-4'><p>" + user + "</p></div><div class='col-xs-8 col-sm-8 col-md-8'>" + comment + "</div></div>";
-    $(popups).each(function () {
-        if (this.myData.id == uniqID) {
+    $(popupsArray).each(function () {
+        if (this.myData.id === uniqID) {
             this.setContent(appendRow(row, uniqID));
         }
     });
@@ -113,6 +124,20 @@ function createCommentRow(user, comment, uniqID) {
 //Since the whole popup has to be recreated, this method clones it's previous HTML
 function appendRow(row, uniqID) {
     var containerFront = "<div id='popup" + uniqID + "' class='container-fluid popup-comment-container'>" + $("#popup" + uniqID).html() + row + "</div>";
-    var containerTail = "<div class='row comment-popup-input'>" + $(".comment-popup-input").html() ;
-    return containerFront +  containerTail;
+    var containerTail = "<div class='row comment-popup-input'>" + $(".comment-popup-input").html();
+    return containerFront + containerTail;
+
 }
+//Creates markers from existing comments in the DB
+function createMarkers(comment, userId, lat, lng) {
+    if (lat != 0 && lng != 0) {
+        var latlng = L.latLng(lat, lng);
+        var uniqID = createMarker(latlng, false);
+        createCommentRow(userId, comment, uniqID);
+    }
+}
+
+//Changing map size/location when window is resized
+$(window).resize(function () {
+    imageMap.invalidateSize();
+})

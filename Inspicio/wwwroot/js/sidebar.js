@@ -17,7 +17,3 @@ $("#close-side").click(function () {
     
 });
 
-$(document).ready(function () {
-    $("#imageMap").width($("#image-container img").width());
-    $("#imageMap").height($("#image-container img").height());
-})

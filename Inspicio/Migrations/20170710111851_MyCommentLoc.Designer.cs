@@ -8,9 +8,10 @@ using Inspicio.Data;
 namespace Inspicio.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170710111851_MyCommentLoc")]
+    partial class MyCommentLoc
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.2")
@@ -75,9 +76,9 @@ namespace Inspicio.Migrations
 
                     b.Property<int>("ImageId");
 
-                    b.Property<float>("Lat");
+                    b.Property<int>("Lat");
 
-                    b.Property<float>("Lng");
+                    b.Property<int>("Lng");
 
                     b.Property<string>("Message");
 
