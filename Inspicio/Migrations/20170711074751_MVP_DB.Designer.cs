@@ -8,8 +8,8 @@ using Inspicio.Data;
 namespace Inspicio.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20170710151647_init")]
-    partial class init
+    [Migration("20170711074751_MVP_DB")]
+    partial class MVP_DB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace Inspicio.Migrations
 {
-    public partial class init : Migration
+    public partial class MVP_DB : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
