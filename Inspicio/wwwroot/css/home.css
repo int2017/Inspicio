@@ -1,0 +1,36 @@
+﻿.blur {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    left: 0;
+    top: 0;
+    z-index: -1;
+    background-color: rgba(0,0,0,0.4);
+}
+
+#homeImg {
+    background-image: url(../images/ostrich.jpg);
+    height: 100vh;
+    position: relative;
+    z-index: 5
+}
+
+#home-header {
+    font-family: 'KG Summer Sunshine Blackout';
+    padding-top: 55px;
+    padding-left: 20px;
+    height: 30px;
+}
+
+#img-txt {
+    color: white;
+    padding-left: 30px;
+    padding-top: 250px;
+    font-family: 'Century Gothic';
+    font-size: larger;
+}
+
+.navbar-brand {
+    visibility:hidden;
+}
+
