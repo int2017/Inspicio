@@ -45,7 +45,9 @@ hr {
 }
 
 
-
+nav{
+    margin-bottom:0 !important;
+}
 .dash-project > h3 {
     display: inline;
 }
