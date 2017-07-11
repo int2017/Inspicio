@@ -14,9 +14,11 @@ namespace Inspicio.Models
 
         public int ImageId { get; set; }
 
-        public Boolean Liked { get; set; }
+        public Boolean Approved { get; set; }
 
-        public Boolean Disliked { get; set; }
+        public Boolean Rejected { get; set; }
+
+        public Boolean ChangesRequested { get; set; }
 
         [ForeignKey("OwnerId"), Column(Order = 0)]
         public ApplicationUser ApplicationUser { get; set; }

@@ -83,8 +83,9 @@ namespace Inspicio.Controllers
                 var review = new Review();
                 review.ImageId = image.ImageID;
                 review.OwnerId = image.OwnerId;
-                review.Liked = false;
-                review.Disliked = false;
+                review.Approved = false;
+                review.Rejected = false;
+                review.ChangesRequested = false;
                 _context.Add(review);
 
                 await _context.SaveChangesAsync();
@@ -274,25 +275,25 @@ namespace Inspicio.Controllers
             if (data.boolean)
             {
                 // if like hasn't already been selected
-                if (review.Liked == false)
+                if (review.Approved == false)
                 {
                     // I
-                    if (review.Disliked == true)
+                    if (review.Rejected == true)
                     {
-                        review.Liked = true;
-                        review.Disliked = false;
-                        image.NoOfLikes++;
-                        if (image.NoOfDislikes > 0)
+                        review.Approved = true;
+                        review.Rejected = false;
+                        image.NoOfApprovals++;
+                        if (image.NoOfRejections > 0)
                         {
-                            image.NoOfDislikes--;
+                            image.NoOfRejections--;
                         }
                     }
                     // if both buttons are false, increment likes by 1
-                    else if (review.Liked == false)
+                    else if (review.Approved == false)
                     {
-                        review.Liked = true;
-                        review.Disliked = false;
-                        image.NoOfLikes++;
+                        review.Approved = true;
+                        review.Rejected = false;
+                        image.NoOfApprovals++;
                     }
                 }
             }
@@ -301,24 +302,24 @@ namespace Inspicio.Controllers
             else
             {
                 // if dislike button hasn't been pressed before
-                if (review.Disliked == false)
+                if (review.Rejected == false)
                 {
                     // if the like button was pressed add 1 to dislikes, minus 1 from likes
-                    if (review.Liked == true)
+                    if (review.Approved == true)
                     {
-                        review.Liked = false;
-                        review.Disliked = true;
-                        image.NoOfDislikes++;
-                        if (image.NoOfLikes > 0)
+                        review.Approved = false;
+                        review.Rejected = true;
+                        image.NoOfRejections++;
+                        if (image.NoOfApprovals > 0)
                         {
-                            image.NoOfLikes--;
+                            image.NoOfApprovals--;
                         }
                     }
                     // if neither button has been pressed, add 1 to dislikes
-                    else if (review.Liked == false)
+                    else if (review.Approved == false)
                     {
-                        review.Disliked = true;
-                        image.NoOfDislikes++;
+                        review.Rejected = true;
+                        image.NoOfRejections++;
                     }
                 }
             }

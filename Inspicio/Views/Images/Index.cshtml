@@ -32,11 +32,15 @@
                 @Html.DisplayNameFor(model => model.Description)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.NoOfLikes)
+                @Html.DisplayNameFor(model => model.NoOfApprovals)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.NoOfDislikes)
+                @Html.DisplayNameFor(model => model.NoOfChangesRequested)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NoOfRejections)
+            </th>
+            
            
    
             <th>
@@ -69,15 +73,22 @@
             </td>
             <td>
                 <a asp-action="View" asp-route-id="@item.ImageID">
-                    @Html.DisplayFor(modelItem => item.NoOfLikes)
+                    @Html.DisplayFor(modelItem => item.NoOfApprovals)
+                </a>
+            </td>
+
+            <td>
+                <a asp-action="View" asp-route-id="@item.ImageID">
+                    @Html.DisplayFor(modelItem => item.NoOfChangesRequested)
                 </a>
             </td>
            
             <td>
                 <a asp-action="View" asp-route-id="@item.ImageID">
-                    @Html.DisplayFor(modelItem => item.NoOfDislikes)
+                    @Html.DisplayFor(modelItem => item.NoOfRejections)
                 </a>
             </td>
+
             
           
         </tr>
