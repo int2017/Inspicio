@@ -252,7 +252,7 @@ namespace Inspicio.Controllers
        
         public class RatingBody
         {
-            // Boolean is true, if like button pressed
+            // Integer determines which button has been pressed
             public int ThumbVal { get; set; }
             public int ImageID { get; set; }
 
@@ -271,13 +271,13 @@ namespace Inspicio.Controllers
             int id = data.ImageID;
             var image = await _context.Images.SingleOrDefaultAsync(m => m.ImageID == id);
 
-            // if the like button has been pressed
+            // if the up thumb has been pressed
             if (data.ThumbVal == 1)
             {
-                // if like hasn't already been selected
+                // if the last button pressed wasn't the up thumb
                 if (review.Approved == false)
                 {
-                    
+                    // if the last button pressed was the middle thumb
                     if (review.ChangesRequested == true)
                     {
                         review.Approved = true;
@@ -289,7 +289,8 @@ namespace Inspicio.Controllers
                             image.NoOfChangesRequested--;
                         }
                     }
-
+                    
+                    // if the last button pressed was the down thumb
                     else if (review.Rejected == true)
                     {
                         review.Rejected = false;
@@ -302,7 +303,7 @@ namespace Inspicio.Controllers
                         }
                     }
 
-                    // if both buttons are false, increment likes by 1
+                    // if none of the buttons have been pressed before
                     else if ((review.Approved == false) && (review.ChangesRequested == false) && (review.Rejected == false))
                     {
                         review.Approved = true;
@@ -311,13 +312,13 @@ namespace Inspicio.Controllers
                 }
             }
 
-            // if the rejection button has been pressed
+            // if the down thumb has been pressed
             else if (data.ThumbVal == -1)
             {
-                // if rejection hasn't already been selected
+                // if the down thumb wasn't the last button pressed
                 if (review.Rejected == false)
                 {
-
+                    // if the last button pressed was the middle thumb
                     if (review.ChangesRequested == true)
                     {
                         review.Rejected = true;
@@ -330,6 +331,7 @@ namespace Inspicio.Controllers
                         }
                     }
 
+                    // if the last button pressed was the up thumb
                     else if (review.Approved == true)
                     {
                         review.Approved = false;
@@ -342,7 +344,7 @@ namespace Inspicio.Controllers
                         }
                     }
 
-                    // if both buttons are false, increment likes by 1
+                    // if none of the buttons have been pressed before
                     else if ((review.Approved == false) && (review.ChangesRequested == false) && (review.Rejected == false))
                     {
                         review.Rejected = true;
@@ -354,10 +356,10 @@ namespace Inspicio.Controllers
             // if the middle button has been pressed
             else if (data.ThumbVal == 0)
             {
-                // if changes hasn't already been selected
+                // if the middle thumb wasn't the last button pressed
                 if (review.ChangesRequested == false)
                 {
-
+                    // if the up thumb was the last button pressed
                     if (review.Approved == true)
                     {
                         review.ChangesRequested = true;
@@ -369,7 +371,7 @@ namespace Inspicio.Controllers
                             image.NoOfApprovals--;
                         }
                     }
-
+                    // if the down thumb was the last button pressed
                     else if (review.Rejected == true)
                     {
                         review.Rejected = false;
@@ -382,7 +384,7 @@ namespace Inspicio.Controllers
                         }
                     }
 
-                    // if both buttons are false, increment likes by 1
+                    // if none of the buttons have been pressed before
                     else if ((review.Approved == false) && (review.ChangesRequested == false) && (review.Rejected == false))
                     {
                         review.ChangesRequested = true;
@@ -390,7 +392,6 @@ namespace Inspicio.Controllers
                     }
                 }
             }
-
             await _context.SaveChangesAsync();
             return Ok(1);
         }
