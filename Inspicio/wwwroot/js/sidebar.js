@@ -16,4 +16,3 @@ $("#close-side").click(function () {
 
 
 });
-
