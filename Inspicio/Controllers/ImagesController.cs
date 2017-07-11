@@ -253,7 +253,7 @@ namespace Inspicio.Controllers
         public class RatingBody
         {
             // Boolean is true, if like button pressed
-            public bool boolean { get; set; }
+            public int ThumbVal { get; set; }
             public int ImageID { get; set; }
 
         }
@@ -272,42 +272,68 @@ namespace Inspicio.Controllers
             var image = await _context.Images.SingleOrDefaultAsync(m => m.ImageID == id);
 
             // if the like button has been pressed
-            if (data.boolean)
+            if (data.ThumbVal == 1)
             {
                 // if like hasn't already been selected
                 if (review.Approved == false)
                 {
-                    // I
-                    if (review.Rejected == true)
+                    
+                    if (review.ChangesRequested == true)
                     {
                         review.Approved = true;
                         review.Rejected = false;
+                        review.ChangesRequested = false;
+                        image.NoOfApprovals++;
+                        if (image.NoOfChangesRequested > 0)
+                        {
+                            image.NoOfChangesRequested--;
+                        }
+                    }
+
+                    else if (review.Rejected == true)
+                    {
+                        review.Rejected = false;
+                        review.ChangesRequested = false;
+                        review.Approved = true;
                         image.NoOfApprovals++;
                         if (image.NoOfRejections > 0)
                         {
                             image.NoOfRejections--;
                         }
                     }
+
                     // if both buttons are false, increment likes by 1
-                    else if (review.Approved == false)
+                    else if ((review.Approved == false) && (review.ChangesRequested == false) && (review.Rejected == false))
                     {
                         review.Approved = true;
-                        review.Rejected = false;
                         image.NoOfApprovals++;
                     }
                 }
             }
 
-            // if the dislike button has been pressed
-            else
+            // if the rejection button has been pressed
+            else if (data.ThumbVal == -1)
             {
-                // if dislike button hasn't been pressed before
+                // if rejection hasn't already been selected
                 if (review.Rejected == false)
                 {
-                    // if the like button was pressed add 1 to dislikes, minus 1 from likes
-                    if (review.Approved == true)
+
+                    if (review.ChangesRequested == true)
+                    {
+                        review.Rejected = true;
+                        review.Approved = false;
+                        review.ChangesRequested = false;
+                        image.NoOfRejections++;
+                        if (image.NoOfChangesRequested > 0)
+                        {
+                            image.NoOfChangesRequested--;
+                        }
+                    }
+
+                    else if (review.Approved == true)
                     {
                         review.Approved = false;
+                        review.ChangesRequested = false;
                         review.Rejected = true;
                         image.NoOfRejections++;
                         if (image.NoOfApprovals > 0)
@@ -315,11 +341,52 @@ namespace Inspicio.Controllers
                             image.NoOfApprovals--;
                         }
                     }
-                    // if neither button has been pressed, add 1 to dislikes
-                    else if (review.Approved == false)
+
+                    // if both buttons are false, increment likes by 1
+                    else if ((review.Approved == false) && (review.ChangesRequested == false) && (review.Rejected == false))
                     {
                         review.Rejected = true;
                         image.NoOfRejections++;
+                    }
+                }
+            }
+
+            // if the middle button has been pressed
+            else if (data.ThumbVal == 0)
+            {
+                // if changes hasn't already been selected
+                if (review.ChangesRequested == false)
+                {
+
+                    if (review.Approved == true)
+                    {
+                        review.ChangesRequested = true;
+                        review.Rejected = false;
+                        review.Approved = false;
+                        image.NoOfChangesRequested++;
+                        if (image.NoOfApprovals > 0)
+                        {
+                            image.NoOfApprovals--;
+                        }
+                    }
+
+                    else if (review.Rejected == true)
+                    {
+                        review.Rejected = false;
+                        review.Approved = false;
+                        review.ChangesRequested = true;
+                        image.NoOfChangesRequested++;
+                        if (image.NoOfRejections > 0)
+                        {
+                            image.NoOfRejections--;
+                        }
+                    }
+
+                    // if both buttons are false, increment likes by 1
+                    else if ((review.Approved == false) && (review.ChangesRequested == false) && (review.Rejected == false))
+                    {
+                        review.ChangesRequested = true;
+                        image.NoOfChangesRequested++;
                     }
                 }
             }

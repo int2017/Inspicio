@@ -10,20 +10,23 @@
         className = className.slice(0, 12) + "-o" + className.slice(12);
     }
     if (button === "thumbs-up") {
-        updateThumbs(true, button);
+        updateThumbs(1, button);
     }
-    else {
-        updateThumbs(false, button);
+    else if (button === "thumbs-down") {
+        updateThumbs(-1, button);
+    }
+    else if (button === "thumbs-middle") {
+        updateThumbs(0, button);
     }
     $("#" + button + " i").addClass(className);
     
 });
 
-function updateThumbs( bool, button ) {
+function updateThumbs( int, button ) {
     var text = "#" + button + " .rating";
     var image = {
         "ImageID": $("#ImageId").val(),
-        "boolean" : bool
+        "ThumbVal": int,
     };
     
     $.ajax(
@@ -35,6 +38,7 @@ function updateThumbs( bool, button ) {
             data: JSON.stringify(image),
             success: function () {
                 $("#thumbs-up > span").load(window.location.href + " " + "#thumbs-up > span");
+                $("#thumbs-middle > span").load(window.location.href + " " + "#thumbs-middle > span");
                 $("#thumbs-down > span").load(window.location.href + " " + "#thumbs-down > span");
             }
         });
