@@ -35,7 +35,7 @@
                 @Html.DisplayNameFor(model => model.NoOfApprovals)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.NoOfChangesRequested)
+                @Html.DisplayNameFor(model => model.NoOfNeedsWork)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.NoOfRejections)
@@ -79,7 +79,7 @@
 
             <td>
                 <a asp-action="View" asp-route-id="@item.ImageID">
-                    @Html.DisplayFor(modelItem => item.NoOfChangesRequested)
+                    @Html.DisplayFor(modelItem => item.NoOfNeedsWork)
                 </a>
             </td>
            

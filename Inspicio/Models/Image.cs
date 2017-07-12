@@ -22,7 +22,7 @@ namespace Inspicio.Models
         public int NoOfApprovals { get; set; }
 
         [DisplayName("Needs More Work")]
-        public int NoOfChangesRequested { get; set; }
+        public int NoOfNeedsWork { get; set; }
 
         public string Description { get; set; }
 
