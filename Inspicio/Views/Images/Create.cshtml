@@ -1,4 +1,4 @@
-@model Inspicio.Models.Image
+@model Inspicio.Controllers.ImagesController.CreatePageModel
 
 @{
     ViewData["Title"] = "Create";
@@ -13,24 +13,54 @@
 
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="row ">
-            <div class="col-md-10   text-center row">
-                <div class="form-group">
-                    
+            <div class="col-md-10 text-center row">
+
+
+                <div class="form-group">         
                     <div class="col-md-8 ">
-                        <input asp-for="Title" class="form-control" placeholder="Title" />
-                        <span asp-validation-for="Title" class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="form-group">
-                    
-                    <div class="col-md-8 ">
-                        <textarea rows="5" asp-for="Description" class="form-control" placeholder="Description" ></textarea>
-                        <span asp-validation-for="Description" class="text-danger"></span>
+                        <input asp-for="@Model.Image.Title" class="form-control" placeholder="Review Title" />
+                        <span asp-validation-for="@Model.Image.Title" class="text-danger"></span>
                     </div>
                 </div>
 
+
+                <div class="form-group">   
+                    <div class="col-md-8 ">
+                        <textarea rows="5" asp-for="@Model.Image.Description" class="form-control" placeholder="Review Description" ></textarea>
+                        <span asp-validation-for="@Model.Image.Description" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-8">
+                        <div asp-for="@Model.Users">
+                           
+                            <!-- checkboxs -->
+                            <table>
+                                @for( int i = 0; i < Model.Users.Count; i++ )
+                                {
+                                    <tr>
+                                        <td asp-for="@Model.Users[i].Email" >
+                                            @Html.DisplayFor(m => m.Users[i].Email)
+                                        </td>
+
+                                        <td>
+                                            @Html.LabelFor( m => m.Users[i].ProfileName)
+                                            @Html.CheckBoxFor(m => m.Users[i].IsSelected)
+                                        </td>
+                                    </tr>
+                                }
+                            </table>
+                            <!-- checkboxs end -->
+
+                        </div>
+                    </div>
+                </div>
+               
+
                 <!--input below will be used to temp store the base64 encoding of the image-->
-                <input id="b64" asp-for="Content" type="hidden" />
+                <input id="b64" asp-for="@Model.Image.Content" type="hidden" />
+
 
                 <div id="dropzoneDiv">
                     <div class="dropzone needsclick dz-clickable" id="uploader">
@@ -42,13 +72,11 @@
                 </div>
 
 
-               
-
                 <div class="form-group" style="margin-top:15px;">
-
                     <input type="submit" value="Create" class="btn btn-success" />
-
                 </div>
+
+
             </div>
         </div>
     </div>
@@ -59,44 +87,43 @@
     <a asp-action="Index">Back to List</a>
 </div>
 
-<!--
-    
-    encodeBase64
+
+<!-- SCRIPTS -->
+<!--encodeBase64
     This function take the chosen file (image file) and 
     converts it to base64encoding. This is then used to 
     set a temp input tag value. This is then sent to 
     the server when create new is pressed.
-
 -->
 <script>
 
     function encodeBase64(file) {
 
-        if (file) {
-            
+        if (file)
+        {           
             var FR = new FileReader();
-
             FR.addEventListener("load", function (e) {
+
                 document.getElementById("b64").value = e.target.result;
                 $(".dropzone").css("background-image", "url(" + e.target.result + ")");
             });
 
             FR.readAsDataURL(file);
-            
-        }
-        
+        }  
     }
 
     Dropzone.autoDiscover = false;
     var myDropzone = new Dropzone(".dropzone", {
+
         maxFiles: 1,
         autoProcessQueue: false,
         thumbnailWidth: null,
         thumbnailHeight: null,
         init: function () {
+
             this.on("addedfile", function (file) {
-                encodeBase64(myDropzone.files[0]);
-                
+
+                encodeBase64(myDropzone.files[0]);  
             });
         },
 
@@ -106,7 +133,6 @@
 
     myDropzone.on("maxfilesexceeded", function (file) { this.removeFile(file); });
 </script>
-
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

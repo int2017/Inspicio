@@ -36,12 +36,12 @@ namespace Inspicio.Controllers
             var UserID = _userManager.GetUserId(HttpContext.User);
             
             // Changed from getting all images then working out which we want to only getting the ones we want.
-            var AllImages =  _context.Images.Where( i => i.OwnerId == UserID).ToList();
+            var AllImages =  _context.Review.Where( i => (i.OwnerId == UserID) ).ToList();
 
-            if (!String.IsNullOrEmpty(SearchString))
-            {
-                AllImages = AllImages.Where(s => s.Title.Contains(SearchString)).ToList();
-            }
+            //if (!String.IsNullOrEmpty(SearchString))
+            //{
+            //    AllImages = AllImages.Where(s => s.Title.Contains(SearchString)).ToList();
+            //}
             return View(AllImages);
         }
 
@@ -62,36 +62,64 @@ namespace Inspicio.Controllers
             return View(Image);
         }
 
+
+
+        public class SelectableUser : ApplicationUser
+        {
+            public bool IsSelected { get; set; }
+        }
+        public class CreatePageModel
+        {
+
+            public List<SelectableUser> Users { get; set; }
+            public Image Image { get; set; }
+        }
         // GET: Images/Create
         public IActionResult Create()
         {
-            return View();
+            var CreatePageModel = new CreatePageModel();
+            CreatePageModel.Users = new List<SelectableUser>();
+
+            var users = _context.Users.Where( u => u.Id != _userManager.GetUserId(HttpContext.User)).ToList();
+            foreach( var u in users )
+            {
+                // Selectable user constructor
+                CreatePageModel.Users.Add(new SelectableUser { Email = u.Email, ProfileName = u.ProfileName, IsSelected = false });
+            }
+
+            return View(CreatePageModel);
         }
 
         // POST: Images/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ImageID,Content,DownRating,UpRating,Description,Title")] Image image)
+        public async Task<IActionResult> Create(CreatePageModel CreatePageModel)
         {
             if (ModelState.IsValid)
             {
-                image.OwnerId = _userManager.GetUserId(HttpContext.User);
-                _context.Add(image);
+                CreatePageModel.Image.OwnerId = _userManager.GetUserId(HttpContext.User);
+                _context.Add(CreatePageModel.Image);
 
                 var review = new Review();
-                review.ImageId = image.ImageID;
-                review.OwnerId = image.OwnerId;
+                review.ImageId = CreatePageModel.Image.ImageID;
+                review.OwnerId = CreatePageModel.Image.OwnerId;
                 review.Liked = false;
                 review.Disliked = false;
                 _context.Add(review);
 
+                var UsersSelected = CreatePageModel.Users.Where(m => m.IsSelected);
+                foreach( var u in UsersSelected )
+                {
+                    review.OwnerId = u.Id;
+                    _context.Add(review);
+                }
+                
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            return View(image);
+            return View(CreatePageModel.Image);
         }
+
 
 
         public class FullReviewData
