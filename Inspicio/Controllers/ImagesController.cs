@@ -21,6 +21,8 @@ namespace Inspicio.Controllers
         private readonly IHostingEnvironment _environment;
         private readonly ApplicationDbContext _context;
 
+        public enum Status { APPROVED, REJECTED, NEEDSWORK };
+
         public ImagesController(ApplicationDbContext _context, IHostingEnvironment _environment, UserManager<ApplicationUser> _userManager)
         {
             this._environment = _environment;
@@ -85,7 +87,7 @@ namespace Inspicio.Controllers
                 review.OwnerId = image.OwnerId;
                 review.Approved = false;
                 review.Rejected = false;
-                review.ChangesRequested = false;
+                review.NeedsWork = false;
                 _context.Add(review);
 
                 await _context.SaveChangesAsync();
@@ -253,10 +255,11 @@ namespace Inspicio.Controllers
         public class RatingBody
         {
             // Integer determines which button has been pressed
-            public int ThumbVal { get; set; }
+            public int ThumbChosen { get; set; }
             public int ImageID { get; set; }
 
         }
+
         [HttpPost]
         public async Task<IActionResult> ChangeRating([FromBody] RatingBody data) 
         {
@@ -271,30 +274,25 @@ namespace Inspicio.Controllers
             int id = data.ImageID;
             var image = await _context.Images.SingleOrDefaultAsync(m => m.ImageID == id);
 
-            // if the up thumb has been pressed
-            if (data.ThumbVal == 1)
+            // If the review has been approved
+            if (data.ThumbChosen == (int)Status.APPROVED)
             {
-                // if the last button pressed wasn't the up thumb
                 if (review.Approved == false)
                 {
-                    // if the last button pressed was the middle thumb
-                    if (review.ChangesRequested == true)
+                    if (review.NeedsWork == true)
                     {
                         review.Approved = true;
-                        review.Rejected = false;
-                        review.ChangesRequested = false;
+                        review.NeedsWork = false;
                         image.NoOfApprovals++;
-                        if (image.NoOfChangesRequested > 0)
+
+                        if (image.NoOfNeedsWork > 0)
                         {
-                            image.NoOfChangesRequested--;
+                            image.NoOfNeedsWork--;
                         }
                     }
-                    
-                    // if the last button pressed was the down thumb
                     else if (review.Rejected == true)
                     {
                         review.Rejected = false;
-                        review.ChangesRequested = false;
                         review.Approved = true;
                         image.NoOfApprovals++;
                         if (image.NoOfRejections > 0)
@@ -302,9 +300,7 @@ namespace Inspicio.Controllers
                             image.NoOfRejections--;
                         }
                     }
-
-                    // if none of the buttons have been pressed before
-                    else if ((review.Approved == false) && (review.ChangesRequested == false) && (review.Rejected == false))
+                    else if ((review.Approved == false) && (review.NeedsWork == false) && (review.Rejected == false))
                     {
                         review.Approved = true;
                         image.NoOfApprovals++;
@@ -312,30 +308,24 @@ namespace Inspicio.Controllers
                 }
             }
 
-            // if the down thumb has been pressed
-            else if (data.ThumbVal == -1)
+            // if the review has been rejected
+            if (data.ThumbChosen == (int)Status.REJECTED)
             {
-                // if the down thumb wasn't the last button pressed
                 if (review.Rejected == false)
                 {
-                    // if the last button pressed was the middle thumb
-                    if (review.ChangesRequested == true)
+                    if (review.NeedsWork == true)
                     {
                         review.Rejected = true;
-                        review.Approved = false;
-                        review.ChangesRequested = false;
+                        review.NeedsWork = false;
                         image.NoOfRejections++;
-                        if (image.NoOfChangesRequested > 0)
+                        if (image.NoOfNeedsWork > 0)
                         {
-                            image.NoOfChangesRequested--;
+                            image.NoOfNeedsWork--;
                         }
                     }
-
-                    // if the last button pressed was the up thumb
                     else if (review.Approved == true)
                     {
                         review.Approved = false;
-                        review.ChangesRequested = false;
                         review.Rejected = true;
                         image.NoOfRejections++;
                         if (image.NoOfApprovals > 0)
@@ -343,9 +333,7 @@ namespace Inspicio.Controllers
                             image.NoOfApprovals--;
                         }
                     }
-
-                    // if none of the buttons have been pressed before
-                    else if ((review.Approved == false) && (review.ChangesRequested == false) && (review.Rejected == false))
+                    else if ((review.Approved == false) && (review.NeedsWork == false) && (review.Rejected == false))
                     {
                         review.Rejected = true;
                         image.NoOfRejections++;
@@ -353,42 +341,35 @@ namespace Inspicio.Controllers
                 }
             }
 
-            // if the middle button has been pressed
-            else if (data.ThumbVal == 0)
+            // if the review needs more work
+            if (data.ThumbChosen == (int)Status.NEEDSWORK)
             {
-                // if the middle thumb wasn't the last button pressed
-                if (review.ChangesRequested == false)
+                if (review.NeedsWork == false)
                 {
-                    // if the up thumb was the last button pressed
                     if (review.Approved == true)
                     {
-                        review.ChangesRequested = true;
-                        review.Rejected = false;
+                        review.NeedsWork = true;
                         review.Approved = false;
-                        image.NoOfChangesRequested++;
+                        image.NoOfNeedsWork++;
                         if (image.NoOfApprovals > 0)
                         {
                             image.NoOfApprovals--;
                         }
                     }
-                    // if the down thumb was the last button pressed
                     else if (review.Rejected == true)
                     {
                         review.Rejected = false;
-                        review.Approved = false;
-                        review.ChangesRequested = true;
-                        image.NoOfChangesRequested++;
+                        review.NeedsWork = true;
+                        image.NoOfNeedsWork++;
                         if (image.NoOfRejections > 0)
                         {
                             image.NoOfRejections--;
                         }
                     }
-
-                    // if none of the buttons have been pressed before
-                    else if ((review.Approved == false) && (review.ChangesRequested == false) && (review.Rejected == false))
+                    else if ((review.Approved == false) && (review.NeedsWork == false) && (review.Rejected == false))
                     {
-                        review.ChangesRequested = true;
-                        image.NoOfChangesRequested++;
+                        review.NeedsWork = true;
+                        image.NoOfNeedsWork++;
                     }
                 }
             }
