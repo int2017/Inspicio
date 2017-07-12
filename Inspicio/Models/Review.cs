@@ -14,11 +14,11 @@ namespace Inspicio.Models
 
         public int ImageId { get; set; }
 
-        public Boolean Approved { get; set; }
+        public bool Approved { get; set; }
 
-        public Boolean Rejected { get; set; }
+        public bool Rejected { get; set; }
 
-        public Boolean ChangesRequested { get; set; }
+        public bool NeedsWork { get; set; }
 
         [ForeignKey("OwnerId"), Column(Order = 0)]
         public ApplicationUser ApplicationUser { get; set; }
