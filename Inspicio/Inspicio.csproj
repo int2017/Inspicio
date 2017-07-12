@@ -25,19 +25,13 @@
     <Content Include="wwwroot\css\thumbs.js" />
     <Content Include="wwwroot\images\add.svg" />
     <Content Include="wwwroot\images\create.svg" />
-    <Content Include="wwwroot\images\eye.jpg" />
-    <Content Include="wwwroot\images\Inspicio bar.png" />
     <Content Include="wwwroot\images\Inspicio.svg" />
-    <Content Include="wwwroot\images\Mountains.jpg" />
-    <Content Include="wwwroot\images\Newcastle.jpg" />
     <Content Include="wwwroot\images\ostrich.jpg" />
     <Content Include="wwwroot\images\pin.svg" />
-    <Content Include="wwwroot\images\ribbon.jpg" />
     <Content Include="wwwroot\js\ajaxComments.js" />
     <Content Include="wwwroot\js\filter.js" />
     <Content Include="wwwroot\js\pinComments.js" />
     <Content Include="wwwroot\js\ajaxThumbs.js" />
-    <Content Include="wwwroot\lib\bootstrap\dist\css\Newcastle.jpg" />
     <Content Include="wwwroot\lib\bootstrap\dist\css\ostrich.jpg" />
     <Content Include="wwwroot\scss\Newcastle.jpg" />
   </ItemGroup>
@@ -64,14 +58,6 @@
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="1.0.1" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Migrations\" />
-    <Folder Include="Migrations\" />
-    <Folder Include="Migrations\" />
-    <Folder Include="Migrations\" />
-    <Folder Include="Migrations\" />
-    <Folder Include="Migrations\" />
-    <Folder Include="Migrations\" />
-    <Folder Include="Migrations\" />
     <Folder Include="Migrations\" />
   </ItemGroup>
 </Project>
