@@ -1,4 +1,10 @@
-﻿$(".thumb").click(function () {
+﻿var thumbEnum = {
+    Approved: 0,
+    Rejected: 1,
+    NeedsWork: 2,
+};
+
+$(".thumb").click(function () {
 
     var button = $(this).attr("id");
     var className = $("#" + button + " i").attr("class");
@@ -10,13 +16,13 @@
         className = className.slice(0, 12) + "-o" + className.slice(12);
     }
     if (button === "thumbs-up") {
-        updateThumbs(1, button);
+        updateThumbs(thumbEnum.Approved, button);
     }
     else if (button === "thumbs-down") {
-        updateThumbs(-1, button);
+        updateThumbs(thumbEnum.Rejected, button);
     }
     else if (button === "thumbs-middle") {
-        updateThumbs(0, button);
+        updateThumbs(thumbEnum.NeedsWork, button);
     }
     $("#" + button + " i").addClass(className);
     
@@ -26,7 +32,7 @@ function updateThumbs( int, button ) {
     var text = "#" + button + " .rating";
     var image = {
         "ImageID": $("#ImageId").val(),
-        "ThumbVal": int,
+        "ThumbChosen": int,
     };
     
     $.ajax(
