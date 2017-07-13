@@ -25,6 +25,9 @@ namespace Inspicio.Models
 
         public string Title { get; set; }
 
+        [DisplayName("Status")]
+        public bool OpenReview { get; set; }
+
         public ICollection<Comment>Comments { get; set; }
         public ICollection<Review> Reviews { get; set; }
 
