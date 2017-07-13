@@ -21,7 +21,7 @@
     <thead>
         <tr>
             <th>
-               
+
             </th>
 
             <th>
@@ -32,13 +32,17 @@
                 @Html.DisplayNameFor(model => model.Description)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.NoOfLikes)
+                @Html.DisplayNameFor(model => model.NoOfApprovals)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.NoOfDislikes)
+                @Html.DisplayNameFor(model => model.NoOfNeedsWork)
             </th>
-           
-   
+            <th>
+                @Html.DisplayNameFor(model => model.NoOfRejections)
+            </th>
+
+
+
             <th>
 
             </th>
@@ -46,42 +50,50 @@
     </thead>
     <tbody>
 
-@foreach (var item in Model) {
-        <tr>
+        @foreach (var item in Model)
+        {
+            <tr>
 
-            <td>
-                <a asp-action="View" asp-route-id="@item.ImageID">
-                    <img style="max-height: 100px; max-width: 100px;" src="@item.Content" />
-                </a>
-                
-            </td>
+                <td>
+                    <a asp-action="View" asp-route-id="@item.ImageID">
+                        <img style="max-height: 100px; max-width: 100px;" src="@item.Content" />
+                    </a>
 
-            <td>
-                <a asp-action="View" asp-route-id="@item.ImageID">
-                    @Html.DisplayFor(modelItem => item.Title)
-                </a>
-            </td>
+                </td>
 
-            <td>
-                <a asp-action="View" asp-route-id="@item.ImageID">
-                    @Html.DisplayFor(modelItem => item.Description)
-                 </a>
-            </td>
-            <td>
-                <a asp-action="View" asp-route-id="@item.ImageID">
-                    @Html.DisplayFor(modelItem => item.NoOfLikes)
-                </a>
-            </td>
-           
-            <td>
-                <a asp-action="View" asp-route-id="@item.ImageID">
-                    @Html.DisplayFor(modelItem => item.NoOfDislikes)
-                </a>
-            </td>
-            
-          
-        </tr>
-}
+                <td>
+                    <a asp-action="View" asp-route-id="@item.ImageID">
+                        @Html.DisplayFor(modelItem => item.Title)
+                    </a>
+                </td>
+
+                <td>
+                    <a asp-action="View" asp-route-id="@item.ImageID">
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </a>
+                </td>
+                <td>
+                    <a asp-action="View" asp-route-id="@item.ImageID">
+                        @Html.DisplayFor(modelItem => item.NoOfApprovals)
+                    </a>
+                </td>
+
+                <td>
+                    <a asp-action="View" asp-route-id="@item.ImageID">
+                        @Html.DisplayFor(modelItem => item.NoOfNeedsWork)
+                    </a>
+                </td>
+
+                <td>
+                    <a asp-action="View" asp-route-id="@item.ImageID">
+                        @Html.DisplayFor(modelItem => item.NoOfRejections)
+                    </a>
+                </td>
+
+
+
+            </tr>
+        }
 
     </tbody>
 </table>

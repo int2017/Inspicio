@@ -33,24 +33,19 @@
 
                 <div class="form-group">
                     <div class="col-md-8">
-                        <div asp-for="@Model.Users">
+                        <div>
                            
                             <!-- checkboxs -->
-                            <table>
-                                @for( int i = 0; i < Model.Users.Count; i++ )
+                            <ul>
+                                @for (var i = 0; i < Model.Users.Count; i++)
                                 {
-                                    <tr>
-                                        <td asp-for="@Model.Users[i].Email" >
-                                            @Html.DisplayFor(m => m.Users[i].Email)
-                                        </td>
-
-                                        <td>
-                                            @Html.LabelFor( m => m.Users[i].ProfileName)
-                                            @Html.CheckBoxFor(m => m.Users[i].IsSelected)
-                                        </td>
-                                    </tr>
+                                    <li>
+                                        <input type="checkbox" asp-for="@Model.Users[i].IsSelected" />
+                                        <label asp-for="@Model.Users[i].IsSelected">@Model.Users[i].Email</label>
+                                        <input type="hidden" asp-for="@Model.Users[i].Id" />
+                                    </li>
                                 }
-                            </table>
+                            </ul>
                             <!-- checkboxs end -->
 
                         </div>

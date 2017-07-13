@@ -15,17 +15,20 @@ namespace Inspicio.Models
 
         public string Content { get; set; }
 
-        [DisplayName("Dislikes")]
-        public int NoOfDislikes { get; set; }
+        [DisplayName("Reject")]
+        public int NoOfRejections { get; set; }
 
-        [DisplayName("Likes")]
-        public int NoOfLikes { get; set; }
+        [DisplayName("Approve")]
+        public int NoOfApprovals { get; set; }
+
+        [DisplayName("Needs More Work")]
+        public int NoOfNeedsWork { get; set; }
 
         public string Description { get; set; }
 
         public string Title { get; set; }
 
-        public ICollection<Comment>Comments { get; set; }
+        public ICollection<Comment> Comments { get; set; }
         public ICollection<Review> Reviews { get; set; }
 
         [ForeignKey("OwnerId")]

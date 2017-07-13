@@ -21,6 +21,8 @@ namespace Inspicio.Controllers
         private readonly IHostingEnvironment _environment;
         private readonly ApplicationDbContext _context;
 
+        public enum Status { APPROVED, REJECTED, NEEDSWORK };
+
         public ImagesController(ApplicationDbContext _context, IHostingEnvironment _environment, UserManager<ApplicationUser> _userManager)
         {
             this._environment = _environment;
@@ -33,16 +35,20 @@ namespace Inspicio.Controllers
         {
 
             // Only images with the user id set as the owner should be passed into the view
-            var UserID = _userManager.GetUserId(HttpContext.User);
-            
-            // Changed from getting all images then working out which we want to only getting the ones we want.
-            var AllImages =  _context.Review.Where( i => (i.OwnerId == UserID) ).ToList();
+            var UserId = _userManager.GetUserId(HttpContext.User);
 
-            //if (!String.IsNullOrEmpty(SearchString))
-            //{
-            //    AllImages = AllImages.Where(s => s.Title.Contains(SearchString)).ToList();
-            //}
-            return View(AllImages);
+            var ImageIds = _context.Review.Where(r => r.OwnerId == UserId).Select(i => i.ImageId);
+            var Images = new List<Image>();
+            foreach ( var Id in ImageIds )
+            {
+                Images.Add( _context.Images.Where( i => i.ImageID == Id).SingleOrDefault());
+            }
+
+            if (!String.IsNullOrEmpty(SearchString))
+            {
+                Images = Images.Where(s => s.Title.Contains(SearchString)).ToList();
+            }
+            return View(Images);
         }
 
         // GET: Images/Details/5
@@ -84,7 +90,7 @@ namespace Inspicio.Controllers
             foreach( var u in users )
             {
                 // Selectable user constructor
-                CreatePageModel.Users.Add(new SelectableUser { Email = u.Email, ProfileName = u.ProfileName, IsSelected = false });
+                CreatePageModel.Users.Add(new SelectableUser { Id = u.Id, Email = u.Email, ProfileName = u.ProfileName, IsSelected = false });
             }
 
             return View(CreatePageModel);
@@ -100,20 +106,28 @@ namespace Inspicio.Controllers
                 CreatePageModel.Image.OwnerId = _userManager.GetUserId(HttpContext.User);
                 _context.Add(CreatePageModel.Image);
 
-                var review = new Review();
-                review.ImageId = CreatePageModel.Image.ImageID;
-                review.OwnerId = CreatePageModel.Image.OwnerId;
-                review.Liked = false;
-                review.Disliked = false;
-                _context.Add(review);
+                var ReviewOwner = new Review();
+                ReviewOwner.ImageId = CreatePageModel.Image.ImageID;
+                ReviewOwner.OwnerId = CreatePageModel.Image.OwnerId;
+                ReviewOwner.Approved = false;
+                ReviewOwner.Rejected = false;
+                ReviewOwner.NeedsWork = false;
+                _context.Add(ReviewOwner);
 
-                var UsersSelected = CreatePageModel.Users.Where(m => m.IsSelected);
-                foreach( var u in UsersSelected )
+                var Reviewees = new List<Review>();
+                foreach( var u in CreatePageModel.Users.Where( m => m.IsSelected ))
                 {
-                    review.OwnerId = u.Id;
-                    _context.Add(review);
+                    var reviewee = new Review();
+                    reviewee.Approved = false;
+                    reviewee.Rejected = false;
+                    reviewee.NeedsWork = false;
+
+                    reviewee.OwnerId = u.Id;
+                    reviewee.ImageId = CreatePageModel.Image.ImageID;
+                    _context.Add(reviewee);
                 }
-                
+
+
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
@@ -276,21 +290,21 @@ namespace Inspicio.Controllers
             await _context.SaveChangesAsync();
 			return Ok(1);
         }
-       
+
         public class RatingBody
         {
-            // Boolean is true, if like button pressed
-            public bool boolean { get; set; }
+            // Integer determines which button has been pressed
+            public int ThumbChosen { get; set; }
             public int ImageID { get; set; }
 
         }
         [HttpPost]
-        public async Task<IActionResult> ChangeRating([FromBody] RatingBody data) 
+        public async Task<IActionResult> ChangeRating([FromBody] RatingBody data)
         {
             var userId = _userManager.GetUserId(HttpContext.User);
             var review = _context.Review.Where(u => u.OwnerId == userId).Where(i => i.ImageId == data.ImageID).SingleOrDefault();
 
-            if( review == null )
+            if (review == null)
             {
                 return NotFound();
             }
@@ -298,59 +312,105 @@ namespace Inspicio.Controllers
             int id = data.ImageID;
             var image = await _context.Images.SingleOrDefaultAsync(m => m.ImageID == id);
 
-            // if the like button has been pressed
-            if (data.boolean)
+            // If the review has been approved
+            if (data.ThumbChosen == (int)Status.APPROVED)
             {
-                // if like hasn't already been selected
-                if (review.Liked == false)
+                if (review.Approved == false)
                 {
-                    // I
-                    if (review.Disliked == true)
+                    if (review.NeedsWork == true)
                     {
-                        review.Liked = true;
-                        review.Disliked = false;
-                        image.NoOfLikes++;
-                        if (image.NoOfDislikes > 0)
+                        review.Approved = true;
+                        review.NeedsWork = false;
+                        image.NoOfApprovals++;
+
+                        if (image.NoOfNeedsWork > 0)
                         {
-                            image.NoOfDislikes--;
+                            image.NoOfNeedsWork--;
                         }
                     }
-                    // if both buttons are false, increment likes by 1
-                    else if (review.Liked == false)
+                    else if (review.Rejected == true)
                     {
-                        review.Liked = true;
-                        review.Disliked = false;
-                        image.NoOfLikes++;
+                        review.Rejected = false;
+                        review.Approved = true;
+                        image.NoOfApprovals++;
+                        if (image.NoOfRejections > 0)
+                        {
+                            image.NoOfRejections--;
+                        }
+                    }
+                    else if ((review.Approved == false) && (review.NeedsWork == false) && (review.Rejected == false))
+                    {
+                        review.Approved = true;
+                        image.NoOfApprovals++;
                     }
                 }
             }
 
-            // if the dislike button has been pressed
-            else
+            // if the review has been rejected
+            if (data.ThumbChosen == (int)Status.REJECTED)
             {
-                // if dislike button hasn't been pressed before
-                if (review.Disliked == false)
+                if (review.Rejected == false)
                 {
-                    // if the like button was pressed add 1 to dislikes, minus 1 from likes
-                    if (review.Liked == true)
+                    if (review.NeedsWork == true)
                     {
-                        review.Liked = false;
-                        review.Disliked = true;
-                        image.NoOfDislikes++;
-                        if (image.NoOfLikes > 0)
+                        review.Rejected = true;
+                        review.NeedsWork = false;
+                        image.NoOfRejections++;
+                        if (image.NoOfNeedsWork > 0)
                         {
-                            image.NoOfLikes--;
+                            image.NoOfNeedsWork--;
                         }
                     }
-                    // if neither button has been pressed, add 1 to dislikes
-                    else if (review.Liked == false)
+                    else if (review.Approved == true)
                     {
-                        review.Disliked = true;
-                        image.NoOfDislikes++;
+                        review.Approved = false;
+                        review.Rejected = true;
+                        image.NoOfRejections++;
+                        if (image.NoOfApprovals > 0)
+                        {
+                            image.NoOfApprovals--;
+                        }
+                    }
+                    else if ((review.Approved == false) && (review.NeedsWork == false) && (review.Rejected == false))
+                    {
+                        review.Rejected = true;
+                        image.NoOfRejections++;
                     }
                 }
             }
 
+            // if the review needs more work
+            if (data.ThumbChosen == (int)Status.NEEDSWORK)
+            {
+                if (review.NeedsWork == false)
+                {
+                    if (review.Approved == true)
+                    {
+                        review.NeedsWork = true;
+                        review.Approved = false;
+                        image.NoOfNeedsWork++;
+                        if (image.NoOfApprovals > 0)
+                        {
+                            image.NoOfApprovals--;
+                        }
+                    }
+                    else if (review.Rejected == true)
+                    {
+                        review.Rejected = false;
+                        review.NeedsWork = true;
+                        image.NoOfNeedsWork++;
+                        if (image.NoOfRejections > 0)
+                        {
+                            image.NoOfRejections--;
+                        }
+                    }
+                    else if ((review.Approved == false) && (review.NeedsWork == false) && (review.Rejected == false))
+                    {
+                        review.NeedsWork = true;
+                        image.NoOfNeedsWork++;
+                    }
+                }
+            }
             await _context.SaveChangesAsync();
             return Ok(1);
         }

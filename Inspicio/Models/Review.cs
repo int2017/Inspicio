@@ -9,21 +9,24 @@ namespace Inspicio.Models
 {
     public class Review
     {
-
+        [Key]
+        [Column(Order = 1)]
         public string OwnerId { get; set; }
 
+        [Key]
+        [Column(Order = 2)]
         public int ImageId { get; set; }
 
-        public Boolean Liked { get; set; }
+        public bool Approved { get; set; }
 
-        public Boolean Disliked { get; set; }
+        public bool Rejected { get; set; }
 
-        [ForeignKey("OwnerId"), Column(Order = 0)]
-        public ApplicationUser ApplicationUser { get; set; }
+        public bool NeedsWork { get; set; }
 
-        [ForeignKey("ImageId"), Column(Order = 1)]
+        [ForeignKey("OwnerId")]
+        public ApplicationUser ApplicationUsers { get; set; }
+
+        [ForeignKey("ImageId")]
         public Image Images { get; set; }
-
     }
 }
-

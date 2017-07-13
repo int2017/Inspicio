@@ -107,9 +107,11 @@ namespace Inspicio.Migrations
 
                     b.Property<string>("Description");
 
-                    b.Property<int>("NoOfDislikes");
+                    b.Property<int>("NoOfApprovals");
 
-                    b.Property<int>("NoOfLikes");
+                    b.Property<int>("NoOfNeedsWork");
+
+                    b.Property<int>("NoOfRejections");
 
                     b.Property<string>("OwnerId");
 
@@ -128,13 +130,15 @@ namespace Inspicio.Migrations
 
                     b.Property<int>("ImageId");
 
-                    b.Property<bool>("Disliked");
+                    b.Property<bool>("Approved");
 
-                    b.Property<bool>("Liked");
+                    b.Property<bool>("NeedsWork");
+
+                    b.Property<bool>("Rejected");
 
                     b.HasKey("OwnerId", "ImageId");
 
-                    b.HasIndex("ImageId");
+                    b.HasAlternateKey("ImageId", "OwnerId");
 
                     b.ToTable("Review");
                 });
@@ -272,7 +276,7 @@ namespace Inspicio.Migrations
                         .HasForeignKey("ImageId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("Inspicio.Models.ApplicationUser", "ApplicationUser")
+                    b.HasOne("Inspicio.Models.ApplicationUser", "ApplicationUsers")
                         .WithMany("Reviews")
                         .HasForeignKey("OwnerId")
                         .OnDelete(DeleteBehavior.Cascade);
