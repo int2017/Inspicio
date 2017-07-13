@@ -29,6 +29,7 @@
     <Content Include="wwwroot\images\ostrich.jpg" />
     <Content Include="wwwroot\images\pin.svg" />
     <Content Include="wwwroot\js\ajaxComments.js" />
+    <Content Include="wwwroot\js\ajaxOpenSlider.js" />
     <Content Include="wwwroot\js\filter.js" />
     <Content Include="wwwroot\js\pinComments.js" />
     <Content Include="wwwroot\js\ajaxThumbs.js" />
