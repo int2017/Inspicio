@@ -37,9 +37,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.NoOfDislikes)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.OpenReview)
-            </th>
            
    
             <th>
@@ -79,11 +76,6 @@
             <td>
                 <a asp-action="View" asp-route-id="@item.ImageID">
                     @Html.DisplayFor(modelItem => item.NoOfDislikes)
-                </a>
-            </td>
-            <td>
-                <a asp-action="View" asp-route-id="@item.ImageID">
-                    @Html.DisplayFor(modelItem => item.OpenReview)
                 </a>
             </td>
             
