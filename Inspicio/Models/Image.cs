@@ -33,7 +33,7 @@ namespace Inspicio.Models
         public enum Status
         {
            Open,
-           Close
+           Closed
         }
 
         public ICollection<Comment>Comments { get; set; }
