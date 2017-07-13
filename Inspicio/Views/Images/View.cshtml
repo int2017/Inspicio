@@ -4,10 +4,10 @@
 
 
 <div class="view-container">
-    <h2>@Model.Image.Title</h2>
+    <h2>@Model.Info.Image.Title</h2>
     <hr />
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <input id="ImageId" type="hidden" asp-for="@Model.Image.ImageID" />
+    <input id="ImageId" type="hidden" asp-for="@Model.Info.Image.ImageID" />
 
 
 
@@ -16,18 +16,18 @@
         <div id="image-container">
             <div id="imageMap"></div>
 
-            <img src="@Url.Content(Model.Image.Content)" title="@Model.Image.Title" alt="@Model.Image.Title" />
+            <img src="@Url.Content(Model.Info.Image.Content)" title="@Model.Info.Image.Title" alt="@Model.Info.Image.Title" />
 
 
         </div>
-        <a class="lightbox-button" href="@Url.Content(Model.Image.Content)" data-lity data-lity-desc="@Model.Image.Title"><i class="glyphicon glyphicon-resize-full"></i></a>
+        <a class="lightbox-button" href="@Url.Content(Model.Info.Image.Content)" data-lity data-lity-desc="@Model.Info.Image.Title"><i class="glyphicon glyphicon-resize-full"></i></a>
 
         <div id="image-description">
 
             <h5>Status: Open</h5>
             <h4>By : @Model.OwnerProfileName</h4>
             <h3>Description</h3>
-            <p>@Model.Image.Description </p>
+            <p>@Model.Info.Image.Description </p>
         </div>
 
         <div class="image-controls text-center">
@@ -36,9 +36,9 @@
 
                 <!--If the user has already voted either thumbs up or down,change the fill to black-->
                 <div class="row">
-                    <button type="button" id="thumbs-up" class="btn btn-success thumb"> <i class="fa fa-thumbs-o-up " aria-hidden="true"></i> : <span class="rating">@Model.Image.NoOfApprovals</span></button>
-                    <button type="button" id="thumbs-middle" class="btn btn-warning thumb"> <i class="fa fa-thumbs-o-up fa-rotate-90" aria-hidden="true"></i> : <span class="rating">@Model.Image.NoOfNeedsWork</span></button>
-                    <button type="button" id="thumbs-down" class="btn btn-danger thumb"><i class="fa fa-thumbs-o-down " aria-hidden="true"></i> : <span class="rating">@Model.Image.NoOfRejections</span></button>
+                    <button type="button" id="thumbs-up" class="btn btn-success thumb"> <i class="fa fa-thumbs-o-up " aria-hidden="true"></i> : <span class="rating">@Model.Info.approvals</span></button>
+                    <button type="button" id="thumbs-middle" class="btn btn-warning thumb"> <i class="fa fa-thumbs-o-up fa-rotate-90" aria-hidden="true"></i> : <span class="rating">@Model.Info.needsWorks</span></button>
+                    <button type="button" id="thumbs-down" class="btn btn-danger thumb"><i class="fa fa-thumbs-o-down " aria-hidden="true"></i> : <span class="rating">@Model.Info.rejections</span</button>
                 </div>
                 <div class="row">
                     <button type="button" class="btn btn-info " onclick="popupState()">Hide markers</button>

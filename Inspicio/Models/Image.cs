@@ -15,15 +15,6 @@ namespace Inspicio.Models
 
         public string Content { get; set; }
 
-        [DisplayName("Reject")]
-        public int NoOfRejections { get; set; }
-
-        [DisplayName("Approve")]
-        public int NoOfApprovals { get; set; }
-
-        [DisplayName("Needs More Work")]
-        public int NoOfNeedsWork { get; set; }
-
         public string Description { get; set; }
 
         public string Title { get; set; }

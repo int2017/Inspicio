@@ -1,7 +1,7 @@
 ﻿var thumbEnum = {
     Approved: 0,
-    Rejected: 1,
-    NeedsWork: 2,
+    NeedsWork: 1,
+    Rejected: 2
 };
 
 $(".thumb").click(function () {
@@ -28,11 +28,11 @@ $(".thumb").click(function () {
     
 });
 
-function updateThumbs( int, button ) {
+function updateThumbs( chosenState, button ) {
     var text = "#" + button + " .rating";
     var image = {
         "ImageID": $("#ImageId").val(),
-        "ThumbChosen": int,
+        "state": chosenState
     };
     
     $.ajax(
