@@ -115,18 +115,20 @@ namespace Inspicio.Controllers
                 _context.Add(ReviewOwner);
 
                 var Reviewees = new List<Review>();
-                foreach( var u in CreatePageModel.Users.Where( m => m.IsSelected ))
+                if (CreatePageModel.Users != null)
                 {
-                    var reviewee = new Review();
-                    reviewee.Approved = false;
-                    reviewee.Rejected = false;
-                    reviewee.NeedsWork = false;
+                    foreach (var u in CreatePageModel.Users.Where(m => m.IsSelected))
+                    {
+                        var reviewee = new Review();
+                        reviewee.Approved = false;
+                        reviewee.Rejected = false;
+                        reviewee.NeedsWork = false;
 
-                    reviewee.OwnerId = u.Id;
-                    reviewee.ImageId = CreatePageModel.Image.ImageID;
-                    _context.Add(reviewee);
+                        reviewee.OwnerId = u.Id;
+                        reviewee.ImageId = CreatePageModel.Image.ImageID;
+                        _context.Add(reviewee);
+                    }
                 }
-
 
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
