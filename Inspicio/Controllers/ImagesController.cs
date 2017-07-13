@@ -31,7 +31,7 @@ namespace Inspicio.Controllers
         }
 
         // GET: Images
-        public class ImageDataModel
+        public class IndexModel
         {
             public Image Image { get; set; }
             public int approvals { get; set; }
@@ -47,7 +47,7 @@ namespace Inspicio.Controllers
 
             // Changed from getting all images then working out which we want to only getting the ones we want.
 
-            List<ImageDataModel> ImageEntries = new List<ImageDataModel>();
+            List<IndexModel> ImageEntries = new List<IndexModel>();
             var AllImages = _context.Images.Where(i => i.OwnerId == UserID).ToList();
 
             if (!String.IsNullOrEmpty(SearchString))
@@ -57,7 +57,7 @@ namespace Inspicio.Controllers
 
             foreach (var a in AllImages)
             {
-                ImageEntries.Add(new ImageDataModel {
+                ImageEntries.Add(new IndexModel {
                     Image = a,
                     approvals = _context.Review.Count(x => (x.ImageId == a.ImageID) && x.State == Review.States.Approved),
                     needsWorks = _context.Review.Count(x => (x.ImageId == a.ImageID) && x.State == Review.States.NeedsWork),
@@ -117,7 +117,7 @@ namespace Inspicio.Controllers
         }
 
 
-        public class FullReviewData
+        public class ViewModel
         {
             public string OwnerProfileName { get; set; }
       
@@ -156,15 +156,15 @@ namespace Inspicio.Controllers
 
             // Create a new FullReview object
             // This will be passed into the view as the model.
-            var FullReviewData = new FullReviewData();
-            FullReviewData.Comments = new List<FullReviewData.CommentInfo>();
+            var FullReviewData = new ViewModel();
+            FullReviewData.Comments = new List<ViewModel.CommentInfo>();
 
             // Added OwnerProfileName to be passed into the model.
             ApplicationUser User = await _userManager.FindByIdAsync(Image.OwnerId);
 
             FullReviewData.OwnerProfileName = User.ProfileName;
 
-            FullReviewData.Info = new FullReviewData.ImageData();
+            FullReviewData.Info = new ViewModel.ImageData();
             FullReviewData.Info.Image = Image;
             FullReviewData.Info.approvals = _context.Review.Count(x => x.ImageId == Id && x.State == Review.States.Approved);
             FullReviewData.Info.rejections = _context.Review.Count(x => x.ImageId == Id && x.State == Review.States.Rejected);
@@ -177,7 +177,7 @@ namespace Inspicio.Controllers
                 // add it and query the user table for the profilename.
 
                 // add it and query the user table for the profilename.
-                var CommentInfo = new FullReviewData.CommentInfo();
+                var CommentInfo = new ViewModel.CommentInfo();
                 CommentInfo.PosterProfileName = _context.Users.Where(u => u.Id == SingleComment.OwnerId).Select(u => u.ProfileName).SingleOrDefault();
                 CommentInfo.comment = SingleComment;
 
@@ -284,7 +284,7 @@ namespace Inspicio.Controllers
             await _context.SaveChangesAsync();
             return Ok(1);
         }
-        public enum States
+        public enum State
         {
             Approved,
             NeedsWork,
@@ -293,7 +293,7 @@ namespace Inspicio.Controllers
         public class RatingBody
         {
             // Integer determines which button has been pressed
-            public States state { get; set; }
+            public State state { get; set; }
             public int ImageID { get; set; }
 
         }
@@ -313,30 +313,19 @@ namespace Inspicio.Controllers
             int id = data.ImageID;
             var image = await _context.Images.SingleOrDefaultAsync(m => m.ImageID == id);
 
-            if (data.state == States.Approved)
+            if (data.state == State.Approved)
             {
-                if (review.State != Review.States.Approved)
-                {
-                    review.State = Review.States.Approved;
-                }
+                review.State = Review.States.Approved;
+            }
+            else if (data.state == State.NeedsWork)
+            {
+                review.State = Review.States.NeedsWork;
+            }
+            else if (data.state == State.Rejected)
+            {
+                review.State = Review.States.Rejected;
             }
 
-            if ( data.state == States.NeedsWork )
-            {
-                 if (review.State != Review.States.NeedsWork)
-                 {
-                    review.State = Review.States.NeedsWork;
-                 }
-            }
-
-            if (data.state == States.Rejected)
-            {
-
-                if (review.State != Review.States.Rejected)
-                {
-                    review.State = Review.States.Rejected;
-                }
-            }  
             await _context.SaveChangesAsync();
             return Ok(1);
         }
