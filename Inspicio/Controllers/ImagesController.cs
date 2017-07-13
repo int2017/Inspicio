@@ -17,7 +17,7 @@ namespace Inspicio.Controllers
     [Authorize]
     public class ImagesController : Controller
     {
-        private readonly UserManager<ApplicationUser> _userManager;   
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly IHostingEnvironment _environment;
         private readonly ApplicationDbContext _context;
 
@@ -34,9 +34,9 @@ namespace Inspicio.Controllers
 
             // Only images with the user id set as the owner should be passed into the view
             var UserID = _userManager.GetUserId(HttpContext.User);
-            
+
             // Changed from getting all images then working out which we want to only getting the ones we want.
-            var AllImages =  _context.Images.Where( i => i.OwnerId == UserID).ToList();
+            var AllImages = _context.Images.Where(i => i.OwnerId == UserID).ToList();
 
             if (!String.IsNullOrEmpty(SearchString))
             {
@@ -73,7 +73,7 @@ namespace Inspicio.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ImageID,Content,DownRating,UpRating,Description,Title")] Image image)
+        public async Task<IActionResult> Create([Bind("ImageID,Content,DownRating,UpRating,Description,Title,OpenReview")] Image image)
         {
             if (ModelState.IsValid)
             {
@@ -86,6 +86,7 @@ namespace Inspicio.Controllers
                 review.Liked = false;
                 review.Disliked = false;
                 _context.Add(review);
+                image.OpenReview = true;
 
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
@@ -115,7 +116,7 @@ namespace Inspicio.Controllers
             {
                 return NotFound();
             }
-            
+
             // Fetch the image by the id pass in '/5'
             var Image = await _context.Images.SingleOrDefaultAsync(m => m.ImageID == Id);
             if (Image == null)
@@ -246,23 +247,23 @@ namespace Inspicio.Controllers
             _context.Add(comment);
 
             await _context.SaveChangesAsync();
-			return Ok(1);
+            return Ok(1);
         }
-       
+
         public class RatingBody
         {
             // Boolean is true, if like button pressed
             public bool boolean { get; set; }
             public int ImageID { get; set; }
-
         }
+
         [HttpPost]
-        public async Task<IActionResult> ChangeRating([FromBody] RatingBody data) 
+        public async Task<IActionResult> ChangeRating([FromBody] RatingBody data)
         {
             var userId = _userManager.GetUserId(HttpContext.User);
             var review = _context.Review.Where(u => u.OwnerId == userId).Where(i => i.ImageId == data.ImageID).SingleOrDefault();
 
-            if( review == null )
+            if (review == null)
             {
                 return NotFound();
             }
@@ -326,5 +327,36 @@ namespace Inspicio.Controllers
             await _context.SaveChangesAsync();
             return Ok(1);
         }
+        public class DataFromToggle
+        {
+            public int ImageID { get; set; }
+            public bool Open { get; set; }
+            
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CloseReview([FromBody] DataFromToggle data)
+        {
+            var userId = _userManager.GetUserId(HttpContext.User);
+
+            int id = data.ImageID;
+            var image = await _context.Images.SingleOrDefaultAsync(m => m.ImageID == id);
+
+            // if the like button has been pressed
+            if (data.Open)
+            {
+                image.OpenReview = true;
+            }
+            else
+            {
+                image.OpenReview = false;
+            }
+                await _context.SaveChangesAsync();
+                return Ok(1);
+            }
+        }
     }
-}
+
+
+
+    

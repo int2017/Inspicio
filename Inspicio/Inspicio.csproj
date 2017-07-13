@@ -23,6 +23,7 @@
     <Content Include="wwwroot\css\JavaScript.js" />
     <Content Include="wwwroot\css\thumbs.js" />
     <Content Include="wwwroot\js\ajaxComments.js" />
+    <Content Include="wwwroot\js\ajaxOpenSlider.js" />
     <Content Include="wwwroot\js\filter.js" />
     <Content Include="wwwroot\js\pinComments.js" />
     <Content Include="wwwroot\js\ajaxThumbs.js" />
@@ -50,6 +51,7 @@
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="1.0.1" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Migrations\" />
     <Folder Include="Migrations\" />
     <Folder Include="Migrations\" />
     <Folder Include="Migrations\" />
