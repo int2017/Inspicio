@@ -86,7 +86,7 @@ namespace Inspicio.Controllers
                 review.Liked = false;
                 review.Disliked = false;
                 _context.Add(review);
-                image.OpenReview = true;
+                image.ReviewStatus = Image.Status.Open;
 
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
@@ -342,14 +342,13 @@ namespace Inspicio.Controllers
             int id = data.ImageID;
             var image = await _context.Images.SingleOrDefaultAsync(m => m.ImageID == id);
 
-            // if the like button has been pressed
             if (data.Open)
             {
-                image.OpenReview = true;
+                image.ReviewStatus = Image.Status.Open;
             }
             else
             {
-                image.OpenReview = false;
+                image.ReviewStatus= Image.Status.Close;
             }
                 await _context.SaveChangesAsync();
                 return Ok(1);
