@@ -9,21 +9,28 @@ namespace Inspicio.Models
 {
     public class Review
     {
-
+        [Key]
+        [Column(Order = 1)]
         public string OwnerId { get; set; }
 
+        [Key]
+        [Column(Order = 2)]
         public int ImageId { get; set; }
 
-        public Boolean Liked { get; set; }
+        [EnumDataType(typeof(States))]
+        public States State { get; set; }
 
-        public Boolean Disliked { get; set; }
+        public enum States { Approved,
+                            NeedsWork,
+                            Rejected,
+                            Undecided};
 
-        [ForeignKey("OwnerId"), Column(Order = 0)]
-        public ApplicationUser ApplicationUser { get; set; }
+        public bool NeedsWork { get; set; }
 
-        [ForeignKey("ImageId"), Column(Order = 1)]
+        [ForeignKey("OwnerId")]
+        public ApplicationUser ApplicationUsers { get; set; }
+
+        [ForeignKey("ImageId")]
         public Image Images { get; set; }
-
     }
 }
-

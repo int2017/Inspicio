@@ -1,102 +1,106 @@
-@model Inspicio.Models.Image
+@model Inspicio.Controllers.ImagesController.CreatePageModel
 
-@{
-    ViewData["Title"] = "Create";
-}
-
-<h2>Create</h2>
+<h3> New Review </h3>
 
 <form asp-action="Create">
-    <div class="form-horizontal ">
-        <h4>Image</h4>
-        <hr />
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="form-group">
+        <!-- Review Title -->
+        <label class="control-label">Review Title</label>
+        <input asp-for="@Model.Image.Title" type="text" class="form-control" placeholder="#7634 ... .. .">
+        <span asp-validation-for="@Model.Image.Title" class="text-danger"></span>
+    </div>
 
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <div class="row ">
-            <div class="col-md-10   text-center row">
-                <div class="form-group">
-                    
-                    <div class="col-md-8 ">
-                        <input asp-for="Title" class="form-control" placeholder="Title" />
-                        <span asp-validation-for="Title" class="text-danger"></span>
-                    </div>
+    <div class="form-group">
+        <!-- Review Description -->
+        <label class="control-label">Review Description</label>
+        <textarea asp-for="@Model.Image.Description" class="form-control" rows="4" placeholder="Reviewees please provide feedback regarding the fix for #7634 ... .. ."></textarea>
+        <span asp-validation-for="@Model.Image.Description" class="text-danger"></span>
+    </div>
+
+    @{
+        if (Model.Users.Count > 0)
+        {
+            <div class="form-group">
+            <!-- Reviewees -->
+                <label for="reviewees_id" class="control-label">Reviewees</label><br />
+
+                <label for="filter_reviewees_id">Filter</label>
+                <input type="text" class="form-control" id="filter_reviewees_id" name="filter_reviewees" onkeyup="filterUsers()" placeholder="No Filter"><br />
+
+                <div id="reviewees_id" style="height:60px; overflow-y:scroll" >
+                    <ul id="users">
+                        @for (var i = 0; i < Model.Users.Count; i++)
+                        {
+                            <li>
+                                <input type="checkbox" asp-for="@Model.Users[i].IsSelected" />
+                                <label asp-for="@Model.Users[i].IsSelected"> @Model.Users[i].ProfileName</label>
+                                <label asp-for="@Model.Users[i].IsSelected"> @Model.Users[i].Email</label><input type="hidden" asp-for="@Model.Users[i].Id" />
+                                <br />
+                            </li>
+                        }
+                    </ul>
                 </div>
-                <div class="form-group">
-                    
-                    <div class="col-md-8 ">
-                        <textarea rows="5" asp-for="Description" class="form-control" placeholder="Description" ></textarea>
-                        <span asp-validation-for="Description" class="text-danger"></span>
-                    </div>
-                </div>
+            </div>
+            }
+        }
 
-                <!--input below will be used to temp store the base64 encoding of the image-->
-                <input id="b64" asp-for="Content" type="hidden" />
-
-                <div id="dropzoneDiv">
-                    <div class="dropzone needsclick dz-clickable" id="uploader">
-                        <div class="dz-message needsclick">
-                            Drop files here or click to upload.
-                            <br>
-                        </div>
-                    </div>
-                </div>
-
-
-               
-
-                <div class="form-group" style="margin-top:15px;">
-
-                    <input type="submit" value="Create" class="btn btn-success" />
-
+    <div class="form-group">
+    
+        <!--input below will be used to temp store the base64 encoding of the image-->
+        <input id="b64" asp-for="@Model.Image.Content" type="hidden" />
+        
+        <!-- Dropzone Image Upload-->
+        <label for="image_upload_id" class="control-label">Review Screenshot</label>
+        <div id="dropzoneDiv">
+            <div class="dropzone needsclick dz-clickable" id="uploader">
+                <div class="dz-message needsclick">
+                    Drop files here or click to upload.
                 </div>
             </div>
         </div>
     </div>
+
+    <div class="form-group">
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-primary">Create Review</button>
+    </div>
+
 </form>
 
-               
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
-<!--
-    
-    encodeBase64
+<!-- SCRIPTS -->
+<!--encodeBase64
     This function take the chosen file (image file) and 
     converts it to base64encoding. This is then used to 
     set a temp input tag value. This is then sent to 
     the server when create new is pressed.
-
 -->
 <script>
 
     function encodeBase64(file) {
 
         if (file) {
-            
             var FR = new FileReader();
-
             FR.addEventListener("load", function (e) {
+
                 document.getElementById("b64").value = e.target.result;
                 $(".dropzone").css("background-image", "url(" + e.target.result + ")");
             });
 
             FR.readAsDataURL(file);
-            
         }
-        
     }
 
     Dropzone.autoDiscover = false;
     var myDropzone = new Dropzone(".dropzone", {
+
         maxFiles: 1,
         autoProcessQueue: false,
-        thumbnailWidth: null,
-        thumbnailHeight: null,
         init: function () {
+
             this.on("addedfile", function (file) {
+
                 encodeBase64(myDropzone.files[0]);
-                
             });
         },
 
@@ -104,10 +108,52 @@
         url: "doNothing"
     });
 
-    myDropzone.on("maxfilesexceeded", function (file) { this.removeFile(file); });
-</script>
+    myDropzone.on("maxfilesexceeded", function (file) {
+        this.removeAllFiles();
+        this.addFile(file);
+    });
 
+
+    function filterUsers() {
+        // Declare variables
+        var input, filter, ul, li, a, i;
+        input = document.getElementById('filter_reviewees_id');
+        filter = input.value.toUpperCase();
+        ul = document.getElementById("users");
+        li = ul.getElementsByTagName('li');
+
+        // Loop through all list items, and hide those who don't match the search query
+        for (i = 0; i < li.length; i++)
+        {
+            a = li[i].getElementsByTagName("label")[0];
+
+            if (a.innerHTML.toUpperCase().indexOf(filter) > -1)
+            {
+                li[i].style.display = "";
+            }
+            else
+            {
+                li[i].style.display = "none";
+            }
+        }
+    }
+
+</script>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+
+<style>
+    .dropzone {
+        height: 300px;
+        width: auto;
+        background-size: contain;
+    }
+
+    ul {
+        margin: 0;
+        list-style: none;
+        float: left;
+    }
+</style>

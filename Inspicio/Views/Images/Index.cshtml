@@ -1,8 +1,11 @@
-@model IEnumerable<Inspicio.Models.Image>
+@model List<Inspicio.Controllers.ImagesController.IndexModel>
+
 
 @{
     ViewData["Title"] = "Index";
 }
+
+
 
 <h2>Viewing All</h2>
 <br />
@@ -21,67 +24,82 @@
     <thead>
         <tr>
             <th>
-               
+
             </th>
 
             <th>
-                @Html.DisplayNameFor(model => model.Title)
+                @Html.DisplayNameFor(model => model.FirstOrDefault().Image.Title)
             </th>
 
             <th>
-                @Html.DisplayNameFor(model => model.Description)
+                @Html.DisplayNameFor(model => model.FirstOrDefault().Image.Description)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.NoOfLikes)
+                Approvals
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.NoOfDislikes)
+                Needs Work
             </th>
-           
-   
             <th>
+                Rejected
+            </th>
 
+            <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().Image.OpenReview)
             </th>
         </tr>
     </thead>
     <tbody>
 
-@foreach (var item in Model) {
-        <tr>
 
-            <td>
-                <a asp-action="View" asp-route-id="@item.ImageID">
-                    <img style="max-height: 100px; max-width: 100px;" src="@item.Content" />
-                </a>
-                
-            </td>
+@{
+    foreach (var ImageData in Model)
+    {
 
-            <td>
-                <a asp-action="View" asp-route-id="@item.ImageID">
-                    @Html.DisplayFor(modelItem => item.Title)
-                </a>
-            </td>
+            <tr>
 
-            <td>
-                <a asp-action="View" asp-route-id="@item.ImageID">
-                    @Html.DisplayFor(modelItem => item.Description)
-                 </a>
-            </td>
-            <td>
-                <a asp-action="View" asp-route-id="@item.ImageID">
-                    @Html.DisplayFor(modelItem => item.NoOfLikes)
+                <td>
+                <a asp-action="View" asp-route-id="@ImageData.Image.ImageID">
+                    <img style="max-height: 100px; max-width: 100px;" src="@ImageData.Image.Content" />
+                    </a>
+
+                </td>
+
+                <td>
+                <a asp-action="View" asp-route-id="@ImageData.Image.ImageID">
+                    @Html.DisplayFor(modelItem => ImageData.Image.Title)
+                    </a>
+                </td>
+
+                <td>
+                <a asp-action="View" asp-route-id="@ImageData.Image.ImageID">
+                    @Html.DisplayFor(modelItem => ImageData.Image.Description)
+                    </a>
+                </td>
+                <td>
+                <a asp-action="View" asp-route-id="@ImageData.Image.ImageID">
+                   @Html.DisplayFor(modelItem => ImageData.approvals)
+                    </a>
+                </td>
+
+                <td>
+                <a asp-action="View" asp-route-id="@ImageData.Image.ImageID">
+                    @Html.DisplayFor(modelItem => ImageData.needsWorks)
                 </a>
             </td>
-           
             <td>
-                <a asp-action="View" asp-route-id="@item.ImageID">
-                    @Html.DisplayFor(modelItem => item.NoOfDislikes)
+                <a asp-action="View" asp-route-id="@ImageData.Image.ImageID">
+                    @Html.DisplayFor(modelItem => ImageData.rejections)
                 </a>
-            </td>
-            
-          
-        </tr>
-}
+            </td>     
+            <td>
+                <a asp-action="View" asp-route-id="@ImageData.Image.ImageID">
+                    @Html.DisplayFor(modelItem => ImageData.Image.OpenReview)
+                    </a>
+                </td>
+            </tr>
+        }
+    }
 
     </tbody>
 </table>
