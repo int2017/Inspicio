@@ -12,16 +12,15 @@
 
 <form asp-controller="Images" asp-action="Index">
     <p>
-        Title: <input type="text" name="SearchString">
-        <input type="submit" value="Filter" />
+        <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for reviews..">
     </p>
 </form>
 
-<table class="table">
+<table id="table">
     <thead>
         <tr>
             <th>
-               
+                @Html.DisplayNameFor(model => model.Content)
             </th>
 
             <th>
@@ -80,3 +79,5 @@
 
     </tbody>
 </table>
+
+<script type="text/javascript" src="~/js/Search.js"></script>
