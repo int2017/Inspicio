@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Inspicio.Data;
+using Inspicio.Models;
 
 namespace Inspicio.Migrations
 {
@@ -107,11 +108,7 @@ namespace Inspicio.Migrations
 
                     b.Property<string>("Description");
 
-                    b.Property<int>("NoOfApprovals");
-
-                    b.Property<int>("NoOfNeedsWork");
-
-                    b.Property<int>("NoOfRejections");
+                    b.Property<bool>("OpenReview");
 
                     b.Property<string>("OwnerId");
 
@@ -130,11 +127,9 @@ namespace Inspicio.Migrations
 
                     b.Property<int>("ImageId");
 
-                    b.Property<bool>("Approved");
-
                     b.Property<bool>("NeedsWork");
 
-                    b.Property<bool>("Rejected");
+                    b.Property<int>("State");
 
                     b.HasKey("OwnerId", "ImageId");
 

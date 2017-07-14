@@ -17,9 +17,13 @@ namespace Inspicio.Models
         [Column(Order = 2)]
         public int ImageId { get; set; }
 
-        public bool Approved { get; set; }
+        [EnumDataType(typeof(States))]
+        public States State { get; set; }
 
-        public bool Rejected { get; set; }
+        public enum States { Approved,
+                            NeedsWork,
+                            Rejected,
+                            Undecided};
 
         public bool NeedsWork { get; set; }
 

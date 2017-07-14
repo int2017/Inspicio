@@ -1,4 +1,10 @@
-﻿$(".thumb").click(function () {
+﻿var thumbEnum = {
+    Approved: 0,
+    NeedsWork: 1,
+    Rejected: 2
+};
+
+$(".thumb").click(function () {
 
     var button = $(this).attr("id");
     var className = $("#" + button + " i").attr("class");
@@ -10,20 +16,23 @@
         className = className.slice(0, 12) + "-o" + className.slice(12);
     }
     if (button === "thumbs-up") {
-        updateThumbs(true, button);
+        updateThumbs(thumbEnum.Approved, button);
     }
-    else {
-        updateThumbs(false, button);
+    else if (button === "thumbs-down") {
+        updateThumbs(thumbEnum.Rejected, button);
+    }
+    else if (button === "thumbs-middle") {
+        updateThumbs(thumbEnum.NeedsWork, button);
     }
     $("#" + button + " i").addClass(className);
     
 });
 
-function updateThumbs( bool, button ) {
+function updateThumbs( chosenState, button ) {
     var text = "#" + button + " .rating";
     var image = {
         "ImageID": $("#ImageId").val(),
-        "boolean" : bool
+        "state": chosenState
     };
     
     $.ajax(
@@ -35,6 +44,7 @@ function updateThumbs( bool, button ) {
             data: JSON.stringify(image),
             success: function () {
                 $("#thumbs-up > span").load(window.location.href + " " + "#thumbs-up > span");
+                $("#thumbs-middle > span").load(window.location.href + " " + "#thumbs-middle > span");
                 $("#thumbs-down > span").load(window.location.href + " " + "#thumbs-down > span");
             }
         });
