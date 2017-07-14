@@ -108,9 +108,9 @@ namespace Inspicio.Migrations
 
                     b.Property<string>("Description");
 
-                    b.Property<bool>("OpenReview");
-
                     b.Property<string>("OwnerId");
+
+                    b.Property<int>("ReviewStatus");
 
                     b.Property<string>("Title");
 

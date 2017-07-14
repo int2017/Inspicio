@@ -21,11 +21,7 @@ namespace Inspicio.Controllers
         private readonly IHostingEnvironment _environment;
         private readonly ApplicationDbContext _context;
 
-<<<<<<< HEAD
-        public enum Status { APPROVED, REJECTED, NEEDSWORK };
-=======
         public enum Status { Approved, NeedsWork, Rejected };
->>>>>>> origin/development
 
         public ImagesController(ApplicationDbContext _context, IHostingEnvironment _environment, UserManager<ApplicationUser> _userManager)
         {
@@ -47,32 +43,26 @@ namespace Inspicio.Controllers
         {
 
             // Only images with the user id set as the owner should be passed into the view
-<<<<<<< HEAD
             var UserId = _userManager.GetUserId(HttpContext.User);
 
-            var ImageIds = _context.Review.Where(r => r.OwnerId == UserId).Select(i => i.ImageId);
-            var Images = new List<Image>();
-            foreach ( var Id in ImageIds )
-            {
-                Images.Add( _context.Images.Where( i => i.ImageID == Id).SingleOrDefault());
-            }
-=======
-            var UserID = _userManager.GetUserId(HttpContext.User);
-
+<<<<<<< HEAD
             // Changed from getting all images then working out which we want to only getting the ones we want.
-            List<IndexModel> ImageEntries = new List<IndexModel>();
-
             var AllImages = _context.Images.Where(i => i.OwnerId == UserID).ToList();
->>>>>>> origin/development
+            return View(AllImages);
+=======
+            var ImageIds = _context.Review.Where(r => r.OwnerId == UserId).Select(i => i.ImageId);
+            var AllImages = new List<Image>();
+            foreach (var Id in ImageIds)
+            {
+                AllImages.Add(_context.Images.Where(i => i.ImageID == Id).SingleOrDefault());
+            }
 
             if (!String.IsNullOrEmpty(SearchString))
             {
-                Images = Images.Where(s => s.Title.Contains(SearchString)).ToList();
+                AllImages = AllImages.Where(s => s.Title.Contains(SearchString)).ToList();
             }
-<<<<<<< HEAD
-            return View(Images);
-=======
 
+            var ImageEntries = new List<IndexModel>();
             foreach (var a in AllImages)
             {
                 ImageEntries.Add(new IndexModel {
@@ -136,20 +126,30 @@ namespace Inspicio.Controllers
         // POST: Images/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-<<<<<<< HEAD
         public async Task<IActionResult> Create(CreatePageModel CreatePageModel)
         {
             if (ModelState.IsValid)
             {
+<<<<<<< HEAD
+                image.OwnerId = _userManager.GetUserId(HttpContext.User);
+                _context.Add(image);
+
+                var review = new Review();
+                review.ImageId = image.ImageID;
+                review.OwnerId = image.OwnerId;
+                review.Liked = false;
+                review.Disliked = false;
+                _context.Add(review);
+                image.ReviewStatus = Image.Status.Open;
+=======
                 CreatePageModel.Image.OwnerId = _userManager.GetUserId(HttpContext.User);
+                CreatePageModel.Image.OpenReview = true;
                 _context.Add(CreatePageModel.Image);
 
                 var ReviewOwner = new Review();
                 ReviewOwner.ImageId = CreatePageModel.Image.ImageID;
                 ReviewOwner.OwnerId = CreatePageModel.Image.OwnerId;
-                ReviewOwner.Approved = false;
-                ReviewOwner.Rejected = false;
-                ReviewOwner.NeedsWork = false;
+                ReviewOwner.State = Review.States.Undecided;
                 _context.Add(ReviewOwner);
 
                 var Reviewees = new List<Review>();
@@ -158,29 +158,13 @@ namespace Inspicio.Controllers
                     foreach (var u in CreatePageModel.Users.Where(m => m.IsSelected))
                     {
                         var reviewee = new Review();
-                        reviewee.Approved = false;
-                        reviewee.Rejected = false;
-                        reviewee.NeedsWork = false;
+                        reviewee.State = Review.States.Undecided;
 
                         reviewee.OwnerId = u.Id;
                         reviewee.ImageId = CreatePageModel.Image.ImageID;
                         _context.Add(reviewee);
                     }
                 }
-=======
-        public async Task<IActionResult> Create([Bind("ImageID,Content,DownRating,UpRating,Description,Title,OpenReview")] Image image)
-        {
-            if (ModelState.IsValid)
-            {
-                image.OwnerId = _userManager.GetUserId(HttpContext.User);
-                _context.Add(image);
-
-                var review = new Review();
-                review.ImageId = image.ImageID;
-                review.OwnerId = image.OwnerId;
-                review.State = Review.States.Undecided;
-                _context.Add(review);
-                image.OpenReview = true;
 >>>>>>> origin/development
 
                 await _context.SaveChangesAsync();
@@ -190,12 +174,7 @@ namespace Inspicio.Controllers
         }
 
 
-<<<<<<< HEAD
-
-        public class FullReviewData
-=======
         public class ViewModel
->>>>>>> origin/development
         {
             public string OwnerProfileName { get; set; }
       
@@ -362,13 +341,6 @@ namespace Inspicio.Controllers
             await _context.SaveChangesAsync();
             return Ok(1);
         }
-<<<<<<< HEAD
-
-        public class RatingBody
-        {
-            // Integer determines which button has been pressed
-            public int ThumbChosen { get; set; }
-=======
         public enum State
         {
             Approved,
@@ -379,7 +351,6 @@ namespace Inspicio.Controllers
         {
             // Integer determines which button has been pressed
             public State state { get; set; }
->>>>>>> origin/development
             public int ImageID { get; set; }
         }
 
@@ -398,73 +369,6 @@ namespace Inspicio.Controllers
             int id = data.ImageID;
             var image = await _context.Images.SingleOrDefaultAsync(m => m.ImageID == id);
 
-<<<<<<< HEAD
-            // If the review has been approved
-            if (data.ThumbChosen == (int)Status.APPROVED)
-            {
-                if (review.Approved == false)
-                {
-                    if (review.NeedsWork == true)
-                    {
-                        review.Approved = true;
-                        review.NeedsWork = false;
-                        image.NoOfApprovals++;
-
-                        if (image.NoOfNeedsWork > 0)
-                        {
-                            image.NoOfNeedsWork--;
-                        }
-                    }
-                    else if (review.Rejected == true)
-                    {
-                        review.Rejected = false;
-                        review.Approved = true;
-                        image.NoOfApprovals++;
-                        if (image.NoOfRejections > 0)
-                        {
-                            image.NoOfRejections--;
-                        }
-                    }
-                    else if ((review.Approved == false) && (review.NeedsWork == false) && (review.Rejected == false))
-                    {
-                        review.Approved = true;
-                        image.NoOfApprovals++;
-                    }
-                }
-            }
-
-            // if the review has been rejected
-            if (data.ThumbChosen == (int)Status.REJECTED)
-            {
-                if (review.Rejected == false)
-                {
-                    if (review.NeedsWork == true)
-                    {
-                        review.Rejected = true;
-                        review.NeedsWork = false;
-                        image.NoOfRejections++;
-                        if (image.NoOfNeedsWork > 0)
-                        {
-                            image.NoOfNeedsWork--;
-                        }
-                    }
-                    else if (review.Approved == true)
-                    {
-                        review.Approved = false;
-                        review.Rejected = true;
-                        image.NoOfRejections++;
-                        if (image.NoOfApprovals > 0)
-                        {
-                            image.NoOfApprovals--;
-                        }
-                    }
-                    else if ((review.Approved == false) && (review.NeedsWork == false) && (review.Rejected == false))
-                    {
-                        review.Rejected = true;
-                        image.NoOfRejections++;
-                    }
-                }
-=======
             if (data.state == State.Approved)
             {
                 review.State = Review.States.Approved;
@@ -476,41 +380,8 @@ namespace Inspicio.Controllers
             else if (data.state == State.Rejected)
             {
                 review.State = Review.States.Rejected;
->>>>>>> origin/development
             }
 
-            // if the review needs more work
-            if (data.ThumbChosen == (int)Status.NEEDSWORK)
-            {
-                if (review.NeedsWork == false)
-                {
-                    if (review.Approved == true)
-                    {
-                        review.NeedsWork = true;
-                        review.Approved = false;
-                        image.NoOfNeedsWork++;
-                        if (image.NoOfApprovals > 0)
-                        {
-                            image.NoOfApprovals--;
-                        }
-                    }
-                    else if (review.Rejected == true)
-                    {
-                        review.Rejected = false;
-                        review.NeedsWork = true;
-                        image.NoOfNeedsWork++;
-                        if (image.NoOfRejections > 0)
-                        {
-                            image.NoOfRejections--;
-                        }
-                    }
-                    else if ((review.Approved == false) && (review.NeedsWork == false) && (review.Rejected == false))
-                    {
-                        review.NeedsWork = true;
-                        image.NoOfNeedsWork++;
-                    }
-                }
-            }
             await _context.SaveChangesAsync();
             return Ok(1);
         }
@@ -529,14 +400,13 @@ namespace Inspicio.Controllers
             int id = data.ImageID;
             var image = await _context.Images.SingleOrDefaultAsync(m => m.ImageID == id);
 
-            // if the like button has been pressed
             if (data.Open)
             {
-                image.OpenReview = true;
+                image.ReviewStatus = Image.Status.Open;
             }
             else
             {
-                image.OpenReview = false;
+                image.ReviewStatus= Image.Status.Closed;
             }
                 await _context.SaveChangesAsync();
                 return Ok(1);
@@ -545,3 +415,14 @@ namespace Inspicio.Controllers
 }
 
 
+
+
+
+
+
+
+              
+
+              
+             
+             

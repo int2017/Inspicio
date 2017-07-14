@@ -28,11 +28,16 @@
     <Content Include="wwwroot\images\Inspicio.svg" />
     <Content Include="wwwroot\images\ostrich.jpg" />
     <Content Include="wwwroot\images\pin.svg" />
+    <Content Include="wwwroot\images\searchicon.ico" />
+    <Content Include="wwwroot\images\thumbdown.jpg" />
+    <Content Include="wwwroot\images\thumbmid.jpg" />
+    <Content Include="wwwroot\images\thumbup.jpg" />
     <Content Include="wwwroot\js\ajaxComments.js" />
     <Content Include="wwwroot\js\ajaxOpenSlider.js" />
     <Content Include="wwwroot\js\filter.js" />
     <Content Include="wwwroot\js\pinComments.js" />
     <Content Include="wwwroot\js\ajaxThumbs.js" />
+    <Content Include="wwwroot\js\Search.js" />
     <Content Include="wwwroot\lib\bootstrap\dist\css\ostrich.jpg" />
     <Content Include="wwwroot\scss\Newcastle.jpg" />
   </ItemGroup>
@@ -59,6 +64,7 @@
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="1.0.1" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Migrations\" />
     <Folder Include="Migrations\" />
     <Folder Include="Migrations\" />
     <Folder Include="Migrations\" />

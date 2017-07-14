@@ -5,9 +5,13 @@
     ViewData["Title"] = "Index";
 }
 
+<<<<<<< HEAD
+<h2>View all Reviews</h2>
+=======
 
 
 <h2>Viewing All</h2>
+>>>>>>> origin/development
 <br />
 <p>
     <a asp-action="Create">Create Review</a>
@@ -15,16 +19,19 @@
 
 <form asp-controller="Images" asp-action="Index">
     <p>
-        Title: <input type="text" name="SearchString">
-        <input type="submit" value="Filter" />
+        <input type="text" id="myInput" onkeyup="searchFunction()" placeholder="Search for reviews..">
     </p>
 </form>
 
-<table class="table">
+<table id="table">
     <thead>
-        <tr>
+        <tr class="header">
             <th>
+<<<<<<< HEAD
+                @Html.DisplayNameFor(model => model.Content)
+=======
 
+>>>>>>> origin/development
             </th>
 
             <th>
@@ -36,27 +43,24 @@
             </th>
             <th>
 <<<<<<< HEAD
-                @Html.DisplayNameFor(model => model.NoOfApprovals)
+                <img src="~/images/thumbup.jpg" style="height: 20px;" />
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.NoOfNeedsWork)
+                <img src="~/images/thumbdown.jpg" style="height: 20px;" />
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.NoOfRejections)
-            </th>
-
-
-
+                @Html.DisplayNameFor(model => model.ReviewStatus)
 =======
                 Approvals
             </th>
             <th>
                 Needs Work
             </th>
->>>>>>> origin/development
             <th>
                 Rejected
+>>>>>>> origin/development
             </th>
+
             <th>
                 @Html.DisplayNameFor(model => model.FirstOrDefault().Image.OpenReview)
             </th>
@@ -65,83 +69,67 @@
     <tbody>
 
 <<<<<<< HEAD
-        @foreach (var item in Model)
-        {
-            <tr>
-
+@foreach (var item in Model)
+{
+        <tr onclick="document.location = 'Images/View/@item.ImageID'" style="cursor:pointer" >
                 <td>
-                    <a asp-action="View" asp-route-id="@item.ImageID">
                         <img style="max-height: 100px; max-width: 100px;" src="@item.Content" />
-                    </a>
-
                 </td>
 
                 <td>
-                    <a asp-action="View" asp-route-id="@item.ImageID">
-                        @Html.DisplayFor(modelItem => item.Title)
-                    </a>
+                    @Html.DisplayFor(modelItem => item.Title)
                 </td>
 
                 <td>
-                    <a asp-action="View" asp-route-id="@item.ImageID">
-                        @Html.DisplayFor(modelItem => item.Description)
-                    </a>
+                    @Html.DisplayFor(modelItem => item.Description)
                 </td>
                 <td>
-                    <a asp-action="View" asp-route-id="@item.ImageID">
-                        @Html.DisplayFor(modelItem => item.NoOfApprovals)
-                    </a>
+                    @Html.DisplayFor(modelItem => item.NoOfLikes)
                 </td>
 
                 <td>
-                    <a asp-action="View" asp-route-id="@item.ImageID">
-                        @Html.DisplayFor(modelItem => item.NoOfNeedsWork)
-                    </a>
+                    @Html.DisplayFor(modelItem => item.NoOfDislikes)
                 </td>
-
                 <td>
-                    <a asp-action="View" asp-route-id="@item.ImageID">
-                        @Html.DisplayFor(modelItem => item.NoOfRejections)
-                    </a>
+                    @Html.DisplayFor(modelItem => item.ReviewStatus)
                 </td>
 
 
-
-            </tr>
-        }
+</tr>
+}
 =======
 
 @{
     foreach (var ImageData in Model)
     {
 
-        <tr>
+            <tr>
 
-            <td>
+                <td>
                 <a asp-action="View" asp-route-id="@ImageData.Image.ImageID">
                     <img style="max-height: 100px; max-width: 100px;" src="@ImageData.Image.Content" />
-                </a>
-                
-            </td>
+                    </a>
 
-            <td>
+                </td>
+
+                <td>
                 <a asp-action="View" asp-route-id="@ImageData.Image.ImageID">
                     @Html.DisplayFor(modelItem => ImageData.Image.Title)
-                </a>
-            </td>
+                    </a>
+                </td>
 
-            <td>
+                <td>
                 <a asp-action="View" asp-route-id="@ImageData.Image.ImageID">
                     @Html.DisplayFor(modelItem => ImageData.Image.Description)
-                 </a>
-            </td>
-            <td>
+                    </a>
+                </td>
+                <td>
                 <a asp-action="View" asp-route-id="@ImageData.Image.ImageID">
                    @Html.DisplayFor(modelItem => ImageData.approvals)
-                </a>
-            </td>
+                    </a>
+                </td>
 
-            <td>
+                <td>
                 <a asp-action="View" asp-route-id="@ImageData.Image.ImageID">
                     @Html.DisplayFor(modelItem => ImageData.needsWorks)
                 </a>
@@ -154,13 +142,14 @@
             <td>
                 <a asp-action="View" asp-route-id="@ImageData.Image.ImageID">
                     @Html.DisplayFor(modelItem => ImageData.Image.OpenReview)
-                </a>
-            </td>
-          
-        </tr>
+                    </a>
+                </td>
+            </tr>
         }
     }
 >>>>>>> origin/development
 
     </tbody>
 </table>
+
+<script type="text/javascript" src="~/js/Search.js"></script>
