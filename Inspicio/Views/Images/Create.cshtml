@@ -28,14 +28,14 @@
                 <label for="filter_reviewees_id">Filter</label>
                 <input type="text" class="form-control" id="filter_reviewees_id" name="filter_reviewees" onkeyup="filterUsers()" placeholder="No Filter"><br />
 
-                <div id="reviewees_id" style="height:100px; overflow-y:scroll" >
+                <div id="reviewees_id" style="height:60px; overflow-y:scroll" >
                     <ul id="users">
                         @for (var i = 0; i < Model.Users.Count; i++)
                         {
                             <li>
                                 <input type="checkbox" asp-for="@Model.Users[i].IsSelected" />
-                                <label asp-for="@Model.Users[i].IsSelected">@Model.Users[i].Email</label>
-                                <input type="hidden" asp-for="@Model.Users[i].Id" />
+                                <label asp-for="@Model.Users[i].IsSelected"> @Model.Users[i].ProfileName</label>
+                                <label asp-for="@Model.Users[i].IsSelected"> @Model.Users[i].Email</label><input type="hidden" asp-for="@Model.Users[i].Id" />
                                 <br />
                             </li>
                         }
@@ -96,8 +96,6 @@
 
         maxFiles: 1,
         autoProcessQueue: false,
-        thumbnailWidth: null,
-        thumbnailHeight: null,
         init: function () {
 
             this.on("addedfile", function (file) {
@@ -148,8 +146,9 @@
 
 <style>
     .dropzone {
-        height: 200px;
-        width: 200px;
+        height: 300px;
+        width: auto;
+        background-size: contain;
     }
 
     ul {
