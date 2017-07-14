@@ -54,43 +54,25 @@
 
 
                 <td>
-                <a asp-action="View" asp-route-id="@item.Image.ImageID">
                     <img style="max-height: 100px; max-width: 100px;" src="@item.Image.Content" />
-                </a>
-                
                 </td>
-
                 <td>
-                <a asp-action="View" asp-route-id="@item.Image.ImageID">
                     @Html.DisplayFor(modelItem => item.Image.Title)
-                </a>
                 </td>
-
                 <td>
-                <a asp-action="View" asp-route-id="@item.Image.ImageID">
                     @Html.DisplayFor(modelItem => item.Image.Description)
-                 </a>
                 </td>
                 <td>
-                <a asp-action="View" asp-route-id="@item.Image.ImageID">
                    @Html.DisplayFor(modelItem => item.approvals)
-                </a>
                 </td>
-
                 <td>
-                <a asp-action="View" asp-route-id="@item.Image.ImageID">
                     @Html.DisplayFor(modelItem => item.needsWorks)
-                </a>
             </td>
             <td>
-                <a asp-action="View" asp-route-id="@item.Image.ImageID">
                     @Html.DisplayFor(modelItem => item.rejections)
-                </a>
             </td>     
             <td>
-                <a asp-action="View" asp-route-id="@item.Image.ImageID">
                     @Html.DisplayFor(modelItem => item.Image.ReviewStatus)
-                </a>
                 </td>
             </tr>
         }
