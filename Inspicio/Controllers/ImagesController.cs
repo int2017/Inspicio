@@ -125,6 +125,7 @@ namespace Inspicio.Controllers
             if (ModelState.IsValid)
             {
                 CreatePageModel.Image.OwnerId = _userManager.GetUserId(HttpContext.User);
+                CreatePageModel.Image.OpenReview = true;
                 _context.Add(CreatePageModel.Image);
 
                 var ReviewOwner = new Review();
