@@ -49,46 +49,33 @@
     </thead>
     <tbody>
 
-@foreach (var item in Model) {
-        <tr>
+@foreach (var item in Model)
+{
+        <tr onclick="document.location = 'Images/View/@item.ImageID'" style="cursor:pointer" >
+                <td>
+                        <img style="max-height: 100px; max-width: 100px;" src="@item.Content" />
+                </td>
 
-            <td>
-                <a asp-action="View" asp-route-id="@item.ImageID">
-                    <img style="max-height: 100px; max-width: 100px;" src="@item.Content" />
-                </a>
-                
-            </td>
-
-            <td>
-                <a asp-action="View" asp-route-id="@item.ImageID">
+                <td>
                     @Html.DisplayFor(modelItem => item.Title)
-                </a>
-            </td>
+                </td>
 
-            <td>
-                <a asp-action="View" asp-route-id="@item.ImageID">
+                <td>
                     @Html.DisplayFor(modelItem => item.Description)
-                 </a>
-            </td>
-            <td>
-                <a asp-action="View" asp-route-id="@item.ImageID">
+                </td>
+                <td>
                     @Html.DisplayFor(modelItem => item.NoOfLikes)
-                </a>
-            </td>
-           
-            <td>
-                <a asp-action="View" asp-route-id="@item.ImageID">
+                </td>
+
+                <td>
                     @Html.DisplayFor(modelItem => item.NoOfDislikes)
-                </a>
-            </td>
-            <td>
-                <a asp-action="View" asp-route-id="@item.ImageID">
+                </td>
+                <td>
                     @Html.DisplayFor(modelItem => item.ReviewStatus)
-                </a>
-            </td>
-            
-          
-        </tr>
+                </td>
+
+
+</tr>
 }
 
     </tbody>

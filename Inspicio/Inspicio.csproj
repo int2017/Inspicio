@@ -28,6 +28,9 @@
     <Content Include="wwwroot\images\Inspicio.svg" />
     <Content Include="wwwroot\images\ostrich.jpg" />
     <Content Include="wwwroot\images\pin.svg" />
+    <Content Include="wwwroot\images\thumbdown.jpg" />
+    <Content Include="wwwroot\images\thumbmid.jpg" />
+    <Content Include="wwwroot\images\thumbup.jpg" />
     <Content Include="wwwroot\js\ajaxComments.js" />
     <Content Include="wwwroot\js\ajaxOpenSlider.js" />
     <Content Include="wwwroot\js\filter.js" />
