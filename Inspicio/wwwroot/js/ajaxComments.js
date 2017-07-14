@@ -64,7 +64,7 @@ function commentClickMain() {
 };
 
 
-//Adding live listeners to the reply buttons, will do the same for the main comment buttons
+//Adding live listeners to the reply buttons
 $(document).ready(function () {
     reloadMarkers();
     $(document).on("keypress", ".reply-textarea", function (e) {
@@ -72,7 +72,6 @@ $(document).ready(function () {
             var parent = $(this).attr("id").slice(5);
             $("#button-" + parent).click();
             // prevent duplicate submission
-            alert(parent);
             return false;
         }
     })
