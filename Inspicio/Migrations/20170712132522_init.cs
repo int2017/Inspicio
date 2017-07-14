@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace Inspicio.Migrations
 {
-    public partial class MVP_DB : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -71,8 +71,9 @@ namespace Inspicio.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Content = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true),
-                    NoOfDislikes = table.Column<int>(nullable: false),
-                    NoOfLikes = table.Column<int>(nullable: false),
+                    NoOfApprovals = table.Column<int>(nullable: false),
+                    NoOfNeedsWork = table.Column<int>(nullable: false),
+                    NoOfRejections = table.Column<int>(nullable: false),
                     OwnerId = table.Column<string>(nullable: true),
                     Title = table.Column<string>(nullable: true)
                 },
@@ -211,12 +212,14 @@ namespace Inspicio.Migrations
                 {
                     OwnerId = table.Column<string>(nullable: false),
                     ImageId = table.Column<int>(nullable: false),
-                    Disliked = table.Column<bool>(nullable: false),
-                    Liked = table.Column<bool>(nullable: false)
+                    Approved = table.Column<bool>(nullable: false),
+                    NeedsWork = table.Column<bool>(nullable: false),
+                    Rejected = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Review", x => new { x.OwnerId, x.ImageId });
+                    table.UniqueConstraint("AK_Review_ImageId_OwnerId", x => new { x.ImageId, x.OwnerId });
                     table.ForeignKey(
                         name: "FK_Review_Images_ImageId",
                         column: x => x.ImageId,
@@ -256,11 +259,6 @@ namespace Inspicio.Migrations
                 name: "IX_Images_OwnerId",
                 table: "Images",
                 column: "OwnerId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Review_ImageId",
-                table: "Review",
-                column: "ImageId");
 
             migrationBuilder.CreateIndex(
                 name: "RoleNameIndex",

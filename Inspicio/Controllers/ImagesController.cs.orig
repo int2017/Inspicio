@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,132 +18,253 @@ namespace Inspicio.Controllers
     public class ImagesController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
-
-        IHostingEnvironment _environment;
-
+        private readonly IHostingEnvironment _environment;
         private readonly ApplicationDbContext _context;
 
-        public ImagesController(ApplicationDbContext context, IHostingEnvironment _environment, UserManager<ApplicationUser> userManager)
+<<<<<<< HEAD
+        public enum Status { APPROVED, REJECTED, NEEDSWORK };
+=======
+        public enum Status { Approved, NeedsWork, Rejected };
+>>>>>>> origin/development
+
+        public ImagesController(ApplicationDbContext _context, IHostingEnvironment _environment, UserManager<ApplicationUser> _userManager)
         {
             this._environment = _environment;
-            _context = context;
-            _userManager = userManager;
+            this._context = _context;
+            this._userManager = _userManager;
         }
 
         // GET: Images
-        public async Task<IActionResult> Index()
+        public class IndexModel
+        {
+            public Image Image { get; set; }
+            public int approvals { get; set; }
+            public int rejections { get; set; }
+            public int needsWorks { get; set; }
+        }
+
+        public async Task<IActionResult> Index(string SearchString)
         {
 
             // Only images with the user id set as the owner should be passed into the view
+<<<<<<< HEAD
+            var UserId = _userManager.GetUserId(HttpContext.User);
+
+            var ImageIds = _context.Review.Where(r => r.OwnerId == UserId).Select(i => i.ImageId);
+            var Images = new List<Image>();
+            foreach ( var Id in ImageIds )
+            {
+                Images.Add( _context.Images.Where( i => i.ImageID == Id).SingleOrDefault());
+            }
+=======
             var UserID = _userManager.GetUserId(HttpContext.User);
 
-            var allImages =  _context.Images;
-            List<Image> images = new List<Image>();
+            // Changed from getting all images then working out which we want to only getting the ones we want.
+            List<IndexModel> ImageEntries = new List<IndexModel>();
 
-            foreach (Image image in allImages)
+            var AllImages = _context.Images.Where(i => i.OwnerId == UserID).ToList();
+>>>>>>> origin/development
+
+            if (!String.IsNullOrEmpty(SearchString))
             {
-                if(image.OwnerId == UserID)
-                {
-                    images.Add(image);
-                }
+                Images = Images.Where(s => s.Title.Contains(SearchString)).ToList();
+            }
+<<<<<<< HEAD
+            return View(Images);
+=======
+
+            foreach (var a in AllImages)
+            {
+                ImageEntries.Add(new IndexModel {
+                    Image = a,
+                    approvals = _context.Review.Count(x => (x.ImageId == a.ImageID) && x.State == Review.States.Approved),
+                    needsWorks = _context.Review.Count(x => (x.ImageId == a.ImageID) && x.State == Review.States.NeedsWork),
+                    rejections = _context.Review.Count(x => (x.ImageId == a.ImageID) && x.State == Review.States.Rejected)
+                });
             }
 
-            return View(images);
+            await _context.SaveChangesAsync();
+            return View(ImageEntries);
+>>>>>>> origin/development
         }
 
         // GET: Images/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int? Id)
         {
-            if (id == null)
+            if (Id == null)
             {
                 return NotFound();
             }
 
-            var image = await _context.Images
-                .SingleOrDefaultAsync(m => m.ImageID == id);
-            if (image == null)
+            var Image = await _context.Images.SingleOrDefaultAsync(m => m.ImageID == Id);
+            if (Image == null)
             {
                 return NotFound();
             }
 
-            return View(image);
+            return View(Image);
         }
 
+
+
+        public class SelectableUser : ApplicationUser
+        {
+            public bool IsSelected { get; set; }
+        }
+        public class CreatePageModel
+        {
+
+            public List<SelectableUser> Users { get; set; }
+            public Image Image { get; set; }
+        }
         // GET: Images/Create
         public IActionResult Create()
         {
-            return View();
+            var CreatePageModel = new CreatePageModel();
+            CreatePageModel.Users = new List<SelectableUser>();
+
+            var users = _context.Users.Where( u => u.Id != _userManager.GetUserId(HttpContext.User)).ToList();
+            foreach( var u in users )
+            {
+                // Selectable user constructor
+                CreatePageModel.Users.Add(new SelectableUser { Id = u.Id, Email = u.Email, ProfileName = u.ProfileName, IsSelected = false });
+            }
+
+            return View(CreatePageModel);
         }
 
         // POST: Images/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ImageID,Content,DownRating,UpRating,Description,Title")] Image image)
+<<<<<<< HEAD
+        public async Task<IActionResult> Create(CreatePageModel CreatePageModel)
+        {
+            if (ModelState.IsValid)
+            {
+                CreatePageModel.Image.OwnerId = _userManager.GetUserId(HttpContext.User);
+                _context.Add(CreatePageModel.Image);
+
+                var ReviewOwner = new Review();
+                ReviewOwner.ImageId = CreatePageModel.Image.ImageID;
+                ReviewOwner.OwnerId = CreatePageModel.Image.OwnerId;
+                ReviewOwner.Approved = false;
+                ReviewOwner.Rejected = false;
+                ReviewOwner.NeedsWork = false;
+                _context.Add(ReviewOwner);
+
+                var Reviewees = new List<Review>();
+                if (CreatePageModel.Users != null)
+                {
+                    foreach (var u in CreatePageModel.Users.Where(m => m.IsSelected))
+                    {
+                        var reviewee = new Review();
+                        reviewee.Approved = false;
+                        reviewee.Rejected = false;
+                        reviewee.NeedsWork = false;
+
+                        reviewee.OwnerId = u.Id;
+                        reviewee.ImageId = CreatePageModel.Image.ImageID;
+                        _context.Add(reviewee);
+                    }
+                }
+=======
+        public async Task<IActionResult> Create([Bind("ImageID,Content,DownRating,UpRating,Description,Title,OpenReview")] Image image)
         {
             if (ModelState.IsValid)
             {
                 image.OwnerId = _userManager.GetUserId(HttpContext.User);
                 _context.Add(image);
+
+                var review = new Review();
+                review.ImageId = image.ImageID;
+                review.OwnerId = image.OwnerId;
+                review.State = Review.States.Undecided;
+                _context.Add(review);
+                image.OpenReview = true;
+>>>>>>> origin/development
+
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            return View(image);
+            return View(CreatePageModel.Image);
         }
 
 
-        public class DataToBody
-        {
-            public Image Image { get; set; }
-            public List<Comment> Comments { get; set; }
-        }
-
-        // GET: Images/View/5
-        public async Task<IActionResult> View(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-            var allComments =  _context.Comments;
-            List<Comment> comments = new List<Comment>();
-            foreach(Comment c in allComments)
-            {
-                if (c.Images != null && c.Images.ImageID == id)
-                {
-                    comments.Add(c);
-                }
-            }
-            var image = await _context.Images.SingleOrDefaultAsync(m => m.ImageID == id);
-            if (image == null)
-            {
-                return NotFound();
-            }
 <<<<<<< HEAD
 
-            DataToBody DataToBody = new DataToBody();
-            DataToBody.Image = image;
-
-            var allcomments = _context.Comments;
-            List<Comment> comments = new List<Comment>();
-
-            foreach (Comment comment in allcomments)
-            {
-                if (comment.ImageId == id)
-                {
-                    comments.Add(comment);
-                }
-            }
-
-            DataToBody.Comments = comments;
-            return View(DataToBody);
+        public class FullReviewData
 =======
-            Tuple<Image,List<Comment>> x = new Tuple<Image, List<Comment>>(image,comments);
-            return View(x);
->>>>>>> temp
+        public class ViewModel
+>>>>>>> origin/development
+        {
+            public string OwnerProfileName { get; set; }
+      
+            public class ImageData
+            {
+                public Image Image { get; set; }
+                public int approvals { get; set; }
+                public int rejections { get; set; }
+                public int needsWorks { get; set; }
+            }
+            public ImageData Info { get; set; }
+
+            public List<CommentInfo> Comments { get; set; }
+            public class CommentInfo
+            {
+                public String PosterProfileName { get; set; }
+                public Comment comment { get; set; }
+            }
         }
 
+
+        // GET: Images/View/5
+        public async Task<IActionResult> View(int? Id)
+        {
+            if (Id == null)
+            {
+                return NotFound();
+            }
+
+            // Fetch the image by the id pass in '/5'
+            var Image = await _context.Images.SingleOrDefaultAsync(m => m.ImageID == Id);
+            if (Image == null)
+            {
+                return NotFound();
+            }
+
+            // Create a new FullReview object
+            // This will be passed into the view as the model.
+            var FullReviewData = new ViewModel();
+            FullReviewData.Comments = new List<ViewModel.CommentInfo>();
+
+            // Added OwnerProfileName to be passed into the model.
+            ApplicationUser User = await _userManager.FindByIdAsync(Image.OwnerId);
+
+            FullReviewData.OwnerProfileName = User.ProfileName;
+
+            FullReviewData.Info = new ViewModel.ImageData();
+            FullReviewData.Info.Image = Image;
+            FullReviewData.Info.approvals = _context.Review.Count(x => x.ImageId == Id && x.State == Review.States.Approved);
+            FullReviewData.Info.rejections = _context.Review.Count(x => x.ImageId == Id && x.State == Review.States.Rejected);
+            FullReviewData.Info.needsWorks = _context.Review.Count(x => x.ImageId == Id && x.State == Review.States.NeedsWork);
+
+            // Changed from getting all comments then working out which we want to only getting the ones we want.
+            var AllComments = _context.Comments.Where(c => c.ImageId == Id);
+            foreach (Comment SingleComment in AllComments)
+            {
+                // add it and query the user table for the profilename.
+
+                // add it and query the user table for the profilename.
+                var CommentInfo = new ViewModel.CommentInfo();
+                CommentInfo.PosterProfileName = _context.Users.Where(u => u.Id == SingleComment.OwnerId).Select(u => u.ProfileName).SingleOrDefault();
+                CommentInfo.comment = SingleComment;
+
+                FullReviewData.Comments.Add(CommentInfo);
+            }
+
+            // FullReview model to the View.
+            return View(FullReviewData);
+        }
 
 
 
@@ -152,10 +273,10 @@ namespace Inspicio.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> View(int id, [Bind("ImageID,Content,DownRating,UpRating,Description,Title")] Image image)
+        public async Task<IActionResult> View(int Id, [Bind("ImageID,Content,DownRating,UpRating,Description,Title")] Image Image)
         {
 
-            if (id != image.ImageID)
+            if (Id != Image.ImageID)
             {
                 return NotFound();
             }
@@ -164,12 +285,12 @@ namespace Inspicio.Controllers
             {
                 try
                 {
-                    _context.Update(image);
+                    _context.Update(Image);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ImageExists(image.ImageID))
+                    if (!ImageExists(Image.ImageID))
                     {
                         return NotFound();
                     }
@@ -180,95 +301,247 @@ namespace Inspicio.Controllers
                 }
                 return RedirectToAction("Index");
             }
-            return View(image);
+            return View(Image);
         }
 
         // GET: Images/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int? Id)
         {
-            if (id == null)
+            if (Id == null)
             {
                 return NotFound();
             }
 
-            var image = await _context.Images
-                .SingleOrDefaultAsync(m => m.ImageID == id);
-            if (image == null)
+            var Image = await _context.Images.SingleOrDefaultAsync(m => m.ImageID == Id);
+            if (Image == null)
             {
                 return NotFound();
             }
 
-            return View(image);
+            return View(Image);
         }
 
         // POST: Images/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int Id)
         {
-            var image = await _context.Images.SingleOrDefaultAsync(m => m.ImageID == id);
-            _context.Images.Remove(image);
+            var Image = await _context.Images.SingleOrDefaultAsync(m => m.ImageID == Id);
+            _context.Images.Remove(Image);
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
-        private bool ImageExists(int id)
+        private bool ImageExists(int Id)
         {
-            return _context.Images.Any(e => e.ImageID == id);
+            return _context.Images.Any(e => e.ImageID == Id);
         }
 
         public class DataFromBody
         {
             public String Message { get; set; }
             public int ImageId { get; set; }
+            public float Lat { get; set; }
+            public float Lng { get; set; }
         }
 
         [HttpPost]
-        public async Task<IActionResult> Comment([FromBody] DataFromBody _DataFromBody)
+        public async Task<IActionResult> Comment([FromBody] DataFromBody DataFromBody)
         {
-<<<<<<< HEAD
             Comment comment = new Comment();
 
             var userId = _userManager.GetUserId(HttpContext.User);
             comment.OwnerId = userId;
-            comment.ImageId = _DataFromBody.ImageId;
-            comment.Message = _DataFromBody.Message;
-=======
-            var a = _userManager.GetUserId(HttpContext.User);
-           // comment.ApplicationUser = a;
->>>>>>> temp
+            comment.ImageId = DataFromBody.ImageId;
+            comment.Message = DataFromBody.Message;
             comment.Timestamp = System.DateTime.Now;
-
+            comment.Lat = DataFromBody.Lat;
+            comment.Lng = DataFromBody.Lng;
             _context.Add(comment);
+
             await _context.SaveChangesAsync();
             return Ok(1);
         }
-       
+<<<<<<< HEAD
+
         public class RatingBody
         {
-            public bool boolean { get; set; }
+            // Integer determines which button has been pressed
+            public int ThumbChosen { get; set; }
+=======
+        public enum State
+        {
+            Approved,
+            NeedsWork,
+            Rejected
+        };
+        public class RatingBody
+        {
+            // Integer determines which button has been pressed
+            public State state { get; set; }
+>>>>>>> origin/development
             public int ImageID { get; set; }
         }
+
         [HttpPost]
         public async Task<IActionResult> ChangeRating([FromBody] RatingBody data)
         {
-            int id = data.ImageID;
-            
-            var image = await _context.Images.SingleOrDefaultAsync(m => m.ImageID == id);
-            if (data.boolean)
+            var userId = _userManager.GetUserId(HttpContext.User);
+            var review = _context.Review.Where(u => u.OwnerId == userId).Where(i => i.ImageId == data.ImageID).SingleOrDefault();
+
+            if (review == null)
             {
-                image.UpRating++;
-            }
-            else
-            {
-                image.DownRating++;
+                return NotFound();
             }
 
+
+            int id = data.ImageID;
+            var image = await _context.Images.SingleOrDefaultAsync(m => m.ImageID == id);
+
+<<<<<<< HEAD
+            // If the review has been approved
+            if (data.ThumbChosen == (int)Status.APPROVED)
+            {
+                if (review.Approved == false)
+                {
+                    if (review.NeedsWork == true)
+                    {
+                        review.Approved = true;
+                        review.NeedsWork = false;
+                        image.NoOfApprovals++;
+
+                        if (image.NoOfNeedsWork > 0)
+                        {
+                            image.NoOfNeedsWork--;
+                        }
+                    }
+                    else if (review.Rejected == true)
+                    {
+                        review.Rejected = false;
+                        review.Approved = true;
+                        image.NoOfApprovals++;
+                        if (image.NoOfRejections > 0)
+                        {
+                            image.NoOfRejections--;
+                        }
+                    }
+                    else if ((review.Approved == false) && (review.NeedsWork == false) && (review.Rejected == false))
+                    {
+                        review.Approved = true;
+                        image.NoOfApprovals++;
+                    }
+                }
+            }
+
+            // if the review has been rejected
+            if (data.ThumbChosen == (int)Status.REJECTED)
+            {
+                if (review.Rejected == false)
+                {
+                    if (review.NeedsWork == true)
+                    {
+                        review.Rejected = true;
+                        review.NeedsWork = false;
+                        image.NoOfRejections++;
+                        if (image.NoOfNeedsWork > 0)
+                        {
+                            image.NoOfNeedsWork--;
+                        }
+                    }
+                    else if (review.Approved == true)
+                    {
+                        review.Approved = false;
+                        review.Rejected = true;
+                        image.NoOfRejections++;
+                        if (image.NoOfApprovals > 0)
+                        {
+                            image.NoOfApprovals--;
+                        }
+                    }
+                    else if ((review.Approved == false) && (review.NeedsWork == false) && (review.Rejected == false))
+                    {
+                        review.Rejected = true;
+                        image.NoOfRejections++;
+                    }
+                }
+=======
+            if (data.state == State.Approved)
+            {
+                review.State = Review.States.Approved;
+            }
+            else if (data.state == State.NeedsWork)
+            {
+                review.State = Review.States.NeedsWork;
+            }
+            else if (data.state == State.Rejected)
+            {
+                review.State = Review.States.Rejected;
+>>>>>>> origin/development
+            }
+
+            // if the review needs more work
+            if (data.ThumbChosen == (int)Status.NEEDSWORK)
+            {
+                if (review.NeedsWork == false)
+                {
+                    if (review.Approved == true)
+                    {
+                        review.NeedsWork = true;
+                        review.Approved = false;
+                        image.NoOfNeedsWork++;
+                        if (image.NoOfApprovals > 0)
+                        {
+                            image.NoOfApprovals--;
+                        }
+                    }
+                    else if (review.Rejected == true)
+                    {
+                        review.Rejected = false;
+                        review.NeedsWork = true;
+                        image.NoOfNeedsWork++;
+                        if (image.NoOfRejections > 0)
+                        {
+                            image.NoOfRejections--;
+                        }
+                    }
+                    else if ((review.Approved == false) && (review.NeedsWork == false) && (review.Rejected == false))
+                    {
+                        review.NeedsWork = true;
+                        image.NoOfNeedsWork++;
+                    }
+                }
+            }
             await _context.SaveChangesAsync();
             return Ok(1);
         }
+        public class DataFromToggle
+        {
+            public int ImageID { get; set; }
+            public bool Open { get; set; }
+            
+        }
 
-        
+        [HttpPost]
+        public async Task<IActionResult> CloseReview([FromBody] DataFromToggle data)
+        {
+            var userId = _userManager.GetUserId(HttpContext.User);
 
+            int id = data.ImageID;
+            var image = await _context.Images.SingleOrDefaultAsync(m => m.ImageID == id);
+
+            // if the like button has been pressed
+            if (data.Open)
+            {
+                image.OpenReview = true;
+            }
+            else
+            {
+                image.OpenReview = false;
+            }
+                await _context.SaveChangesAsync();
+                return Ok(1);
+        }
     }
 }
+
+

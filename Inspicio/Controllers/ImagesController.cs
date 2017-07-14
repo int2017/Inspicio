@@ -43,18 +43,21 @@ namespace Inspicio.Controllers
         {
 
             // Only images with the user id set as the owner should be passed into the view
-            var UserID = _userManager.GetUserId(HttpContext.User);
+            var UserId = _userManager.GetUserId(HttpContext.User);
 
-            // Changed from getting all images then working out which we want to only getting the ones we want.
-            List<IndexModel> ImageEntries = new List<IndexModel>();
-
-            var AllImages = _context.Images.Where(i => i.OwnerId == UserID).ToList();
+            var ImageIds = _context.Review.Where(r => r.OwnerId == UserId).Select(i => i.ImageId);
+            var AllImages = new List<Image>();
+            foreach (var Id in ImageIds)
+            {
+                AllImages.Add(_context.Images.Where(i => i.ImageID == Id).SingleOrDefault());
+            }
 
             if (!String.IsNullOrEmpty(SearchString))
             {
                 AllImages = AllImages.Where(s => s.Title.Contains(SearchString)).ToList();
             }
 
+            var ImageEntries = new List<IndexModel>();
             foreach (var a in AllImages)
             {
                 ImageEntries.Add(new IndexModel {
@@ -86,35 +89,69 @@ namespace Inspicio.Controllers
             return View(Image);
         }
 
+
+
+        public class SelectableUser : ApplicationUser
+        {
+            public bool IsSelected { get; set; }
+        }
+        public class CreatePageModel
+        {
+
+            public List<SelectableUser> Users { get; set; }
+            public Image Image { get; set; }
+        }
         // GET: Images/Create
         public IActionResult Create()
         {
-            return View();
+            var CreatePageModel = new CreatePageModel();
+            CreatePageModel.Users = new List<SelectableUser>();
+
+            var users = _context.Users.Where( u => u.Id != _userManager.GetUserId(HttpContext.User)).ToList();
+            foreach( var u in users )
+            {
+                // Selectable user constructor
+                CreatePageModel.Users.Add(new SelectableUser { Id = u.Id, Email = u.Email, ProfileName = u.ProfileName, IsSelected = false });
+            }
+
+            return View(CreatePageModel);
         }
 
         // POST: Images/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ImageID,Content,DownRating,UpRating,Description,Title,OpenReview")] Image image)
+        public async Task<IActionResult> Create(CreatePageModel CreatePageModel)
         {
             if (ModelState.IsValid)
             {
-                image.OwnerId = _userManager.GetUserId(HttpContext.User);
-                _context.Add(image);
+                CreatePageModel.Image.OwnerId = _userManager.GetUserId(HttpContext.User);
+                CreatePageModel.Image.OpenReview = true;
+                _context.Add(CreatePageModel.Image);
 
-                var review = new Review();
-                review.ImageId = image.ImageID;
-                review.OwnerId = image.OwnerId;
-                review.State = Review.States.Undecided;
-                _context.Add(review);
-                image.OpenReview = true;
+                var ReviewOwner = new Review();
+                ReviewOwner.ImageId = CreatePageModel.Image.ImageID;
+                ReviewOwner.OwnerId = CreatePageModel.Image.OwnerId;
+                ReviewOwner.State = Review.States.Undecided;
+                _context.Add(ReviewOwner);
+
+                var Reviewees = new List<Review>();
+                if (CreatePageModel.Users != null)
+                {
+                    foreach (var u in CreatePageModel.Users.Where(m => m.IsSelected))
+                    {
+                        var reviewee = new Review();
+                        reviewee.State = Review.States.Undecided;
+
+                        reviewee.OwnerId = u.Id;
+                        reviewee.ImageId = CreatePageModel.Image.ImageID;
+                        _context.Add(reviewee);
+                    }
+                }
 
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            return View(image);
+            return View(CreatePageModel.Image);
         }
 
 
@@ -360,3 +397,14 @@ namespace Inspicio.Controllers
 }
 
 
+
+
+
+
+
+
+              
+
+              
+             
+             

@@ -9,9 +9,12 @@ namespace Inspicio.Models
 {
     public class Review
     {
-
+        [Key]
+        [Column(Order = 1)]
         public string OwnerId { get; set; }
 
+        [Key]
+        [Column(Order = 2)]
         public int ImageId { get; set; }
 
         [EnumDataType(typeof(States))]
@@ -22,12 +25,12 @@ namespace Inspicio.Models
                             Rejected,
                             Undecided};
 
-        [ForeignKey("OwnerId"), Column(Order = 0)]
-        public ApplicationUser ApplicationUser { get; set; }
+        public bool NeedsWork { get; set; }
 
-        [ForeignKey("ImageId"), Column(Order = 1)]
+        [ForeignKey("OwnerId")]
+        public ApplicationUser ApplicationUsers { get; set; }
+
+        [ForeignKey("ImageId")]
         public Image Images { get; set; }
-
     }
 }
-

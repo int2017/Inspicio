@@ -24,7 +24,7 @@
     <thead>
         <tr>
             <th>
-               
+
             </th>
 
             <th>
@@ -43,6 +43,7 @@
             <th>
                 Rejected
             </th>
+
             <th>
                 @Html.DisplayNameFor(model => model.FirstOrDefault().Image.OpenReview)
             </th>
@@ -55,33 +56,33 @@
     foreach (var ImageData in Model)
     {
 
-        <tr>
+            <tr>
 
-            <td>
+                <td>
                 <a asp-action="View" asp-route-id="@ImageData.Image.ImageID">
                     <img style="max-height: 100px; max-width: 100px;" src="@ImageData.Image.Content" />
-                </a>
-                
-            </td>
+                    </a>
 
-            <td>
+                </td>
+
+                <td>
                 <a asp-action="View" asp-route-id="@ImageData.Image.ImageID">
                     @Html.DisplayFor(modelItem => ImageData.Image.Title)
-                </a>
-            </td>
+                    </a>
+                </td>
 
-            <td>
+                <td>
                 <a asp-action="View" asp-route-id="@ImageData.Image.ImageID">
                     @Html.DisplayFor(modelItem => ImageData.Image.Description)
-                 </a>
-            </td>
-            <td>
+                    </a>
+                </td>
+                <td>
                 <a asp-action="View" asp-route-id="@ImageData.Image.ImageID">
                    @Html.DisplayFor(modelItem => ImageData.approvals)
-                </a>
-            </td>
+                    </a>
+                </td>
 
-            <td>
+                <td>
                 <a asp-action="View" asp-route-id="@ImageData.Image.ImageID">
                     @Html.DisplayFor(modelItem => ImageData.needsWorks)
                 </a>
@@ -94,10 +95,9 @@
             <td>
                 <a asp-action="View" asp-route-id="@ImageData.Image.ImageID">
                     @Html.DisplayFor(modelItem => ImageData.Image.OpenReview)
-                </a>
-            </td>
-          
-        </tr>
+                    </a>
+                </td>
+            </tr>
         }
     }
 
