@@ -348,7 +348,7 @@ namespace Inspicio.Controllers
             }
             else
             {
-                image.ReviewStatus= Image.Status.Close;
+                image.ReviewStatus= Image.Status.Closed;
             }
                 await _context.SaveChangesAsync();
                 return Ok(1);
