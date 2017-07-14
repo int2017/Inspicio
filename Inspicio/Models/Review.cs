@@ -14,9 +14,13 @@ namespace Inspicio.Models
 
         public int ImageId { get; set; }
 
-        public Boolean Liked { get; set; }
+        [EnumDataType(typeof(States))]
+        public States State { get; set; }
 
-        public Boolean Disliked { get; set; }
+        public enum States { Approved,
+                            NeedsWork,
+                            Rejected,
+                            Undecided};
 
         [ForeignKey("OwnerId"), Column(Order = 0)]
         public ApplicationUser ApplicationUser { get; set; }

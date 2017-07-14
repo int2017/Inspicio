@@ -107,9 +107,11 @@ namespace Inspicio.Migrations
 
                     b.Property<string>("Description");
 
-                    b.Property<int>("NoOfDislikes");
+                    b.Property<int>("NoOfApprovals");
 
-                    b.Property<int>("NoOfLikes");
+                    b.Property<int>("NoOfChangesRequested");
+
+                    b.Property<int>("NoOfRejections");
 
                     b.Property<string>("OwnerId");
 
@@ -128,9 +130,11 @@ namespace Inspicio.Migrations
 
                     b.Property<int>("ImageId");
 
-                    b.Property<bool>("Disliked");
+                    b.Property<bool>("Approved");
 
-                    b.Property<bool>("Liked");
+                    b.Property<bool>("ChangesRequested");
+
+                    b.Property<bool>("Rejected");
 
                     b.HasKey("OwnerId", "ImageId");
 
