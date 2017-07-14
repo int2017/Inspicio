@@ -46,8 +46,8 @@ namespace Inspicio.Controllers
             var UserID = _userManager.GetUserId(HttpContext.User);
 
             // Changed from getting all images then working out which we want to only getting the ones we want.
-
             List<IndexModel> ImageEntries = new List<IndexModel>();
+
             var AllImages = _context.Images.Where(i => i.OwnerId == UserID).ToList();
 
             if (!String.IsNullOrEmpty(SearchString))
@@ -97,7 +97,7 @@ namespace Inspicio.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ImageID,Content,DownRating,UpRating,Description,Title")] Image image)
+        public async Task<IActionResult> Create([Bind("ImageID,Content,DownRating,UpRating,Description,Title,OpenReview")] Image image)
         {
             if (ModelState.IsValid)
             {
@@ -109,6 +109,7 @@ namespace Inspicio.Controllers
                 review.OwnerId = image.OwnerId;
                 review.State = Review.States.Undecided;
                 _context.Add(review);
+                image.OpenReview = true;
 
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
@@ -295,7 +296,6 @@ namespace Inspicio.Controllers
             // Integer determines which button has been pressed
             public State state { get; set; }
             public int ImageID { get; set; }
-
         }
 
         [HttpPost]
@@ -329,5 +329,34 @@ namespace Inspicio.Controllers
             await _context.SaveChangesAsync();
             return Ok(1);
         }
+        public class DataFromToggle
+        {
+            public int ImageID { get; set; }
+            public bool Open { get; set; }
+            
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CloseReview([FromBody] DataFromToggle data)
+        {
+            var userId = _userManager.GetUserId(HttpContext.User);
+
+            int id = data.ImageID;
+            var image = await _context.Images.SingleOrDefaultAsync(m => m.ImageID == id);
+
+            // if the like button has been pressed
+            if (data.Open)
+            {
+                image.OpenReview = true;
+            }
+            else
+            {
+                image.OpenReview = false;
+            }
+                await _context.SaveChangesAsync();
+                return Ok(1);
+            }
+        }
     }
 }
+
