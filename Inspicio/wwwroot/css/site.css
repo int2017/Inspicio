@@ -191,6 +191,7 @@ hr {
     position: absolute;
     background: transparent;
     overflow: visible;
+    z-index: 5000
 }
 
 .leaflet-popup-content, .leaflet-popup-content textarea {
@@ -407,7 +408,25 @@ input:focus {
 .comment-user {
     background-color: rgba(0, 0, 0, 0.09);
 }
+.reply-textarea{
+    height:80px !important;
+    padding-right:40px;
+}
+[id^="button-"].reply-button {
+    height: 100% !important;
+    position: absolute !important;
+    right: 0 !important;
+    top: 0 !important;
+    z-index:900000000 !important;
+}
+.replied-section {
+    display: none;
+    background-color: rgba(65, 80, 121, 0.35);
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius:2px;
 
+}
 @media screen and (max-width: 767px) {
     /* Hide captions */
     .carousel-caption {

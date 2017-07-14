@@ -18,7 +18,7 @@
         <ul class="nav navbar-nav navbar-right">
             <li>
                 <!-- The Users ProfileName -->
-                <a asp-area="" asp-controller="Manage" asp-action="Index" title="Manage">Hello @User.GetProfileName()</a>
+                <a asp-area="" asp-controller="Manage" asp-action="Index" title="Manage">Hello <span class="main-user">@User.GetProfileName()</span></a>
             </li>
             <li>
                 <button type="submit" class="btn btn-link navbar-btn navbar-link">Log out</button>

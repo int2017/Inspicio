@@ -152,8 +152,20 @@ namespace Inspicio.Controllers
             return View(FullReviewData);
         }
 
-
-
+       
+        public JsonResult GetComments(int? Id)
+        {
+            List<FullReviewData.CommentInfo> comments = new List<FullReviewData.CommentInfo>();
+            var AllComments = _context.Comments.Where(c => c.ImageId == Id);
+            foreach(Comment SingleComment in AllComments)
+            {
+                var CommentInfo = new FullReviewData.CommentInfo();
+                CommentInfo.comment = SingleComment;
+                CommentInfo.PosterProfileName = _context.Users.Where(u => u.Id == SingleComment.OwnerId).Select(u => u.ProfileName).SingleOrDefault();
+                comments.Add(CommentInfo);
+            }
+            return Json(comments);
+        }
         // POST: Images/View/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -229,6 +241,7 @@ namespace Inspicio.Controllers
             public int ImageId { get; set; }
             public float Lat { get; set; }
             public float Lng { get; set; }
+            public String ParentId { get; set; }
         }
 
         [HttpPost]
@@ -243,6 +256,7 @@ namespace Inspicio.Controllers
             comment.Timestamp = System.DateTime.Now;
             comment.Lat = DataFromBody.Lat;
             comment.Lng = DataFromBody.Lng;
+            comment.ParentId = DataFromBody.ParentId;
             _context.Add(comment);
 
             await _context.SaveChangesAsync();
