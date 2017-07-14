@@ -27,6 +27,9 @@ function commentClick(uniqID) {
                 $(".leaflet-popup-content").fadeOut();
                 markerX = markersArray[markersArray.findIndex(x => parseInt(x.myData.id) === parseInt(uniqID))];
                 markerX.closePopup();
+                $(markersArray).each(function () {
+                    this.getPopup().setContent("");
+                })
                 reloadMarkers();
                 $(".leaflet-popup-content").fadeIn();
                 $("#comment-section").load(window.location.href + " #comment-section > * ");

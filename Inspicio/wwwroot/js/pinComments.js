@@ -15,6 +15,15 @@ var customPin = L.icon({
     shadowAnchor: [11, 62],  // the same for the shadow
     popupAnchor: [3, -45]
 })
+var hoverPin = L.icon({
+    iconUrl: "../../images/pinLit.svg",
+    shadowUrl: "../../images/pinshadow.svg",
+    iconSize: [38, 58], // size of the icon
+    shadowSize: [80, 120], // size of the shadow
+    iconAnchor: [15, 58], // point of the icon which will correspond to marker's location
+    shadowAnchor: [11, 62],  // the same for the shadow
+    popupAnchor: [3, -45]
+})
 //Changing map size/location when window is resized
 $(window).resize(function () {
     setTimeout(
@@ -204,8 +213,38 @@ function createInputRow(uniqID, parent) {
 
 //Listeners
 $(document).ready(function () {
-    //Opening pins from comment sidebar
-    $(document).on("click", ".open-pin", function () {
+    $(document).on("mouseover", ".open-pin", function () {
+        var loc = $(this).data("location").split(' ');
+        var lat = loc[0];
+        var lng = loc[2];
+        var latCollection = locations.map(function (value, index) { return value[1] });
+        var lngCollection = locations.map(function (value, index) { return value[2] });
+
+        if ($.inArray(parseInt(lat), latCollection) !== -1 && $.inArray(parseInt(lng), lngCollection) !== -1) {
+
+            var latlng = L.latLng(lat, lng);
+            var idCollection = locations.map(function (value, index) { return value[0] });
+            var uniqID = idCollection[$.inArray(parseInt(lat), latCollection)];
+            markerX = markersArray[markersArray.findIndex(x => parseInt(x.myData.id) === parseInt(uniqID))];
+            markerX.setIcon(hoverPin); 
+        }
+    }).on("mouseleave", ".open-pin", function () {
+        var loc = $(this).data("location").split(' ');
+        var lat = loc[0];
+        var lng = loc[2];
+        var latCollection = locations.map(function (value, index) { return value[1] });
+        var lngCollection = locations.map(function (value, index) { return value[2] });
+
+        if ($.inArray(parseInt(lat), latCollection) !== -1 && $.inArray(parseInt(lng), lngCollection) !== -1) {
+
+            var latlng = L.latLng(lat, lng);
+            var idCollection = locations.map(function (value, index) { return value[0] });
+            var uniqID = idCollection[$.inArray(parseInt(lat), latCollection)];
+            markerX = markersArray[markersArray.findIndex(x => parseInt(x.myData.id) === parseInt(uniqID))];
+            markerX.setIcon(customPin);
+            
+        }
+    }).on("click", ".open-pin", function () {
         var loc = $(this).data("location").split(' ');
         var lat = loc[0];
         var lng = loc[2];
@@ -218,7 +257,6 @@ $(document).ready(function () {
             var idCollection = locations.map(function (value, index) { return value[0] });
             var uniqID = idCollection[$.inArray(parseInt(lat), latCollection)];
             markerX = markersArray[markersArray.findIndex(x => parseInt(x.myData.id) === parseInt(uniqID))].openPopup();
-
         }
 
     })

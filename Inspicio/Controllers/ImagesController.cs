@@ -161,7 +161,7 @@ namespace Inspicio.Controllers
             {
                 var CommentInfo = new FullReviewData.CommentInfo();
                 CommentInfo.comment = SingleComment;
-                CommentInfo.PosterProfileName = _context.Users.Where(u => u.Id == SingleComment.OwnerId).Select(u => u.ProfileName).SingleOrDefault();
+                CommentInfo.PosterProfileName = _context.Users.Where(u => u.Id == SingleComment.OwnerId).Select(u => u.ProfileName).Single();
                 comments.Add(CommentInfo);
             }
             return Json(comments);

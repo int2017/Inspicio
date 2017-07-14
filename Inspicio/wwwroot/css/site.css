@@ -206,7 +206,9 @@ hr {
     display: none;
     z-index: -500 !important;
 }
-
+nav.navbar.navbar-inverse.navbar-fixed-top {
+    z-index: 5050;
+}
 .comment-popup-input {
     padding-top: 5px;
     border-top: 1px solid #cecece;
@@ -338,6 +340,7 @@ input:focus {
     opacity: 0.6;
     transition: all 0.2s ease-in-out;
     border: 1px solid #8c8c8c;
+    z-index:5000;
 }
 
     .lightbox-button:hover {
