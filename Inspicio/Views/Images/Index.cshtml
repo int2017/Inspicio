@@ -43,6 +43,9 @@
             <th>
                 Rejected
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().Image.OpenReview)
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -83,12 +86,16 @@
                     @Html.DisplayFor(modelItem => ImageData.needsWorks)
                 </a>
             </td>
-           
             <td>
                 <a asp-action="View" asp-route-id="@ImageData.Image.ImageID">
                     @Html.DisplayFor(modelItem => ImageData.rejections)
                 </a>
-            </td>           
+            </td>     
+            <td>
+                <a asp-action="View" asp-route-id="@ImageData.Image.ImageID">
+                    @Html.DisplayFor(modelItem => ImageData.Image.OpenReview)
+                </a>
+            </td>
           
         </tr>
         }

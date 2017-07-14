@@ -355,8 +355,8 @@ namespace Inspicio.Controllers
             }
                 await _context.SaveChangesAsync();
                 return Ok(1);
-            }
         }
     }
 }
+
 
