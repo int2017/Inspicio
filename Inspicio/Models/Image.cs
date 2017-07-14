@@ -16,11 +16,6 @@ namespace Inspicio.Models
 
         public string Content { get; set; }
 
-        [DisplayName("Dislikes")]
-        public int NoOfDislikes { get; set; }
-
-        [DisplayName("Likes")]
-        public int NoOfLikes { get; set; }
 
         public string Description { get; set; }
 
@@ -36,7 +31,7 @@ namespace Inspicio.Models
            Closed
         }
 
-        public ICollection<Comment>Comments { get; set; }
+        public ICollection<Comment> Comments { get; set; }
         public ICollection<Review> Reviews { get; set; }
 
         [ForeignKey("OwnerId")]

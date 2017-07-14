@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Inspicio.Data;
+using Inspicio.Models;
 
 namespace Inspicio.Migrations
 {
@@ -107,11 +108,9 @@ namespace Inspicio.Migrations
 
                     b.Property<string>("Description");
 
-                    b.Property<int>("NoOfDislikes");
-
-                    b.Property<int>("NoOfLikes");
-
                     b.Property<string>("OwnerId");
+
+                    b.Property<int>("ReviewStatus");
 
                     b.Property<string>("Title");
 
@@ -128,13 +127,13 @@ namespace Inspicio.Migrations
 
                     b.Property<int>("ImageId");
 
-                    b.Property<bool>("Disliked");
+                    b.Property<bool>("NeedsWork");
 
-                    b.Property<bool>("Liked");
+                    b.Property<int>("State");
 
                     b.HasKey("OwnerId", "ImageId");
 
-                    b.HasIndex("ImageId");
+                    b.HasAlternateKey("ImageId", "OwnerId");
 
                     b.ToTable("Review");
                 });
@@ -272,7 +271,7 @@ namespace Inspicio.Migrations
                         .HasForeignKey("ImageId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("Inspicio.Models.ApplicationUser", "ApplicationUser")
+                    b.HasOne("Inspicio.Models.ApplicationUser", "ApplicationUsers")
                         .WithMany("Reviews")
                         .HasForeignKey("OwnerId")
                         .OnDelete(DeleteBehavior.Cascade);

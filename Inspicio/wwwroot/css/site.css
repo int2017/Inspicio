@@ -97,6 +97,9 @@ hr {
     display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
+
+    margin-right: -15px;
+    margin-left: -15px;
 }
 
 .dash-filter select {
