@@ -8,9 +8,7 @@
 hr {
     border-color: #e6e6e6;
 }
-nav{
-    border-radius:0!important;
-}
+
 /* Wrapping element */
 /* Set some basic padding to keep content from hitting the edges */
 .body-content {
@@ -18,8 +16,37 @@ nav{
     padding-right: 30px;
 }
 
-/* Set widths on the form inputs since otherwise they're 100% wide */
+#table {
+    width: 100%;
+    font-size: 18px;
+    border-collapse: collapse;
+}
 
+#table td, #table th {
+    padding: 15px;
+    text-align: left;
+    width: 16%;
+}
+
+#table tr:hover {
+        background-color: #f1f1f1;
+    }
+
+#table tr.header:hover{
+    background-color: white;
+}
+
+#myInput {
+    background-image: url('../images/searchicon.ico');
+    background-size: 20px;
+    background-position: 10px 12px; 
+    background-repeat: no-repeat; 
+    width: 100%; 
+    font-size: 16px;
+    padding: 12px 20px 12px 40px; 
+    border: 1px solid #ddd; 
+    margin-bottom: 12px; 
+}
 
 .create-img input:not(.btn), .create-img select, .create-img textarea {
     max-width: none;
@@ -48,10 +75,6 @@ nav{
     width: 100%;
 }
 
-
-nav{
-    margin-bottom:0 !important;
-}
 .dash-project > h3 {
     display: inline;
 }
@@ -334,7 +357,7 @@ input:focus {
     position: absolute;
     width: 72%;
     right: 0;
-    padding: 20px;
+    padding: 40px;
     margin: auto;
 }
 

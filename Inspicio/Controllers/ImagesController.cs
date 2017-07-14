@@ -52,11 +52,6 @@ namespace Inspicio.Controllers
                 AllImages.Add(_context.Images.Where(i => i.ImageID == Id).SingleOrDefault());
             }
 
-            if (!String.IsNullOrEmpty(SearchString))
-            {
-                AllImages = AllImages.Where(s => s.Title.Contains(SearchString)).ToList();
-            }
-
             var ImageEntries = new List<IndexModel>();
             foreach (var a in AllImages)
             {
@@ -125,7 +120,7 @@ namespace Inspicio.Controllers
             if (ModelState.IsValid)
             {
                 CreatePageModel.Image.OwnerId = _userManager.GetUserId(HttpContext.User);
-                CreatePageModel.Image.OpenReview = true;
+                CreatePageModel.Image.ReviewStatus = Image.Status.Open;
                 _context.Add(CreatePageModel.Image);
 
                 var ReviewOwner = new Review();
@@ -134,6 +129,7 @@ namespace Inspicio.Controllers
                 ReviewOwner.State = Review.States.Undecided;
                 _context.Add(ReviewOwner);
 
+                CreatePageModel.Image.ReviewStatus = Image.Status.Open;
                 var Reviewees = new List<Review>();
                 if (CreatePageModel.Users != null)
                 {
@@ -204,6 +200,7 @@ namespace Inspicio.Controllers
 
             FullReviewData.Info = new ViewModel.ImageData();
             FullReviewData.Info.Image = Image;
+            FullReviewData.Info.Image.ReviewStatus = Image.ReviewStatus;
             FullReviewData.Info.approvals = _context.Review.Count(x => x.ImageId == Id && x.State == Review.States.Approved);
             FullReviewData.Info.rejections = _context.Review.Count(x => x.ImageId == Id && x.State == Review.States.Rejected);
             FullReviewData.Info.needsWorks = _context.Review.Count(x => x.ImageId == Id && x.State == Review.States.NeedsWork);
@@ -395,14 +392,13 @@ namespace Inspicio.Controllers
             int id = data.ImageID;
             var image = await _context.Images.SingleOrDefaultAsync(m => m.ImageID == id);
 
-            // if the like button has been pressed
             if (data.Open)
             {
-                image.OpenReview = true;
+                image.ReviewStatus = Image.Status.Open;
             }
             else
             {
-                image.OpenReview = false;
+                image.ReviewStatus= Image.Status.Closed;
             }
                 await _context.SaveChangesAsync();
                 return Ok(1);
