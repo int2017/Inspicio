@@ -1,13 +1,13 @@
-﻿function myFunction() {
+﻿function searchFunction() {
 
-  var input, filter, table, tr, td, 
+    var input, filter, table, tr, td, i; 
   input = document.getElementById("myInput");
   filter = input.value.toUpperCase();
   table = document.getElementById("table");
   tr = table.getElementsByTagName("tr");
 
   // Loops through table rows, and hides ones that don't match the search query
-  for (int i = 0; i < tr.length; i++) {
+  for (i = 0; i < tr.length; i++) {
       tdTitle = tr[i].getElementsByTagName("td")[1];
       tdDescription = tr[i].getElementsByTagName("td")[2];
       if (tdTitle) {
