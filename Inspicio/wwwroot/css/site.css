@@ -14,6 +14,7 @@ hr {
 .body-content {
     padding-left: 30px;
     padding-right: 30px;
+    margin-top:50px;
 }
 
 #table {
@@ -153,18 +154,21 @@ hr {
 }
 
 .dropzone {
-    height: 450px;
     border-radius: 2px !important;
     background-repeat: no-repeat !important;
     background-size: 100% 100% !important;
     background-position: center !important;
     object-fit: cover;
+    padding: 0;
+    display: inline-block;
+    min-width:500px;
+    margin:auto;
 }
 
 #comment-section {
     max-width: 100%;
     margin: 10px auto;
-    padding: 10px 10px;
+    padding: 20px;
     height: 100%;
     width: 100%;
 }

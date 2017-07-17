@@ -1,5 +1,10 @@
-﻿//Commenting from popups
-function commentClick(uniqID) {
+﻿var commentEnum = {
+    Default: 0,
+    Urgent: 1,
+};
+
+//Commenting from popups
+function commentClick(uniqID, chosenState) {
     var locationLat;
     var locationLng;
     $(markersArray).each(function () {
@@ -42,7 +47,7 @@ function commentClick(uniqID) {
 };
 
 //Commenting from main comment section
-function commentClickMain() {
+function commentClickMain(chosenState) {
     var DataFromBody = {
         "ImageId": $("#ImageId").val(),
         "Message": $("#comment-textarea").val(),
@@ -96,6 +101,9 @@ $(document).ready(function () {
         }
         replyComment(parent, area);
 
+    })
+    $(document).on("click", "#submit-comment", function () {
+        commentClick();
     })
 });
 

@@ -313,6 +313,7 @@ namespace Inspicio.Controllers
             public float Lat { get; set; }
             public float Lng { get; set; }
             public String ParentId { get; set; }
+            public enum CommentUrgency { Default,Urgent }
         }
 
         [HttpPost]

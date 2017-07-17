@@ -76,6 +76,8 @@ namespace Inspicio.Migrations
 
                     b.Property<string>("ChildId");
 
+                    b.Property<int>("CommentUrgency");
+
                     b.Property<int>("ImageId");
 
                     b.Property<float>("Lat");

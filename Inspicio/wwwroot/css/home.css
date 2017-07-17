@@ -12,23 +12,35 @@
     background-image: url(../images/ostrich.jpg);
     height: 100vh;
     position: relative;
-    z-index: 5
+    z-index: 5;
+    overflow: hidden;
+    padding:30px;
 }
 
 #home-header {
     font-family: 'KG Summer Sunshine Blackout';
-    padding-top: 55px;
-    padding-left: 20px;
-    height: 30px;
+    margin:55px 0px;
 }
 
 #img-txt {
     color: white;
-    padding-left: 30px;
-    padding-top: 250px;
+    margin:100px 0;
     font-family: 'Century Gothic';
     font-size: larger;
 }
+    #img-txt ul {
+        padding: 0px;
+        list-style-type: none
+    }
+#img-txt li{
+    margin:50px 0;
+    
+}
+    #img-txt img {
+        height: 100px;
+        margin: 0 20px 0 0;
+        display: inline-block;
+    }
 
 .navbar-brand {
     visibility:hidden;
@@ -38,4 +50,8 @@
     margin:0 ;
     padding:0;
     width:100%;
+}
+nav.navbar {
+    background: none ;
+    border: none ;
 }
