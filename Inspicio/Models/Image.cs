@@ -3,7 +3,12 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Sys
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace Inspicio.Models
+{
+    public class Image
     {
         public int ImageID { get; set; }
 
