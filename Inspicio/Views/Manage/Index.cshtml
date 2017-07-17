@@ -3,6 +3,16 @@
     ViewData["Title"] = "Manage your account";
 }
 
+@using Inspicio.Extensions
+
+<script src="~/js/md5.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#ProfilePicture").attr("src", "http://www.gravatar.com/avatar/" + md5("@Model.Email"));
+    });
+</script>
+
+
 <h2>@ViewData["Title"].</h2>
 <p class="text-success">@ViewData["StatusMessage"]</p>
 
@@ -10,6 +20,12 @@
     <h4>Change your account settings</h4>
     <hr />
     <dl class="dl-horizontal">
+        
+        <dt>Profile Picture:</dt>
+        <dd>
+            <img id="ProfilePicture" />
+        </dd>
+
         <dt>Password:</dt>
         <dd>
             @if (Model.HasPassword)
