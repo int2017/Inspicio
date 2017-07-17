@@ -186,6 +186,7 @@ hr {
 #comment-textarea {
     padding-right: 50px;
     border-radius: 4px;
+    border:none;
 }
 
 #submit-comment {
@@ -462,6 +463,10 @@ input:focus {
     margin-bottom: 20px;
     border-radius:2px;
 
+}
+#comment-status{
+    background-color:rgba(255,255,255,1);
+    border: none;
 }
 @media screen and (max-width: 767px) {
     /* Hide captions */
