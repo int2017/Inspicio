@@ -32,9 +32,11 @@ namespace Inspicio.Models
         }
 
         public ICollection<Comment> Comments { get; set; }
-        public ICollection<Review> Reviews { get; set; }
+        public ICollection<Review> changed { get; set; }
 
         [ForeignKey("OwnerId")]
         public ApplicationUser ApplicationUsers { get; set; }
+
+        // MADE  CANHEFS 
     }
 }
