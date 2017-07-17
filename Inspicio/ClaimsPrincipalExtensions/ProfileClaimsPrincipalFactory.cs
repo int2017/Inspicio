@@ -17,9 +17,9 @@ using System.Threading.Tasks;
 
 namespace Inspicio.ClaimsPrincipalExtensions
 {
-    public class ProfileNameClaimsPrincipalFactory : UserClaimsPrincipalFactory<ApplicationUser, IdentityRole>
+    public class ProfileClaimsPrincipalFactory : UserClaimsPrincipalFactory<ApplicationUser, IdentityRole>
     {
-        public ProfileNameClaimsPrincipalFactory (
+        public ProfileClaimsPrincipalFactory (
             UserManager<ApplicationUser> userManager,
             RoleManager<IdentityRole> roleManager,
             IOptions<IdentityOptions> optionsAccessor ) : base( userManager, roleManager, optionsAccessor )
@@ -36,7 +36,8 @@ namespace Inspicio.ClaimsPrincipalExtensions
             ((ClaimsIdentity)principal.Identity).AddClaims(new[]
             {
                 // ClaimTypes.GivenName, this will be how we access our property when needed
-                new Claim(ClaimTypes.GivenName, user.ProfileName)
+                new Claim(ClaimTypes.GivenName, user.ProfileName),
+                new Claim(ClaimTypes.Role, user.Id)
             });
 
             return principal;

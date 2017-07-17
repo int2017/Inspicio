@@ -62,7 +62,7 @@ namespace Inspicio
 
             // Jack Lloyd [06/07/17]
             // Registering our new UserClaimsPrincipalFactory in Startup.cs
-            services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, ProfileNameClaimsPrincipalFactory>();
+            services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, ProfileClaimsPrincipalFactory>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
