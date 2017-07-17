@@ -47,7 +47,7 @@
                     <button type="button" id="thumbs-down" class="btn btn-danger thumb"><i class="fa fa-thumbs-o-down " aria-hidden="true"></i> : <span class="rating">@Model.Info.rejections</span></button>
                 </div>
                 <div class="row">
-                    <button type="button" class="btn btn-info " onclick="popupState()">Hide markers</button>
+                    <button type="button" class="btn btn-info " id="hide-pop" onclick="popupState()">Hide markers</button>
                     <!--IF the image is created by the user--> <!--IF project is open-->
                     <button class="btn btn-warning " type="submit">Close</button>              
                 </div>
@@ -70,17 +70,60 @@
             <h3 class="text-center">Comment section</h3>
             @foreach (var c in Model.Comments)
             {
-                <div class="row-eq-height comment">
-                    <div class="comment-user col-xs-4 col-sm-4 col-md-4">
-                        <h5 class="username">@c.PosterProfileName</h5>
-                        <p>@c.comment.Timestamp</p>
+                if (c.comment.ParentId == null)
+                {
+                    <div class="comment">
+                        <div class="row-eq-height ">
 
-                    </div>
+                            <div class="comment-user col-xs-4 col-sm-4 col-md-4">
+                                <h5 class="username">@c.PosterProfileName</h5>
+                                <p>@c.comment.Timestamp</p>
+                                @if (c.comment.Lat != 0 && c.comment.Lng != 0)
+                                {
+                                    <p><a id="loc-@c.comment.CommentId" class="open-pin" href="#" data-location="@c.comment.Lat  @c.comment.Lng">Open pin</a></p>
 
-                    <div class="col-xs-8 col-sm-8 col-md-8">
-                        <p>@c.comment.Message</p>
+                                }
+                                <p><a class="reply" data-target="@c.comment.CommentId" href="#">Reply</a></p>
+                            </div>
+
+                            <div class="col-xs-8 col-sm-8 col-md-8">
+                                <p>@c.comment.Message</p>
+                            </div>
+                        </div>
+
+                        <div class="replied-section" id="replies-@c.comment.CommentId">
+                            <div class="comment-container">
+                                @foreach (var x in Model.Comments)
+                                {
+                                    if (x.comment.ParentId != null && c.comment.CommentId.ToString().Equals(x.comment.ParentId))
+                                    {
+                                        <div class='row-eq-height comment'>
+                                            <div class='comment-user col-xs-4 col-sm-4 col-md-4'>
+                                                <h5 class='username'> @x.PosterProfileName</h5>
+                                                <p> @x.comment.Timestamp </p>
+                                            </div>
+                                            <div class='col-xs-8 col-sm-8 col-md-8'>
+                                                <p> @x.comment.Message</p>
+                                            </div>
+                                        </div>;
+                                    }
+
+                                }
+                            </div>
+
+                            <div class="row-eq-height reply-comment" id="replycomm-@c.comment.CommentId">
+                                <div class="col-xs-12 col-sm-12 col-md-12 input-group">
+                                    <textarea class="form-control reply-textarea" id="text-@c.comment.CommentId" rows="5" placeholder="Reply..."></textarea>
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-success reply-button" type="submit" id="button-@c.comment.CommentId" data-parent="@c.comment.CommentId">
+                                            <i class="glyphicon glyphicon-share-alt"></i>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                }
 
             }
             <!-- ends here -->
@@ -120,20 +163,22 @@
 <script type="text/javascript" src="~/js/ajaxThumbs.js"></script>
 <script type="text/javascript" src="~/js/ajaxOpenSlider.js"></script>
 
+
+
 <script type="text/javascript" src="~/js/sidebar.js"></script>
-
+<script type="text/javascript" src="~/js/replies.js"></script>
 <script>
-
     $(document).ready(function () {
-        @foreach ( var c in Model.Comments)
-    {
-       <text> createMarkers('@c.comment.Message', '@c.PosterProfileName', '@c.comment.Lat', '@c.comment.Lng');</text>
-
-    }
         $("#imageMap").width($("#image-container >img").width());
         $("#imageMap").height($("#image-container >img").height());
+ Threads
+        imageMap.invalidateSize();
+    })
+</script>
+
     });
 </script>
 
 <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
 <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+
