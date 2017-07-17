@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,17 +16,22 @@ namespace Inspicio.Models
 
         public string Content { get; set; }
 
-        [DisplayName("Dislikes")]
-        public int NoOfDislikes { get; set; }
-
-        [DisplayName("Likes")]
-        public int NoOfLikes { get; set; }
 
         public string Description { get; set; }
 
         public string Title { get; set; }
 
-        public ICollection<Comment>Comments { get; set; }
+        [EnumDataType(typeof(Status))]
+        [DisplayName("Status")]
+        public Status ReviewStatus { get; set; }
+
+        public enum Status
+        {
+           Open,
+           Closed
+        }
+
+        public ICollection<Comment> Comments { get; set; }
         public ICollection<Review> Reviews { get; set; }
 
         [ForeignKey("OwnerId")]

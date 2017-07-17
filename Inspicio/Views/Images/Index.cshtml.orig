@@ -1,87 +1,155 @@
-@model IEnumerable<Inspicio.Models.Image>
+@model List<Inspicio.Controllers.ImagesController.IndexModel>
+
 
 @{
     ViewData["Title"] = "Index";
 }
 
+<<<<<<< HEAD
+<h2>View all Reviews</h2>
+=======
+
+
 <h2>Viewing All</h2>
+>>>>>>> origin/development
 <br />
 <p>
     <a asp-action="Create">Create Review</a>
 </p>
-<table class="table">
+
+<form asp-controller="Images" asp-action="Index">
+    <p>
+        <input type="text" id="myInput" onkeyup="searchFunction()" placeholder="Search for reviews..">
+    </p>
+</form>
+
+<table id="table">
     <thead>
-        <tr>
+        <tr class="header">
             <th>
-               
-            </th>
-
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-
 <<<<<<< HEAD
-            <th>
-                @Html.DisplayNameFor(model => model.DownRating)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UpRating)
-            </th>
+                @Html.DisplayNameFor(model => model.Content)
 =======
-        
->>>>>>> temp
-   
-            <th>
 
+>>>>>>> origin/development
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().Image.Title)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().Image.Description)
+            </th>
+            <th>
+<<<<<<< HEAD
+                <img src="~/images/thumbup.jpg" style="height: 20px;" />
+            </th>
+            <th>
+                <img src="~/images/thumbdown.jpg" style="height: 20px;" />
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ReviewStatus)
+=======
+                Approvals
+            </th>
+            <th>
+                Needs Work
+            </th>
+            <th>
+                Rejected
+>>>>>>> origin/development
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().Image.OpenReview)
             </th>
         </tr>
     </thead>
     <tbody>
 
-@foreach (var item in Model) {
-        <tr>
-
-            <td>
-                <a asp-action="View" asp-route-id="@item.ImageID">
-                    <img style="max-height: 100px; max-width: 100px;" src="@item.Content" />
-                </a>
-                
-            </td>
-
-            <td>
-                <a asp-action="View" asp-route-id="@item.ImageID">
-                    @Html.DisplayFor(modelItem => item.Title)
-                </a>
-            </td>
-
-            <td>
-                <a asp-action="View" asp-route-id="@item.ImageID">
-                    @Html.DisplayFor(modelItem => item.Description)
-                 </a>
-            </td>
-
-           
 <<<<<<< HEAD
-            <td>
-                <a asp-action="View" asp-route-id="@item.ImageID">
-                    @Html.DisplayFor(modelItem => item.UpRating)
-                </a>
-            </td>
-            <td>
-                <a asp-action="View" asp-route-id="@item.ImageID">
-                    @Html.DisplayFor(modelItem => item.DownRating)
-                </a>
-            </td>
-=======
-         
->>>>>>> temp
-          
-        </tr>
+@foreach (var item in Model)
+{
+        <tr onclick="document.location = 'Images/View/@item.ImageID'" style="cursor:pointer" >
+                <td>
+                        <img style="max-height: 100px; max-width: 100px;" src="@item.Content" />
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NoOfLikes)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.NoOfDislikes)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ReviewStatus)
+                </td>
+
+
+</tr>
 }
+=======
+
+@{
+    foreach (var ImageData in Model)
+    {
+
+            <tr>
+
+                <td>
+                <a asp-action="View" asp-route-id="@ImageData.Image.ImageID">
+                    <img style="max-height: 100px; max-width: 100px;" src="@ImageData.Image.Content" />
+                    </a>
+
+                </td>
+
+                <td>
+                <a asp-action="View" asp-route-id="@ImageData.Image.ImageID">
+                    @Html.DisplayFor(modelItem => ImageData.Image.Title)
+                    </a>
+                </td>
+
+                <td>
+                <a asp-action="View" asp-route-id="@ImageData.Image.ImageID">
+                    @Html.DisplayFor(modelItem => ImageData.Image.Description)
+                    </a>
+                </td>
+                <td>
+                <a asp-action="View" asp-route-id="@ImageData.Image.ImageID">
+                   @Html.DisplayFor(modelItem => ImageData.approvals)
+                    </a>
+                </td>
+
+                <td>
+                <a asp-action="View" asp-route-id="@ImageData.Image.ImageID">
+                    @Html.DisplayFor(modelItem => ImageData.needsWorks)
+                </a>
+            </td>
+            <td>
+                <a asp-action="View" asp-route-id="@ImageData.Image.ImageID">
+                    @Html.DisplayFor(modelItem => ImageData.rejections)
+                </a>
+            </td>     
+            <td>
+                <a asp-action="View" asp-route-id="@ImageData.Image.ImageID">
+                    @Html.DisplayFor(modelItem => ImageData.Image.OpenReview)
+                    </a>
+                </td>
+            </tr>
+        }
+    }
+>>>>>>> origin/development
 
     </tbody>
 </table>
+
+<script type="text/javascript" src="~/js/Search.js"></script>

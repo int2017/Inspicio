@@ -1,87 +1,84 @@
-@model IEnumerable<Inspicio.Models.Image>
+@model List<Inspicio.Controllers.ImagesController.IndexModel>
+
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h2>Viewing All</h2>
-<br />
+<h2>View All Reviews</h2>
+
 <p>
     <a asp-action="Create">Create Review</a>
 </p>
 
 <form asp-controller="Images" asp-action="Index">
     <p>
-        Title: <input type="text" name="SearchString">
-        <input type="submit" value="Filter" />
+        <input type="text" id="myInput" onkeyup="searchFunction()" placeholder="Search for reviews..">
     </p>
 </form>
 
-<table class="table">
+<table id="table">
     <thead>
-        <tr>
+        <tr class="header">
             <th>
-               
+                Content
             </th>
 
             <th>
-                @Html.DisplayNameFor(model => model.Title)
+                @Html.DisplayNameFor(model => model.FirstOrDefault().Image.Title)
             </th>
 
             <th>
-                @Html.DisplayNameFor(model => model.Description)
+                @Html.DisplayNameFor(model => model.FirstOrDefault().Image.Description)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.NoOfLikes)
+                <img src="~/images/thumbup.jpg" style="height: 20px;" />
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.NoOfDislikes)
+                <img src="~/images/thumbmid.jpg" style="height: 20px;" />
             </th>
-           
-   
             <th>
+                 <img src="~/images/thumbdown.jpg" style="height: 20px;" />
+            </th>
 
+            <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().Image.ReviewStatus)
             </th>
         </tr>
     </thead>
     <tbody>
 
-@foreach (var item in Model) {
-        <tr>
+@foreach (var item in Model)
+{
+        <tr onclick="document.location = 'Images/View/@item.Image.ImageID'" style="cursor:pointer" >
 
-            <td>
-                <a asp-action="View" asp-route-id="@item.ImageID">
-                    <img style="max-height: 100px; max-width: 100px;" src="@item.Content" />
-                </a>
-                
-            </td>
 
-            <td>
-                <a asp-action="View" asp-route-id="@item.ImageID">
-                    @Html.DisplayFor(modelItem => item.Title)
-                </a>
+                <td>
+                    <img style="max-height: 100px; max-width: 100px;" src="@item.Image.Content" />
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Image.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Image.Description)
+                </td>
+                <td>
+                   @Html.DisplayFor(modelItem => item.approvals)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.needsWorks)
             </td>
+            <td>
+                    @Html.DisplayFor(modelItem => item.rejections)
+            </td>     
+            <td>
+                    @Html.DisplayFor(modelItem => item.Image.ReviewStatus)
+                </td>
+            </tr>
+        }
 
-            <td>
-                <a asp-action="View" asp-route-id="@item.ImageID">
-                    @Html.DisplayFor(modelItem => item.Description)
-                 </a>
-            </td>
-            <td>
-                <a asp-action="View" asp-route-id="@item.ImageID">
-                    @Html.DisplayFor(modelItem => item.NoOfLikes)
-                </a>
-            </td>
-           
-            <td>
-                <a asp-action="View" asp-route-id="@item.ImageID">
-                    @Html.DisplayFor(modelItem => item.NoOfDislikes)
-                </a>
-            </td>
-            
-          
-        </tr>
-}
 
     </tbody>
 </table>
+
+<script type="text/javascript" src="~/js/Search.js"></script>

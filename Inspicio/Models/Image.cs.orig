@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,18 +10,36 @@ namespace Inspicio.Models
     public class Image
     {
         public int ImageID { get; set; }
-        public string OwnerId { get; set; }
-        public string Content { get; set; }
-<<<<<<< HEAD
-=======
-        // public int Rating { get; set; }
->>>>>>> temp
-        public int DownRating { get; set; }
-        public int UpRating { get; set; }
-        public string Description { get; set; }
-        public string Title { get; set; }
-        public ICollection<Comment>Comments { get; set; }
 
+        public string OwnerId { get; set; }
+
+        public string Content { get; set; }
+
+<<<<<<< HEAD
+        [DisplayName("Reject")]
+        public int NoOfRejections { get; set; }
+
+        [DisplayName("Approve")]
+        public int NoOfApprovals { get; set; }
+
+        [DisplayName("Needs More Work")]
+        public int NoOfNeedsWork { get; set; }
+
+=======
+>>>>>>> origin/development
+        public string Description { get; set; }
+
+        public string Title { get; set; }
+
+<<<<<<< HEAD
+        public ICollection<Comment> Comments { get; set; }
+=======
+        [DisplayName("Status")]
+        public bool OpenReview { get; set; }
+
+        public ICollection<Comment>Comments { get; set; }
+>>>>>>> origin/development
+        public ICollection<Review> Reviews { get; set; }
 
         [ForeignKey("OwnerId")]
         public ApplicationUser ApplicationUsers { get; set; }
