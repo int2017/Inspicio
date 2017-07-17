@@ -21,7 +21,9 @@
     font-family: 'KG Summer Sunshine Blackout';
     margin:55px 0px;
 }
-
+.navbar-header{
+    display:none;
+}
 #img-txt {
     color: white;
     margin:100px 0;
