@@ -170,6 +170,7 @@ namespace Inspicio.Controllers
                 public String PosterProfileName { get; set; }
                 public Comment comment { get; set; }
             }
+            public List<Review> Reviews = new List<Review>();
         }
 
 
@@ -204,7 +205,7 @@ namespace Inspicio.Controllers
             FullReviewData.Info.approvals = _context.Review.Count(x => x.ImageId == Id && x.State == Review.States.Approved);
             FullReviewData.Info.rejections = _context.Review.Count(x => x.ImageId == Id && x.State == Review.States.Rejected);
             FullReviewData.Info.needsWorks = _context.Review.Count(x => x.ImageId == Id && x.State == Review.States.NeedsWork);
-
+            FullReviewData.Reviews = _context.Review.Where(u => u.ImageId == Id).ToList();
             // Changed from getting all comments then working out which we want to only getting the ones we want.
             var AllComments = _context.Comments.Where(c => c.ImageId == Id);
             foreach (Comment SingleComment in AllComments)
@@ -334,6 +335,11 @@ namespace Inspicio.Controllers
             await _context.SaveChangesAsync();
 			return Ok(1);
         }
+      /*  public JsonResult GetVoters(int? Id)
+        {
+           // List<Rat>
+        }*/
+        
         public enum State
         {
             Approved,

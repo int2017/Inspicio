@@ -103,7 +103,7 @@ $(document).ready(function () {
 
     })
     $(document).on("click", "#submit-comment", function () {
-        commentClick();
+        commentClickMain();
     })
 });
 

@@ -67,7 +67,6 @@ $(".leaflet-map-pane").attr("id", "map-pane");
 function popupState() {
     if ($("#map-pane").hasClass("hidden")) {
         $("#map-pane").removeClass("hidden");
-        $("#hide-pop").html("Hide markers");
         imageMap.on('click', function (e) {
             mapOnClick(e);
         });
@@ -75,7 +74,6 @@ function popupState() {
     else {
         $("#map-pane").addClass("hidden");
         imageMap.off('click');
-        $("#hide-pop").html("Show markers");
     }
 }
 //Array of all the popups and markers
