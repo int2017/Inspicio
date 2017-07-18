@@ -18,7 +18,7 @@ namespace Inspicio.Classes
             MD5 md5Hasher = MD5.Create();
 
             // Convert the input string to a byte array and compute the hash. 
-            byte[] data = MD5.Create().ComputeHash(Encoding.UTF8.GetBytes(email));
+            byte[] data = MD5.Create().ComputeHash(Encoding.UTF8.GetBytes(email.ToLowerInvariant().Trim()));
 
             // Create a new Stringbuilder to collect the bytes  
             // and create a string.  
