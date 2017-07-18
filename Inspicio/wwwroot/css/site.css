@@ -1,13 +1,13 @@
 
-﻿body {
-    padding-top: 0px;
-    padding-bottom: 0px;
-    font-family:'Century Gothic';
-    padding-left: 0px; 
-}
-
+﻿
 hr {
     border-color: #e6e6e6;
+}
+body {
+    padding-top: 0px;
+    padding-bottom: 0px;
+    font-family: 'Century Gothic' !important;
+    padding-left: 0px;
 }
 
 /* Wrapping element */
@@ -15,7 +15,7 @@ hr {
 .body-content {
     padding-left: 30px;
     padding-right: 30px;
-    margin-top:50px;
+    margin-top:71px;
 }
 
 #table {
@@ -368,7 +368,7 @@ input:focus {
     position: fixed;
     width: 28%;
     left: 0;
-    top: 50px;
+    top: 71px;
     background-color: rgb(195, 195, 195);
     bottom: 0;
     overflow-y: scroll;
@@ -552,6 +552,11 @@ input:focus {
         height: 2px;
         background: black;
         margin: 0 5px;
+    }
+    .nav.navbar-nav,.navbar-brand{
+        display:flex;
+        align-items:center;
+        height:71px;
     }
 @media screen and (max-width: 767px) {
     /* Hide captions */

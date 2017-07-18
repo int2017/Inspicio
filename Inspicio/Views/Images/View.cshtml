@@ -1,11 +1,12 @@
 @model Inspicio.Controllers.ImagesController.ViewModel
-
+@using Inspicio.Extensions
+@inject UserManager<ApplicationUser> UserManager
 
 <div class="view-container">
     <h2>@Model.Info.Image.Title</h2>
     <input type="checkbox"
            @{ if (Model.Info.Image.ReviewStatus == Image.Status.Open)
-                {
+               {
                    @:checked="checked"
                 }
             } 
@@ -30,11 +31,12 @@
         
 
         <div id="image-description">
-               
-                <!--IF the image is created by the user--> <!--IF project is open-->
-            <h4>By : @Model.OwnerProfileName</h4>
-            <h3>Description</h3>
-            <p>@Model.Info.Image.Description </p>
+           @{
+               var user = await UserManager.FindByIdAsync(Model.OwnerId);
+            <h4> By :<img style="height:40px;width:40px" src="@user.ProfilePicture" /> @user.ProfileName</h4>
+                <h3>Description</h3>
+                <p>@Model.Info.Image.Description </p>
+        }
         </div>
 
         <div class="image-controls text-center">
@@ -83,16 +85,16 @@
 
     <!-- comments go here -->
     <h3 class="text-center">Comment section</h3>
-    String previousDate = ("Jan 1, 0000");
-                foreach (var c in Model.Comments)
-                {
-                    String currentDate = @c.comment.Timestamp.ToString("MMM d");
+    @{
 
-                    if (c.comment.ParentId == null)
-                    {
-                       
+        String previousDate = ("Jan 1, 0000");
+        foreach (var c in Model.Comments)
+        {
+            String currentDate = @c.comment.Timestamp.ToString("MMM d");
 
-                        previousDate = currentDate;
+            if (c.comment.ParentId == null)
+            {
+                previousDate = currentDate;
             <div class="comment">
                 <div class="row ">
                     <div class="comment-user row-eq-height">
@@ -102,7 +104,7 @@
                         </div>
                             <div class="col-md-4">
                                  @if (currentDate != previousDate)
-                        {
+                                 {
                             <div class="date-header">
                                @if (currentDate == DateTime.Today.ToString("MMM d"))
                                {
@@ -117,7 +119,7 @@
                                 <p> @c.comment.Timestamp.ToString("MMM d") </p>
                                }
                             </div>
-                        }
+                                 }
                             </div>
                             <div class="col-md-4 text-right">
                                 @if (c.comment.Lat != 0 && c.comment.Lng != 0)
@@ -184,10 +186,11 @@
                             </div>
                         </div>
                     </div>
-                
-               
-                    }
-                    }
+
+
+                }
+            }
+        }
                     <!-- ends here -->
                     
                     <div class="row-eq-height" id="new-comment">
