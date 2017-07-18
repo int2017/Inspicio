@@ -345,10 +345,7 @@ namespace Inspicio.Controllers
             await _context.SaveChangesAsync();
 			return Ok(1);
         }
-      /*  public JsonResult GetVoters(int? Id)
-        {
-           // List<Rat>
-        }*/
+
         
         public enum State
         {
