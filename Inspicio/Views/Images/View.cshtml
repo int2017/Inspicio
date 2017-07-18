@@ -83,11 +83,16 @@
 
     <!-- comments go here -->
     <h3 class="text-center">Comment section</h3>
-    @foreach (var c in Model.Comments)
-            {
-
-        @if (c.comment.ParentId == null)
+    String previousDate = ("Jan 1, 0000");
+                foreach (var c in Model.Comments)
                 {
+                    String currentDate = @c.comment.Timestamp.ToString("MMM d");
+
+                    if (c.comment.ParentId == null)
+                    {
+                       
+
+                        previousDate = currentDate;
             <div class="comment">
                 <div class="row ">
                     <div class="comment-user row-eq-height">
@@ -96,7 +101,23 @@
 
                         </div>
                             <div class="col-md-4">
-                                <p>@c.comment.Timestamp</p>
+                                 @if (currentDate != previousDate)
+                        {
+                            <div class="date-header">
+                               @if (currentDate == DateTime.Today.ToString("MMM d"))
+                               {
+                                <p> Today </p>
+                               }
+                               else if (currentDate == DateTime.Today.AddDays(-1).ToString("MMM d"))
+                               {
+                                <p> Yesterday </p>
+                               }
+                               else
+                               {
+                                <p> @c.comment.Timestamp.ToString("MMM d") </p>
+                               }
+                            </div>
+                        }
                             </div>
                             <div class="col-md-4 text-right">
                                 @if (c.comment.Lat != 0 && c.comment.Lng != 0)

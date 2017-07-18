@@ -10,6 +10,7 @@ using Microsoft.Extensions.Options;
 using Inspicio.Models;
 using Inspicio.Models.ManageViewModels;
 using Inspicio.Services;
+using Inspicio.Classes;
 
 namespace Inspicio.Controllers
 {
@@ -64,7 +65,8 @@ namespace Inspicio.Controllers
                 PhoneNumber = await _userManager.GetPhoneNumberAsync(user),
                 TwoFactor = await _userManager.GetTwoFactorEnabledAsync(user),
                 Logins = await _userManager.GetLoginsAsync(user),
-                BrowserRemembered = await _signInManager.IsTwoFactorClientRememberedAsync(user)
+                BrowserRemembered = await _signInManager.IsTwoFactorClientRememberedAsync(user),
+                ProfilePicture = user.ProfilePicture
             };
             return View(model);
         }

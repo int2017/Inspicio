@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp1.1</TargetFramework>
@@ -21,6 +21,9 @@
 
   <ItemGroup>
     <Content Include="wwwroot\css\home.css" />
+    <Content Include="wwwroot\css\JavaScript.js" />
+    <Content Include="wwwroot\css\site.css" />
+    <Content Include="wwwroot\css\thumbs.js" />
     <Content Include="wwwroot\images\add.svg" />
     <Content Include="wwwroot\images\create.svg" />
     <Content Include="wwwroot\images\Inspicio.svg" />
@@ -63,7 +66,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Migrations\" />
-    <Folder Include="Migrations\" />
-    <Folder Include="Migrations\" />
+    <Folder Include="Models\UserViewModels\" />
   </ItemGroup>
 </Project>
