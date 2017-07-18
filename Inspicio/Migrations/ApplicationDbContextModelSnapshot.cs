@@ -50,6 +50,8 @@ namespace Inspicio.Migrations
 
                     b.Property<string>("ProfileName");
 
+                    b.Property<string>("ProfilePicture");
+
                     b.Property<string>("SecurityStamp");
 
                     b.Property<bool>("TwoFactorEnabled");

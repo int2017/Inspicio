@@ -153,7 +153,7 @@ namespace Inspicio.Controllers
 
         public class ViewModel
         {
-            public string OwnerProfileName { get; set; }
+            public string OwnerId { get; set; }
       
             public class ImageData
             {
@@ -196,7 +196,7 @@ namespace Inspicio.Controllers
             // Added OwnerProfileName to be passed into the model.
             ApplicationUser User = await _userManager.FindByIdAsync(Image.OwnerId);
 
-            FullReviewData.OwnerProfileName = User.ProfileName;
+            FullReviewData.OwnerId = User.Id;
 
             FullReviewData.Info = new ViewModel.ImageData();
             FullReviewData.Info.Image = Image;

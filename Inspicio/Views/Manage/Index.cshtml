@@ -3,6 +3,9 @@
     ViewData["Title"] = "Manage your account";
 }
 
+@using Inspicio.Extensions
+
+
 <h2>@ViewData["Title"].</h2>
 <p class="text-success">@ViewData["StatusMessage"]</p>
 
@@ -10,6 +13,16 @@
     <h4>Change your account settings</h4>
     <hr />
     <dl class="dl-horizontal">
+        
+        <dt>Profile Picture:</dt>
+        <dd>
+            <img style="height:80px; width:80px" src="@Model.ProfilePicture" />
+        </dd>
+        <dd>
+            <a asp-controller="Manage" asp-action="ChangeAvatar" class="btn-bracketed">Upload</a>
+        </dd>
+
+        <br />
         <dt>Password:</dt>
         <dd>
             @if (Model.HasPassword)
