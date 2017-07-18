@@ -48,7 +48,7 @@
                         <button type="button" id="thumbs-down" class="btn btn-danger thumb"><i class="fa fa-thumbs-o-down " aria-hidden="true"></i> : <span class="rating">@Model.Info.rejections</span></button>
                     </div>
 
-                    <div class="row reviewer-row">
+                    <div class="row reviewer-row" id="dropdownrow">
                         @foreach (var r in Model.Reviews)
                         {
 
@@ -58,7 +58,8 @@
                         }
                     </div>
                     <div class="text-center">
-                        <i class="glyphicon glyphicon-chevron-down"></i>
+                        <i class="glyphicon glyphicon-chevron-down" id="dropdown"></i>
+                        
                     </div>
                 </div>
 

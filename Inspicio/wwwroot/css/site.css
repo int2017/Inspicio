@@ -480,6 +480,11 @@ input:focus {
     margin-bottom:0px;
     padding:5px 10px;
 }
+
+#dropdownrow {
+    display: none;
+}
+
 .comment-msg{
     min-height:60px;
 }

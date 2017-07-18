@@ -10,3 +10,9 @@ $(document).on("click", ".reply", function () {
             $("#replies-" + which).slideUp();
         }
 })
+
+
+//Controlling reviewers box
+$("#dropdown").click(function () {
+    $(".reviewer-row").slideToggle();
+});
