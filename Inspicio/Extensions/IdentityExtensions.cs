@@ -21,5 +21,13 @@ namespace Inspicio.Extensions
             // avoiding null issues locally
             return user.Claims.FirstOrDefault(v => v.Type == ClaimTypes.GivenName).Value ?? string.Empty;
         }
+
+
+        public static string GetProfileRole(this ClaimsPrincipal user)
+        {
+            // ClaimTypes.GivenName returning the ProfileName
+            // avoiding null issues locally
+            return user.Claims.FirstOrDefault(v => v.Type == ClaimTypes.Role).Value ?? string.Empty;
+        }
     }
 }
