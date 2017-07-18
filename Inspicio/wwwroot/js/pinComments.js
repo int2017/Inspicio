@@ -142,7 +142,6 @@ function createCommentRow(user, comment, uniqID, parent, urgency) {
         urgencyEl = "<div class='urgent'><span class='glyphicon glyphicon-star' aria-hidden='true'></span></div>"
     }
     else urgencyEl = "";
-    alert(urgencyEl);
     var row = "<div class='row-eq-height popup-comment'> <div class='col-xs-4 col-sm-4 col-md-4'><p>" + user + "</p></div><div class='col-xs-8 col-sm-8 col-md-8'>" + comment + "</div>" + urgencyEl + "</div>";
     popupX = popupsArray[popupsArray.findIndex(x => parseInt(x.myData.id) === parseInt(uniqID))].setContent(appendRow(row, uniqID, parent));
 

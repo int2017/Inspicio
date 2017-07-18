@@ -78,43 +78,45 @@
         </div>
         <div id="comment-section">
 
-            <!-- comments go here -->
-            <h3 class="text-center">Comment section</h3>
-            @foreach (var c in Model.Comments)
+    <!-- comments go here -->
+    <h3 class="text-center">Comment section</h3>
+    @foreach (var c in Model.Comments)
             {
-                if (c.comment.ParentId == null)
+
+        @if (c.comment.ParentId == null)
                 {
-                    <div class="comment">
-                        <div class="row ">
-                            <div class="comment-user row-eq-height">
-                                <div class="col-md-4">
-                                <h5 class="username">@c.PosterProfileName</h5>
+            <div class="comment">
+                <div class="row ">
+                    <div class="comment-user row-eq-height">
+                        <div class="col-md-4">
+                            <h5 class="username">@c.PosterProfileName</h5>
+                            <p>@c.comment.Timestamp</p>
+
+                        </div>
+                            <div class="col-md-4">
                                 <p>@c.comment.Timestamp</p>
+                            </div>
+                            <div class="col-md-4 text-right">
                                 @if (c.comment.Lat != 0 && c.comment.Lng != 0)
                                 {
                                     <p><a id="loc-@c.comment.CommentId" class="open-pin" href="#" data-location="@c.comment.Lat  @c.comment.Lng">Open pin</a></p>
-                                    </div>
-                                <div class="col-md-4">
-                                    <p>@c.comment.Timestamp</p>
-                                </div>
-                                <div class="col-md-4 text-right">
-                                    @if (c.comment.Lat != 0 && c.comment.Lng != 0)
-                                    {
-                                        <p><a id="loc-@c.comment.CommentId" class="open-pin" href="#" data-location="@c.comment.Lat  @c.comment.Lng">Open pin</a></p>
 
                                 }
                                 <p><a class="reply" data-target="@c.comment.CommentId" href="#">Reply</a></p>
 
-                                @if (c.comment.CommentUrgency == Comment.Urgency.Urgent)
-                                {
-                                    <div class='urgent'>
-                                        <span class="glyphicon glyphicon-star"  aria-hidden="true"></span>
-                                    </div>
-                                } 
+                               
                             </div>
+                            
+                        </div>
                             <div class="row-eq-height comment-msg">
                                 <div class="col-xs-12 col-sm-12 col-md-12">
                                     <p>@c.comment.Message</p>
+                                    @if (c.comment.CommentUrgency == Comment.Urgency.Urgent)
+                                    {
+                                        <div class='urgent text-right'>
+                                            <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+                                        </div>
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -129,7 +131,7 @@
                                                 <div class='row-eq-height comment-user'>
                                                     <div class='col-md-6'>
                                                         <h5 class='username'> @x.PosterProfileName</h5>
-                                                        
+
                                                     </div>
                                                     <div class="col-md-6">
                                                         <p> @x.comment.Timestamp </p>
@@ -159,34 +161,33 @@
                             </div>
                         </div>
                     </div>
-                }
+                
+               
+                    }
+                    }
+                    <!-- ends here -->
+                    
+                    <div class="row-eq-height" id="new-comment">
+                        <div class="col-xs-12 col-sm-12 col-md-12 input-group">
+                            <textarea class="form-control" id="comment-textarea" rows="5" placeholder="Comment..."></textarea>
+                            <div class="comment-status">
+                                <label><input type="checkbox" id="urgent-main" value="">Urgent</label>
+                            </div>
+                            <span class="input-group-btn">
+                                <button class="btn btn-success" type="submit" id="submit-comment">
+                                    <i class="glyphicon glyphicon-share-alt"></i>
+                                </button>
+                            </span>
 
-            }
-            <!-- ends here -->
-
-            <div class="row-eq-height" id="new-comment">
-                <div class="col-xs-12 col-sm-12 col-md-12 input-group">
-                    <textarea class="form-control" id="comment-textarea" rows="5" placeholder="Comment..."></textarea>
-                    <div class="comment-status">
-                        <label><input type="checkbox" id="urgent-main" value="">Urgent</label>
+                        </div>
                     </div>
-                    <span class="input-group-btn">
-                        <button class="btn btn-success" type="submit" id="submit-comment" >
-                            <i class="glyphicon glyphicon-share-alt"></i>
-                        </button>
-                    </span>
-
                 </div>
             </div>
-        </div>
 
+            <div>
+                <a asp-action="Index">Back to List</a>
+            </div>
     </div>
-
-    <div>
-        <a asp-action="Index">Back to List</a>
-    </div>
-</div>
-
 <style>
     footer {
         display: none;
@@ -212,9 +213,6 @@
         $("#imageMap").height($("#image-container >img").height());
         imageMap.invalidateSize();
     })
-</script>
-
-    });
 </script>
 
 <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
