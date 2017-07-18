@@ -221,10 +221,10 @@ hr {
 #thumb-container {
     padding: 15px 0;
 }
-
     #thumb-container i {
         font-size: 24px;
-        color:white;
+        color: white;
+        transition: all 0.3s;
     }
 
 #image-container {
@@ -387,7 +387,7 @@ input:focus {
 }
 
 .lightbox-button {
-    background-color: rgb(62, 62, 62);
+    background-color: rgb(88, 88, 88);
     color: white;
     transition: all 0.3s ease-in-out;
     -moz-transition: all 0.3s ease-in-out;
@@ -494,19 +494,21 @@ input:focus {
     padding:5px 10px;
 }
 
-#dropdownrow {
-    display: none;
-}
-
 .comment-msg{
     min-height:60px;
 }
 .container-fluid.reviewer-container .row {
     padding: 10px;
 }
-
+.lity-close {
+    background-color: white;
+    border: none;
+    box-shadow: none;
+    font-size: 24px;
+}
 .reviewers{
     padding:5px 0;
+    border-radius:2px;
 }
 .Rejected {
     background-color: rgba(169, 99, 96, 0.53);
@@ -517,7 +519,20 @@ input:focus {
 .NeedsWork {
     background-color: rgba(193, 151, 91, 0.61);
 }
-
+.Undecided {
+   background-color: rgba(255, 255, 255, 0.42);
+}
+.reviewer-row.row {
+    display: none;
+}
+.show-reviewers{
+    display:inline-block;
+    padding:10px;
+    cursor:pointer;
+}
+    .show-reviewers h4 {
+        color: rgba(255, 255, 255, 0.43);
+    }
 .urgent {
     color: #e2ca84;
     font-size: 20px;

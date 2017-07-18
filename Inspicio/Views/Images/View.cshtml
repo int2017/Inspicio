@@ -48,7 +48,7 @@
                         <button type="button" id="thumbs-down" class="btn btn-danger thumb"><i class="fa fa-thumbs-o-down " aria-hidden="true"></i> : <span class="rating">@Model.Info.rejections</span></button>
                     </div>
 
-                    <div class="row reviewer-row" id="dropdownrow">
+                    <div class="row reviewer-row" >
                         @foreach (var r in Model.Reviews)
                         {
 
@@ -58,7 +58,10 @@
                         }
                     </div>
                     <div class="text-center">
-                        <i class="glyphicon glyphicon-chevron-down" id="dropdown"></i>
+                        <div class="show-reviewers">
+                            <h4 class="text-center">Reviewers</h4>
+                            <i class="glyphicon glyphicon-chevron-down" id="dropdown"></i>
+                        </div>
                         
                     </div>
                 </div>
@@ -90,7 +93,6 @@
                     <div class="comment-user row-eq-height">
                         <div class="col-md-4">
                             <h5 class="username">@c.PosterProfileName</h5>
-                            <p>@c.comment.Timestamp</p>
 
                         </div>
                             <div class="col-md-4">
@@ -114,7 +116,7 @@
                                     @if (c.comment.CommentUrgency == Comment.Urgency.Urgent)
                                     {
                                         <div class='urgent text-right'>
-                                            <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+                                            <span title="Urgent!" class="glyphicon glyphicon-star" aria-hidden="true"></span>
                                         </div>
                                     }
                                 </div>
@@ -199,19 +201,19 @@
 }
 
 <script type="text/javascript" src="~/js/filter.js"></script>
-<script type="text/javascript" src="~/js/pinComments.js"></script>
-<script type="text/javascript" src="~/js/ajaxComments.js"></script>
+
 <script type="text/javascript" src="~/js/ajaxThumbs.js"></script>
-
-
-
+<script type="text/javascript" src="~/js/ajaxOpenSlider.js"></script>
 <script type="text/javascript" src="~/js/sidebar.js"></script>
 <script type="text/javascript" src="~/js/replies.js"></script>
+<script type="text/javascript" src="~/js/pinComments.js"></script>
+<script type="text/javascript" src="~/js/ajaxComments.js"></script>
 <script>
     $(document).ready(function () {
         $("#imageMap").width($("#image-container >img").width());
         $("#imageMap").height($("#image-container >img").height());
         imageMap.invalidateSize();
+        
     })
 </script>
 

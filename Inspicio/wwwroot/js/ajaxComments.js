@@ -50,8 +50,9 @@ function commentClick(uniqID, chosenState) {
             }
 
         });
+}
 
-    ;
+    
 
     //Commenting from main comment section
     function commentClickMain(chosenState) {
@@ -85,8 +86,7 @@ function commentClick(uniqID, chosenState) {
             });
 
     }
-
-
+    
     //Adding live listeners to the reply buttons
     $(document).ready(function () {
         reloadMarkers();
@@ -123,14 +123,15 @@ function commentClick(uniqID, chosenState) {
     });
 
     function replyComment(parent, area) {
+        var loc;
         var element = " #replies-" + parent;
         try {
-            var loc = $("#loc-" + parent).data("location").split(" ");
+            loc = $("#loc-" + parent).data("location").split(" ");
             var lat = loc[0];
             var lng = loc[2];
         }
         catch (err) {
-            var loc = null;
+            loc = null;
         }
         var DataFromBody = {
             "ImageId": $("#ImageId").val(),
@@ -172,12 +173,9 @@ function commentClick(uniqID, chosenState) {
             });
     }
 
-
-
-
     //Get new comments for markers
     function reloadMarkers() {
-
+        
         var id = $("#ImageId").val();
         $.ajax(
             {
@@ -205,4 +203,5 @@ function commentClick(uniqID, chosenState) {
                 }
             });
     }
-}
+
+

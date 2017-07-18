@@ -13,6 +13,14 @@ $(document).on("click", ".reply", function () {
 
 
 //Controlling reviewers box
-$("#dropdown").click(function () {
-    $(".reviewer-row").slideToggle();
-});
+$(".show-reviewers").click(function () {
+    if ($(".reviewer-row").is(":visible")){
+        $(".reviewer-row").slideUp();
+        $(".show-reviewers i").css("transform", "rotate(0deg)");
+    }
+    else {
+        $(".reviewer-row").slideDown();
+        $(".show-reviewers i").css("transform", "rotate(180deg)");
+    }
+    });
+

@@ -174,23 +174,22 @@ function appendRow(row, uniqID, parent) {
 
 //Creates markers from existing comments in the DB
 function createMarkers(comment, user, lat, lng, parent,urgency, reload) {
-    
-
     if (lat !== 0 && lng !== 0) {
         var latCollection = locations.map(function (value, index) { return value[1]; });
         var lngCollection = locations.map(function (value, index) { return value[2]; });
+        var uniqID;
         if ($.inArray(lat, latCollection) !== -1 && $.inArray(lng, lngCollection) !== -1) {
 
             if ($.inArray(lat, latCollection) === $.inArray(lng, lngCollection)) {
                 var idCollection = locations.map(function (value, index) { return value[0]; });
-                var uniqID = idCollection[$.inArray(lat, latCollection)];
+                uniqID = idCollection[$.inArray(lat, latCollection)];
                 createCommentRow(user, comment, uniqID, parent,urgency);
 
             }
         }
         else {
             var latlng = L.latLng(lat, lng);
-            var uniqID = createMarker(latlng, false);
+            uniqID = createMarker(latlng, false);
             locations.push([uniqID, lat, lng]);
             createCommentRow(user, comment, uniqID, parent, urgency);
         }
