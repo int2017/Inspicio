@@ -66,7 +66,7 @@ namespace Inspicio.Controllers
                 TwoFactor = await _userManager.GetTwoFactorEnabledAsync(user),
                 Logins = await _userManager.GetLoginsAsync(user),
                 BrowserRemembered = await _signInManager.IsTwoFactorClientRememberedAsync(user),
-                ProfilePicture = (user.ProfilePicture == "") ? Gravatar.GetLink(await _userManager.GetEmailAsync(user)) : user.ProfilePicture
+                ProfilePicture = user.ProfilePicture
             };
             return View(model);
         }

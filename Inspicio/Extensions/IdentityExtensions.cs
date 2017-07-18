@@ -1,5 +1,4 @@
-﻿    
-    // Jack Lloyd [06/07/17]
+﻿
 /*
     Extension methods for the Identity. (ApplicationUser additional columns)
  */
@@ -23,10 +22,10 @@ namespace Inspicio.Extensions
             return user.FindFirst("Name").Value ?? string.Empty;
         }
 
-        public static string GetProfilePicture(this ClaimsPrincipal user, int size = 80)
+        public static string GetProfilePicture(this ClaimsPrincipal user)
         {
             // ClaimTypes.Webpage returning the ProfilePicture
-            return user.FindFirst("Picture").Value == "" ? Gravatar.GetLink(user.GetProfileEmail(), size) : "";
+            return user.FindFirst("Picture").Value;
         }
 
         public static string GetProfileEmail(this ClaimsPrincipal user)

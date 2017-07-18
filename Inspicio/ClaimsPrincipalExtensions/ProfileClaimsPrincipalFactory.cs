@@ -1,5 +1,4 @@
 ﻿
-    // Jack Lloyd [06/07/17]
 /*
     Overriding the UserClaimsprincipalFactory
     in order to add a 'ProfileName' claim 

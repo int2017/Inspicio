@@ -13,6 +13,8 @@ using Inspicio.Models;
 using Inspicio.Models.AccountViewModels;
 using Inspicio.Services;
 
+using Inspicio.Classes;
+
 namespace Inspicio.Controllers
 {
     [Authorize]
@@ -125,7 +127,7 @@ namespace Inspicio.Controllers
 
                 // ApplicationUser does not take ProfileName in a construtor.
                 user.ProfileName = model.ProfileName;
-                user.ProfilePicture = "";
+                user.ProfilePicture = Gravatar.GetLink(model.Email);
 
 
                 // This calls our overridden function in ProfileNameClaimsPrincipalFactory.cs

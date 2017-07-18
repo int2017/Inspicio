@@ -31,7 +31,8 @@ namespace Inspicio.Classes
                 sBuilder.Append(data[i].ToString("x2"));
             }
 
-            return "https://www.gravatar.com/avatar/" + sBuilder.ToString() + "?s=" + size;  // Return the hexadecimal string. 
+            // Return the hexadecimal string. 
+            return "https://www.gravatar.com/avatar/" + sBuilder.ToString();  
         }
     } 
 }

@@ -16,9 +16,13 @@
         
         <dt>Profile Picture:</dt>
         <dd>
-            <img src="@Model.ProfilePicture" />
+            <img style="height:80px; width:80px" src="@Model.ProfilePicture" />
+        </dd>
+        <dd>
+            <a asp-controller="Manage" asp-action="ChangeAvatar" class="btn-bracketed">Upload</a>
         </dd>
 
+        <br />
         <dt>Password:</dt>
         <dd>
             @if (Model.HasPassword)
