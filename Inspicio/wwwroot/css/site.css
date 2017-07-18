@@ -1,3 +1,4 @@
+
 ﻿body {
     padding-top: 0px;
     padding-bottom: 0px;
@@ -14,6 +15,7 @@ hr {
 .body-content {
     padding-left: 30px;
     padding-right: 30px;
+    margin-top:50px;
 }
 
 #table {
@@ -48,26 +50,11 @@ hr {
     margin-bottom: 12px; 
 }
 
-#comment-section .date-header {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-
+.create-img input:not(.btn), .create-img select, .create-img textarea {
+    max-width: none;
 }
-
-    #comment-section .date-header:before, #comment-section .date-header:after {
-        content: '';
-        width: 100px;
-        height: 2px;
-        background: black;
-        margin: 0 5px;
-    }
-
-
-
-        /* Carousel */
-        .carousel-caption p {
+/* Carousel */
+.carousel-caption p {
     font-size: 20px;
     line-height: 1.4;
 }
@@ -112,7 +99,7 @@ hr {
     display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-
+    overflow:hidden;
     margin-right: -15px;
     margin-left: -15px;
 }
@@ -168,26 +155,34 @@ hr {
 }
 
 .dropzone {
-    height: 450px;
     border-radius: 2px !important;
     background-repeat: no-repeat !important;
     background-size: 100% 100% !important;
     background-position: center !important;
     object-fit: cover;
+    padding: 0;
+    display: inline-block;
+    min-width:500px;
+    margin:auto;
 }
 
 #comment-section {
     max-width: 100%;
     margin: 10px auto;
-    padding: 10px 10px;
+    padding: 20px;
     height: 100%;
     width: 100%;
 }
-
+#comment-section .row-eq-height{
+    margin:0px;
+}
 .comment {
     border-radius: 2px;
     background-color: white;
     margin-bottom: 15px;
+    position: relative;
+    padding: 0 10px;
+    overflow: hidden;
 }
 
     .comment:nth-child(even) {
@@ -201,6 +196,8 @@ hr {
 #comment-textarea {
     padding-right: 50px;
     border-radius: 4px;
+    border:none;
+    border-bottom-left-radius:0;
 }
 
 #submit-comment {
@@ -225,9 +222,10 @@ hr {
 #thumb-container {
     padding: 15px 0;
 }
-
     #thumb-container i {
         font-size: 24px;
+        color: white;
+        transition: all 0.3s;
     }
 
 #image-container {
@@ -241,21 +239,31 @@ hr {
     overflow: visible;
     z-index: 5000
 }
-
-.leaflet-popup-content, .leaflet-popup-content textarea {
-    font-size: 11px;
-}
-
 .leaflet-popup-content {
     min-width: 250px;
 }
-
+    .leaflet-popup-content .comment-status {
+        border: 1px solid #cccccc;
+        border-top: none;
+        border-radius:4px;
+    }
+.comment-status {
+        display: inline-block;
+        width: 100%;
+        
+        border-radius: 2px;
+        border-top-left-radius:0;
+        padding-right: 40px;
+        background-color: rgba(255,255,255,1);
+        padding-left:10px;
+    }
 .hidden {
     display: none;
     z-index: -500 !important;
 }
 nav.navbar.navbar-inverse.navbar-fixed-top {
     z-index: 5050;
+    background-color:#000;
 }
 .comment-popup-input {
     padding-top: 5px;
@@ -265,6 +273,9 @@ nav.navbar.navbar-inverse.navbar-fixed-top {
 
     .comment-popup-input textarea {
         padding-right: 40px;
+        font-size: 11px;
+        border-bottom-left-radius:0;
+        
     }
 
     .comment-popup-input button {
@@ -298,7 +309,7 @@ nav.navbar.navbar-inverse.navbar-fixed-top {
     }
 
 .image-controls {
-    background-color: rgb(154, 154, 154);
+    background-color: rgb(62, 62, 62);
     z-index: 5000;
     margin: 0 auto;
     border-radius: 3px;
@@ -358,7 +369,7 @@ input:focus {
     width: 28%;
     left: 0;
     top: 50px;
-    background-color: rgb(206, 206, 206);
+    background-color: rgb(195, 195, 195);
     bottom: 0;
     overflow-y: scroll;
     overflow-x: hidden;
@@ -377,18 +388,14 @@ input:focus {
 }
 
 .lightbox-button {
-    border-bottom-right-radius: 4px;
-    padding: 15px;
-    font-size: 20px;
-    position: absolute;
-    top: 0;
-    left: 0;
-    background-color: white;
-    color: black;
-    opacity: 0.6;
-    transition: all 0.2s ease-in-out;
-    border: 1px solid #8c8c8c;
-    z-index:5000;
+    background-color: rgb(88, 88, 88);
+    color: white;
+    transition: all 0.3s ease-in-out;
+    -moz-transition: all 0.3s ease-in-out;
+    -webkit-transition: all 0.3s ease-in-out;
+    border: 1px solid #cccccc;
+    width: 80px;
+    margin: 0 10px 10px 0;
 }
 
     .lightbox-button:hover {
@@ -397,12 +404,15 @@ input:focus {
         -moz-transition: all 0.3s ease-in-out;
         -webkit-transition: all 0.3s ease-in-out;
         color: black;
+        background-color: rgb(210, 210, 210);
+        border-color:transparent;
     }
 
 .sidebar-menu {
     width: 100%;
     height: 50px;
-    background-color: rgba(37, 80, 101, 0.31);
+    background-color: rgb(62, 62, 62);
+    color:#fff;
 }
 
     .sidebar-menu ul {
@@ -474,10 +484,75 @@ input:focus {
     display: none;
     background-color: rgba(65, 80, 121, 0.35);
     padding: 20px;
-    margin-bottom: 20px;
+    margin: 0 -15px 0 -15px;
+    border-radius: 2px;
+}
+#comment-status {
+    background-color: rgba(255,255,255,1);
+    border: none;
+    border-radius: 2px;
+    margin-bottom:0px;
+    padding:5px 10px;
+}
+
+.comment-msg{
+    min-height:60px;
+}
+.container-fluid.reviewer-container .row {
+    padding: 10px;
+}
+.lity-close {
+    background-color: white;
+    border: none;
+    box-shadow: none;
+    font-size: 24px;
+}
+.reviewers{
+    padding:5px 0;
     border-radius:2px;
+}
+.Rejected {
+    background-color: rgba(169, 99, 96, 0.53);
+}
+.Approved {
+    background-color: rgba(123, 167, 123, 0.62);
+}
+.NeedsWork {
+    background-color: rgba(193, 151, 91, 0.61);
+}
+.Undecided {
+   background-color: rgba(255, 255, 255, 0.42);
+}
+.reviewer-row.row {
+    display: none;
+}
+.show-reviewers{
+    display:inline-block;
+    padding:10px;
+    cursor:pointer;
+}
+    .show-reviewers h4 {
+        color: rgba(255, 255, 255, 0.43);
+    }
+.urgent {
+    color: #e2ca84;
+    font-size: 20px;
+}
+#comment-section .date-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
 
 }
+
+    #comment-section .date-header:before, #comment-section .date-header:after {
+        content: '';
+        width: 100px;
+        height: 2px;
+        background: black;
+        margin: 0 5px;
+    }
 @media screen and (max-width: 767px) {
     /* Hide captions */
     .carousel-caption {
@@ -513,3 +588,4 @@ input:focus {
         padding: 20px 20px 20px 75px;
     }
 }
+

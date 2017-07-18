@@ -5,8 +5,6 @@ $(function () {
         off: 'Closed'
     });
 });
-
-
 $(function () {
     $('#toggle').change(function () {
         var DataFromToggle = {

@@ -170,6 +170,7 @@ namespace Inspicio.Controllers
                 public String PosterProfileName { get; set; }
                 public Comment comment { get; set; }
             }
+            public List<Review> Reviews = new List<Review>();
         }
 
 
@@ -204,7 +205,7 @@ namespace Inspicio.Controllers
             FullReviewData.Info.approvals = _context.Review.Count(x => x.ImageId == Id && x.State == Review.States.Approved);
             FullReviewData.Info.rejections = _context.Review.Count(x => x.ImageId == Id && x.State == Review.States.Rejected);
             FullReviewData.Info.needsWorks = _context.Review.Count(x => x.ImageId == Id && x.State == Review.States.NeedsWork);
-
+            FullReviewData.Reviews = _context.Review.Where(u => u.ImageId == Id).ToList();
             // Changed from getting all comments then working out which we want to only getting the ones we want.
             var AllComments = _context.Comments.Where(c => c.ImageId == Id);
             foreach (Comment SingleComment in AllComments)
@@ -313,8 +314,14 @@ namespace Inspicio.Controllers
             public float Lat { get; set; }
             public float Lng { get; set; }
             public String ParentId { get; set; }
+            public Urgency CommentUrgency { get; set; }
         }
+        public enum Urgency
+        {
+            Default,
+            Urgent
 
+        }
         [HttpPost]
         public async Task<IActionResult> Comment([FromBody] DataFromBody DataFromBody)
         {
@@ -328,11 +335,18 @@ namespace Inspicio.Controllers
             comment.Lat = DataFromBody.Lat;
             comment.Lng = DataFromBody.Lng;
             comment.ParentId = DataFromBody.ParentId;
+            if (DataFromBody.CommentUrgency == Urgency.Urgent)
+            {
+                comment.CommentUrgency = Models.Comment.Urgency.Urgent;
+            }
+            else comment.CommentUrgency = Models.Comment.Urgency.Default;
             _context.Add(comment);
 
             await _context.SaveChangesAsync();
 			return Ok(1);
         }
+
+        
         public enum State
         {
             Approved,

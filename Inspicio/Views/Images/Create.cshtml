@@ -84,7 +84,9 @@
             FR.addEventListener("load", function (e) {
 
                 document.getElementById("b64").value = e.target.result;
-                $(".dropzone").css("background-image", "url(" + e.target.result + ")");
+                var image = new Image();
+                image.src = e.target.result;
+                $(image).appendTo(".dropzone");
             });
 
             FR.readAsDataURL(file);
@@ -145,11 +147,6 @@
 }
 
 <style>
-    .dropzone {
-        height: 300px;
-        width: auto;
-        background-size: contain;
-    }
 
     ul {
         margin: 0;
