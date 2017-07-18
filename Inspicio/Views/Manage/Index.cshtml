@@ -5,13 +5,6 @@
 
 @using Inspicio.Extensions
 
-<script src="~/js/md5.js"></script>
-<script>
-    $(document).ready(function () {
-        $("#ProfilePicture").attr("src", "http://www.gravatar.com/avatar/" + md5("@Model.Email"));
-    });
-</script>
-
 
 <h2>@ViewData["Title"].</h2>
 <p class="text-success">@ViewData["StatusMessage"]</p>
@@ -23,7 +16,7 @@
         
         <dt>Profile Picture:</dt>
         <dd>
-            <img id="ProfilePicture" />
+            <img src="@Model.ProfilePicture" />
         </dd>
 
         <dt>Password:</dt>

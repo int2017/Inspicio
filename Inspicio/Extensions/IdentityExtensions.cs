@@ -21,5 +21,12 @@ namespace Inspicio.Extensions
             // avoiding null issues locally
             return user.Claims.FirstOrDefault(v => v.Type == ClaimTypes.GivenName).Value ?? string.Empty;
         }
+
+        public static string GetProfilePicture(this ClaimsPrincipal user)
+        {
+            // ClaimTypes.Webpage returning the ProfilePicture
+            // avoiding null issues locally
+            return user.Claims.FirstOrDefault(v => v.Type == ClaimTypes.Webpage).Value;
+        }
     }
 }

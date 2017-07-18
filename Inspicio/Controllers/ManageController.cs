@@ -10,6 +10,7 @@ using Microsoft.Extensions.Options;
 using Inspicio.Models;
 using Inspicio.Models.ManageViewModels;
 using Inspicio.Services;
+using Inspicio.Classes;
 
 namespace Inspicio.Controllers
 {
@@ -65,7 +66,7 @@ namespace Inspicio.Controllers
                 TwoFactor = await _userManager.GetTwoFactorEnabledAsync(user),
                 Logins = await _userManager.GetLoginsAsync(user),
                 BrowserRemembered = await _signInManager.IsTwoFactorClientRememberedAsync(user),
-                Email = await _userManager.GetEmailAsync(user)
+                ProfilePicture = (user.ProfilePicture == "") ? Gravatar.GetLink(await _userManager.GetEmailAsync(user)) : user.ProfilePicture
             };
             return View(model);
         }

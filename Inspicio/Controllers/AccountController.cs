@@ -125,6 +125,8 @@ namespace Inspicio.Controllers
 
                 // ApplicationUser does not take ProfileName in a construtor.
                 user.ProfileName = model.ProfileName;
+                user.ProfilePicture = "";
+
 
                 // This calls our overridden function in ProfileNameClaimsPrincipalFactory.cs
                 var result = await _userManager.CreateAsync(user, model.Password);

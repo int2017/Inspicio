@@ -19,6 +19,6 @@ namespace Inspicio.Models.ManageViewModels
         public bool BrowserRemembered { get; set; }
 
         //
-        public string Email { get; set; }
+        public string ProfilePicture { get; set; }
     }
 }
