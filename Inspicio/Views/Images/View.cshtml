@@ -87,8 +87,8 @@
 
                                 @if (c.comment.CommentUrgency == Comment.Urgency.Urgent)
                                 {
-                                    <div class='urgentID'>
-                                        <span class="glyphicon glyphicon-star" style="color:#ffb266" aria-hidden="true">@c.comment.CommentUrgency</span>
+                                    <div class='urgent'>
+                                        <span class="glyphicon glyphicon-star"  aria-hidden="true"></span>
                                     </div>
                                 } 
                             </div>
@@ -144,8 +144,8 @@
             <div class="row-eq-height" id="new-comment">
                 <div class="col-xs-12 col-sm-12 col-md-12 input-group">
                     <textarea class="form-control" id="comment-textarea" rows="5" placeholder="Comment..."></textarea>
-                    <div class="checkbox" id="comment-status">
-                        <label><input type="checkbox" id="urgentID" value="">Urgent</label>
+                    <div class="comment-status">
+                        <label><input type="checkbox" id="urgent-main" value="">Urgent</label>
                     </div>
                     <span class="input-group-btn">
                         <button class="btn btn-success" type="submit" id="submit-comment" >

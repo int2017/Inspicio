@@ -239,7 +239,14 @@ hr {
 .leaflet-popup-content {
     min-width: 250px;
 }
-
+    .leaflet-popup-content .comment-status {
+        display: inline-block;
+        width: 100%;
+        border: 1px solid #cccccc;
+        border-top: none;
+        border-radius: 2px;
+        padding-right: 40px;
+    }
 .hidden {
     display: none;
     z-index: -500 !important;
@@ -468,9 +475,13 @@ input:focus {
     border-radius:2px;
 
 }
-#comment-status{
+.comment-status{
     background-color:rgba(255,255,255,1);
     border: none;
+}
+.urgent {
+    color: #d0af4e;
+    font-size: 20px;
 }
 @media screen and (max-width: 767px) {
     /* Hide captions */

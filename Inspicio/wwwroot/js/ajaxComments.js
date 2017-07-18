@@ -5,7 +5,7 @@
 
 //Commenting from popups
 function commentClick(uniqID, chosenState) {
-    var urgent = $("#urgentID").is(":checked");
+    var urgent = $(".urgency-popup").is(":checked");
     var urgency;
     if (urgent) {
         urgency = commentEnum.Urgent
@@ -56,7 +56,7 @@ function commentClick(uniqID, chosenState) {
 //Commenting from main comment section
 function commentClickMain(chosenState) {
     
-    var urgent = $("#urgentID").is(":checked");
+    var urgent = $("#urgent-main").is(":checked");
     var urgency;
     if (urgent) {
         urgency = commentEnum.Urgent
@@ -199,7 +199,7 @@ function reloadMarkers() {
                     else {
                         parent = this.comment.parentId;
                     }
-                    createMarkers(this.comment.message, this.posterProfileName, this.comment.lat, this.comment.lng, parent, true);
+                    createMarkers(this.comment.message, this.posterProfileName, this.comment.lat, this.comment.lng, parent, this.comment.commentUrgency, true);
 
                 })
             }

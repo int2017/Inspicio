@@ -129,7 +129,7 @@ function createBtn(uniqID) {
 
     var btn = "<button onclick='commentClick(" + uniqID + ")' class='btn btn-success popup-btn'> <i class='glyphicon glyphicon-share-alt'></i></button>";
     Math.floor(Math.random() * 100);
-    var strng = "<div id='popup" + uniqID + "' class='container-fluid popup-comment-container'></div> <div id=popupinput" + uniqID + "' class='row comment-popup-input'><div class='col-xs-4 col-sm-4 col-md-4 text-center'>You</div><div class='col-xs-8 col-sm-8 col-md-8 input-group'><textarea id='popuptext" + uniqID + "' rows= '2' class='form-control popup-textarea' o id='popuptext" + uniqID + "' ></textarea > <span class='input-group-btn'> " + btn + " </span></div > ";
+    var strng = "<div id='popup" + uniqID + "' class='container-fluid popup-comment-container'></div> <div id=popupinput" + uniqID + "' class='row comment-popup-input'><div class='col-xs-4 col-sm-4 col-md-4 text-center'>You</div><div class='col-xs-8 col-sm-8 col-md-8 input-group'><textarea id='popuptext" + uniqID + "' rows= '2' class='form-control popup-textarea' o id='popuptext" + uniqID + "' ></textarea ><div class='comment-status'><label><input type='checkbox' class='urgency-popup'>Urgent</label></div> <span class='input-group-btn'> " + btn + " </span></div > ";
 
 
 
@@ -137,9 +137,15 @@ function createBtn(uniqID) {
 }
 
 //Creating a new comment row
-function createCommentRow(user, comment, uniqID, parent) {
+function createCommentRow(user, comment, uniqID, parent, urgency) {
 
-    var row = "<div class='row popup-comment'> <div class='col-xs-4 col-sm-4 col-md-4'><p>" + user + "</p></div><div class='col-xs-8 col-sm-8 col-md-8'>" + comment + "</div></div>";
+    var urgencyEl; //Urgency element
+    if (urgency === 1) {
+        urgencyEl = "<div class='urgent'><span class='glyphicon glyphicon-star' aria-hidden='true'></span></div>"
+    }
+    else urgencyEl = "";
+    alert(urgencyEl);
+    var row = "<div class='row-eq-height popup-comment'> <div class='col-xs-4 col-sm-4 col-md-4'><p>" + user + "</p></div><div class='col-xs-8 col-sm-8 col-md-8'>" + comment + "</div>" + urgencyEl + "</div>";
     popupX = popupsArray[popupsArray.findIndex(x => parseInt(x.myData.id) === parseInt(uniqID))].setContent(appendRow(row, uniqID, parent));
 
 }
@@ -170,7 +176,8 @@ function appendRow(row, uniqID, parent) {
 
 
 //Creates markers from existing comments in the DB
-function createMarkers(comment, user, lat, lng, parent, reload) {
+function createMarkers(comment, user, lat, lng, parent,urgency, reload) {
+    
 
     if (lat !== 0 && lng !== 0) {
         var latCollection = locations.map(function (value, index) { return value[1] });
@@ -180,7 +187,7 @@ function createMarkers(comment, user, lat, lng, parent, reload) {
             if ($.inArray(lat, latCollection) === $.inArray(lng, lngCollection)) {
                 var idCollection = locations.map(function (value, index) { return value[0] });
                 var uniqID = idCollection[$.inArray(lat, latCollection)];
-                createCommentRow(user, comment, uniqID, parent);
+                createCommentRow(user, comment, uniqID, parent,urgency);
 
             }
         }
@@ -188,7 +195,7 @@ function createMarkers(comment, user, lat, lng, parent, reload) {
             var latlng = L.latLng(lat, lng);
             var uniqID = createMarker(latlng, false);
             locations.push([uniqID, lat, lng]);
-            createCommentRow(user, comment, uniqID, parent);
+            createCommentRow(user, comment, uniqID, parent, urgency);
         }
 
     }
