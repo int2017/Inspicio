@@ -1,6 +1,6 @@
 ﻿var commentEnum = {
     Default: 0,
-    Urgent: 1,
+    Urgent: 1
 };
 
 //Commenting from popups
@@ -8,7 +8,7 @@ function commentClick(uniqID, chosenState) {
     var urgent = $(".urgency-popup").is(":checked");
     var urgency;
     if (urgent) {
-        urgency = commentEnum.Urgent
+        urgency = commentEnum.Urgent;
     }
     else urgency = commentEnum.Default;
     var locationLat;
@@ -18,7 +18,7 @@ function commentClick(uniqID, chosenState) {
             locationLat = Math.round(this.getLatLng().lat);
             locationLng = Math.round(this.getLatLng().lng);
         }
-    })
+    });
     var DataFromBody = {
         "ImageId": $("#ImageId").val(),
         "Message": $(".popup-textarea").val(),
@@ -26,7 +26,7 @@ function commentClick(uniqID, chosenState) {
         "Lng": locationLng,
         "ParentId": null,
         "CommentUrgency": urgency
-    }
+    };
     $.ajax(
         {
             type: "POST", //HTTP POST Method  
@@ -41,7 +41,7 @@ function commentClick(uniqID, chosenState) {
                 markerX.closePopup();
                 $(markersArray).each(function () {
                     this.getPopup().setContent("");
-                })
+                });
                 reloadMarkers();
                 $(".leaflet-popup-content").fadeIn();
                 $("#comment-section").load(window.location.href + " #comment-section > * ");
@@ -51,7 +51,7 @@ function commentClick(uniqID, chosenState) {
 
         });
 
-};
+;
 
 //Commenting from main comment section
 function commentClickMain(chosenState) {
@@ -59,7 +59,7 @@ function commentClickMain(chosenState) {
     var urgent = $("#urgent-main").is(":checked");
     var urgency;
     if (urgent) {
-        urgency = commentEnum.Urgent
+        urgency = commentEnum.Urgent;
     }
     else urgency = commentEnum.Default;
     var DataFromBody = {
@@ -68,8 +68,8 @@ function commentClickMain(chosenState) {
         "Lat": null,
         "Lng": null,
         "ParentId": null,
-        "CommentUrgency" : urgency
-    }
+        "CommentUrgency": urgency
+    };
     $.ajax(
         {
             type: "POST", //HTTP POST Method  
@@ -84,7 +84,7 @@ function commentClickMain(chosenState) {
             }
         });
 
-};
+}
 
 
 //Adding live listeners to the reply buttons
@@ -97,14 +97,14 @@ $(document).ready(function () {
             // prevent duplicate submission
             return false;
         }
-    })
+    });
     $(document).on("keypress", "#comment-textarea", function (e) {
         if (e.which === 13) {
             $('#submit-comment').click();
             // prevent duplicate submission
             return false;
         }
-    })
+    });
     $(document).on("click", ".reply-button", function () {
         var area;
         var parent = $(this).data("parent");
@@ -116,10 +116,10 @@ $(document).ready(function () {
         }
         replyComment(parent, area);
 
-    })
+    });
     $(document).on("click", "#submit-comment", function () {
         commentClickMain();
-    })
+    });
 });
 
 function replyComment(parent, area) {
@@ -138,7 +138,7 @@ function replyComment(parent, area) {
         "Lat": lat,
         "Lng": lng,
         "ParentId": parent
-    }
+    };
     $.ajax(
         {
             type: "POST", //HTTP POST Method  
@@ -160,7 +160,7 @@ function replyComment(parent, area) {
                         {
                             $(markersArray).each(function () {
                                 this.getPopup().setContent("");
-                            })
+                            });
                             reloadMarkers();
                         }
 
@@ -178,7 +178,7 @@ function replyComment(parent, area) {
 //Get new comments for markers
 function reloadMarkers() {
 
-    var id = $("#ImageId").val()
+    var id = $("#ImageId").val();
     $.ajax(
         {
             type: "GET", //HTTP GET Method  
@@ -201,7 +201,7 @@ function reloadMarkers() {
                     }
                     createMarkers(this.comment.message, this.posterProfileName, this.comment.lat, this.comment.lng, parent, this.comment.commentUrgency, true);
 
-                })
+                });
             }
         });
 }
