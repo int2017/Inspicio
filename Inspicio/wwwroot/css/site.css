@@ -48,11 +48,26 @@ hr {
     margin-bottom: 12px; 
 }
 
-.create-img input:not(.btn), .create-img select, .create-img textarea {
-    max-width: none;
+#comment-section .date-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+
 }
-/* Carousel */
-.carousel-caption p {
+
+    #comment-section .date-header:before, #comment-section .date-header:after {
+        content: '';
+        width: 100px;
+        height: 2px;
+        background: black;
+        margin: 0 5px;
+    }
+
+
+
+        /* Carousel */
+        .carousel-caption p {
     font-size: 20px;
     line-height: 1.4;
 }
