@@ -68,63 +68,100 @@
 
             <!-- comments go here -->
             <h3 class="text-center">Comment section</h3>
-            @foreach (var c in Model.Comments)
-            {
-                if (c.comment.ParentId == null)
+            @{
+                String previousDate = ("Jan 1, 0000");
+                foreach (var c in Model.Comments)
                 {
-                    <div class="comment">
-                        <div class="row-eq-height ">
+                    String currentDate = @c.comment.Timestamp.ToString("MMM d");
 
-                            <div class="comment-user col-xs-4 col-sm-4 col-md-4">
-                                <h5 class="username">@c.PosterProfileName</h5>
-                                <p>@c.comment.Timestamp</p>
-                                @if (c.comment.Lat != 0 && c.comment.Lng != 0)
-                                {
-                                    <p><a id="loc-@c.comment.CommentId" class="open-pin" href="#" data-location="@c.comment.Lat  @c.comment.Lng">Open pin</a></p>
-
-                                }
-                                <p><a class="reply" data-target="@c.comment.CommentId" href="#">Reply</a></p>
+                    if (c.comment.ParentId == null)
+                    {
+                        if (currentDate != previousDate)
+                        {
+                            <div class="date-header">
+                               @if (currentDate == DateTime.Today.ToString("MMM d"))
+                               {
+                                <p> Today </p>
+                               }
+                               else if (currentDate == DateTime.Today.AddDays(-1).ToString("MMM d"))
+                               {
+                                <p> Yesterday </p>
+                               }
+                               else
+                               {
+                                <p> @c.comment.Timestamp.ToString("MMM d") </p>
+                               }
                             </div>
+                        }
 
-                            <div class="col-xs-8 col-sm-8 col-md-8">
-                                <p>@c.comment.Message</p>
-                            </div>
-                        </div>
+                        previousDate = currentDate;
 
-                        <div class="replied-section" id="replies-@c.comment.CommentId">
-                            <div class="comment-container">
-                                @foreach (var x in Model.Comments)
-                                {
-                                    if (x.comment.ParentId != null && c.comment.CommentId.ToString().Equals(x.comment.ParentId))
+                        <div class="comment">
+                            <div class="row-eq-height ">
+                                <div class="comment-user col-xs-4 col-sm-4 col-md-4">
+                                    <h5 class="username">@c.PosterProfileName</h5>
+                                    <p>@c.comment.Timestamp.ToString("h:mm tt")</p>
+                                    @if (c.comment.Lat != 0 && c.comment.Lng != 0)
                                     {
-                                        <div class='row-eq-height comment'>
-                                            <div class='comment-user col-xs-4 col-sm-4 col-md-4'>
-                                                <h5 class='username'> @x.PosterProfileName</h5>
-                                                <p> @x.comment.Timestamp </p>
-                                            </div>
-                                            <div class='col-xs-8 col-sm-8 col-md-8'>
-                                                <p> @x.comment.Message</p>
-                                            </div>
-                                        </div>;
-                                    }
+                                        <p><a id="loc-@c.comment.CommentId" class="open-pin" href="#" data-location="@c.comment.Lat  @c.comment.Lng">Open pin</a></p>
 
-                                }
+                                    }
+                                    <p><a class="reply" data-target="@c.comment.CommentId" href="#">Reply</a></p>
+                                </div>
+
+                                <div class="col-xs-8 col-sm-8 col-md-8">
+                                    <p>@c.comment.Message</p>
+                                </div>
                             </div>
 
-                            <div class="row-eq-height reply-comment" id="replycomm-@c.comment.CommentId">
-                                <div class="col-xs-12 col-sm-12 col-md-12 input-group">
-                                    <textarea class="form-control reply-textarea" id="text-@c.comment.CommentId" rows="5" placeholder="Reply..."></textarea>
-                                    <span class="input-group-btn">
-                                        <button class="btn btn-success reply-button" type="submit" id="button-@c.comment.CommentId" data-parent="@c.comment.CommentId">
-                                            <i class="glyphicon glyphicon-share-alt"></i>
-                                        </button>
-                                    </span>
+                            <div class="replied-section" id="replies-@c.comment.CommentId">
+                                <div class="comment-container">
+                                    @foreach (var x in Model.Comments)
+                                    {
+                                        if (x.comment.ParentId != null && c.comment.CommentId.ToString().Equals(x.comment.ParentId))
+                                        {
+                                            <div class='row-eq-height comment'>
+                                                <div class='comment-user col-xs-4 col-sm-4 col-md-4'>
+                                                    <h5 class='username'> @x.PosterProfileName</h5>
+
+                                                    @if(((DateTime.Now.Date - x.comment.Timestamp.Date).TotalDays) <= 0)
+                                                    {
+                                                        <p>Today</p>
+                                                    }
+                                                    else if (((DateTime.Now.Date - x.comment.Timestamp.Date).TotalDays) <=1)
+                                                    {
+                                                        <p>Yesterday</p>
+                                                    }
+                                                    else
+                                                    {
+                                                        <p> @((DateTime.Now.Date - x.comment.Timestamp.Date).TotalDays) days ago</p>
+                                                    }
+                                                    <p>@x.comment.Timestamp.ToString("h:mm tt")</p>
+                                                </div>
+                                                <div class='col-xs-8 col-sm-8 col-md-8'>
+                                                    <p> @x.comment.Message</p>
+                                                </div>
+                                            </div>;
+                                        }
+
+                                    }
+                                </div>
+
+                                <div class="row-eq-height reply-comment" id="replycomm-@c.comment.CommentId">
+                                    <div class="col-xs-12 col-sm-12 col-md-12 input-group">
+                                        <textarea class="form-control reply-textarea" id="text-@c.comment.CommentId" rows="5" placeholder="Reply..."></textarea>
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-success reply-button" type="submit" id="button-@c.comment.CommentId" data-parent="@c.comment.CommentId">
+                                                <i class="glyphicon glyphicon-share-alt"></i>
+                                            </button>
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                }
+                    }
 
+                }
             }
             <!-- ends here -->
 
