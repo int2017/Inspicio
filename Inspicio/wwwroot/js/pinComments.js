@@ -88,7 +88,7 @@ function mapOnClick(e) {
 //Creating individual markers. Needed because onClick event sends a different object than createMarkers()
 //clickBool determines wether the markers and popups are created by clicking on map or by fetching data from DB
 function createMarker(latlng, clickBool) {
-    var uniqID = Math.round(new Date().getTime() +;(Math.random() * 100));
+    var uniqID = Math.round(new Date().getTime() +(Math.random() * 100));
     var marker = new L.marker(latlng, { icon: customPin }).addTo(markerGroup);
     var popup = new L.Popup();
     //Removes marker if popup is empty
