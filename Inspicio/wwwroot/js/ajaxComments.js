@@ -5,6 +5,12 @@
 
 //Commenting from popups
 function commentClick(uniqID, chosenState) {
+    var urgent = $("#urgentID").is(":checked");
+    var urgency;
+    if (urgent) {
+        urgency = commentEnum.Urgent
+    }
+    else urgency = commentEnum.Default;
     var locationLat;
     var locationLng;
     $(markersArray).each(function () {
@@ -18,7 +24,8 @@ function commentClick(uniqID, chosenState) {
         "Message": $(".popup-textarea").val(),
         "Lat": locationLat,
         "Lng": locationLng,
-        "ParentId": null
+        "ParentId": null,
+        "CommentUrgency": urgency
     }
     $.ajax(
         {
@@ -48,17 +55,25 @@ function commentClick(uniqID, chosenState) {
 
 //Commenting from main comment section
 function commentClickMain(chosenState) {
+    
+    var urgent = $("#urgentID").is(":checked");
+    var urgency;
+    if (urgent) {
+        urgency = commentEnum.Urgent
+    }
+    else urgency = commentEnum.Default;
     var DataFromBody = {
         "ImageId": $("#ImageId").val(),
         "Message": $("#comment-textarea").val(),
         "Lat": null,
         "Lng": null,
-        "ParentId": null
+        "ParentId": null,
+        "CommentUrgency" : urgency
     }
     $.ajax(
         {
             type: "POST", //HTTP POST Method  
-            url: "../Comment", // Controller/View  
+            url: "../Comment", // Controller  
             contentType: "application/json;",
             dataType: "text",
             data: JSON.stringify(DataFromBody),
@@ -103,7 +118,7 @@ $(document).ready(function () {
 
     })
     $(document).on("click", "#submit-comment", function () {
-        commentClick();
+        commentClickMain();
     })
 });
 

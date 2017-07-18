@@ -84,10 +84,19 @@
 
                                 }
                                 <p><a class="reply" data-target="@c.comment.CommentId" href="#">Reply</a></p>
+
+                                @if (c.comment.CommentUrgency == Comment.Urgency.Urgent)
+                                {
+                                    <div class='urgentID'>
+                                        <span class="glyphicon glyphicon-star" style="color:#ffb266" aria-hidden="true">@c.comment.CommentUrgency</span>
+                                    </div>
+                                } 
                             </div>
 
                             <div class="col-xs-8 col-sm-8 col-md-8">
                                 <p>@c.comment.Message</p>
+
+                                
                             </div>
                         </div>
 
@@ -103,6 +112,10 @@
                                                 <p> @x.comment.Timestamp </p>
                                             </div>
                                             <div class='col-xs-8 col-sm-8 col-md-8'>
+
+                                                        
+                                                
+
                                                 <p> @x.comment.Message</p>
                                             </div>
                                         </div>;
@@ -132,7 +145,7 @@
                 <div class="col-xs-12 col-sm-12 col-md-12 input-group">
                     <textarea class="form-control" id="comment-textarea" rows="5" placeholder="Comment..."></textarea>
                     <div class="checkbox" id="comment-status">
-                        <label><input type="checkbox" value="">Urgent</label>
+                        <label><input type="checkbox" id="urgentID" value="">Urgent</label>
                     </div>
                     <span class="input-group-btn">
                         <button class="btn btn-success" type="submit" id="submit-comment" >
