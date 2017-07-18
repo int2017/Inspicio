@@ -12,7 +12,7 @@ namespace Inspicio.Classes
     {
         /// Hashes an email with MD5.
         /// Suitable for use with Gravatar profile image urls
-        public static string GetLink(string email)
+        public static string GetLink(string email, int size = 80)
         {
             // Create a new instance of the MD5CryptoServiceProvider object.  
             MD5 md5Hasher = MD5.Create();
@@ -31,7 +31,7 @@ namespace Inspicio.Classes
                 sBuilder.Append(data[i].ToString("x2"));
             }
 
-            return "https://www.gravatar.com/avatar/" + sBuilder.ToString();  // Return the hexadecimal string. 
+            return "https://www.gravatar.com/avatar/" + sBuilder.ToString() + "?s=" + size;  // Return the hexadecimal string. 
         }
     } 
 }

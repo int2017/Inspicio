@@ -23,10 +23,10 @@ namespace Inspicio.Extensions
             return user.FindFirst("Name").Value ?? string.Empty;
         }
 
-        public static string GetProfilePicture(this ClaimsPrincipal user)
+        public static string GetProfilePicture(this ClaimsPrincipal user, int size = 80)
         {
             // ClaimTypes.Webpage returning the ProfilePicture
-            return user.FindFirst("Picture").Value == "" ? Gravatar.GetLink(user.GetProfileEmail()) : "";
+            return user.FindFirst("Picture").Value == "" ? Gravatar.GetLink(user.GetProfileEmail(), size) : "";
         }
 
         public static string GetProfileEmail(this ClaimsPrincipal user)
