@@ -14,11 +14,12 @@
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <input id="ImageId" type="hidden" asp-for="@Model.Info.Image.ImageID" />
 
-
+    
 
 
     <div class="img-wrapper">
-
+        <button type="button" class="btn lightbox-button " id="hide-pop" onclick="popupState()"><i class="glyphicon glyphicon-map-marker"></i></button>
+        <button class="lightbox-button btn" href="@Url.Content(Model.Info.Image.Content)" data-lity data-lity-desc="@Model.Info.Image.Title"><i class="fa fa-expand" aria-hidden="true"></i></button>
         <div id="image-container">
             <div id="imageMap"></div>
 
@@ -26,31 +27,42 @@
 
 
         </div>
-        <a class="lightbox-button" href="@Url.Content(Model.Info.Image.Content)" data-lity data-lity-desc="@Model.Info.Image.Title"><i class="glyphicon glyphicon-resize-full"></i></a>
+        
 
         <div id="image-description">
-
-            <h5>Status: Open</h5>
+               
+                <!--IF the image is created by the user--> <!--IF project is open-->
             <h4>By : @Model.OwnerProfileName</h4>
             <h3>Description</h3>
             <p>@Model.Info.Image.Description </p>
         </div>
 
         <div class="image-controls text-center">
+            <div class="container-fluid reviewer-container">
+                <div id="thumb-container">
 
-            <div id="thumb-container">
+                    <!--If the user has already voted either thumbs up or down,change the fill to black-->
+                    <div class="row">
+                        <button type="button" id="thumbs-up" class="btn btn-success thumb"> <i class="fa fa-thumbs-o-up " aria-hidden="true"></i> : <span class="rating">@Model.Info.approvals</span></button>
+                        <button type="button" id="thumbs-middle" class="btn btn-warning thumb"> <i class="fa fa-thumbs-o-up fa-rotate-90" aria-hidden="true"></i> : <span class="rating">@Model.Info.needsWorks</span></button>
+                        <button type="button" id="thumbs-down" class="btn btn-danger thumb"><i class="fa fa-thumbs-o-down " aria-hidden="true"></i> : <span class="rating">@Model.Info.rejections</span></button>
+                    </div>
 
-                <!--If the user has already voted either thumbs up or down,change the fill to black-->
-                <div class="row">
-                    <button type="button" id="thumbs-up" class="btn btn-success thumb"> <i class="fa fa-thumbs-o-up " aria-hidden="true"></i> : <span class="rating">@Model.Info.approvals</span></button>
-                    <button type="button" id="thumbs-middle" class="btn btn-warning thumb"> <i class="fa fa-thumbs-o-up fa-rotate-90" aria-hidden="true"></i> : <span class="rating">@Model.Info.needsWorks</span></button>
-                    <button type="button" id="thumbs-down" class="btn btn-danger thumb"><i class="fa fa-thumbs-o-down " aria-hidden="true"></i> : <span class="rating">@Model.Info.rejections</span></button>
+                    <div class="row reviewer-row" id="dropdownrow">
+                        @foreach (var r in Model.Reviews)
+                        {
+
+                        <div class="col-md-2 reviewers approved @r.State">@r.ApplicationUsers.ProfileName</div>
+
+
+                        }
+                    </div>
+                    <div class="text-center">
+                        <i class="glyphicon glyphicon-chevron-down" id="dropdown"></i>
+                        
+                    </div>
                 </div>
-                <div class="row">
-                    <button type="button" class="btn btn-info " id="hide-pop" onclick="popupState()">Hide markers</button>
-                    <!--IF the image is created by the user--> <!--IF project is open-->
-                    <button class="btn btn-warning " type="submit">Close</button>
-                </div>
+
             </div>
         </div>
     </div>
@@ -73,14 +85,22 @@
                 if (c.comment.ParentId == null)
                 {
                     <div class="comment">
-                        <div class="row-eq-height ">
-
-                            <div class="comment-user col-xs-4 col-sm-4 col-md-4">
+                        <div class="row ">
+                            <div class="comment-user row-eq-height">
+                                <div class="col-md-4">
                                 <h5 class="username">@c.PosterProfileName</h5>
                                 <p>@c.comment.Timestamp</p>
                                 @if (c.comment.Lat != 0 && c.comment.Lng != 0)
                                 {
                                     <p><a id="loc-@c.comment.CommentId" class="open-pin" href="#" data-location="@c.comment.Lat  @c.comment.Lng">Open pin</a></p>
+                                    </div>
+                                <div class="col-md-4">
+                                    <p>@c.comment.Timestamp</p>
+                                </div>
+                                <div class="col-md-4 text-right">
+                                    @if (c.comment.Lat != 0 && c.comment.Lng != 0)
+                                    {
+                                        <p><a id="loc-@c.comment.CommentId" class="open-pin" href="#" data-location="@c.comment.Lat  @c.comment.Lng">Open pin</a></p>
 
                                 }
                                 <p><a class="reply" data-target="@c.comment.CommentId" href="#">Reply</a></p>
@@ -92,33 +112,36 @@
                                     </div>
                                 } 
                             </div>
-
-                            <div class="col-xs-8 col-sm-8 col-md-8">
-                                <p>@c.comment.Message</p>
-
-                                
+                            <div class="row-eq-height comment-msg">
+                                <div class="col-xs-12 col-sm-12 col-md-12">
+                                    <p>@c.comment.Message</p>
+                                </div>
                             </div>
                         </div>
-
                         <div class="replied-section" id="replies-@c.comment.CommentId">
                             <div class="comment-container">
                                 @foreach (var x in Model.Comments)
                                 {
                                     if (x.comment.ParentId != null && c.comment.CommentId.ToString().Equals(x.comment.ParentId))
                                     {
-                                        <div class='row-eq-height comment'>
-                                            <div class='comment-user col-xs-4 col-sm-4 col-md-4'>
-                                                <h5 class='username'> @x.PosterProfileName</h5>
-                                                <p> @x.comment.Timestamp </p>
-                                            </div>
-                                            <div class='col-xs-8 col-sm-8 col-md-8'>
-
+                                        <div class="comment">
+                                            <div class="row">
+                                                <div class='row-eq-height comment-user'>
+                                                    <div class='col-md-6'>
+                                                        <h5 class='username'> @x.PosterProfileName</h5>
                                                         
-                                                
-
-                                                <p> @x.comment.Message</p>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <p> @x.comment.Timestamp </p>
+                                                    </div>
+                                                </div>
+                                                <div class='row-eq-height comment-msg'>
+                                                    <div class='col-xs-8 col-sm-8 col-md-8'>
+                                                        <p> @x.comment.Message</p>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>;
+                                        </div>
                                     }
 
                                 }
