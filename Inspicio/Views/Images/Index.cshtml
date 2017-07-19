@@ -18,28 +18,25 @@
 <table id="table">
     <thead>
         <tr class="header">
-            <th>
+            <th id="content">
                 Content
             </th>
-
-            <th>
-               Creator
-            </th>
-
             <th>
                 @Html.DisplayNameFor(model => model.FirstOrDefault().Image.Title)
             </th>
-            <th>
+            <th id="creator">
+                Creator
+            </th>
+            <th id="up-col">
                 <img src="~/images/thumbup.jpg" style="height: 20px;" />
             </th>
-            <th>
+            <th id="mid-col">
                 <img src="~/images/thumbmid.jpg" style="height: 20px;" />
             </th>
-            <th>
+            <th id="down-col">
                  <img src="~/images/thumbdown.jpg" style="height: 20px;" />
             </th>
-
-            <th>
+            <th id="status">
                 @Html.DisplayNameFor(model => model.FirstOrDefault().Image.ReviewStatus)
             </th>
         </tr>
@@ -49,30 +46,28 @@
 @foreach (var item in Model)
 {
         <tr onclick="document.location = 'Images/View/@item.Image.ImageID'" style="cursor:pointer" >
-
-
-                <td>
+                <td id="content">
                     <img style="max-height: 100px; max-width: 100px;" src="@item.Image.Content" />
                 </td>
                 <td>
+                @Html.DisplayFor(modelItem => item.Image.Title)
+                </td>
+                <td id="creator">
                     @{
                         var user = await UserManager.FindByIdAsync(item.Image.OwnerId);
                     @Html.DisplayFor(modelItem => user.ProfileName);
                      }
                 </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Image.Title)
-                </td>
-                <td>
+                <td id="up-col">
                    @Html.DisplayFor(modelItem => item.approvals)
                 </td>
-                <td>
+                <td id="mid-col">
                     @Html.DisplayFor(modelItem => item.needsWorks)
-            </td>
-            <td>
+                </td>
+                <td id="down-col">
                     @Html.DisplayFor(modelItem => item.rejections)
-            </td>     
-            <td>
+                </td>     
+                <td id="status">
                     @Html.DisplayFor(modelItem => item.Image.ReviewStatus)
                 </td>
             </tr>
