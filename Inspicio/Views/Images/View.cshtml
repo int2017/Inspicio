@@ -53,8 +53,8 @@
                     <div class="row reviewer-row" >
                         @foreach (var r in Model.Reviews)
                         {
-
-                        <div class="col-md-2 reviewers approved @r.State">@r.ApplicationUsers.ProfileName</div>
+                            var replyOwner = await UserManager.FindByIdAsync(r.OwnerId);
+                        <div class="col-md-2 reviewers approved @r.State">@replyOwner.ProfileName</div>
 
 
                         }
