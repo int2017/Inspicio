@@ -34,9 +34,10 @@ namespace Inspicio.ClaimsPrincipalExtensions
             // Adding the ProfileName property to Claims.
             ((ClaimsIdentity)principal.Identity).AddClaims(new[]
             {
-                new Claim("Name", user.ProfileName),              
+                new Claim("Name", user.ProfileName),
                 new Claim("Picture", user.ProfilePicture),
-                new Claim("Email", user.Email)
+                new Claim("Email", user.Email),
+                new Claim("Id", user.Id)
             });
 
             return principal;
