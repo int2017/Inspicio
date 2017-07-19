@@ -44,7 +44,7 @@
             <h4> By :<img style="height:40px;width:40px" src="@user.ProfilePicture" /> @user.ProfileName</h4>
             <h3>Description</h3>
             <div id="description-section">
-                @Model.Info.Image.Description
+                @Html.Raw(Model.Info.Image.Description)
             </div>
         }
         </div>

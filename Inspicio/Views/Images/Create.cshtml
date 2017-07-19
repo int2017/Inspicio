@@ -17,10 +17,10 @@
     <div class="form-group">
         <!-- Review Description -->
         <label class="control-label">Review Description</label>
-        <textarea rows="4" placeholder=" Reviewees please provide feedback regarding the fix for #7634 ... .. ."></textarea>
+        <textarea class="form-control" id="Image_Description_UserInput" rows="4" placeholder=" Reviewees please provide feedback regarding the fix for #7634 ... .. ."></textarea>
         <span asp-validation-for="@Model.Image.Description" class="text-danger"></span>
 
-        <textarea class="form-control" asp-for="@Model.Image.Description" id="Image_DescriptionHTML" ></textarea>
+        <textarea asp-for="@Model.Image.Description" id="Image_DescriptionHTML" ></textarea>
     </div>
 
     @{
@@ -149,9 +149,9 @@
         }
     }
 
-    $('#Image_Description').on('blur', function (e) {
+    $('#Image_Description_UserInput').on('blur', function (e) {
 
-        $("#Image_DescriptionHTML").html( convertToHTML( $("#Image_Description").val() ) );
+        $("#Image_DescriptionHTML").html(convertToHTML($("#Image_Description_UserInput").val() ) );
     });
 
 </script>
