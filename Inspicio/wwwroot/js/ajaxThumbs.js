@@ -25,7 +25,6 @@ $(".thumb").click(function () {
         updateThumbs(thumbEnum.NeedsWork, button);
     }
     $("#" + button + " i").addClass(className);
-    
 });
 
 function updateThumbs( chosenState, button ) {

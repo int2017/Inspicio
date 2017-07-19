@@ -12,9 +12,11 @@
     background-image: url(../images/ostrich.jpg);
     height: 100vh;
     position: relative;
+    width: auto;
     z-index: 5;
-    overflow: hidden;
-    padding:30px;
+    overflow: no-display;
+    padding: 30px;
+    /*background-position: right -400px top;*/
 }
 
 #home-header {

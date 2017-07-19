@@ -15,4 +15,5 @@ $(document).on("click", ".reply", function () {
 //Controlling reviewers box
 $("#dropdown").click(function () {
     $(".reviewer-row").slideToggle();
+    //$(this).toggleClass('glyphicon-arrow-down').toggleClass('glyphicon-arrow-up');
 });
