@@ -14,7 +14,6 @@ function addThumbListener() {
         else {
             className = className.slice(0, 12) + "-o" + className.slice(12);
         }
-        alert(className);
         if (button === "thumbs-up") {
             updateThumbs(thumbEnum.Approved, button);
         }
