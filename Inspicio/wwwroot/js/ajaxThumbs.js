@@ -6,15 +6,7 @@
 function addThumbListener() {
     
         var button = $(this).attr("id");
-        var className = $("#" + button + " i").attr("class");
-        $("#" + button + " i").removeClass(className);
-        if (className.toLowerCase().indexOf("-o") > 0) {
-            className = className.replace("-o", "");
-        }
-        else {
-            className = className.slice(0, 12) + "-o" + className.slice(12);
-        }
-        alert(className);
+        
         if (button === "thumbs-up") {
             updateThumbs(thumbEnum.Approved, button);
         }
@@ -24,8 +16,7 @@ function addThumbListener() {
         else if (button === "thumbs-middle") {
             updateThumbs(thumbEnum.NeedsWork, button);
         }
-        $("#" + button + " i").addClass(className);
-
+        
    
 }
 
@@ -95,4 +86,22 @@ function changeState(state) {
         $("#thumbs-down").addClass("disabled");
         $("#thumbs-down").off();
     }
+        updateIcon();
+}
+
+function updateIcon() {
+    $("#thumb-container button.btn i").each(function () {
+        var className = $(this).attr("class");
+        $(this).removeClass(className);
+        if ($(this).parent().hasClass("disabled")) {
+            
+            className = className.replace("-o", "");
+          
+        }
+        else if (className.indexOf("-o")<0) {
+           className = className.slice(0, 12) + "-o" + className.slice(12);
+   
+        }
+        $(this).addClass(className);
+    })
 }
