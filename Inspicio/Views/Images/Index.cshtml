@@ -1,5 +1,5 @@
 @model List<Inspicio.Controllers.ImagesController.IndexModel>
-
+@inject UserManager<ApplicationUser> UserManager
 
 @{
     ViewData["Title"] = "Index";
@@ -22,6 +22,10 @@
         <tr class="header">
             <th>
                 Content
+            </th>
+
+            <th>
+               Creator
             </th>
 
             <th>
@@ -55,6 +59,12 @@
 
                 <td>
                     <img style="max-height: 100px; max-width: 100px;" src="@item.Image.Content" />
+                </td>
+                <td>
+                    @{
+                        var user = await UserManager.FindByIdAsync(item.Image.OwnerId);
+                    @Html.DisplayFor(modelItem => user.ProfileName);
+                     }
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Image.Title)
