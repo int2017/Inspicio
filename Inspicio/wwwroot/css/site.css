@@ -21,17 +21,21 @@ body {
 #table {
     width: 100%;
     font-size: 18px;
-    border-collapse: collapse;
+    align-content: center;
+    table-layout: fixed;
 }
 
 #table td, #table th {
-    padding: 15px;
-    text-align: left;
-    width: 16%;
+    padding-bottom: 15px;
+    border-collapse: collapse;
 }
 
-#table tr:hover {
-        background-color: #f1f1f1;
+    #table th#content, td#content, td#status, th#status, td#creator, th#creator{
+        width: 10%;
+    }
+
+    #table th#up-col, td#up-col, td#mid-col, th#mid-col, td#down-col, th#down-col {
+        width: 5%;
     }
 
 #table tr.header:hover{
