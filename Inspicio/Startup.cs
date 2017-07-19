@@ -72,6 +72,12 @@ namespace Inspicio
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
+            var basePath = Configuration.GetValue("InspicioBasePath", defaultValue: string.Empty);
+            if (!string.IsNullOrWhiteSpace(basePath))
+            {
+                app.UsePathBase(basePath);
+            }
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
