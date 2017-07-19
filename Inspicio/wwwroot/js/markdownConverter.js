@@ -2,7 +2,8 @@
 function convertToHTML(markdown) {
 
     var converter = new showdown.Converter();
-    var html = converter.makeHtml(markdown);
+    converter.setFlavor('github');
 
+    var html = converter.makeHtml(markdown);
     return html;
 }

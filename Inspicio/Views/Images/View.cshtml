@@ -43,7 +43,9 @@
             var user = await UserManager.FindByIdAsync(Model.OwnerId);
             <h4> By :<img style="height:40px;width:40px" src="@user.ProfilePicture" /> @user.ProfileName</h4>
             <h3>Description</h3>
-            <div id="description-section"></div>
+            <div id="description-section">
+                @Model.Info.Image.Description
+            </div>
         }
         </div>
 
@@ -234,9 +236,6 @@
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
 
-<script type="text/javascript" src="https://cdn.rawgit.com/showdownjs/showdown/1.7.1/dist/showdown.min.js"></script>
-<script type="text/javascript" src="~/js/markdownConverter.js"></script>
-
 <script type="text/javascript" src="~/js/filter.js"></script>
 <script type="text/javascript" src="~/js/ajaxThumbs.js"></script>
 <script type="text/javascript" src="~/js/ajaxOpenSlider.js"></script>
@@ -251,8 +250,6 @@
         $("#imageMap").width($("#image-container >img").width());
         $("#imageMap").height($("#image-container >img").height());
         imageMap.invalidateSize();
-
-        $("#description-section").html(convertToHTML("#hello, *markdown*!"));
     });
 </script>
 
