@@ -29,10 +29,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.FirstOrDefault().Image.Title)
             </th>
-
-            <th>
-                @Html.DisplayNameFor(model => model.FirstOrDefault().Image.Description)
-            </th>
             <th>
                 <img src="~/images/thumbup.jpg" style="height: 20px;" />
             </th>
@@ -66,9 +62,6 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Image.Title)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Image.Description)
                 </td>
                 <td>
                    @Html.DisplayFor(modelItem => item.approvals)
