@@ -18,28 +18,27 @@ namespace Inspicio.Extensions
     {
         public static string GetProfileName(this ClaimsPrincipal user)
         {
-            // ClaimTypes.GivenName returning the ProfileName
+            // Name returning the ProfileName
             return user.FindFirst("Name").Value ?? string.Empty;
         }
 
         public static string GetProfilePicture(this ClaimsPrincipal user)
         {
-            // ClaimTypes.Webpage returning the ProfilePicture
+            // Picture returning the ProfilePicture
             return user.FindFirst("Picture").Value;
         }
 
         public static string GetProfileEmail(this ClaimsPrincipal user)
         {
-            // ClaimTypes.Webpage returning the ProfilePicture
+            // Email returning the ProfilePicture
             return user.FindFirst("Email").Value;
         }
 
 
-        public static string GetProfileRole(this ClaimsPrincipal user)
+        public static string GetProfileId(this ClaimsPrincipal user)
         {
-            // ClaimTypes.GivenName returning the ProfileName
-            // avoiding null issues locally
-            return user.Claims.FirstOrDefault(v => v.Type == ClaimTypes.Role).Value ?? string.Empty;
+            // Id returning the ProfileId
+            return user.FindFirst("Id").Value;
         }
     }
 }

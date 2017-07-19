@@ -10,7 +10,7 @@
                    @:checked="checked"
                 }
              
-             if (User.GetProfileRole() != Model.Info.Image.OwnerId)
+             if (User.GetProfileId() != Model.Info.Image.OwnerId)
                {
                    @:disabled = "disabled";
 

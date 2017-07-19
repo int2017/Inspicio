@@ -67,6 +67,7 @@
   <ItemGroup>
     <Folder Include="Migrations\" />
     <Folder Include="Migrations\" />
+    <Folder Include="Migrations\" />
     <Folder Include="Models\UserViewModels\" />
   </ItemGroup>
 </Project>
