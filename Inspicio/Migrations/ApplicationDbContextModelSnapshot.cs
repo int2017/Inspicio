@@ -50,6 +50,8 @@ namespace Inspicio.Migrations
 
                     b.Property<string>("ProfileName");
 
+                    b.Property<string>("ProfilePicture");
+
                     b.Property<string>("SecurityStamp");
 
                     b.Property<bool>("TwoFactorEnabled");
@@ -75,6 +77,8 @@ namespace Inspicio.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("ChildId");
+
+                    b.Property<int>("CommentUrgency");
 
                     b.Property<int>("ImageId");
 
