@@ -3,7 +3,6 @@
 @inject UserManager<ApplicationUser> UserManager
 
 
-
 <div class="view-container">
     <h2>@Model.Info.Image.Title</h2>
     <input type="checkbox"
@@ -43,10 +42,11 @@
             var user = await UserManager.FindByIdAsync(Model.OwnerId);
             <h4> By :<img style="height:40px;width:40px" src="@user.ProfilePicture" /> @user.ProfileName</h4>
             <h3>Description</h3>
-            <div id="description-section" style="width:95%;">
-                @Html.Raw(Model.Info.Image.Description)
+            <hr />
+            <div id="description-section" style="width:95%;margin-top:-2em;">
+                @Html.Raw( Model.Info.Image.Description )
             </div>
-            <br />
+            <hr />
         }
         </div>
 

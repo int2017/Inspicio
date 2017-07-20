@@ -529,7 +529,6 @@ input:focus {
 }
 .show-reviewers{
     display:inline-block;
-    padding:10px;
     cursor:pointer;
 }
     .show-reviewers h4 {
