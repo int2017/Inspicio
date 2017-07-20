@@ -524,6 +524,7 @@ input:focus {
 .reviewers{
     padding:5px 0;
     border-radius:2px;
+    margin:3px;
 }
 .Rejected {
     background-color: rgba(169, 99, 96, 0.53);

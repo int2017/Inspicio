@@ -17,7 +17,7 @@ namespace Inspicio.Controllers
     [Authorize]
     public class ImagesController : Controller
     {
-        private readonly UserManager<ApplicationUser> _userManager;   
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly IHostingEnvironment _environment;
         private readonly ApplicationDbContext _context;
 
@@ -55,7 +55,8 @@ namespace Inspicio.Controllers
             var ImageEntries = new List<IndexModel>();
             foreach (var a in AllImages)
             {
-                ImageEntries.Add(new IndexModel {
+                ImageEntries.Add(new IndexModel
+                {
                     Image = a,
                     approvals = _context.Review.Count(x => (x.ImageId == a.ImageID) && x.State == Review.States.Approved),
                     needsWorks = _context.Review.Count(x => (x.ImageId == a.ImageID) && x.State == Review.States.NeedsWork),
@@ -102,8 +103,8 @@ namespace Inspicio.Controllers
             var CreatePageModel = new CreatePageModel();
             CreatePageModel.Users = new List<SelectableUser>();
 
-            var users = _context.Users.Where( u => u.Id != _userManager.GetUserId(HttpContext.User)).ToList();
-            foreach( var u in users )
+            var users = _context.Users.Where(u => u.Id != _userManager.GetUserId(HttpContext.User)).ToList();
+            foreach (var u in users)
             {
                 // Selectable user constructor
                 CreatePageModel.Users.Add(new SelectableUser { Id = u.Id, Email = u.Email, ProfileName = u.ProfileName, IsSelected = false });
@@ -154,7 +155,7 @@ namespace Inspicio.Controllers
         public class ViewModel
         {
             public string OwnerId { get; set; }
-      
+
             public class ImageData
             {
                 public Image Image { get; set; }
@@ -181,7 +182,7 @@ namespace Inspicio.Controllers
             {
                 return NotFound();
             }
-            
+
             // Fetch the image by the id pass in '/5'
             var Image = await _context.Images.SingleOrDefaultAsync(m => m.ImageID == Id);
             if (Image == null)
@@ -224,12 +225,16 @@ namespace Inspicio.Controllers
             return View(FullReviewData);
         }
 
-       
-        public JsonResult GetComments(int? Id)
+        public JsonResult GetRating(int? id) {
+            var userId = _userManager.GetUserId(HttpContext.User);
+            var review = _context.Review.Where(u => u.OwnerId == userId).Where(i => i.ImageId == id).SingleOrDefault();
+            return Json(review.State);
+    }
+    public JsonResult GetComments(int? Id)
         {
             List<ViewModel.CommentInfo> comments = new List<ViewModel.CommentInfo>();
             var AllComments = _context.Comments.Where(c => c.ImageId == Id);
-            foreach(Comment SingleComment in AllComments)
+            foreach (Comment SingleComment in AllComments)
             {
                 var CommentInfo = new ViewModel.CommentInfo();
                 CommentInfo.comment = SingleComment;
@@ -343,10 +348,10 @@ namespace Inspicio.Controllers
             _context.Add(comment);
 
             await _context.SaveChangesAsync();
-			return Ok(1);
+            return Ok(1);
         }
 
-        
+
         public enum State
         {
             Approved,
@@ -361,12 +366,12 @@ namespace Inspicio.Controllers
 
         }
         [HttpPost]
-        public async Task<IActionResult> ChangeRating([FromBody] RatingBody data) 
+        public async Task<IActionResult> ChangeRating([FromBody] RatingBody data)
         {
             var userId = _userManager.GetUserId(HttpContext.User);
             var review = _context.Review.Where(u => u.OwnerId == userId).Where(i => i.ImageId == data.ImageID).SingleOrDefault();
 
-            if( review == null )
+            if (review == null)
             {
                 return NotFound();
             }
@@ -391,33 +396,35 @@ namespace Inspicio.Controllers
             await _context.SaveChangesAsync();
             return Ok(1);
         }
-        public class DataFromToggle
-        {
-            public int ImageID { get; set; }
-            public bool Open { get; set; }
-            
-        }
 
-        [HttpPost]
-        public async Task<IActionResult> CloseReview([FromBody] DataFromToggle data)
-        {
-            var userId = _userManager.GetUserId(HttpContext.User);
+        
+    public class DataFromToggle
+    {
+        public int ImageID { get; set; }
+        public bool Open { get; set; }
 
-            int id = data.ImageID;
-            var image = await _context.Images.SingleOrDefaultAsync(m => m.ImageID == id);
-
-            if (data.Open)
-            {
-                image.ReviewStatus = Image.Status.Open;
-            }
-            else
-            {
-                image.ReviewStatus= Image.Status.Closed;
-            }
-                await _context.SaveChangesAsync();
-                return Ok(1);
-        }
     }
+
+    [HttpPost]
+    public async Task<IActionResult> CloseReview([FromBody] DataFromToggle data)
+    {
+        var userId = _userManager.GetUserId(HttpContext.User);
+
+        int id = data.ImageID;
+        var image = await _context.Images.SingleOrDefaultAsync(m => m.ImageID == id);
+
+        if (data.Open)
+        {
+            image.ReviewStatus = Image.Status.Open;
+        }
+        else
+        {
+            image.ReviewStatus = Image.Status.Closed;
+        }
+        await _context.SaveChangesAsync();
+        return Ok(1);
+    }
+}
 }
 
 
