@@ -48,7 +48,8 @@ namespace Inspicio.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed");
 
-                    b.Property<string>("ProfileName");
+                    b.Property<string>("ProfileName")
+                        .HasMaxLength(16);
 
                     b.Property<string>("ProfilePicture");
 
