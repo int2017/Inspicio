@@ -1,10 +1,6 @@
 @model List<Inspicio.Controllers.ImagesController.IndexModel>
 @inject UserManager<ApplicationUser> UserManager
 
-@{
-    ViewData["Title"] = "Index";
-}
-
 <h2>View All Reviews</h2>
 
 <p>
@@ -21,8 +17,8 @@
             <th id="content">
                 Content
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FirstOrDefault().Image.Title)
+            <th >
+                Title
             </th>
             <th id="creator">
                 Creator
@@ -37,7 +33,7 @@
                  <img src="~/images/thumbdown.jpg" style="height: 20px;" />
             </th>
             <th id="status">
-                @Html.DisplayNameFor(model => model.FirstOrDefault().Image.ReviewStatus)
+                Status
             </th>
         </tr>
     </thead>
@@ -45,17 +41,21 @@
 
 @foreach (var item in Model)
 {
-        <tr onclick="document.location = 'Images/View/@item.Image.ImageID'" style="cursor:pointer" >
+        <tr title="@item.Image.Title" onclick="document.location = 'Images/View/@item.Image.ImageID'" style="cursor:pointer" >
                 <td id="content">
                     <img style="max-height: 100px; max-width: 100px;" src="@item.Image.Content" />
                 </td>
-                <td>
-                @Html.DisplayFor(modelItem => item.Image.Title)
+                <td id="title">
+                    @{
+                        string defaultTitle = item.Image.Title;
+                        string title = (defaultTitle.Length <= 137) ? defaultTitle : defaultTitle.Substring(0, 137) + "...";
+                        @Html.DisplayFor(modelItem => title)
+                    }
                 </td>
                 <td id="creator">
                     @{
                         var user = await UserManager.FindByIdAsync(item.Image.OwnerId);
-                    @Html.DisplayFor(modelItem => user.ProfileName);
+                        @Html.DisplayFor(modelItem => user.ProfileName);
                      }
                 </td>
                 <td id="up-col">
