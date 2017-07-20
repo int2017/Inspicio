@@ -150,8 +150,9 @@ body {
     background-color: red
 }
 
-.dz-preview {
-    display: none !important;
+body .dropzone .dz-preview .dz-image {
+    width:auto;
+    height:auto;
 }
 
 .dropzone {

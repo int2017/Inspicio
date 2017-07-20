@@ -10,51 +10,64 @@
 
 #homeImg {
     background-image: url(../images/ostrich.jpg);
-    height: 100vh;
     position: relative;
     z-index: 5;
     overflow: hidden;
-    padding:30px;
-    background-size:cover;
+    padding: 30px;
+    background-size: cover;
+    background-attachment:fixed;
 }
-
+.dropzone{
+    width:100%;
+}
 #home-header {
     font-family: 'KG Summer Sunshine Blackout';
-    margin:55px 0px;
+    margin: 75px 0px 0px;
 }
-.navbar-header{
-    display:none;
+#home-header img{
+    margin:auto;
+}
+.navbar-header {
+    display: none;
+}
+#img-txt >.row-eq-height{
+    margin:10px 0;
+    height:300px;
 }
 #img-txt {
     color: white;
-    margin:100px 0;
+    margin: 100px 0;
     font-family: 'Century Gothic';
     font-size: larger;
 }
+
     #img-txt ul {
         padding: 0px;
         list-style-type: none
     }
-#img-txt li{
-    margin:50px 0;
-    
-}
-    #img-txt img {
-        height: 100px;
+
+    #img-txt li {
+        margin: 50px 0;
+    }
+
+    #img-txt .feat-col img {
+        height: 80px;
         margin: 0 20px 0 0;
         display: inline-block;
     }
 
 .navbar-brand {
-    visibility:hidden;
+    visibility: hidden;
 }
 
-.container.body-content{
-    margin:0 ;
-    padding:0;
-    width:100%;
+.container.body-content {
+    margin: 0;
+    padding: 0;
+    width: 100%;
 }
+
 body nav.navbar.navbar-inverse.navbar-fixed-top {
-    background: none ;
-    border: none ;
+    background: none;
+    border: none;
+    position:absolute;
 }
