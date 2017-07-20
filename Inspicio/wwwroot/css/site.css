@@ -25,9 +25,34 @@ body {
     table-layout: fixed;
 }
 
+#loginform {
+    text-align: left;
+    width: 500px;
+    margin: 10px auto;
+}
+
+#loginbutton {
+    text-align: left;
+    width: 500px;
+    margin: 10px auto;
+}
+
 #table td, #table th {
     padding-bottom: 15px;
     border-collapse: collapse;
+}
+
+loginsection {
+    color: black;
+    font-weight: bold;
+    background-color: white;
+    border-right: solid;
+    border-width: 1px;
+    font-size: 30px;
+    padding: 5px;
+    padding-right: 69px;
+    padding-left: 70px;
+    font-size: 30px;
 }
 
     #table th#content, td#content, td#status, th#status, td#creator, th#creator{
