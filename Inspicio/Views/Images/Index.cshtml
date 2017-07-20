@@ -48,7 +48,7 @@
                 <td id="title">
                     @{
                         string defaultTitle = item.Image.Title;
-                        string title = (defaultTitle.Length <= 137) ? defaultTitle : defaultTitle.Substring(0, 137) + "...";
+                        string title = (defaultTitle.Length <= 130) ? defaultTitle : defaultTitle.Substring(0, 130) + "...";
                         @Html.DisplayFor(modelItem => title)
                     }
                 </td>
