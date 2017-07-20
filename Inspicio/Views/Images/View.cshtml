@@ -1,13 +1,21 @@
 @model Inspicio.Controllers.ImagesController.ViewModel
+@using Inspicio.Extensions
+@inject UserManager<ApplicationUser> UserManager
 
 
 <div class="view-container">
     <h2>@Model.Info.Image.Title</h2>
     <input type="checkbox"
            @{ if (Model.Info.Image.ReviewStatus == Image.Status.Open)
-                {
+               {
                    @:checked="checked"
                 }
+             
+             if (User.GetProfileId() != Model.Info.Image.OwnerId)
+               {
+                   @:disabled = "disabled";
+
+               }
             } 
      data-toggle="toggle" data-on="Open" data-off="Closed" data-onstyle="success" data-offstyle="danger" id="toggle">
     <hr />
@@ -30,11 +38,16 @@
         
 
         <div id="image-description">
-               
-                <!--IF the image is created by the user--> <!--IF project is open-->
-            <h4>By : @Model.OwnerProfileName</h4>
+        @{
+            var user = await UserManager.FindByIdAsync(Model.OwnerId);
+            <h4> By :<img style="height:40px;width:40px" src="@user.ProfilePicture" /> @user.ProfileName</h4>
             <h3>Description</h3>
-            <p>@Model.Info.Image.Description </p>
+            <hr />
+            <div id="description-section" style="width:95%;margin-top:-2em;">
+                @Html.Raw( Model.Info.Image.Description )
+            </div>
+            <hr />
+        }
         </div>
 
         <div class="image-controls text-center">
@@ -48,16 +61,19 @@
                         <button type="button" id="thumbs-down" class="btn btn-danger thumb"><i class="fa fa-thumbs-o-down " aria-hidden="true"></i> : <span class="rating">@Model.Info.rejections</span></button>
                     </div>
 
-                    <div class="row reviewer-row" id="dropdownrow">
+                    <div class="row reviewer-row" >
                         @foreach (var r in Model.Reviews)
                         {
-
-                        <div class="col-md-2 reviewers approved @r.State">@r.ApplicationUsers.ProfileName</div>
+                            var replyOwner = await UserManager.FindByIdAsync(r.OwnerId);
+                        <div class="col-md-2 reviewers approved @r.State">@replyOwner.ProfileName</div>
 
                         }
                     </div>
-                    <div class="text-center">
-                        <i class="glyphicon glyphicon-chevron-down" id="dropdown"></i>
+                    <div id="showmarker" class="text-center">
+                        <div class="show-reviewers">
+                            <h4 class="text-center">Reviewers</h4>
+                            <i class="glyphicon glyphicon-chevron-down" id="dropdown"></i>
+                        </div>
                         
                     </div>
                 </div>
@@ -77,43 +93,58 @@
         </div>
         <div id="comment-section">
 
-    <!-- comments go here -->
-    <h3 class="text-center">Comment section</h3>
-    @foreach (var c in Model.Comments)
+        <!-- comments go here -->
+        <h3 class="text-center">Comment section</h3>
+        @{
+
+            String previousDate = ("Jan 1, 0000");
+            foreach (var c in Model.Comments)
             {
+                String currentDate = @c.comment.Timestamp.ToString("MMM d");
 
-        @if (c.comment.ParentId == null)
+                if (c.comment.ParentId == null)
                 {
-            <div class="comment">
-                <div class="row ">
-                    <div class="comment-user row-eq-height">
-                        <div class="col-md-4">
-                            <h5 class="username">@c.PosterProfileName</h5>
-                            <p>@c.comment.Timestamp</p>
-
+                    @if (currentDate != previousDate)
+                    {
+                        <div class="date-header">
+                            @if (currentDate == DateTime.Today.ToString("MMM d"))
+                            {
+                                <p> Today </p>
+                            }
+                            else if (currentDate == DateTime.Today.AddDays(-1).ToString("MMM d"))
+                            {
+                                <p> Yesterday </p>
+                            }
+                            else
+                            {
+                                <p> @c.comment.Timestamp.ToString("MMM d")</p>
+                            }
                         </div>
-                            <div class="col-md-4">
-                                <p>@c.comment.Timestamp</p>
+                    }
+                    <div class="comment">
+                        <div class="row ">
+                            <div class="comment-user row-eq-height">
+                                <div class="col-md-4">
+                                    <h5 class="username">@c.PosterProfileName</h5>
+                                </div>
+                                <div class="col-md-4">
+                                    <p>@c.comment.Timestamp.ToString("h:mm tt")</p>
+                                </div>
+                                <div class="col-md-4 text-right">
+                                    @if (c.comment.Lat != 0 && c.comment.Lng != 0)
+                                    {
+                                        <p><a id="loc-@c.comment.CommentId" class="open-pin" href="#" data-location="@c.comment.Lat  @c.comment.Lng">Open pin</a></p>
+                                    }
+                                    <p><a class="reply" data-target="@c.comment.CommentId" href="#">Reply</a></p>
+                                </div>
                             </div>
-                            <div class="col-md-4 text-right">
-                                @if (c.comment.Lat != 0 && c.comment.Lng != 0)
-                                {
-                                    <p><a id="loc-@c.comment.CommentId" class="open-pin" href="#" data-location="@c.comment.Lat  @c.comment.Lng">Open pin</a></p>
-
-                                }
-                                <p><a class="reply" data-target="@c.comment.CommentId" href="#">Reply</a></p>
-
-                               
-                            </div>
-                            
-                        </div>
                             <div class="row-eq-height comment-msg">
                                 <div class="col-xs-12 col-sm-12 col-md-12">
                                     <p>@c.comment.Message</p>
                                     @if (c.comment.CommentUrgency == Comment.Urgency.Urgent)
                                     {
                                         <div class='urgent text-right'>
-                                            <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+                                            <span title="Urgent!" class="glyphicon glyphicon-star" aria-hidden="true"></span>
                                         </div>
                                     }
                                 </div>
@@ -130,10 +161,21 @@
                                                 <div class='row-eq-height comment-user'>
                                                     <div class='col-md-6'>
                                                         <h5 class='username'> @x.PosterProfileName</h5>
-
                                                     </div>
                                                     <div class="col-md-6">
-                                                        <p> @x.comment.Timestamp </p>
+                                                         @if(((DateTime.Now.Date - x.comment.Timestamp.Date).TotalDays) <= 0)
+                                                     {
+                                                         <p>Today</p>
+                                                     }
+                                                     else if (((DateTime.Now.Date - x.comment.Timestamp.Date).TotalDays) <=1)
+                                                     {
+                                                         <p>Yesterday</p>
+                                                     }
+                                                     else
+                                                     {
+                                                         <p> @((DateTime.Now.Date - x.comment.Timestamp.Date).TotalDays) days ago</p>
+                                                     }
+                                                     <p>@x.comment.Timestamp.ToString("h:mm tt")</p>
                                                     </div>
                                                 </div>
                                                 <div class='row-eq-height comment-msg'>
@@ -144,10 +186,8 @@
                                             </div>
                                         </div>
                                     }
-
                                 }
                             </div>
-
                             <div class="row-eq-height reply-comment" id="replycomm-@c.comment.CommentId">
                                 <div class="col-xs-12 col-sm-12 col-md-12 input-group">
                                     <textarea class="form-control reply-textarea" id="text-@c.comment.CommentId" rows="5" placeholder="Reply..."></textarea>
@@ -160,36 +200,41 @@
                             </div>
                         </div>
                     </div>
-                
-               
                     }
-                    }
-                    <!-- ends here -->
-                    
-                    <div class="row-eq-height" id="new-comment">
-                        <div class="col-xs-12 col-sm-12 col-md-12 input-group">
-                            <textarea class="form-control" id="comment-textarea" rows="5" placeholder="Comment..."></textarea>
-                            <div class="comment-status">
-                                <label><input type="checkbox" id="urgent-main" value="">Urgent</label>
-                            </div>
-                            <span class="input-group-btn">
-                                <button class="btn btn-success" type="submit" id="submit-comment">
-                                    <i class="glyphicon glyphicon-share-alt"></i>
-                                </button>
-                            </span>
 
-                        </div>
+                    previousDate = currentDate;
+                }
+            }
+            
+            <div class="row-eq-height" id="new-comment">
+                <div class="col-xs-12 col-sm-12 col-md-12 input-group">
+                    <textarea class="form-control" id="comment-textarea" rows="5" placeholder="Comment..."></textarea>
+                    <div class="comment-status">
+                        <label><input type="checkbox" id="urgent-main" value="">Urgent</label>
                     </div>
+                    <span class="input-group-btn">
+                        <button class="btn btn-success" type="submit" id="submit-comment">
+                            <i class="glyphicon glyphicon-share-alt"></i>
+                        </button>
+                    </span>
                 </div>
             </div>
-
-            <div>
-                <a asp-action="Index">Back to List</a>
-            </div>
+        </div>
     </div>
+
+    <br />
+    <div>
+        <a asp-action="Index">Back to List</a>
+    </div>
+</div>
+
 <style>
     footer {
         display: none;
+    }
+
+    #showmarker{
+        height:70px;
     }
 </style>
 
@@ -198,22 +243,21 @@
 }
 
 <script type="text/javascript" src="~/js/filter.js"></script>
-<script type="text/javascript" src="~/js/pinComments.js"></script>
-<script type="text/javascript" src="~/js/ajaxComments.js"></script>
 <script type="text/javascript" src="~/js/ajaxThumbs.js"></script>
-
-
-
+<script type="text/javascript" src="~/js/ajaxOpenSlider.js"></script>
 <script type="text/javascript" src="~/js/sidebar.js"></script>
 <script type="text/javascript" src="~/js/replies.js"></script>
+<script type="text/javascript" src="~/js/pinComments.js"></script>
+<script type="text/javascript" src="~/js/ajaxComments.js"></script>
 <script>
+
+
     $(document).ready(function () {
         $("#imageMap").width($("#image-container >img").width());
         $("#imageMap").height($("#image-container >img").height());
         imageMap.invalidateSize();
-    })
+    });
 </script>
 
 <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
 <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
-

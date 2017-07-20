@@ -14,13 +14,20 @@
 
   <ItemGroup>
     <Compile Remove="Data\Migrations\**" />
+    <Compile Remove="Models\UserViewModels\**" />
     <Content Remove="Data\Migrations\**" />
+    <Content Remove="Models\UserViewModels\**" />
     <EmbeddedResource Remove="Data\Migrations\**" />
+    <EmbeddedResource Remove="Models\UserViewModels\**" />
     <None Remove="Data\Migrations\**" />
+    <None Remove="Models\UserViewModels\**" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="wwwroot\css\home.css" />
+    <Content Include="wwwroot\css\JavaScript.js" />
+    <Content Include="wwwroot\css\site.css" />
+    <Content Include="wwwroot\css\thumbs.js" />
     <Content Include="wwwroot\images\add.svg" />
     <Content Include="wwwroot\images\create.svg" />
     <Content Include="wwwroot\images\Inspicio.svg" />
@@ -33,6 +40,7 @@
     <Content Include="wwwroot\js\ajaxComments.js" />
     <Content Include="wwwroot\js\filter.js" />
     <Content Include="wwwroot\js\login_register.js" />
+    <Content Include="wwwroot\js\markdownConverter.js" />
     <Content Include="wwwroot\js\pinComments.js" />
     <Content Include="wwwroot\js\ajaxThumbs.js" />
     <Content Include="wwwroot\js\replies.js" />
@@ -63,8 +71,6 @@
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="1.0.1" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Migrations\" />
-    <Folder Include="Migrations\" />
     <Folder Include="Migrations\" />
   </ItemGroup>
 </Project>

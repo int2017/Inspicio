@@ -14,7 +14,7 @@ var customPin = L.icon({
     iconAnchor: [15, 58], // point of the icon which will correspond to marker's location
     shadowAnchor: [11, 62],  // the same for the shadow
     popupAnchor: [3, -45]
-})
+});
 var hoverPin = L.icon({
     iconUrl: "../../images/pinLit.svg",
     shadowUrl: "../../images/pinshadow.svg",
@@ -23,7 +23,7 @@ var hoverPin = L.icon({
     iconAnchor: [15, 58], // point of the icon which will correspond to marker's location
     shadowAnchor: [11, 62],  // the same for the shadow
     popupAnchor: [3, -45]
-})
+});
 //Changing map size/location when window is resized
 $(window).resize(function () {
     setTimeout(
@@ -88,7 +88,7 @@ function mapOnClick(e) {
 //Creating individual markers. Needed because onClick event sends a different object than createMarkers()
 //clickBool determines wether the markers and popups are created by clicking on map or by fetching data from DB
 function createMarker(latlng, clickBool) {
-    var uniqID = Math.round(new Date().getTime() + (Math.random() * 100));
+    var uniqID = Math.round(new Date().getTime() +(Math.random() * 100));
     var marker = new L.marker(latlng, { icon: customPin }).addTo(markerGroup);
     var popup = new L.Popup();
     //Removes marker if popup is empty
@@ -139,7 +139,7 @@ function createCommentRow(user, comment, uniqID, parent, urgency) {
 
     var urgencyEl; //Urgency element
     if (urgency === 1) {
-        urgencyEl = "<div class='urgent'><span class='glyphicon glyphicon-star' aria-hidden='true'></span></div>"
+        urgencyEl = "<div class='urgent'><span class='glyphicon glyphicon-star' aria-hidden='true'></span></div>";
     }
     else urgencyEl = "";
     var row = "<div class='row-eq-height popup-comment'> <div class='col-xs-4 col-sm-4 col-md-4'><p>" + user + "</p></div><div class='col-xs-8 col-sm-8 col-md-8'>" + comment + "</div>" + urgencyEl + "</div>";
@@ -174,23 +174,22 @@ function appendRow(row, uniqID, parent) {
 
 //Creates markers from existing comments in the DB
 function createMarkers(comment, user, lat, lng, parent,urgency, reload) {
-    
-
     if (lat !== 0 && lng !== 0) {
-        var latCollection = locations.map(function (value, index) { return value[1] });
-        var lngCollection = locations.map(function (value, index) { return value[2] });
+        var latCollection = locations.map(function (value, index) { return value[1]; });
+        var lngCollection = locations.map(function (value, index) { return value[2]; });
+        var uniqID;
         if ($.inArray(lat, latCollection) !== -1 && $.inArray(lng, lngCollection) !== -1) {
 
             if ($.inArray(lat, latCollection) === $.inArray(lng, lngCollection)) {
-                var idCollection = locations.map(function (value, index) { return value[0] });
-                var uniqID = idCollection[$.inArray(lat, latCollection)];
+                var idCollection = locations.map(function (value, index) { return value[0]; });
+                uniqID = idCollection[$.inArray(lat, latCollection)];
                 createCommentRow(user, comment, uniqID, parent,urgency);
 
             }
         }
         else {
             var latlng = L.latLng(lat, lng);
-            var uniqID = createMarker(latlng, false);
+            uniqID = createMarker(latlng, false);
             locations.push([uniqID, lat, lng]);
             createCommentRow(user, comment, uniqID, parent, urgency);
         }
@@ -221,57 +220,57 @@ $(document).ready(function () {
         var loc = $(this).data("location").split(' ');
         var lat = loc[0];
         var lng = loc[2];
-        var latCollection = locations.map(function (value, index) { return value[1] });
-        var lngCollection = locations.map(function (value, index) { return value[2] });
+        var latCollection = locations.map(function (value, index) { return value[1]; });
+        var lngCollection = locations.map(function (value, index) { return value[2]; });
 
         if ($.inArray(parseInt(lat), latCollection) !== -1 && $.inArray(parseInt(lng), lngCollection) !== -1) {
 
             var latlng = L.latLng(lat, lng);
-            var idCollection = locations.map(function (value, index) { return value[0] });
+            var idCollection = locations.map(function (value, index) { return value[0]; });
             var uniqID = idCollection[$.inArray(parseInt(lat), latCollection)];
             markerX = markersArray[markersArray.findIndex(x => parseInt(x.myData.id) === parseInt(uniqID))];
-            markerX.setIcon(hoverPin); 
+            markerX.setIcon(hoverPin);
         }
     }).on("mouseleave", ".open-pin", function () {
         var loc = $(this).data("location").split(' ');
         var lat = loc[0];
         var lng = loc[2];
-        var latCollection = locations.map(function (value, index) { return value[1] });
-        var lngCollection = locations.map(function (value, index) { return value[2] });
+        var latCollection = locations.map(function (value, index) { return value[1]; });
+        var lngCollection = locations.map(function (value, index) { return value[2]; });
 
         if ($.inArray(parseInt(lat), latCollection) !== -1 && $.inArray(parseInt(lng), lngCollection) !== -1) {
 
             var latlng = L.latLng(lat, lng);
-            var idCollection = locations.map(function (value, index) { return value[0] });
+            var idCollection = locations.map(function (value, index) { return value[0]; });
             var uniqID = idCollection[$.inArray(parseInt(lat), latCollection)];
             markerX = markersArray[markersArray.findIndex(x => parseInt(x.myData.id) === parseInt(uniqID))];
             markerX.setIcon(customPin);
-            
+
         }
     }).on("click", ".open-pin", function () {
         var loc = $(this).data("location").split(' ');
         var lat = loc[0];
         var lng = loc[2];
-        var latCollection = locations.map(function (value, index) { return value[1] });
-        var lngCollection = locations.map(function (value, index) { return value[2] });
+        var latCollection = locations.map(function (value, index) { return value[1]; });
+        var lngCollection = locations.map(function (value, index) { return value[2]; });
 
         if ($.inArray(parseInt(lat), latCollection) !== -1 && $.inArray(parseInt(lng), lngCollection) !== -1) {
 
             var latlng = L.latLng(lat, lng);
-            var idCollection = locations.map(function (value, index) { return value[0] });
+            var idCollection = locations.map(function (value, index) { return value[0]; });
             var uniqID = idCollection[$.inArray(parseInt(lat), latCollection)];
             markerX = markersArray[markersArray.findIndex(x => parseInt(x.myData.id) === parseInt(uniqID))].openPopup();
         }
 
-    })
+    });
     $(document).on("keypress", ".popup-textarea", function (e) {
         if (e.which === 13) {
             $('.leaflet-popup-content button').click();
             // prevent duplicate submission
             return false;
         }
-        });
-})
+    });
+});
 
 
 

@@ -1,9 +1,5 @@
 @model List<Inspicio.Controllers.ImagesController.IndexModel>
-
-
-@{
-    ViewData["Title"] = "Index";
-}
+@inject UserManager<ApplicationUser> UserManager
 
 <h2>View All Reviews</h2>
 
@@ -11,38 +7,33 @@
     <a asp-action="Create">Create Review</a>
 </p>
 
-<form asp-controller="Images" asp-action="Index">
     <p>
-        <input type="text" id="myInput" onkeyup="searchFunction()" placeholder="Search for reviews..">
+        <input type="text" id="myInput" placeholder="Search for reviews..">
     </p>
-</form>
 
 <table id="table">
     <thead>
         <tr class="header">
-            <th>
+            <th id="content">
                 Content
             </th>
-
-            <th>
-                @Html.DisplayNameFor(model => model.FirstOrDefault().Image.Title)
+            <th >
+                Title
             </th>
-
-            <th>
-                @Html.DisplayNameFor(model => model.FirstOrDefault().Image.Description)
+            <th id="creator">
+                Creator
             </th>
-            <th>
+            <th id="up-col">
                 <img src="~/images/thumbup.jpg" style="height: 20px;" />
             </th>
-            <th>
+            <th id="mid-col">
                 <img src="~/images/thumbmid.jpg" style="height: 20px;" />
             </th>
-            <th>
+            <th id="down-col">
                  <img src="~/images/thumbdown.jpg" style="height: 20px;" />
             </th>
-
-            <th>
-                @Html.DisplayNameFor(model => model.FirstOrDefault().Image.ReviewStatus)
+            <th id="status">
+                Status
             </th>
         </tr>
     </thead>
@@ -50,28 +41,33 @@
 
 @foreach (var item in Model)
 {
-        <tr onclick="document.location = 'Images/View/@item.Image.ImageID'" style="cursor:pointer" >
-
-
-                <td>
+        <tr title="@item.Image.Title" onclick="document.location = 'Images/View/@item.Image.ImageID'" style="cursor:pointer" >
+                <td id="content">
                     <img style="max-height: 100px; max-width: 100px;" src="@item.Image.Content" />
                 </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Image.Title)
+                <td id="title">
+                    @{
+                        string defaultTitle = item.Image.Title;
+                        string title = (defaultTitle.Length <= 100) ? defaultTitle : defaultTitle.Substring(0, 100) + "...";
+                        @Html.DisplayFor(modelItem => title)
+                    }
                 </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Image.Description)
+                <td id="creator">
+                    @{
+                        var user = await UserManager.FindByIdAsync(item.Image.OwnerId);
+                        @Html.DisplayFor(modelItem => user.ProfileName);
+                     }
                 </td>
-                <td>
+                <td id="up-col">
                    @Html.DisplayFor(modelItem => item.approvals)
                 </td>
-                <td>
+                <td id="mid-col">
                     @Html.DisplayFor(modelItem => item.needsWorks)
-            </td>
-            <td>
+                </td>
+                <td id="down-col">
                     @Html.DisplayFor(modelItem => item.rejections)
-            </td>     
-            <td>
+                </td>     
+                <td id="status">
                     @Html.DisplayFor(modelItem => item.Image.ReviewStatus)
                 </td>
             </tr>

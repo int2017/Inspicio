@@ -7,16 +7,23 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 
+using System.ComponentModel.DataAnnotations;
+
 namespace Inspicio.Models
 {
     // Add profile data for application users by adding properties to the ApplicationUser class
     public class ApplicationUser : IdentityUser
     {
-        // Added ProfileName column to the user table [AspNetUsers]
+        // ProfileName column in the user table [AspNetUsers]
+        [StringLength(16, MinimumLength = 5)]
         public string ProfileName { get; set; }
+
+        // ProfilePicture column in the user table [AspNetUsers]
+        public string ProfilePicture { get; set; }
 
         public ICollection<Comment> Comments { get; set; }
         public ICollection<Image> Images { get; set; }
         public ICollection<Review> Reviews { get; set; }
     }
 }
+

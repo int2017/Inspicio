@@ -1,5 +1,8 @@
 @model Inspicio.Controllers.ImagesController.CreatePageModel
 
+<script type="text/javascript" src="https://cdn.rawgit.com/showdownjs/showdown/1.7.1/dist/showdown.min.js"></script>
+<script type="text/javascript" src="~/js/markdownConverter.js"></script>
+
 <h3> New Review </h3>
 
 <form asp-action="Create">
@@ -7,15 +10,17 @@
     <div class="form-group">
         <!-- Review Title -->
         <label class="control-label">Review Title</label>
-        <input asp-for="@Model.Image.Title" type="text" class="form-control" placeholder="#7634 ... .. .">
+        <input asp-for="@Model.Image.Title" type="text" class="form-control" placeholder=" #7634 ... .. .">
         <span asp-validation-for="@Model.Image.Title" class="text-danger"></span>
     </div>
 
     <div class="form-group">
         <!-- Review Description -->
-        <label class="control-label">Review Description</label>
-        <textarea asp-for="@Model.Image.Description" class="form-control" rows="4" placeholder="Reviewees please provide feedback regarding the fix for #7634 ... .. ."></textarea>
+        <label class="control-label">Review Description &lt;markdown supported&gt;</label>
+        <textarea class="form-control" id="Image_Description_UserInput" rows="8" placeholder=" Reviewees please provide feedback regarding the fix for #7634 ... .. ."></textarea>
         <span asp-validation-for="@Model.Image.Description" class="text-danger"></span>
+
+        <textarea asp-for="@Model.Image.Description" id="Image_DescriptionHTML" ></textarea>
     </div>
 
     @{
@@ -82,7 +87,11 @@
         if (file) {
             var FR = new FileReader();
             FR.addEventListener("load", function (e) {
-
+                var images = $(".dropzone#uploader > img");
+                var l = images.length;
+                for (var i = 0; i < l; i++) {
+                    images[0].parentNode.removeChild(images[0]);
+                }
                 document.getElementById("b64").value = e.target.result;
                 var image = new Image();
                 image.src = e.target.result;
@@ -140,6 +149,11 @@
         }
     }
 
+    $('#Image_Description_UserInput').on('blur', function (e) {
+
+        $("#Image_DescriptionHTML").html(convertToHTML($("#Image_Description_UserInput").val() ) );
+    });
+
 </script>
 
 @section Scripts {
@@ -152,5 +166,9 @@
         margin: 0;
         list-style: none;
         float: left;
+    }
+
+    #Image_DescriptionHTML{
+        display:none;
     }
 </style>
