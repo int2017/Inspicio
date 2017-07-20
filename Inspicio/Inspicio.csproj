@@ -39,6 +39,7 @@
     <Content Include="wwwroot\images\thumbup.jpg" />
     <Content Include="wwwroot\js\ajaxComments.js" />
     <Content Include="wwwroot\js\filter.js" />
+    <Content Include="wwwroot\js\markdownConverter.js" />
     <Content Include="wwwroot\js\pinComments.js" />
     <Content Include="wwwroot\js\ajaxThumbs.js" />
     <Content Include="wwwroot\js\replies.js" />

@@ -2,6 +2,7 @@
 @using Inspicio.Extensions
 @inject UserManager<ApplicationUser> UserManager
 
+
 <div class="view-container">
     <h2>@Model.Info.Image.Title</h2>
     <input type="checkbox"
@@ -37,11 +38,15 @@
         
 
         <div id="image-description">
-           @{
-               var user = await UserManager.FindByIdAsync(Model.OwnerId);
+        @{
+            var user = await UserManager.FindByIdAsync(Model.OwnerId);
             <h4> By :<img style="height:40px;width:40px" src="@user.ProfilePicture" /> @user.ProfileName</h4>
-                <h3>Description</h3>
-                <p>@Model.Info.Image.Description </p>
+            <h3>Description</h3>
+            <hr />
+            <div id="description-section" style="width:95%;margin-top:-2em;">
+                @Html.Raw( Model.Info.Image.Description )
+            </div>
+            <hr />
         }
         </div>
 
@@ -65,7 +70,7 @@
 
                         }
                     </div>
-                    <div class="text-center">
+                    <div id="showmarker" class="text-center">
                         <div class="show-reviewers">
                             <h4 class="text-center">Reviewers</h4>
                             <i class="glyphicon glyphicon-chevron-down" id="dropdown"></i>
@@ -217,6 +222,8 @@
             </div>
         </div>
     </div>
+
+    <br />
     <div>
         <a asp-action="Index">Back to List</a>
     </div>
@@ -226,6 +233,10 @@
     footer {
         display: none;
     }
+
+    #showmarker{
+        height:70px;
+    }
 </style>
 
 @section Scripts {
@@ -233,7 +244,6 @@
 }
 
 <script type="text/javascript" src="~/js/filter.js"></script>
-
 <script type="text/javascript" src="~/js/ajaxThumbs.js"></script>
 <script type="text/javascript" src="~/js/ajaxOpenSlider.js"></script>
 <script type="text/javascript" src="~/js/sidebar.js"></script>
@@ -241,12 +251,13 @@
 <script type="text/javascript" src="~/js/pinComments.js"></script>
 <script type="text/javascript" src="~/js/ajaxComments.js"></script>
 <script>
+
+
     $(document).ready(function () {
         $("#imageMap").width($("#image-container >img").width());
         $("#imageMap").height($("#image-container >img").height());
         imageMap.invalidateSize();
-        
-    })
+    });
 </script>
 
 <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
