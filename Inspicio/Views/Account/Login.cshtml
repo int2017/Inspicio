@@ -1,55 +1,102 @@
 ﻿@using System.Collections.Generic
 @using Microsoft.AspNetCore.Http
 @using Microsoft.AspNetCore.Http.Authentication
-@model LoginViewModel
+
+@model Inspicio.Models.AccountViewModels.LogRegModel
 @inject SignInManager<ApplicationUser> SignInManager
 
 @{
     ViewData["Title"] = "Log in";
+    ViewData["Title2"] = "Register";
 }
 
-<h2 align="center">@ViewData["Title"].</h2>
+<script type="text/javascript" src="~/js/login_register.js"></script>
+
 <div id="loginform" align-text="centre" class="row login-page">
     <div id="loginform" class="col-md-8" style="display: inline-block" align-text="center">
-        <section>
-            <form align="center" asp-controller="Account" asp-action="Login" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
+        <table style="border-width: 1px;">
+            <tr>
+                <td onclick="registerswitch()" onmouseover="loginswitchhover(this)" onmouseout="loginswitchout(this)" id="loginsection" style="color: black; font-weight:bold; background-color:white; border-top: solid; border-left:solid; border-width: 1px; font-size: 30px; padding: 5px; padding-right: 69px; padding-left: 70px; font-size: 30px; ">@ViewData["Title"].</td>
+                <td onclick="loginswitch()" onmouseover="registerhover(this)" onmouseout="registerout(this)" id="registersection" style="color:lightgrey; font-weight:bold; background-color:#404040; font-size: 30px; padding: 5px; padding-left: 60px; padding-right: 52px; font-size: 30px;">@ViewData["Title2"].</td>
+            </tr>
+        </table>
+        <section> 
+            <form id="loginformmain" style="border: solid; display:block; border-width: 1px;" asp-controller="Account" asp-action="Login" method="post" class="form-horizontal">  
                 <h4 style="text-align:center">Use a local account to log in.</h4>
                 <hr/>
                 <div asp-validation-summary="All" class="text-danger"></div>
-                <div align="center" class="form-group" id="loginform">
-                    <label asp-for="Email" class="col-md-2 control-label"></label>
+                <div align="center" class="form-group">
+                    <label asp-for="Login.Email" class="col-md-2 control-label"></label>
                     <div class="col-md-10">
-                        <input asp-for="Email" class="form-control" />
-                        <span asp-validation-for="Email" class="text-danger"></span>
+                        <input asp-for="Login.Email" class="form-control" />
+                        <span asp-validation-for="Login.Email" class="text-danger"></span>
                     </div>
                 </div>
-                <div class="form-group" align="center"  id="loginform">
-                    <label asp-for="Password" class="col-md-2 control-label"></label>
+                <div class="form-group" align="center" >
+                    <label asp-for="Login.Password" class="col-md-2 control-label"></label>
                     <div class="col-md-10">
-                        <input asp-for="Password" class="form-control" />
-                        <span asp-validation-for="Password" class="text-danger"></span>
+                        <input asp-for="Login.Password" class="form-control" />
+                        <span asp-validation-for="Login.Password" class="text-danger"></span>
                     </div>
                 </div>
-                <div class="form-group" id="loginform">
+                <div class="form-group">
                     <div class="col-md-offset-2 col-md-10">
                         <div class="checkbox">
-                            <label asp-for="RememberMe">
-                                <input asp-for="RememberMe" />
-                                @Html.DisplayNameFor(m => m.RememberMe)
+                            <label asp-for="Login.RememberMe">
+                                <input asp-for="Login.RememberMe" />
+                                @Html.DisplayNameFor(m => m.Login.RememberMe)
                             </label>
                         </div>
                     </div>
                 </div>
-                <div class="form-group" id="loginbutton">
+                <div class="form-group" id="">
                     <div class="col-md-offset-2 col-md-10">
                         <button type="submit" class="btn btn-default">Log in</button>
                     </div>
                 </div> 
             </form>
+            <form id="registerform" style="display:none; background-color:#404040; color:lightgrey; border:solid; border-color:black; border-width:1px;" align="center" asp-controller="Account" asp-action="Register" method="post" class="form-horizontal">
+                <h4>Create a new account.</h4>
+                <hr />
+                <div asp-validation-summary="All" class="text-danger"></div>
+
+                <div align="center"class="form-group">
+                    <label asp-for="Register.ProfileName" class="col-md-2 control-label"></label>
+                    <div class="col-md-10">
+                        <input asp-for="Register.ProfileName" class="form-control" />
+                        <span asp-validation-for="Register.ProfileName" class="text-danger"></span>
+                    </div>
+                </div>
+                <div align="center" class="form-group">
+                    <label asp-for="Register.Email" class="col-md-2 control-label"></label>
+                    <div class="col-md-10">
+                        <input asp-for="Register.Email" class="form-control" />
+                        <span asp-validation-for="Register.Email" class="text-danger"></span>
+                    </div>
+                </div>
+                <div align="center" class="form-group">
+                    <label asp-for="Register.Password" class="col-md-2 control-label"></label>
+                    <div class="col-md-10">
+                        <input asp-for="Register.Password" class="form-control" />
+                        <span asp-validation-for="Register.Password" class="text-danger"></span>
+                    </div>
+                </div>
+                <div align="center" class="form-group">
+                    <label asp-for="Register.ConfirmPassword" class="col-md-2 control-label"></label>
+                    <div class="col-md-10">
+                        <input asp-for="Register.ConfirmPassword" class="form-control" />
+                        <span asp-validation-for="Register.ConfirmPassword" class="text-danger"></span>
+                    </div>
+                </div>
+                <div align="center" class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <button type="submit" class="btn btn-default">Register</button>
+                    </div>
+                </div>
+            </form>
         </section>
-             
         <p align="center" style="padding-top: 0.5cm;">
-            <a asp-action="Register" asp-route-returnurl="@ViewData["ReturnUrl"]">Register as a new user?</a>
+            <a onclick="loginswitch()" >Register as a new user?</a>
         </p>
         <p align="center">
             <a asp-action="ForgotPassword">Forgot your password?</a>
