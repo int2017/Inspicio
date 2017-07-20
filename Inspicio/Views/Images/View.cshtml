@@ -43,9 +43,10 @@
             var user = await UserManager.FindByIdAsync(Model.OwnerId);
             <h4> By :<img style="height:40px;width:40px" src="@user.ProfilePicture" /> @user.ProfileName</h4>
             <h3>Description</h3>
-            <div id="description-section">
+            <div id="description-section" style="width:95%;">
                 @Html.Raw(Model.Info.Image.Description)
             </div>
+            <br />
         }
         </div>
 
@@ -69,7 +70,7 @@
 
                         }
                     </div>
-                    <div class="text-center">
+                    <div id="showmarker" class="text-center">
                         <div class="show-reviewers">
                             <h4 class="text-center">Reviewers</h4>
                             <i class="glyphicon glyphicon-chevron-down" id="dropdown"></i>
@@ -221,6 +222,8 @@
             </div>
         </div>
     </div>
+
+    <br />
     <div>
         <a asp-action="Index">Back to List</a>
     </div>
@@ -229,6 +232,10 @@
 <style>
     footer {
         display: none;
+    }
+
+    #showmarker{
+        height:70px;
     }
 </style>
 

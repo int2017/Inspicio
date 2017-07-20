@@ -16,8 +16,8 @@
 
     <div class="form-group">
         <!-- Review Description -->
-        <label class="control-label">Review Description</label>
-        <textarea class="form-control" id="Image_Description_UserInput" rows="4" placeholder=" Reviewees please provide feedback regarding the fix for #7634 ... .. ."></textarea>
+        <label class="control-label">Review Description &lt;markdown supported&gt;</label>
+        <textarea class="form-control" id="Image_Description_UserInput" rows="8" placeholder=" Reviewees please provide feedback regarding the fix for #7634 ... .. ."></textarea>
         <span asp-validation-for="@Model.Image.Description" class="text-danger"></span>
 
         <textarea asp-for="@Model.Image.Description" id="Image_DescriptionHTML" ></textarea>
