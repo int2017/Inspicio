@@ -117,7 +117,9 @@ namespace Inspicio.Migrations
 
                     b.Property<int>("ReviewStatus");
 
-                    b.Property<string>("Title");
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(150);
 
                     b.HasKey("ImageID");
 
