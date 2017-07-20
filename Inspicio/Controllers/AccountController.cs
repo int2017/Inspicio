@@ -127,7 +127,7 @@ namespace Inspicio.Controllers
 
                 // ApplicationUser does not take ProfileName in a construtor.
                 user.ProfileName = model.Register.ProfileName;
-                user.ProfilePicture = Gravatar.GetLink(model.Email);
+                user.ProfilePicture = Gravatar.GetLink(model.Register.Email);
 
 
                 // This calls our overridden function in ProfileNameClaimsPrincipalFactory.cs
