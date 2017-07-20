@@ -123,7 +123,7 @@ namespace Inspicio.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Register.Email = model.Register.Email };
+                var user = new ApplicationUser { UserName = model.Register.Email, Email = model.Register.Email };
 
                 // ApplicationUser does not take ProfileName in a construtor.
                 user.ProfileName = model.Register.ProfileName;
