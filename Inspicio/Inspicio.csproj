@@ -14,9 +14,13 @@
 
   <ItemGroup>
     <Compile Remove="Data\Migrations\**" />
+    <Compile Remove="Models\UserViewModels\**" />
     <Content Remove="Data\Migrations\**" />
+    <Content Remove="Models\UserViewModels\**" />
     <EmbeddedResource Remove="Data\Migrations\**" />
+    <EmbeddedResource Remove="Models\UserViewModels\**" />
     <None Remove="Data\Migrations\**" />
+    <None Remove="Models\UserViewModels\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -35,6 +39,7 @@
     <Content Include="wwwroot\images\thumbup.jpg" />
     <Content Include="wwwroot\js\ajaxComments.js" />
     <Content Include="wwwroot\js\filter.js" />
+    <Content Include="wwwroot\js\markdownConverter.js" />
     <Content Include="wwwroot\js\pinComments.js" />
     <Content Include="wwwroot\js\ajaxThumbs.js" />
     <Content Include="wwwroot\js\replies.js" />
@@ -68,6 +73,6 @@
     <Folder Include="Migrations\" />
     <Folder Include="Migrations\" />
     <Folder Include="Migrations\" />
-    <Folder Include="Models\UserViewModels\" />
+    <Folder Include="Migrations\" />
   </ItemGroup>
 </Project>
