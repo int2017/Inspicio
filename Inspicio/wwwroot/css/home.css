@@ -9,6 +9,7 @@
 }
 
 #homeImg {
+    height:100vh;
     background-image: url(../images/ostrich.jpg);
     position: relative;
     z-index: 5;
@@ -27,12 +28,33 @@
 #home-header img{
     margin:auto;
 }
-.navbar-header {
+}.navbar-header {
+    display: none;
+}
+#img-txt > .row-eq-height:not(:first-child) {
     display: none;
 }
 #img-txt >.row-eq-height{
     margin:10px 0;
-    height:300px;
+    height:350px;
+    
+}
+.dropzone {
+    padding: 0px;
+    background-color: rgba(33, 33, 33, 0.46);
+}
+.panel-body {
+    color:black;
+}
+
+    .map-col > div {
+        background-color: rgba(214, 214, 214, 0.8);
+        border-radius: 3px;
+    }
+.panel-body .row-eq-height {
+    margin: 10px auto;
+    padding: 5px;
+    border-top: 1px solid rgba(0, 0, 0, 0.23);
 }
 #img-txt {
     color: white;
