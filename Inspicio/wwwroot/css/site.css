@@ -3,6 +3,9 @@
 hr {
     border-color: #e6e6e6;
 }
+a{
+    cursor:pointer;
+}
 body {
     padding-top: 0px;
     padding-bottom: 0px;
@@ -547,7 +550,12 @@ input:focus {
     font-weight: bold;
 
 }
-
+.dz-image{
+    border-radius:0 !important;
+}
+body .dropzone .dz-preview.dz-image-preview {
+    margin: 0px;
+}
     #comment-section .date-header:before, #comment-section .date-header:after {
         content: '';
         width: 100px;

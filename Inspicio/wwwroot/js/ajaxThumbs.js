@@ -74,15 +74,15 @@ function changeState(state) {
     $("#thumb-container button.btn").removeClass("disabled");
     $(".thumb").off();
     $(".thumb").click(addThumbListener);
-    if (state == 0) {
+    if (state === 0) {
         $("#thumbs-up").addClass("disabled");
         $("#thumbs-up").off();
     }
-    else if (state == 1) {
+    else if (state === 1) {
         $("#thumbs-middle").addClass("disabled");
         $("#thumbs-middle").off();
     }
-    if (state == 2) {
+    if (state === 2) {
         $("#thumbs-down").addClass("disabled");
         $("#thumbs-down").off();
     }

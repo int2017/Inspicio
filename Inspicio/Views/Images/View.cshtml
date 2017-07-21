@@ -123,9 +123,9 @@
                                 <div class="col-md-4 text-right">
                                     @if (c.comment.Lat != 0 && c.comment.Lng != 0)
                                     {
-                                        <p><a id="loc-@c.comment.CommentId" class="open-pin" href="#" data-location="@c.comment.Lat  @c.comment.Lng">Open pin</a></p>
+                                        <p><a id="loc-@c.comment.CommentId" class="open-pin" data-location="@c.comment.Lat  @c.comment.Lng">Open pin</a></p>
                                     }
-                                    <p><a class="reply" data-target="@c.comment.CommentId" href="#">Reply</a></p>
+                                    <p><a class="reply" data-target="@c.comment.CommentId" >Reply</a></p>
                                 </div>
                             </div>
                             <div class="row-eq-height comment-msg">

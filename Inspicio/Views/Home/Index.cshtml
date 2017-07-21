@@ -7,6 +7,18 @@
         <img src="~/images/InspicioOstrich.svg" class="img-responsive" alt="Inspicio" />
     </div>
 
+    
+        <div class="progress">
+            <div id="progr1" class="progress-bar progress-bar-info progress-bar-striped active" role="progressbar" style="width:0%">
+                Upload
+            </div>
+            <div id="progr2" class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" style="width:0%">
+                Add
+            </div>
+            <div id="progr3" class="progress-bar progress-bar-warning progress-bar-striped active" role="progressbar" style="width:0%">
+                Feedback
+            </div>
+        </div>
     <div id="img-txt">
         <div class="row-eq-height" id="section1">
             <div class="col-md-8">
@@ -20,32 +32,37 @@
             </div>
             <div class="col-md-4 feat-col">
                 <img src="~/images/create.svg" class="img-responsive" /> Drop in your images
+                <div class="success">Successfuly uploaded</div>
             </div>
         </div>
         <div class="row-eq-height" id="section2">
             <div class="col-md-4 feat-col">
                 <img src="~/images/add.svg" class="img-responsive" /> Add teammates to review your images
+                <div class="success">Successfuly added</div>
             </div>
             <div class="col-md-8">
                 <div class="panel panel-default">
                     <div class="panel-heading">Add reviewers</div>
                     <div class="panel-body">
-                        
-                            <input type="text" placeholder="Search..." />
 
-                            <div class="row-eq-height">
-                                <div class="col-md-1 col-md-offset-1 text-center">
-                                    <input id="chatbot-check" type="checkbox" />
-                                </div>
-                                <div class="col-md-10 text-left">
+                        <input type="text" placeholder="Search..." />
+
+                        <div class="row-eq-height">
+                            <div class="col-md-1 col-md-offset-1 text-center">
+                                <input id="chatbot-check" type="checkbox" />
+                            </div>
+                            <div class="col-md-10 text-left">
+                                <label for="chatbot-check">
                                     Chatbot
-                                </div>
+                                </label>
+                            </div>
 
-                            </div>
-                        <div class="panel-footer">
-                            <div class="cold-md-12 text-center">
-                                <button type="button" class="btn btn-primary switch-section">Add reviewers</button>
-                            </div>
+                        </div>
+
+                    </div>
+                    <div class="panel-footer">
+                        <div class="cold-md-12 text-center">
+                            <button type="button" class="btn btn-success switch-section">Add reviewers</button>
                         </div>
                     </div>
                 </div>
@@ -63,6 +80,7 @@
             </div>
             <div class="col-md-4 feat-col">
                 <img src="~/images/feedback.svg" class="img-responsive" /> Interactive feedback on your work
+                <a href="#"><div class="success">Begin now <i class="fa fa-sign-in" aria-hidden="true"></i></div></a>
             </div>
         </div>
 
