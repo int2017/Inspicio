@@ -4,12 +4,15 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
+
+
 namespace Inspicio.Models.AccountViewModels
 {
     public class RegisterViewModel
     {
         // Error message is needed!
         [Required]
+        [StringLength(16, ErrorMessage ="The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 5)]
         [Display(Name = "Profile Name")]
         public string ProfileName { get; set; }
 

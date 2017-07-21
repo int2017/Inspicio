@@ -7,10 +7,13 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
+
    xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   id="svg8"
+   width="212.082mm"
+   height="206.85898mm"
+   viewBox="0 0 212.082 206.85898"
    version="1.1"
    viewBox="0 0 170.81706 253.38166"
    height="253.38165mm"
@@ -151,56 +154,41 @@
          id="feBlend4406-1" />
     </filter>
     <filter
-       inkscape:label="Sharpen More"
-       inkscape:menu="Image Effects"
-       inkscape:menu-tooltip="Sharpen edges and boundaries within the object, force=0.3"
+       inkscape:label="Light Eraser"
        style="color-interpolation-filters:sRGB"
-       id="filter4408-2-1">
-      <feConvolveMatrix
-         targetY="1"
-         targetX="1"
-         in="SourceGraphic"
-         divisor="1"
-         kernelMatrix="0 -0.3 0 -0.3 2.2 -0.3 0 -0.3 0"
-         order="3 3"
-         result="result1"
-         id="feConvolveMatrix4404-4-1" />
-      <feBlend
-         in2="SourceGraphic"
-         mode="normal"
-         result="result2"
-         id="feBlend4406-8-0" />
-    </filter>
-    <filter
-       inkscape:label="Blur Double"
-       inkscape:menu="Blurs"
-       inkscape:menu-tooltip="Overlays two copies with different blur amounts and modifiable blend and composite"
-       style="color-interpolation-filters:sRGB"
-       id="filter5391">
-      <feGaussianBlur
-         stdDeviation="5"
-         result="fbSourceGraphic"
-         id="feGaussianBlur5383" />
-      <feGaussianBlur
-         stdDeviation="0.01"
-         in="SourceGraphic"
-         result="result1"
-         id="feGaussianBlur5385" />
+       id="filter297">
+      <feColorMatrix
+         values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 -212.5 -715.4 -72.1 1000 0 "
+         result="colormatrix"
+         id="feColorMatrix293" />
       <feComposite
-         in2="result1"
+         in2="colormatrix"
          operator="arithmetic"
-         in="fbSourceGraphic"
-         k2="0.5"
-         k3="0.5"
-         result="result2"
-         id="feComposite5387"
+         k2="1"
+         result="fbSourceGraphic"
+         id="feComposite295"
          k1="0"
+         k3="0"
          k4="0" />
-      <feBlend
-         in2="fbSourceGraphic"
-         mode="normal"
-         result="result3"
-         id="feBlend5389" />
+      <feColorMatrix
+         result="fbSourceGraphicAlpha"
+         in="fbSourceGraphic"
+         values="0 0 0 -1 0 0 0 0 -1 0 0 0 0 -1 0 0 0 0 1 0"
+         id="feColorMatrix299" />
+      <feColorMatrix
+         id="feColorMatrix301"
+         values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 -212.5 -715.4 -72.1 1000 0 "
+         result="colormatrix"
+         in="fbSourceGraphic" />
+      <feComposite
+         in2="colormatrix"
+         id="feComposite303"
+         operator="arithmetic"
+         k2="1"
+         result="composite"
+         k1="0"
+         k3="0"
+         k4="0" />
     </filter>
     <linearGradient
        inkscape:collect="always"
@@ -252,6 +240,24 @@
      bordercolor="#666666"
      pagecolor="#ffffff"
      id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.68"
+     inkscape:cx="403.913"
+     inkscape:cy="318.28627"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1280"
+     inkscape:window-height="962"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:pagecheckerboard="true"
+     showguides="false"
      fit-margin-top="0"
      fit-margin-left="0"
      fit-margin-right="0"

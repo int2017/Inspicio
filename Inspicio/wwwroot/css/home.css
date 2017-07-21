@@ -10,6 +10,7 @@
 
 #homeImg {
     position: relative;
+    width: auto;
     z-index: 5;
     height:100vh;
     overflow: hidden;
