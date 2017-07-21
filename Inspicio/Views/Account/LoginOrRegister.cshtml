@@ -33,3 +33,23 @@
 @section Scripts {
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 }
+
+<script>
+    $(window).on("load", function () {
+        @{
+            if (Model != null)
+            {
+                if (Model.Login != null)
+                {
+                    @:$("#registerform").css("display","none");
+                    @:$("#loginformmain").css("display","block");
+                }
+                else
+                {
+                    @:$("#registerform").css("display","block");
+                    @:$("#loginformmain").css("display","none");
+                }
+            }
+        }
+    });
+</script>

@@ -100,7 +100,7 @@ namespace Inspicio.Controllers
             }
 
             // If we got this far, something failed, redisplay form
-            return View(model);
+            return View("LoginOrRegister", model);
         }
 
         //
@@ -139,7 +139,7 @@ namespace Inspicio.Controllers
             }
 
             // If we got this far, something failed, redisplay form
-            return View(model);
+            return View("LoginOrRegister", model);
         }
 
         //
