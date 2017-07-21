@@ -1,5 +1,46 @@
+#loginsection, #registersection {
+    font-size: 30px;
+    font-weight: bold;
+    width: 270px;
+    cursor: pointer;
+    border: 1px solid black;
+    border-bottom:none;
+}
+#loginsection:hover {
+     background-color : lightgrey;
+}
 
-﻿
+#loginsection {
+    color: black;
+    background-color: white;
+    
+}
+#registersection:hover{
+    background-color:grey;
+}
+#registersection {
+    color:lightgrey; 
+    background-color:#404040;
+    padding: 5px ;
+}
+.log-form {
+    padding-left: 25px;
+}
+.logreg-opt{
+    margin:5px 0;
+    padding:5px 0;
+}
+#loginformmain {
+    
+    border: 1px solid black;
+    display: block;
+}
+#registerform {
+    display: none;
+    background-color: #404040;
+    color: lightgrey;
+    border: 1px solid black;
+}﻿
 hr {
     border-color: #e6e6e6;
 }
