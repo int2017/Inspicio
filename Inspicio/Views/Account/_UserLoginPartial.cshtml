@@ -1,0 +1,44 @@
+﻿
+@model Inspicio.Models.AccountViewModels.LogRegModel
+
+<script type="text/javascript" src="~/js/login_register.js"></script>
+
+<!-- ▼▼ Log On Form ▼▼ -->
+<form id="loginformmain" style="border: solid; display:block; border-width: 1px;" asp-controller="Account" asp-action="Login" method="post" class="form-horizontal">  
+    <h4 style="text-align:center">Use a local account to log in.</h4>
+    <hr/>
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div style="padding-left:25px; " align="center" class="form-group">
+        <label asp-for="Login.Email" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="Login.Email" class="form-control" />
+            <span asp-validation-for="Login.Email" class="text-danger"></span>
+        </div>
+    </div>
+    <div style="padding-left:25px; " class="form-group" align="center" >
+        <label asp-for="Login.Password" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="Login.Password" class="form-control" />
+            <span asp-validation-for="Login.Password" class="text-danger"></span>
+        </div>
+    </div>
+    <div align="center" class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <div class="checkbox">
+                <label asp-for="Login.RememberMe">
+                    <input asp-for="Login.RememberMe" />
+                    @Html.DisplayNameFor(m => m.Login.RememberMe)
+                </label>
+            </div>
+        </div>
+    </div>
+    <div align="center" class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <button type="submit" class="btn btn-default">Log in</button>
+        </div>
+    </div> 
+</form>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}
