@@ -13,12 +13,16 @@
 <table style="border-top: solid; border-width: 1px" >
     <tr>
         <td style="padding-right: 25px; padding-bottom:20px; padding-top: 5px;">
-            <script type="text/javascript" src="~/js/SearchAlpha.js"></script>
-            <input type="checkbox" onclick="alphasort(1)" id="alphasort" /> Sort Alphabetically
+            <p id="alphaP">
+                <script type="text/javascript" src="~/js/SearchAlpha.js"></script>
+                <input type="checkbox" onclick="alphasort(1)" id="alphasort" /> Sort Alphabetically
+            </p>
         </td>
         <td style="padding-right: 25px; padding-bottom:18px; padding-right:830px; padding-top: 5px;">
-            <script type="text/javascript" src="~/js/SearchOpenClosed.js"></script>
-            <input type="checkbox" onclick="OCSort(6)" id="OCSort"/> Sort by Open
+            <p id="ocP">
+                <script type="text/javascript" src="~/js/SearchOpenClosed.js"></script>
+                <input type="checkbox" onclick="OCSort(6)" id="OCSort" /> Sort by Open
+            </p>
         </td>
     </tr>
 </table>
@@ -30,7 +34,7 @@
             <th id="content">
                 Content
             </th>
-            <th onclick="alphasort()">
+            <th>
                 Title
             </th>
             <th id="creator">

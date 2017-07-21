@@ -1,5 +1,6 @@
 ﻿function alphasort(n) {
     if (document.getElementById('alphasort').checked) {
+        document.getElementById("alphaP").style.fontWeight = "900";
         var table, rows, switching, i, x, y, switchcount = 0;
         table = document.getElementById("table");
         switching = true;
@@ -49,8 +50,12 @@
     }
     else {
         $("#tBody").load(window.location.href + " #tBody > *");
+        document.getElementById("alphaP").style.fontWeight = "normal";
     }
 }
+
+    
+
 
 
 /*

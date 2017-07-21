@@ -1,5 +1,6 @@
 ﻿function OCSort(n) {
     if (document.getElementById('OCSort').checked) {
+        document.getElementById("ocP").style.fontWeight = "900";
         var table, rows, switching, i, x, y, switchcount = 0;
         table = document.getElementById("table");
         switching = true;
@@ -49,12 +50,9 @@
     }
     else {
         $("#tBody").load(window.location.href + " #tBody > *");
+        document.getElementById("ocP").style.fontWeight = "normal";
     }
 }
-
-
-
-
 
 
 /*function OCSort(n) {
@@ -74,10 +72,10 @@
                 tr[i].style.display = "none";
         }
     }
-}*/
+}
 
 
-/*function OCSort(n) {
+function OCSort(n) {
     var table, rows, switching, i, x, y, switchcount = 0;
     table = document.getElementById("table");
     var dir = "asc";
