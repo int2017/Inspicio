@@ -1,0 +1,35 @@
+﻿
+@model Inspicio.Models.AccountViewModels.LogRegModel
+
+<script type="text/javascript" src="~/js/login_register.js"></script>
+
+<div id="loginform" align-text="centre" class="row login-page">
+    <div id="loginform" class="col-md-8" style="display: inline-block" align-text="center">
+        <table style="border-width: 1px;">
+            <tr>
+                <td onclick="registerswitch()" onmouseover="loginswitchhover(this)" onmouseout="loginswitchout(this)" id="loginsection" style="color: black; font-weight:bold; background-color:white; border-top: solid; border-left:solid; border-width: 1px; font-size: 30px; padding: 5px; padding-right: 69px; padding-left: 70px; font-size: 30px; ">Login.</td>
+                <td onclick="loginswitch()" onmouseover="registerhover(this)" onmouseout="registerout(this)" id="registersection" style="color:lightgrey; font-weight:bold; background-color:#404040; font-size: 30px; padding: 5px; padding-left: 70px; padding-right: 52px; font-size: 30px;">Register.</td>
+            </tr>
+        </table>
+        <section>
+            
+            <div id="content-area" >
+                @await Html.PartialAsync("_UserLoginPartial")
+                @await Html.PartialAsync("_RegisterPartial")
+            </div>
+
+        </section>
+
+        <p align="center" style="padding-top: 0.5cm;">            
+            <a onclick="loginswitch()">Register as a new user?</a>
+        </p>
+        <p align="center">
+            <a asp-action="ForgotPassword">Forgot your password?</a>
+        </p>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}
