@@ -16,26 +16,26 @@
     <div id="loginform" class="col-md-8" style="display: inline-block" align-text="center">
         <table style="border-width: 1px;">
             <tr>
-                <td onclick="registerswitch()" onmouseover="loginswitchhover(this)" onmouseout="loginswitchout(this)" id="loginsection" style="color: black; font-weight:bold; background-color:white; border-top: solid; border-left:solid; border-width: 1px; font-size: 30px; padding: 5px; padding-right: 69px; padding-left: 70px; font-size: 30px; ">@ViewData["Title"].</td>
-                <td onclick="loginswitch()" onmouseover="registerhover(this)" onmouseout="registerout(this)" id="registersection" style="color:lightgrey; font-weight:bold; background-color:#404040; font-size: 30px; padding: 5px; padding-left: 60px; padding-right: 52px; font-size: 30px;">@ViewData["Title2"].</td>
+                <td class="text-center" id="loginsection" >@ViewData["Title"].</td>
+                <td class="text-center"  id="registersection">@ViewData["Title2"].</td>
             </tr>
         </table>
         <section> 
-            <form id="loginformmain" style="border: solid; display:block; border-width: 1px;" asp-controller="Account" asp-action="Login" method="post" class="form-horizontal">  
-                <h4 style="text-align:center">Use a local account to log in.</h4>
+            <form id="loginformmain" asp-controller="Account" asp-action="Login" method="post" class="form-horizontal">  
+                <h4 class="text-center">Use a local account to log in.</h4>
                 <hr/>
                 <div asp-validation-summary="All" class="text-danger"></div>
-                <div style="padding-left:25px; " align="center" class="form-group">
+                <div  align="center" class="form-group log-form">
                     <label asp-for="Login.Email" class="col-md-2 control-label"></label>
                     <div class="col-md-10">
                         <input asp-for="Login.Email" class="form-control" />
                         <span asp-validation-for="Login.Email" class="text-danger"></span>
                     </div>
                 </div>
-                <div style="padding-left:25px; " class="form-group" align="center" >
+                <div  class="form-group log-form" align="center" >
                     <label asp-for="Login.Password" class="col-md-2 control-label"></label>
                     <div class="col-md-10">
-                        <input asp-for="Login.Password" class="form-control" />
+                        <input asp-for="Login.Password" class="form-control log-form" />
                         <span asp-validation-for="Login.Password" class="text-danger"></span>
                     </div>
                 </div>
@@ -56,39 +56,39 @@
                 </div> 
             </form>
             <!-- ▲▲ Log On Form ▲▲ --- ▼▼ Register Form ▼▼ -->
-            <form id="registerform" style="display:none; background-color:#404040; color:lightgrey; border:solid; border-color:black; border-width:1px;" align="center" asp-controller="Account" asp-action="Register" method="post" class="form-horizontal">
+            <form id="registerform" align="center" asp-controller="Account" asp-action="Register" method="post" class="form-horizontal">
                 <h4>Create a new account.</h4>
                 <hr />
                 <div asp-validation-summary="All" class="text-danger"></div>
-                <div style="padding-left:25px; " align="center"class="form-group">
+                <div align="center"class="form-group log-form">
                     <label asp-for="Register.ProfileName" class="col-md-2 control-label"></label>
                     <div class="col-md-10">
                         <input asp-for="Register.ProfileName" class="form-control" />
                         <span asp-validation-for="Register.ProfileName" class="text-danger"></span>
                     </div>
                 </div>
-                <div style="padding-left:25px; padding-bottom:10px;" align="center" class="form-group">
+                <div  align="center" class="form-group log-form">
                     <label asp-for="Register.Email" class="col-md-2 control-label"></label>
                     <div class="col-md-10">
                         <input asp-for="Register.Email" class="form-control" />
                         <span asp-validation-for="Register.Email" class="text-danger"></span>
                     </div>
                 </div>
-                <div style="padding-left:25px; padding-bottom:10px" align="center" class="form-group">
+                <div  align="center" class="form-group log-form">
                     <label asp-for="Register.Password" class="col-md-2 control-label"></label>
                     <div class="col-md-10">
                         <input asp-for="Register.Password" class="form-control" />
                         <span asp-validation-for="Register.Password" class="text-danger"></span>
                     </div>
                 </div>
-                <div style="padding-left:25px; " align="center" class="form-group">
+                <div  align="center" class="form-group log-form">
                     <label asp-for="Register.ConfirmPassword" class="col-md-2 control-label"></label>
                     <div class="col-md-10">
                         <input asp-for="Register.ConfirmPassword" class="form-control" />
                         <span asp-validation-for="Register.ConfirmPassword" class="text-danger"></span>
                     </div>
                 </div>
-                <div style="padding-left:25px; " align="center" class="form-group">
+                <div  align="center" class="form-group log-form">
                     <div class="col-md-offset-2 col-md-10">
                         <button type="submit" class="btn btn-default">Register</button>
                     </div>
@@ -96,10 +96,10 @@
 
             </form>
         </section>
-        <p align="center" style="padding-top: 0.5cm;">
+        <p align="center" class="logreg-opt">
             <a onclick="loginswitch()" >Register as a new user?</a>
         </p>
-        <p align="center">
+        <p align="center" class="logreg-opt">
             <a asp-action="ForgotPassword">Forgot your password?</a>
         </p>
     </div>
