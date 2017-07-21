@@ -1,6 +1,7 @@
 @model List<Inspicio.Controllers.ImagesController.IndexModel>
 @inject UserManager<ApplicationUser> UserManager
 
+
 <h2>View All Reviews</h2>
 
 <p>
@@ -10,6 +11,11 @@
     <p>
         <input type="text" id="myInput" placeholder="Search for reviews..">
     </p>
+<p>
+    <script type="text/javascript" src="~/js/SearchAlpha.js"></script>
+    <input type="checkbox" onclick="alphasort()" id="alphatest" />Sort Alphabetically
+    <!--<input type="checkbox" onclick="test()" id="test" />test-->
+</p>
 
 <table id="table">
     <thead>
@@ -17,7 +23,7 @@
             <th id="content">
                 Content
             </th>
-            <th >
+            <th onclick="alphasort()">
                 Title
             </th>
             <th id="creator">
