@@ -15,8 +15,14 @@
     background-color: white;
     
 }
-#registersection:hover{
-    background-color:grey;
+#background-selector {
+    position:absolute;
+    height:100%;
+    top:0;
+    left:0;
+}
+#registersection:hover {
+    background-color: grey;
 }
 #registersection {
     color:lightgrey; 
@@ -533,7 +539,7 @@ input:focus {
 }
 
 .view-container.wide {
-    padding: 20px 20px 20px 75px;
+    padding: 40px 20px 40px 75px;
     width: 100%;
     transition: all 0.3s linear;
     -moz-transition: all 0.3s linear;

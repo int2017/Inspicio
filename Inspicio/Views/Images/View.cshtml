@@ -29,6 +29,7 @@
         <button type="button" class="btn lightbox-button " id="hide-pop" onclick="popupState()"><i class="glyphicon glyphicon-map-marker"></i></button>
         <button class="lightbox-button btn" href="@Url.Content(Model.Info.Image.Content)" data-lity data-lity-desc="@Model.Info.Image.Title"><i class="fa fa-expand" aria-hidden="true"></i></button>
         <div id="image-container">
+            <div id="background-selector"></div>
             <div id="imageMap"></div>
 
             <img src="@Url.Content(Model.Info.Image.Content)" title="@Model.Info.Image.Title" alt="@Model.Info.Image.Title" />
@@ -249,6 +250,7 @@
 <script type="text/javascript" src="~/js/replies.js"></script>
 <script type="text/javascript" src="~/js/pinComments.js"></script>
 <script type="text/javascript" src="~/js/ajaxComments.js"></script>
+<script type="text/javascript" src="~/js/background-selector.js"></script>
 <script>
 
 
