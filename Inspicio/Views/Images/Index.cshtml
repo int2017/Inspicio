@@ -7,15 +7,22 @@
 <p>
     <a asp-action="Create">Create Review</a>
 </p>
-
-    <p>
-        <input type="text" id="myInput" placeholder="Search for reviews..">
-    </p>
 <p>
-    <script type="text/javascript" src="~/js/SearchAlpha.js"></script>
-    <input type="checkbox" onclick="alphasort(1)" id="alphatest" /> Sort Alphabetically
-    <!--<input type="checkbox" onclick="test()" id="test" />test-->
+    <input type="text" id="myInput" placeholder="Search for reviews..">
 </p>
+<table style="border-top: solid; border-width: 1px" >
+    <tr>
+        <td style="padding-right: 25px; padding-bottom:20px; padding-top: 5px;">
+            <script type="text/javascript" src="~/js/SearchAlpha.js"></script>
+            <input type="checkbox" onclick="alphasort(1)" id="alphasort" /> Sort Alphabetically
+        </td>
+        <td style="padding-right: 25px; padding-bottom:18px; padding-right:830px; padding-top: 5px;">
+            <script type="text/javascript" src="~/js/SearchOpenClosed.js"></script>
+            <input type="checkbox" onclick="OCSort(6)" id="OCSort"/> Sort by Open
+        </td>
+    </tr>
+</table>
+
 
 <table id="table">
     <thead>
@@ -43,7 +50,7 @@
             </th>
         </tr>
     </thead>
-    <tbody>
+    <tbody id="tBody">
 
 @foreach (var item in Model)
 {

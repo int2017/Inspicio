@@ -1,50 +1,54 @@
-﻿
-function alphasort(n) {
-    var table, rows, switching, i, x, y, switchcount = 0;
-    table = document.getElementById("table");
-    switching = true;
+﻿function alphasort(n) {
+    if (document.getElementById('alphasort').checked) {
+        var table, rows, switching, i, x, y, switchcount = 0;
+        table = document.getElementById("table");
+        switching = true;
 
-    var shouldSwitch = false;
-    var dir = "asc";
-    while (switching) {
+        var shouldSwitch = false;
+        var dir = "asc";
+        while (switching) {
 
-        switching = false;
-        rows = table.getElementsByTagName("TR");
+            switching = false;
+            rows = table.getElementsByTagName("TR");
 
-        for (i = 1; i < (rows.length - 1); i++) {
+            for (i = 1; i < (rows.length - 1); i++) {
 
-            shouldSwitch = false;
+                shouldSwitch = false;
 
-            x = rows[i].getElementsByTagName("TD")[n];
-            y = rows[i + 1].getElementsByTagName("TD")[n];
+                x = rows[i].getElementsByTagName("TD")[n];
+                y = rows[i + 1].getElementsByTagName("TD")[n];
 
-            if (dir === "asc") {
-                if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                if (dir === "asc") {
+                    if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
 
-                    shouldSwitch = true;
-                    break;
-                }
-            } else if (dir === "desc") {
-                if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                } else if (dir === "desc") {
+                    if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
 
-                    shouldSwitch = true;
-                    break;
+                        shouldSwitch = true;
+                        break;
+                    }
                 }
             }
-        }
-        if (shouldSwitch) {
+            if (shouldSwitch) {
 
-            rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-            switching = true;
-
-            switchcount++;
-        } else {
-
-            if (switchcount === 0 && dir === "asc") {
-                dir = "desc";
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
                 switching = true;
+
+                switchcount++;
+            } else {
+
+                if (switchcount === 0 && dir === "asc") {
+                    dir = "desc";
+                    switching = true;
+                }
             }
         }
+    }
+    else {
+        $("#tBody").load(window.location.href + " #tBody > *");
     }
 }
 
