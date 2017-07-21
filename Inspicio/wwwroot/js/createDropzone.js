@@ -19,6 +19,9 @@ the server when create new is pressed.
                 var image = new Image();
                 image.src = e.target.result;
                 $(image).appendTo(".dropzone#uploader > .dz-preview >.dz-image");
+                $(image).click(function () {
+                    $(".dropzone#uploader").click();
+                })
             });
 
             FR.readAsDataURL(file);
@@ -49,4 +52,3 @@ the server when create new is pressed.
 
 
    
-    

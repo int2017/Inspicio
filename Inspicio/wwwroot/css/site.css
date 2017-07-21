@@ -632,6 +632,9 @@ input:focus {
 .dz-image{
     border-radius:0 !important;
 }
+.dz-image img:hover{
+    cursor:pointer;
+}
 body .dropzone .dz-preview.dz-image-preview {
     margin: 0px;
 }
