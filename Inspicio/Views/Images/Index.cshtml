@@ -10,15 +10,15 @@
 <p>
     <input type="text" id="myInput" placeholder="Search for reviews..">
 </p>
-<table style="border-top: solid; border-width: 1px" >
+<table>
     <tr>
-        <td style="padding-right: 25px; padding-bottom:20px; padding-top: 5px;">
+        <td style="padding-right: 25px; padding-bottom:20px;">
             <p id="alphaP">
                 <script type="text/javascript" src="~/js/SearchAlpha.js"></script>
                 <input type="checkbox" onclick="alphasort(1)" id="alphasort" /> Sort Alphabetically
             </p>
-        </td>
-        <td style="padding-right: 25px; padding-bottom:18px; padding-right:830px; padding-top: 5px;">
+        </td> 
+        <td style="padding-right: 25px; padding-bottom:18px;">
             <p id="ocP">
                 <script type="text/javascript" src="~/js/SearchOpenClosed.js"></script>
                 <input type="checkbox" onclick="OCSort(6)" id="OCSort" /> Sort by Open
@@ -30,7 +30,7 @@
 
 <table id="table">
     <thead>
-        <tr class="header">
+        <tr class="header" style="border-bottom: solid; border-width: 3px;">
             <th id="content">
                 Content
             </th>
@@ -54,7 +54,7 @@
             </th>
         </tr>
     </thead>
-    <tbody id="tBody">
+    <tbody id="tBody" style="border-bottom: solid; border-width: 3px;">
 
 @foreach (var item in Model)
 {
