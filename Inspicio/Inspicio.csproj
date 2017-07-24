@@ -47,7 +47,7 @@
     <Content Include="wwwroot\js\replies.js" />
     <Content Include="wwwroot\js\Search.js" />
     <Content Include="wwwroot\js\SearchDate.js" />
-    <Content Include="wwwroot\js\SearchOpenClosed.js" />
+    <Content Include="wwwroot\js\SortTable.js" />
     <Content Include="wwwroot\lib\bootstrap\dist\css\ostrich.jpg" />
     <Content Include="wwwroot\scss\Newcastle.jpg" />
   </ItemGroup>
@@ -74,7 +74,6 @@
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="1.0.1" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Migrations\" />
     <Folder Include="Migrations\" />
   </ItemGroup>
 </Project>

@@ -10,23 +10,6 @@
 <p>
     <input type="text" id="myInput" placeholder="Search for reviews..">
 </p>
-<table>
-    <tr>
-        <td style="padding-right: 25px; padding-bottom:20px;">
-            <p id="alphaP">
-                <script type="text/javascript" src="~/js/SearchAlpha.js"></script>
-                <input type="checkbox" onclick="alphasort(1)" id="alphasort" /> Sort Alphabetically
-            </p>
-        </td> 
-        <td style="padding-right: 25px; padding-bottom:18px;">
-            <p id="ocP">
-                <script type="text/javascript" src="~/js/SearchOpenClosed.js"></script>
-                <input type="checkbox" onclick="OCSort(6)" id="OCSort" /> Sort by Open
-            </p>
-        </td>
-    </tr>
-</table>
-
 
 <table id="table">
     <thead>
@@ -34,10 +17,10 @@
             <th id="content">
                 Content
             </th>
-            <th>
+            <th class="TitleHeader" style="cursor: pointer;">
                 Title
             </th>
-            <th id="creator">
+            <th class="CreatorHeader" id="creator" style="cursor: pointer;">
                 Creator
             </th>
             <th id="up-col">
@@ -49,7 +32,7 @@
             <th id="down-col">
                  <img src="~/images/thumbdown.jpg" style="height: 20px;" />
             </th>
-            <th id="status">
+            <th class="StatusHeader" id="status" style="cursor: pointer;">
                 Status
             </th>
         </tr>
@@ -94,4 +77,5 @@
     </tbody>
 </table>
 
+<script type="text/javascript" src="~/js/SortTable.js"></script>
 <script type="text/javascript" src="~/js/Search.js"></script>
