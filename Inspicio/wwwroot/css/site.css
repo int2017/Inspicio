@@ -38,7 +38,7 @@ body {
 }
 
 #table td, #table th {
-    padding-bottom: 15px;
+    padding-bottom: 5px;
     border-collapse: collapse;
 }
 
@@ -69,7 +69,6 @@ loginsection {
         height: 48px;
         width: 100%;
         overflow: hidden;
-        float: left;
         margin-top: 1.5%;
     }
 

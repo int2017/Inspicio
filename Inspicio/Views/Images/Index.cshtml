@@ -58,9 +58,9 @@
 
 @foreach (var item in Model)
 {
-        <tr title="@item.Image.Title" onclick="document.location = 'Images/View/@item.Image.ImageID'" style="cursor:pointer" >
+        <tr title="@item.Image.Title" onclick="document.location = 'Images/View/@item.Image.ImageID'" style="cursor:pointer; border-bottom:solid;border-bottom-width:1px;" >
                 <td id="content">
-                    <img style="max-height: 100px; max-width: 100px;" src="@item.Image.Content" />
+                    <img style="max-height: 100px; max-width: 100px; margin-top:15px;" src="@item.Image.Content" />
                 </td>
                 <td id="title">
                     @{
