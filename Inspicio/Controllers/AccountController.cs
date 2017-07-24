@@ -129,7 +129,6 @@ namespace Inspicio.Controllers
                 user.ProfileName = model.Register.ProfileName;
                 user.ProfilePicture = Gravatar.GetLink(model.Register.Email);
 
-
                 // This calls our overridden function in ProfileNameClaimsPrincipalFactory.cs
                 var result = await _userManager.CreateAsync(user, model.Register.Password);
                 if (result.Succeeded)
