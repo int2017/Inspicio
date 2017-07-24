@@ -143,7 +143,8 @@ function createCommentRow(user, comment, uniqID, parent, urgency) {
     }
     else urgencyEl = "";
     var row = "<div class='row-eq-height popup-comment'> <div class='col-xs-4 col-sm-4 col-md-4'><p>" + user + "</p></div><div class='col-xs-8 col-sm-8 col-md-8'>" + comment + "</div>" + urgencyEl + "</div>";
-    popupX = popupsArray[popupsArray.findIndex(x => parseInt(x.myData.id) === parseInt(uniqID))].setContent(appendRow(row, uniqID, parent));
+    popupX = popupsArray[popupsArray.findIndex(x => parseInt(x.myData.id) === parseInt(uniqID))];
+    popupX.setContent(appendRow(row, uniqID, parent));
 
 }
 //Since the whole popup has to be recreated, this method clones it's previous HTML and adds a new comment row
@@ -166,7 +167,6 @@ function appendRow(row, uniqID, parent) {
 
     }
     //A new input section has to be created each time to keep things consistent, otherwise it messes up the HTML
-    var result = $('<div>').append($(div).clone()).html() + inputBox;
     return openingTag + div.html() + "</div>" + inputBox;
 
 }
@@ -270,7 +270,6 @@ $(document).ready(function () {
             return false;
         }
     });
-});
 
 
-
+})

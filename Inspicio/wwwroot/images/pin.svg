@@ -15,8 +15,8 @@
    height="206.85898mm"
    viewBox="0 0 212.082 206.85898"
    version="1.1"
-   viewBox="0 0 170.81706 252.75109"
-   height="252.75108mm"
+   viewBox="0 0 170.81706 253.38166"
+   height="253.38165mm"
    width="170.81706mm"
    style="enable-background:new"
    inkscape:version="0.92.1 r15371"
@@ -63,11 +63,11 @@
        inkscape:collect="always"
        id="linearGradient5233">
       <stop
-         style="stop-color:#f2f2f2;stop-opacity:1"
+         style="stop-color:#fcf11f;stop-opacity:1"
          offset="0"
          id="stop5229" />
       <stop
-         style="stop-color:#0e0e0e;stop-opacity:1"
+         style="stop-color:#ff8327;stop-opacity:1"
          offset="1"
          id="stop5231" />
     </linearGradient>
@@ -194,10 +194,10 @@
        inkscape:collect="always"
        xlink:href="#linearGradient5233"
        id="linearGradient5237-4"
-       x1="-165.35284"
-       y1="48.917294"
-       x2="14.186954"
-       y2="62.850933"
+       x1="-141.85461"
+       y1="52.277142"
+       x2="2.1526947"
+       y2="55.860222"
        gradientUnits="userSpaceOnUse" />
     <filter
        inkscape:label="Sharpen More"
@@ -224,15 +224,15 @@
   <sodipodi:namedview
      inkscape:window-maximized="1"
      inkscape:window-y="-8"
-     inkscape:window-x="-8"
-     inkscape:window-height="838"
+     inkscape:window-x="1432"
+     inkscape:window-height="878"
      inkscape:window-width="1440"
      showborder="false"
      showgrid="false"
      inkscape:current-layer="layer1"
      inkscape:document-units="mm"
-     inkscape:cy="335.68986"
-     inkscape:cx="278.25714"
+     inkscape:cy="527.95884"
+     inkscape:cx="327.87518"
      inkscape:zoom="0.35"
      inkscape:pageshadow="2"
      inkscape:pageopacity="0.0"
@@ -278,11 +278,12 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(142.71612,44.751897)">
+     transform="translate(315.37297,46.609345)">
     <g
-       id="g4556">
+       id="g4556"
+       transform="translate(-172.8134,-1.3229176)">
       <path
-         style="fill:url(#linearGradient5302);fill-opacity:1;stroke:#000000;stroke-width:2.64583333;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         style="fill:url(#linearGradient5302);fill-opacity:1;stroke:#000000;stroke-width:2.64583325;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
          d="M -55.210168,-11.553701 A 51.051564,52.135397 44.040978 0 0 -88.860829,0.05850897 51.051564,52.135397 44.040978 0 0 -97.748657,72.679399 51.051564,52.135397 44.040978 0 0 -72.990996,89.433932 c -0.638937,39.459658 -1.278247,78.919148 -1.917195,118.378818 8.519351,-38.97769 17.038781,-77.95521 25.558132,-116.932912 a 51.051564,52.135397 44.040978 0 0 24.0006,-10.82983 51.051564,52.135397 44.040978 0 0 8.887831,-72.6203715 51.051564,52.135397 44.040978 0 0 -38.74854,-18.9833375 z"
          id="path3680"
          inkscape:connector-curvature="0" />
@@ -293,7 +294,7 @@
          rx="51.026787"
          ry="52.160713"
          style="opacity:1;fill:url(#linearGradient5237-4);fill-opacity:1;stroke-width:0.26458332;filter:url(#filter4408-4);enable-background:new"
-         transform="matrix(-0.78303111,0.62126217,-0.59850042,-0.74507045,-83.12868,138.69054)" />
+         transform="matrix(-0.78303111,0.62126217,-0.59850042,-0.74507045,-82.972126,138.15601)" />
       <ellipse
          style="fill:url(#linearGradient5294);fill-opacity:1;stroke-width:1.28728497;stroke-miterlimit:4;stroke-dasharray:none;filter:url(#filter4408-2)"
          ry="52.160713"
