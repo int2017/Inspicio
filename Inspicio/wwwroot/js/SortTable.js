@@ -15,7 +15,7 @@ $(document).on("click", ".StatusHeader", function () {
 
 function sort(by_column)
 {
-    var table, rows, switching, i, x, y, switchcount = 0;
+    var table, rows, switching, currentRow, currentColumn, nextColumn, switchcount = 0;
     table = document.getElementById("table");
     switching = true;
 
@@ -27,17 +27,17 @@ function sort(by_column)
         switching = false;
         rows = table.getElementsByTagName("TR");
 
-        for (i = 1; i < (rows.length - 1); i++)
+        for (currentRow = 1; currentRow < (rows.length - 1); currentRow++)
         {
 
             shouldSwitch = false;
 
-            x = rows[i].getElementsByTagName("TD")[by_column];
-            y = rows[i + 1].getElementsByTagName("TD")[by_column];
+            currentColumn = rows[currentRow].getElementsByTagName("TD")[by_column];
+            nextColumn = rows[currentRow + 1].getElementsByTagName("TD")[by_column];
 
             if (dir === "asc")
             {
-                if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase())
+                if (currentColumn.innerHTML.toLowerCase() > nextColumn.innerHTML.toLowerCase())
                 {
 
                     shouldSwitch = true;
@@ -46,7 +46,7 @@ function sort(by_column)
             }
             else if (dir === "desc")
             {
-                if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase())
+                if (currentColumn.innerHTML.toLowerCase() < nextColumn.innerHTML.toLowerCase())
                 {
 
                     shouldSwitch = true;
@@ -58,7 +58,7 @@ function sort(by_column)
         if (shouldSwitch)
         {
 
-            rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+            rows[currentRow].parentNode.insertBefore(rows[currentRow + 1], rows[currentRow]);
             switching = true;
 
             switchcount++;
