@@ -18,11 +18,14 @@
         <dd>
             <img id="profilePicture" src="@Model.ProfilePicture" style="width:80px;height:80px;margin-top: -2em;"/>
             <form asp-action="ChangeAvatar" style="display:inline-block;margin-top: 10px;">
-                <input id="b64" asp-for="@Model.ProfilePicture" type="hidden" />
+                <input id="b64" asp-for="@Model.ProfilePicture" type="hidden" value="gravatar" />
                 <input id="fileInput" type="file" style="display:none;" onchange="changeAvatar();">
                 <ul style="display:inline-block;list-style-type: none;">
                     <li style="margin: 2%;"><input type="button" value="Change Avatar" onclick="newAvatar();" /></li>
-                    <li as style="margin: 2%;"><input type="submit" value="Upload" />
+                    <li style="margin: 2%;display:inline">
+                        <input id="upload_btn" type="submit" value="Upload" />
+                        <input type="button" value="Use Gravatar" onclick="document.getElementById('upload_btn').click()" />
+                    </li>
                 </ul>
             </form>
         </dd>

@@ -255,7 +255,14 @@ namespace Inspicio.Controllers
         public async Task<IActionResult> ChangeAvatar(IndexViewModel model)
         {
             var user = await _userManager.GetUserAsync(HttpContext.User);
-            user.ProfilePicture = model.ProfilePicture;
+            if( model.ProfilePicture == "gravatar")
+            {
+                user.ProfilePicture = Gravatar.GetLink(user.Email);
+            }
+            else
+            {
+                user.ProfilePicture = model.ProfilePicture;
+            }
 
             _context.Users.Update(user);
             await _context.SaveChangesAsync();
