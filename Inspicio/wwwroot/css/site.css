@@ -16,10 +16,15 @@
     
 }
 #background-selector {
-    position:absolute;
-    height:100%;
-    top:0;
-    left:0;
+    position: absolute;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    background-color: rgb(191, 191, 191);
+}
+div.colorpicker {
+    z-index:500000000000;
 }
 #registersection:hover {
     background-color: grey;
@@ -319,7 +324,7 @@ body .dropzone .dz-preview .dz-image {
     }
 
 #image-container {
-    padding: 0;
+    padding: 10px;
     position: relative;
 }
 

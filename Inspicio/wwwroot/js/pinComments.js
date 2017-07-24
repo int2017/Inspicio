@@ -7,7 +7,7 @@ var imageMap = L.map("imageMap", {
 });
 //Creates custom pin
 var customPin = L.icon({
-    iconUrl: "../../images/pin.svg",
+    iconUrl: "../../images/pinNormal.svg",
     shadowUrl: "../../images/pinshadow.svg",
     iconSize: [38, 58], // size of the icon
     shadowSize: [80, 120], // size of the shadow
