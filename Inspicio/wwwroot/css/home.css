@@ -9,53 +9,163 @@
 }
 
 #homeImg {
-    background-image: url(../images/ostrich.jpg);
-    height: 100vh;
     position: relative;
     width: auto;
     z-index: 5;
-    overflow: no-display;
+    height:100vh;
+    overflow: hidden;
     padding: 30px;
-    background-size:cover;
+    
 }
-
+.blur.blur-img {
+    width: 110%;
+    height: 110%;
+    left: -10px;
+    top:-10px;
+    background-image: url(../images/ostrich.jpg);
+    background-size: cover;
+    filter: blur(5px);
+}
+.dropzone{
+    width:100%;
+}
 #home-header {
     font-family: 'KG Summer Sunshine Blackout';
-    margin:55px 0px;
+    margin: 75px 0px 0px;
 }
-.navbar-header{
+    #home-header img {
+        margin: auto;
+        height: 180px;
+    }
+
+    .navbar-header {
+    display: none;
+}
+[id^='progr'] {
+    font-size: 1.15em;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    
+}
+.progress {
+    height: 30px;
+    background-color: rgba(255, 255, 255, 0);
+    border: 2px solid rgba(255, 255, 255, 0.26);
+}
+#section1 .success {
+    background-color: #417686;
+}
+#section2 .success {
+    background-color: #3d593f;
+}
+#section3 .success {
+    background-color: #be9f4e;
+}
+#section3 a:hover .success{
+    
+    opacity:1;
+    transition:all 0,3s;
+}
+#section3 a, #section3 a:hover {
+    color: white;
+    text-decoration: none;
+}
+.success {
+    transition: all 0,3s;
+    display: none;
+    text-align: center;
+    margin: 15px;
+    font-size: 1.4em;
+    padding: 15px;
+    opacity: 0.85;
+    border-radius: 3px;
+}
+#img-txt > .row-eq-height:not(:first-child):not(.progress) {
     display:none;
 }
+#img-txt >.row-eq-height{
+    margin:10px 0;
+    height:350px;
+    position:relative;
+}
+.row-eq-height > *{
+    max-height:100%;
+}
+.dz-progress{
+    display:none;
+}
+.dropzone {
+    padding: 0px;
+    background-color: rgba(33, 33, 33, 0.46);
+}
+/*Panels may be reused for the Create page later on*/
+.panel > [class^='panel']:not(.panel-body) {
+    background-color: rgba(245, 245, 245, 0.35);
+}
+.panel {
+    background-color: rgba(255, 255, 255, 0.53);
+}
+.panel-body {
+    color:black;
+}
+    .panel-body .row-eq-height {
+        margin: 10px auto;
+        padding: 5px;
+        border-top: 1px solid rgb(221, 221, 221);
+    }
+    .panel-body >*:nth-child(even) {
+        background-color: rgba(2, 2, 2, 0.35);
+    }
+
+
+    .map-col > div {
+        background-color: rgba(214, 214, 214, 0.8);
+        border-radius: 3px;
+    }
+
 #img-txt {
     color: white;
-    margin:100px 0;
+    margin: 50px 0;
     font-family: 'Century Gothic';
     font-size: larger;
 }
+
     #img-txt ul {
         padding: 0px;
         list-style-type: none
     }
-#img-txt li{
-    margin:50px 0;
-    
-}
-    #img-txt img {
-        height: 100px;
+
+    #img-txt li {
+        margin: 50px 0;
+    }
+
+    #img-txt .feat-col img {
+        height: 80px;
         margin: 0 20px 0 0;
         display: inline-block;
     }
 
 .navbar-brand {
-    visibility:hidden;
+    visibility: hidden;
 }
 
-.container.body-content{
-    margin:0 ;
-    padding:0;
-    width:100%;
+.container.body-content {
+    margin: 0;
+    padding: 0;
+    width: 100%;
 }
+
 body nav.navbar.navbar-inverse.navbar-fixed-top {
-    background: none ;
-    border: none ;
+    background: none;
+    border: none;
+    position:absolute;
+}
+
+#homeImageMap {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    background: none;
+    outline: none;
 }

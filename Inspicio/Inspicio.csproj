@@ -38,10 +38,12 @@
     <Content Include="wwwroot\images\thumbmid.jpg" />
     <Content Include="wwwroot\images\thumbup.jpg" />
     <Content Include="wwwroot\js\ajaxComments.js" />
+    <Content Include="wwwroot\js\createDropzone.js" />
     <Content Include="wwwroot\js\filter.js" />
     <Content Include="wwwroot\js\SearchAlpha.js" />
     <Content Include="wwwroot\js\login_register.js" />
     <Content Include="wwwroot\js\markdownConverter.js" />
+    <Content Include="wwwroot\js\homepageScripts.js" />
     <Content Include="wwwroot\js\pinComments.js" />
     <Content Include="wwwroot\js\ajaxThumbs.js" />
     <Content Include="wwwroot\js\replies.js" />
