@@ -4,41 +4,73 @@
     var listOfUsers = [];
     //Creates an Image object that is added to the list of Images
     $("#add-img").click(function () {
+        
         var title = $("#Image_Title").val();
         var description = $("#Image_Description_UserInput").val();
         var content = $("#b64").val();
-        var image = {
-            "Title": title,
-            "Description": description,
-            "Content": content
-        };
-        listOfImages.push(image);
+        var contentCol = listOfImages.map(v => v.Content);
+        if ($.inArray(content, contentCol) > -1) {
+            alert("This image is already added");
+            myDropzone.removeAllFiles();
+            $(".dropzone").html("");
+        }
+        else {
+            var image = {
+                "Title": title,
+                "Description": description,
+                "Content": content
+            };
+            listOfImages.push(image);
+            
+            $("#Image_Title").val("");
+            $("#Image_Description_UserInput").val("");
+            $("#b64").val("");
+            myDropzone.removeAllFiles();
+            $(".dropzone").html("");
+            appendThumbnail(listOfImages.length - 1, content);
+        }
         //Clear the fields for another image
-        $("#Image_Title").val("");
-        $("#Image_Description_UserInput").val("");
-        $("#b64").val("");
-        myDropzone.removeAllFiles();
-        appendThumbnail(listOfImages.length-1, content);
+        
     })
-
+    var currentImage;
     function appendThumbnail(index, image) {
         
-        var container = $(document.createElement('div')).addClass("col-xs-4 col-md-3").attr('id',"image-"+index);
+        var container = $(document.createElement('div')).addClass("col-xs-4 col-md-2").attr('id', "image-" + index);
+        var innerContainer = $(document.createElement('div')).addClass("col-xs-12 col-md-12 thumbnail-inner");
         var image = $(document.createElement('img')).addClass('img-responsive').attr('src', image);
-        $(image).click(function () {
+        $(innerContainer).click(function () {
+            currentImage = index;
             $(".dropzone").html("");
             $("#Image_Title").val(listOfImages[index].Title);
             $("#Image_Description_UserInput").val(listOfImages[index].Description);
             $("#b64").val(listOfImages[index].Content);
             var image = $(document.createElement("img")).addClass("img-responsive").attr('src', listOfImages[index].Content);
-            myDropzone.emit(image);
-
+            var myImage = {
+                name: listOfImages[index].Title
+            }
+            $("#Image_Title").change(function () {
+                currentImage = index;
+                $("#edit-img").show();
+            })
+            $("#Image_Description_UserInput").change(function () {
+                currentImage = index;
+                $("#edit-img").show();
+            })
+            myDropzone.emit("addedfile", myImage);
+            myDropzone.emit("thumbnail", myImage, listOfImages[index].Content);
         })
-        $(image).appendTo(container);
+        $(image).appendTo(innerContainer);
+        $(innerContainer).appendTo(container);
         $(container).appendTo("#thumbnail-container");
     }
 
-
+    $("#edit-img").click(function () {
+        listOfImages[currentImage].Title = $("#Image_Title").val();
+        listOfImages[currentImage].Description = $("#Image_Description_UserInput").val();
+        $("#Image_Title").off();
+        $("#Image_Description_UserInput").off();
+        $(this).hide();
+    })
     $("#submit-images").click(function () {
         //Get the details of the users who were checked as reviewers
         $("#users input[type='checkbox']:checked").each(function () {

@@ -254,12 +254,38 @@ loginsection {
 .dz-max-files-reached {
     background-color: red
 }
-
+#thumbnail-container {
+    margin: 10px 0px;
+    border-radius: 2px;
+    background-color: #b9b9b9;
+    flex-wrap: wrap;
+    padding: 15px 0;
+}
+#add-img {
+    color: #417686;
+}
+.thumbnail-inner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 150px;
+    background-color: #e6e6e6;
+    border-radius: 4px;
+    cursor: pointer;
+}
+    #thumbnail-container > div:nth-child(6n) {
+        margin-right: 0;
+    }
 body .dropzone .dz-preview .dz-image {
     width: auto;
     height: auto;
 }
-
+.dz-size {
+    display: none;
+}
+#edit-img{
+    display:none;
+}
 .dropzone {
     border-radius: 2px !important;
     background-repeat: no-repeat !important;
