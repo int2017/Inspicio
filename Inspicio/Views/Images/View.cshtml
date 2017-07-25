@@ -4,14 +4,14 @@
 
 
 <div class="view-container">
-    <h2>@Model.Info.Image.Title</h2>
+    <h2>@Model.Info.Screen.Title</h2>
     <input type="checkbox"
-           @{ if (Model.Info.Image.ReviewStatus == Image.Status.Open)
+           @{ if (Model.Info.Screen.ScreenStatus == Screen.Status.Open)
                {
                    @:checked="checked"
                 }
              
-             if (User.GetProfileId() != Model.Info.Image.OwnerId)
+             if (User.GetProfileId() != Model.Info.Screen.OwnerId)
                {
                    @:disabled = "disabled";
 
@@ -20,20 +20,20 @@
      data-toggle="toggle" data-on="Open" data-off="Closed" data-onstyle="success" data-offstyle="danger" id="toggle">
     <hr />
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <input id="ImageId" type="hidden" asp-for="@Model.Info.Image.ImageID" />
+    <input id="ScreenId" type="hidden" asp-for="@Model.Info.Screen.ScreenId" />
 
     
 
 
     <div class="img-wrapper">
         <button type="button" class="btn lightbox-button " id="hide-pop" onclick="popupState()"><i class="glyphicon glyphicon-map-marker"></i></button>
-        <button class="lightbox-button btn" href="@Url.Content(Model.Info.Image.Content)" data-lity data-lity-desc="@Model.Info.Image.Title"><i class="fa fa-expand" aria-hidden="true"></i></button>
+        <button class="lightbox-button btn" href="@Url.Content(Model.Info.Screen.Content)" data-lity data-lity-desc="@Model.Info.Screen.Title"><i class="fa fa-expand" aria-hidden="true"></i></button>
         <button class="lightbox-button btn" id="color-picker"><i class="fa fa-paint-brush" aria-hidden="true"></i></button>
         <div id="image-container">
             <div id="background-selector"></div>
             <div id="imageMap"></div>
 
-            <img src="@Url.Content(Model.Info.Image.Content)" title="@Model.Info.Image.Title" alt="@Model.Info.Image.Title" />
+            <img src="@Url.Content(Model.Info.Screen.Content)" title="@Model.Info.Screen.Title" alt="@Model.Info.Screen.Title" />
 
 
         </div>
@@ -46,7 +46,7 @@
             <h3>Description</h3>
             <hr />
             <div id="description-section" style="width:95%;margin-top:-2em;">
-                @Html.Raw( Model.Info.Image.Description )
+                @Html.Raw( Model.Info.Screen.Description )
             </div>
             <hr />
         }
@@ -66,9 +66,8 @@
                     <div class="row reviewer-row" >
                         @foreach (var r in Model.Reviews)
                         {
-                            var replyOwner = await UserManager.FindByIdAsync(r.OwnerId);
-                        <div class="col-md-2 reviewers approved @r.State">@replyOwner.ProfileName</div>
-
+                            var replyOwner = await UserManager.FindByIdAsync(r.UserId);
+                            <div class="col-md-2 reviewers approved @r.State">@replyOwner.ProfileName</div>
                         }
                     </div>
                     <div id="showmarker" class="text-center">

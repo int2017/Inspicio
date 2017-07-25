@@ -121,7 +121,7 @@ loginsection {
     font-size: 30px;
 }
 
-#table th#content, td#content, td#status, th#status, td#creator, th#creator {
+#table th#content, td#content, td#status, th#status, td#creator, th#creator, td#title, th#title {
     width: 12%;
     text-align: center;
 }

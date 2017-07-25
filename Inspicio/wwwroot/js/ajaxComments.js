@@ -20,7 +20,7 @@ function commentClick(uniqID, chosenState) {
         }
     });
     var DataFromBody = {
-        "ImageId": $("#ImageId").val(),
+        "ScreenId": $("#ScreenId").val(),
         "Message": $(".popup-textarea").val(),
         "Lat": locationLat,
         "Lng": locationLng,
@@ -64,7 +64,7 @@ function commentClick(uniqID, chosenState) {
         }
         else urgency = commentEnum.Default;
         var DataFromBody = {
-            "ImageId": $("#ImageId").val(),
+            "ScreenId": $("#ScreenId").val(),
             "Message": $("#comment-textarea").val(),
             "Lat": null,
             "Lng": null,
@@ -133,7 +133,7 @@ function commentClick(uniqID, chosenState) {
             loc = null;
         }
         var DataFromBody = {
-            "ImageId": $("#ImageId").val(),
+            "ScreenId": $("#ScreenId").val(),
             "Message": area.val(),
             "Lat": lat,
             "Lng": lng,
@@ -175,7 +175,7 @@ function commentClick(uniqID, chosenState) {
     //Get new comments for markers
     function reloadMarkers() {
         
-        var id = $("#ImageId").val();
+        var id = $("#ScreenId").val();
         $.ajax(
             {
                 type: "GET", //HTTP GET Method  

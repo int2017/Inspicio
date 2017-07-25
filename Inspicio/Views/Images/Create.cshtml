@@ -10,17 +10,17 @@
     <div class="form-group">
         <!-- Review Title -->
         <label class="control-label">Review Title</label>
-        <input asp-for="@Model.Image.Title" type="text" class="form-control" placeholder=" #7634 ... .. .">
-        <span asp-validation-for="@Model.Image.Title" class="text-danger"></span>
+        <input asp-for="@Model.Screen.Title" type="text" class="form-control" placeholder=" #7634 ... .. .">
+        <span asp-validation-for="@Model.Screen.Title" class="text-danger"></span>
     </div>
 
     <div class="form-group">
         <!-- Review Description -->
         <label class="control-label">Review Description &lt;markdown supported&gt;</label>
         <textarea class="form-control" id="Image_Description_UserInput" rows="8" placeholder=" Reviewees please provide feedback regarding the fix for #7634 ... .. ."></textarea>
-        <span asp-validation-for="@Model.Image.Description" class="text-danger"></span>
+        <span asp-validation-for="@Model.Screen.Description" class="text-danger"></span>
 
-        <textarea asp-for="@Model.Image.Description" id="Image_DescriptionHTML"></textarea>
+        <textarea asp-for="@Model.Screen.Description" id="Image_DescriptionHTML"></textarea>
     </div>
 
     @{
@@ -53,7 +53,7 @@
     <div class="form-group">
     
         <!--input below will be used to temp store the base64 encoding of the image-->
-        <input id="b64" asp-for="@Model.Image.Content" type="hidden" />
+        <input id="b64" asp-for="@Model.Screen.Content" type="hidden" />
         
         <!-- Dropzone Image Upload-->
         <label for="image_upload_id" class="control-label">Review Screenshot</label>
