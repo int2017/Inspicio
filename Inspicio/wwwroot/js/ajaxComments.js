@@ -79,8 +79,7 @@ function commentClick(uniqID, chosenState) {
                 dataType: "text",
                 data: JSON.stringify(DataFromBody),
                 success: function () {
-                    $("#comment-section").load(window.location.href + " #comment-section > * ");
-
+                    $("#comment-section").load(window.location.href + " #comment-section > * ");                 
                     $("#comment-textarea").val("");
                 }
             });
