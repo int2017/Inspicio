@@ -45,7 +45,7 @@ namespace Inspicio.Controllers
             // Only images with the user id set as the owner should be passed into the view
             var UserId = _userManager.GetUserId(HttpContext.User);
 
-            var ImageIds = _context.Review.Where(r => r.UserId == UserId).Select(i => i.ImageId);
+            var ImageIds = _context.AccessTable.Where(r => r.UserId == UserId).Select(i => i.ImageId);
             var AllImages = new List<Image>();
             foreach (var Id in ImageIds)
             {
@@ -58,9 +58,9 @@ namespace Inspicio.Controllers
                 ImageEntries.Add(new IndexModel
                 {
                     Image = a,
-                    approvals = _context.Review.Count(x => (x.ImageId == a.ImageID) && x.State == Review.States.Approved),
-                    needsWorks = _context.Review.Count(x => (x.ImageId == a.ImageID) && x.State == Review.States.NeedsWork),
-                    rejections = _context.Review.Count(x => (x.ImageId == a.ImageID) && x.State == Review.States.Rejected)
+                    approvals = _context.AccessTable.Count(x => (x.ImageId == a.ImageID) && x.State == AccessTable.States.Approved),
+                    needsWorks = _context.AccessTable.Count(x => (x.ImageId == a.ImageID) && x.State == AccessTable.States.NeedsWork),
+                    rejections = _context.AccessTable.Count(x => (x.ImageId == a.ImageID) && x.State == AccessTable.States.Rejected)
                 });
             }
 
@@ -124,20 +124,20 @@ namespace Inspicio.Controllers
                 CreatePageModel.Image.ReviewStatus = Image.Status.Open;
                 _context.Add(CreatePageModel.Image);
 
-                var ReviewOwner = new Review();
+                var ReviewOwner = new AccessTable();
                 ReviewOwner.ImageId = CreatePageModel.Image.ImageID;
                 ReviewOwner.UserId = CreatePageModel.Image.OwnerId;
-                ReviewOwner.State = Review.States.Undecided;
+                ReviewOwner.State = AccessTable.States.Undecided;
                 _context.Add(ReviewOwner);
 
                 CreatePageModel.Image.ReviewStatus = Image.Status.Open;
-                var Reviewees = new List<Review>();
+                var Reviewees = new List<AccessTable>();
                 if (CreatePageModel.Users != null)
                 {
                     foreach (var u in CreatePageModel.Users.Where(m => m.IsSelected))
                     {
-                        var reviewee = new Review();
-                        reviewee.State = Review.States.Undecided;
+                        var reviewee = new AccessTable();
+                        reviewee.State = AccessTable.States.Undecided;
 
                         reviewee.UserId = u.Id;
                         reviewee.ImageId = CreatePageModel.Image.ImageID;
@@ -171,7 +171,7 @@ namespace Inspicio.Controllers
                 public String PosterProfileName { get; set; }
                 public Comment comment { get; set; }
             }
-            public List<Review> Reviews = new List<Review>();
+            public List<AccessTable> Reviews = new List<AccessTable>();
         }
 
 
@@ -203,10 +203,10 @@ namespace Inspicio.Controllers
             FullReviewData.Info = new ViewModel.ImageData();
             FullReviewData.Info.Image = Image;
             FullReviewData.Info.Image.ReviewStatus = Image.ReviewStatus;
-            FullReviewData.Info.approvals = _context.Review.Count(x => x.ImageId == Id && x.State == Review.States.Approved);
-            FullReviewData.Info.rejections = _context.Review.Count(x => x.ImageId == Id && x.State == Review.States.Rejected);
-            FullReviewData.Info.needsWorks = _context.Review.Count(x => x.ImageId == Id && x.State == Review.States.NeedsWork);
-            FullReviewData.Reviews = _context.Review.Where(u => u.ImageId == Id).ToList();
+            FullReviewData.Info.approvals = _context.AccessTable.Count(x => x.ImageId == Id && x.State == AccessTable.States.Approved);
+            FullReviewData.Info.rejections = _context.AccessTable.Count(x => x.ImageId == Id && x.State == AccessTable.States.Rejected);
+            FullReviewData.Info.needsWorks = _context.AccessTable.Count(x => x.ImageId == Id && x.State == AccessTable.States.NeedsWork);
+            FullReviewData.Reviews = _context.AccessTable.Where(u => u.ImageId == Id).ToList();
             // Changed from getting all comments then working out which we want to only getting the ones we want.
             var AllComments = _context.Comments.Where(c => c.ImageId == Id);
             foreach (Comment SingleComment in AllComments)
@@ -225,12 +225,13 @@ namespace Inspicio.Controllers
             return View(FullReviewData);
         }
 
-        public JsonResult GetRating(int? id) {
+        public JsonResult GetRating(int? id)
+        {
             var userId = _userManager.GetUserId(HttpContext.User);
-            var review = _context.Review.Where(u => u.UserId == userId).Where(i => i.ImageId == id).SingleOrDefault();
+            var review = _context.AccessTable.Where(u => u.UserId == userId).Where(i => i.ImageId == id).SingleOrDefault();
             return Json(review.State);
-    }
-    public JsonResult GetComments(int? Id)
+        }
+        public JsonResult GetComments(int? Id)
         {
             List<ViewModel.CommentInfo> comments = new List<ViewModel.CommentInfo>();
             var AllComments = _context.Comments.Where(c => c.ImageId == Id);
@@ -369,7 +370,7 @@ namespace Inspicio.Controllers
         public async Task<IActionResult> ChangeRating([FromBody] RatingBody data)
         {
             var userId = _userManager.GetUserId(HttpContext.User);
-            var review = _context.Review.Where(u => u.UserId == userId).Where(i => i.ImageId == data.ImageID).SingleOrDefault();
+            var review = _context.AccessTable.Where(u => u.UserId == userId).Where(i => i.ImageId == data.ImageID).SingleOrDefault();
 
             if (review == null)
             {
@@ -382,60 +383,47 @@ namespace Inspicio.Controllers
 
             if (data.state == State.Approved)
             {
-                review.State = Review.States.Approved;
+                review.State = AccessTable.States.Approved;
             }
             else if (data.state == State.NeedsWork)
             {
-                review.State = Review.States.NeedsWork;
+                review.State = AccessTable.States.NeedsWork;
             }
             else if (data.state == State.Rejected)
             {
-                review.State = Review.States.Rejected;
+                review.State = AccessTable.States.Rejected;
             }
 
             await _context.SaveChangesAsync();
             return Ok(1);
         }
 
-        
-    public class DataFromToggle
-    {
-        public int ImageID { get; set; }
-        public bool Open { get; set; }
 
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> CloseReview([FromBody] DataFromToggle data)
-    {
-        var userId = _userManager.GetUserId(HttpContext.User);
-
-        int id = data.ImageID;
-        var image = await _context.Images.SingleOrDefaultAsync(m => m.ImageID == id);
-
-        if (data.Open)
+        public class DataFromToggle
         {
-            image.ReviewStatus = Image.Status.Open;
+            public int ImageID { get; set; }
+            public bool Open { get; set; }
+
         }
-        else
+
+        [HttpPost]
+        public async Task<IActionResult> CloseReview([FromBody] DataFromToggle data)
         {
-            image.ReviewStatus = Image.Status.Closed;
+            var userId = _userManager.GetUserId(HttpContext.User);
+
+            int id = data.ImageID;
+            var image = await _context.Images.SingleOrDefaultAsync(m => m.ImageID == id);
+
+            if (data.Open)
+            {
+                image.ReviewStatus = Image.Status.Open;
+            }
+            else
+            {
+                image.ReviewStatus = Image.Status.Closed;
+            }
+            await _context.SaveChangesAsync();
+            return Ok(1);
         }
-        await _context.SaveChangesAsync();
-        return Ok(1);
     }
 }
-}
-
-
-
-
-
-
-
-
-              
-
-              
-             
-             

@@ -33,7 +33,7 @@ namespace Inspicio.Models
         }
 
         public ICollection<Comment> Comments { get; set; }
-        public ICollection<Review> Reviews { get; set; }
+        public ICollection<AccessTable> Reviews { get; set; }
 
         [ForeignKey("OwnerId")]
         public ApplicationUser ApplicationUsers { get; set; }

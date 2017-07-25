@@ -19,11 +19,11 @@ namespace Inspicio.Data
 
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Image> Images { get; set; }
-        public DbSet<Review> Review { get; set; }
+        public DbSet<AccessTable> AccessTable { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Review>().HasKey(r => new { r.UserId, r.ImageId });
+            modelBuilder.Entity<AccessTable>().HasKey(r => new { r.UserId, r.ImageId });
             modelBuilder.Entity<ApplicationUser>().HasMany(a => a.Images);
             modelBuilder.Entity<ApplicationUser>().HasMany(a => a.Comments);
             modelBuilder.Entity<Image>().HasMany(i => i.Comments).WithOne(i => i.Images);

@@ -17,6 +17,21 @@ namespace Inspicio.Migrations
                 .HasAnnotation("ProductVersion", "1.1.2")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("Inspicio.Models.AccessTable", b =>
+                {
+                    b.Property<string>("UserId");
+
+                    b.Property<int>("ImageId");
+
+                    b.Property<int>("State");
+
+                    b.HasKey("UserId", "ImageId");
+
+                    b.HasAlternateKey("ImageId", "UserId");
+
+                    b.ToTable("AccessTable");
+                });
+
             modelBuilder.Entity("Inspicio.Models.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
@@ -128,21 +143,6 @@ namespace Inspicio.Migrations
                     b.ToTable("Images");
                 });
 
-            modelBuilder.Entity("Inspicio.Models.Review", b =>
-                {
-                    b.Property<string>("UserId");
-
-                    b.Property<int>("ImageId");
-
-                    b.Property<int>("State");
-
-                    b.HasKey("UserId", "ImageId");
-
-                    b.HasAlternateKey("ImageId", "UserId");
-
-                    b.ToTable("Review");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -250,6 +250,19 @@ namespace Inspicio.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("Inspicio.Models.AccessTable", b =>
+                {
+                    b.HasOne("Inspicio.Models.Image", "Images")
+                        .WithMany("Reviews")
+                        .HasForeignKey("ImageId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Inspicio.Models.ApplicationUser", "ApplicationUsers")
+                        .WithMany("Reviews")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("Inspicio.Models.Comment", b =>
                 {
                     b.HasOne("Inspicio.Models.Image", "Images")
@@ -267,19 +280,6 @@ namespace Inspicio.Migrations
                     b.HasOne("Inspicio.Models.ApplicationUser", "ApplicationUsers")
                         .WithMany("Images")
                         .HasForeignKey("OwnerId");
-                });
-
-            modelBuilder.Entity("Inspicio.Models.Review", b =>
-                {
-                    b.HasOne("Inspicio.Models.Image", "Images")
-                        .WithMany("Reviews")
-                        .HasForeignKey("ImageId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("Inspicio.Models.ApplicationUser", "ApplicationUsers")
-                        .WithMany("Reviews")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRoleClaim<string>", b =>
