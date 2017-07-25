@@ -23,13 +23,13 @@ namespace Inspicio.Models
         public string Description { get; set; }
 
         [EnumDataType(typeof(Status))]
-        [DisplayName("Status")]
         public Status ScreenStatus { get; set; }
 
         public enum Status { Open,  Closed }
 
         public ICollection<Comment> Comments { get; set; }
-        public ICollection<AccessTable> Reviews { get; set; }
+
+        public ICollection<Review> Reviews { get; set; }
 
         [ForeignKey("OwnerId")]
         public ApplicationUser ApplicationUsers { get; set; }

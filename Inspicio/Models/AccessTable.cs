@@ -15,17 +15,12 @@ namespace Inspicio.Models
 
         [Key]
         [Column(Order = 2)]
-        public int ScreenId { get; set; }
-
-        [EnumDataType(typeof(States))]
-        public States State { get; set; }
-
-        public enum States { Approved, NeedsWork, Rejected, Undecided };
+        public int ReviewId { get; set; }
 
         [ForeignKey("UserId")]
         public ApplicationUser ApplicationUsers { get; set; }
 
-        [ForeignKey("ScreenId")]
-        public Screen Screens { get; set; }
+        [ForeignKey("ReviewId")]
+        public Review Reviews { get; set; }
     }
 }

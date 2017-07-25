@@ -45,7 +45,7 @@ namespace Inspicio.Controllers
             // Only images with the user id set as the owner should be passed into the view
             var UserId = _userManager.GetUserId(HttpContext.User);
 
-            var ImageIds = _context.AccessTable.Where(r => r.UserId == UserId).Select(i => i.ScreenId);
+            var ImageIds = _context.AccessTable.Where(r => r.UserId == UserId).Select(i => i.ReviewId);
             var AllImages = new List<Screen>();
             foreach (var Id in ImageIds)
             {
@@ -58,9 +58,9 @@ namespace Inspicio.Controllers
                 ImageEntries.Add(new IndexModel
                 {
                     Screen = a,
-                    approvals = _context.AccessTable.Count(x => (x.ScreenId == a.ScreenId) && x.State == AccessTable.States.Approved),
-                    needsWorks = _context.AccessTable.Count(x => (x.ScreenId == a.ScreenId) && x.State == AccessTable.States.NeedsWork),
-                    rejections = _context.AccessTable.Count(x => (x.ScreenId == a.ScreenId) && x.State == AccessTable.States.Rejected)
+                    approvals = 0,//_context.AccessTable.Count(x => (x.ReviewId == a.ScreenId) && x.State == AccessTable.States.Approved),
+                    needsWorks = 0,//_context.AccessTable.Count(x => (x.ReviewId == a.ScreenId) && x.State == AccessTable.States.NeedsWork),
+                    rejections = 0//_context.AccessTable.Count(x => (x.ReviewId == a.ScreenId) && x.State == AccessTable.States.Rejected)
                 });
             }
 
@@ -125,9 +125,9 @@ namespace Inspicio.Controllers
                 _context.Add(CreatePageModel.Screen);
 
                 var ReviewOwner = new AccessTable();
-                ReviewOwner.ScreenId = CreatePageModel.Screen.ScreenId;
+                ReviewOwner.ReviewId = CreatePageModel.Screen.ScreenId;
                 ReviewOwner.UserId = CreatePageModel.Screen.OwnerId;
-                ReviewOwner.State = AccessTable.States.Undecided;
+                //ReviewOwner.State = AccessTable.States.Undecided;
                 _context.Add(ReviewOwner);
 
                 CreatePageModel.Screen.ScreenStatus = Screen.Status.Open;
@@ -137,10 +137,10 @@ namespace Inspicio.Controllers
                     foreach (var u in CreatePageModel.Users.Where(m => m.IsSelected))
                     {
                         var reviewee = new AccessTable();
-                        reviewee.State = AccessTable.States.Undecided;
+                        //reviewee.State = AccessTable.States.Undecided;
 
                         reviewee.UserId = u.Id;
-                        reviewee.ScreenId = CreatePageModel.Screen.ScreenId;
+                        reviewee.ReviewId = CreatePageModel.Screen.ScreenId;
                         _context.Add(reviewee);
                     }
                 }
@@ -203,10 +203,10 @@ namespace Inspicio.Controllers
             FullReviewData.Info = new ViewModel.ImageData();
             FullReviewData.Info.Screen = Screen;
             FullReviewData.Info.Screen.ScreenStatus = Screen.ScreenStatus;
-            FullReviewData.Info.approvals = _context.AccessTable.Count(x => x.ScreenId == Id && x.State == AccessTable.States.Approved);
-            FullReviewData.Info.rejections = _context.AccessTable.Count(x => x.ScreenId == Id && x.State == AccessTable.States.Rejected);
-            FullReviewData.Info.needsWorks = _context.AccessTable.Count(x => x.ScreenId == Id && x.State == AccessTable.States.NeedsWork);
-            FullReviewData.Reviews = _context.AccessTable.Where(u => u.ScreenId == Id).ToList();
+            FullReviewData.Info.approvals = 0;//_context.AccessTable.Count(x => x.ReviewId == Id && x.State == AccessTable.States.Approved);
+            FullReviewData.Info.rejections = 0;//_context.AccessTable.Count(x => x.ReviewId == Id && x.State == AccessTable.States.Rejected);
+            FullReviewData.Info.needsWorks = 0;//_context.AccessTable.Count(x => x.ReviewId == Id && x.State == AccessTable.States.NeedsWork);
+            FullReviewData.Reviews = _context.AccessTable.Where(u => u.ReviewId == Id).ToList();
             // Changed from getting all comments then working out which we want to only getting the ones we want.
             var AllComments = _context.Comments.Where(c => c.ScreenId == Id);
             foreach (Comment SingleComment in AllComments)
@@ -228,8 +228,8 @@ namespace Inspicio.Controllers
         public JsonResult GetRating(int? id)
         {
             var userId = _userManager.GetUserId(HttpContext.User);
-            var review = _context.AccessTable.Where(u => u.UserId == userId).Where(i => i.ScreenId == id).SingleOrDefault();
-            return Json(review.State);
+            var review = _context.AccessTable.Where(u => u.UserId == userId).Where(i => i.ReviewId == id).SingleOrDefault();
+            return Json(0);// review.State);
         }
         public JsonResult GetComments(int? Id)
         {
@@ -370,7 +370,7 @@ namespace Inspicio.Controllers
         public async Task<IActionResult> ChangeRating([FromBody] RatingBody data)
         {
             var userId = _userManager.GetUserId(HttpContext.User);
-            var review = _context.AccessTable.Where(u => u.UserId == userId).Where(i => i.ScreenId == data.ScreenId).SingleOrDefault();
+            var review = _context.AccessTable.Where(u => u.UserId == userId).Where(i => i.ReviewId == data.ScreenId).SingleOrDefault();
 
             if (review == null)
             {
@@ -381,18 +381,18 @@ namespace Inspicio.Controllers
             int id = data.ScreenId;
             var image = await _context.Screens.SingleOrDefaultAsync(m => m.ScreenId == id);
 
-            if (data.state == State.Approved)
-            {
-                review.State = AccessTable.States.Approved;
-            }
-            else if (data.state == State.NeedsWork)
-            {
-                review.State = AccessTable.States.NeedsWork;
-            }
-            else if (data.state == State.Rejected)
-            {
-                review.State = AccessTable.States.Rejected;
-            }
+            //if (data.state == State.Approved)
+            //{
+            //    review.State = AccessTable.States.Approved;
+            //}
+            //else if (data.state == State.NeedsWork)
+            //{
+            //    review.State = AccessTable.States.NeedsWork;
+            //}
+            //else if (data.state == State.Rejected)
+            //{
+            //    review.State = AccessTable.States.Rejected;
+            //}
 
             await _context.SaveChangesAsync();
             return Ok(1);

@@ -13,22 +13,14 @@ namespace Inspicio.Models
 
         public int ScreenId { get; set; }
 
-        public int NextScreenId { get; set; }
-
-        public int NextVersionId { get; set; }
-
         [EnumDataType(typeof(States))]
-        public States ScreenState { get; set; }
+        public States ReviewState { get; set; }
 
         public enum States { Approved, NeedsWork, Rejected, Undecided };
 
+        public ICollection<AccessTable> AccessTable { get; set; }
+
         [ForeignKey("ScreenId")]
         public Screen Screens { get; set; }
-
-        [ForeignKey("NextScreenId")]
-        public Screen NextScreens { get; set; }
-
-        [ForeignKey("NextVersionId")]
-        public Screen NextScreenVersions { get; set; }
     }
 }

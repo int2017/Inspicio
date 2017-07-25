@@ -24,8 +24,8 @@ namespace Inspicio.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<AccessTable>().HasKey(r => new { r.UserId, r.ScreenId });
-            modelBuilder.Entity<ApplicationUser>().HasMany(a => a.Images);
+            modelBuilder.Entity<AccessTable>().HasKey(r => new { r.UserId, r.ReviewId });
+            modelBuilder.Entity<ApplicationUser>().HasMany(a => a.Screens);
             modelBuilder.Entity<ApplicationUser>().HasMany(a => a.Comments);
             modelBuilder.Entity<Screen>().HasMany(i => i.Comments).WithOne(i => i.Screens);
 

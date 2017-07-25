@@ -21,13 +21,11 @@ namespace Inspicio.Migrations
                 {
                     b.Property<string>("UserId");
 
-                    b.Property<int>("ScreenId");
+                    b.Property<int>("ReviewId");
 
-                    b.Property<int>("State");
+                    b.HasKey("UserId", "ReviewId");
 
-                    b.HasKey("UserId", "ScreenId");
-
-                    b.HasAlternateKey("ScreenId", "UserId");
+                    b.HasAlternateKey("ReviewId", "UserId");
 
                     b.ToTable("AccessTable");
                 });
@@ -124,15 +122,13 @@ namespace Inspicio.Migrations
                     b.Property<int>("ReviewId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("NextScreenId");
-
-                    b.Property<int>("NextVersionId");
+                    b.Property<int>("ReviewState");
 
                     b.Property<int>("ScreenId");
 
-                    b.Property<int>("ScreenState");
-
                     b.HasKey("ReviewId");
+
+                    b.HasIndex("ScreenId");
 
                     b.ToTable("Review");
                 });
@@ -270,13 +266,13 @@ namespace Inspicio.Migrations
 
             modelBuilder.Entity("Inspicio.Models.AccessTable", b =>
                 {
-                    b.HasOne("Inspicio.Models.Screen", "Screens")
-                        .WithMany("Reviews")
-                        .HasForeignKey("ScreenId")
+                    b.HasOne("Inspicio.Models.Review", "Reviews")
+                        .WithMany("AccessTable")
+                        .HasForeignKey("ReviewId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Inspicio.Models.ApplicationUser", "ApplicationUsers")
-                        .WithMany("Reviews")
+                        .WithMany("AccessTable")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
@@ -293,10 +289,18 @@ namespace Inspicio.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("Inspicio.Models.Review", b =>
+                {
+                    b.HasOne("Inspicio.Models.Screen", "Screens")
+                        .WithMany("Reviews")
+                        .HasForeignKey("ScreenId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("Inspicio.Models.Screen", b =>
                 {
                     b.HasOne("Inspicio.Models.ApplicationUser", "ApplicationUsers")
-                        .WithMany("Images")
+                        .WithMany("Screens")
                         .HasForeignKey("OwnerId");
                 });
 
