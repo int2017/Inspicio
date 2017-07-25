@@ -45,7 +45,7 @@ namespace Inspicio.Controllers
             // Only images with the user id set as the owner should be passed into the view
             var UserId = _userManager.GetUserId(HttpContext.User);
 
-            var ImageIds = _context.Review.Where(r => r.OwnerId == UserId).Select(i => i.ImageId);
+            var ImageIds = _context.Review.Where(r => r.UserId == UserId).Select(i => i.ImageId);
             var AllImages = new List<Image>();
             foreach (var Id in ImageIds)
             {
@@ -126,7 +126,7 @@ namespace Inspicio.Controllers
 
                 var ReviewOwner = new Review();
                 ReviewOwner.ImageId = CreatePageModel.Image.ImageID;
-                ReviewOwner.OwnerId = CreatePageModel.Image.OwnerId;
+                ReviewOwner.UserId = CreatePageModel.Image.OwnerId;
                 ReviewOwner.State = Review.States.Undecided;
                 _context.Add(ReviewOwner);
 
@@ -139,7 +139,7 @@ namespace Inspicio.Controllers
                         var reviewee = new Review();
                         reviewee.State = Review.States.Undecided;
 
-                        reviewee.OwnerId = u.Id;
+                        reviewee.UserId = u.Id;
                         reviewee.ImageId = CreatePageModel.Image.ImageID;
                         _context.Add(reviewee);
                     }
@@ -227,7 +227,7 @@ namespace Inspicio.Controllers
 
         public JsonResult GetRating(int? id) {
             var userId = _userManager.GetUserId(HttpContext.User);
-            var review = _context.Review.Where(u => u.OwnerId == userId).Where(i => i.ImageId == id).SingleOrDefault();
+            var review = _context.Review.Where(u => u.UserId == userId).Where(i => i.ImageId == id).SingleOrDefault();
             return Json(review.State);
     }
     public JsonResult GetComments(int? Id)
@@ -369,7 +369,7 @@ namespace Inspicio.Controllers
         public async Task<IActionResult> ChangeRating([FromBody] RatingBody data)
         {
             var userId = _userManager.GetUserId(HttpContext.User);
-            var review = _context.Review.Where(u => u.OwnerId == userId).Where(i => i.ImageId == data.ImageID).SingleOrDefault();
+            var review = _context.Review.Where(u => u.UserId == userId).Where(i => i.ImageId == data.ImageID).SingleOrDefault();
 
             if (review == null)
             {

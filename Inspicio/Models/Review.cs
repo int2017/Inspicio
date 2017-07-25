@@ -11,7 +11,7 @@ namespace Inspicio.Models
     {
         [Key]
         [Column(Order = 1)]
-        public string OwnerId { get; set; }
+        public string UserId { get; set; }
 
         [Key]
         [Column(Order = 2)]
@@ -20,14 +20,9 @@ namespace Inspicio.Models
         [EnumDataType(typeof(States))]
         public States State { get; set; }
 
-        public enum States { Approved,
-                            NeedsWork,
-                            Rejected,
-                            Undecided};
+        public enum States { Approved, NeedsWork, Rejected, Undecided };
 
-        public bool NeedsWork { get; set; }
-
-        [ForeignKey("OwnerId")]
+        [ForeignKey("UserId")]
         public ApplicationUser ApplicationUsers { get; set; }
 
         [ForeignKey("ImageId")]

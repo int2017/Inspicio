@@ -130,17 +130,15 @@ namespace Inspicio.Migrations
 
             modelBuilder.Entity("Inspicio.Models.Review", b =>
                 {
-                    b.Property<string>("OwnerId");
+                    b.Property<string>("UserId");
 
                     b.Property<int>("ImageId");
 
-                    b.Property<bool>("NeedsWork");
-
                     b.Property<int>("State");
 
-                    b.HasKey("OwnerId", "ImageId");
+                    b.HasKey("UserId", "ImageId");
 
-                    b.HasAlternateKey("ImageId", "OwnerId");
+                    b.HasAlternateKey("ImageId", "UserId");
 
                     b.ToTable("Review");
                 });
@@ -280,7 +278,7 @@ namespace Inspicio.Migrations
 
                     b.HasOne("Inspicio.Models.ApplicationUser", "ApplicationUsers")
                         .WithMany("Reviews")
-                        .HasForeignKey("OwnerId")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
