@@ -1,26 +1,26 @@
 @model List<Inspicio.Controllers.ImagesController.IndexModel>
 @inject UserManager<ApplicationUser> UserManager
 
+
 <h2>View All Reviews</h2>
 
 <p>
     <a asp-action="Create">Create Review</a>
 </p>
-
-    <p>
-        <input type="text" id="myInput" placeholder="Search for reviews..">
-    </p>
+<p>
+    <input type="text" id="myInput" placeholder="Search for reviews..">
+</p>
 
 <table id="table">
     <thead>
-        <tr class="header">
+        <tr class="header" style="border-bottom: solid; border-width: 3px;">
             <th id="content">
                 Content
             </th>
-            <th >
+            <th class="TitleHeader" style="cursor: pointer;">
                 Title
             </th>
-            <th id="creator">
+            <th class="CreatorHeader" id="creator" style="cursor: pointer;">
                 Creator
             </th>
             <th id="up-col">
@@ -32,18 +32,18 @@
             <th id="down-col">
                  <img src="~/images/thumbdown.jpg" style="height: 20px;" />
             </th>
-            <th id="status">
+            <th class="StatusHeader" id="status" style="cursor: pointer;">
                 Status
             </th>
         </tr>
     </thead>
-    <tbody>
+    <tbody id="tBody" style="border-bottom: solid; border-width: 3px;">
 
 @foreach (var item in Model)
 {
-        <tr title="@item.Image.Title" onclick="document.location = 'Images/View/@item.Image.ImageID'" style="cursor:pointer" >
+        <tr title="@item.Image.Title" onclick="document.location = 'Images/View/@item.Image.ImageID'" style="cursor:pointer; border-bottom:solid;border-bottom-width:1px;" >
                 <td id="content">
-                    <img style="max-height: 100px; max-width: 100px;" src="@item.Image.Content" />
+                    <img style="max-height: 100px; max-width: 100px; margin-top:15px;" src="@item.Image.Content" />
                 </td>
                 <td id="title">
                     @{
@@ -77,4 +77,5 @@
     </tbody>
 </table>
 
+<script type="text/javascript" src="~/js/SortTable.js"></script>
 <script type="text/javascript" src="~/js/Search.js"></script>

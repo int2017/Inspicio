@@ -103,7 +103,7 @@ body {
 }
 
 #table td, #table th {
-    padding-bottom: 15px;
+    padding-bottom: 5px;
     border-collapse: collapse;
 }
 
