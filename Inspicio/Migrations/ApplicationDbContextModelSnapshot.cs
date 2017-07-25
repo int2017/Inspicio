@@ -21,13 +21,13 @@ namespace Inspicio.Migrations
                 {
                     b.Property<string>("UserId");
 
-                    b.Property<int>("ImageId");
+                    b.Property<int>("ScreenId");
 
                     b.Property<int>("State");
 
-                    b.HasKey("UserId", "ImageId");
+                    b.HasKey("UserId", "ScreenId");
 
-                    b.HasAlternateKey("ImageId", "UserId");
+                    b.HasAlternateKey("ScreenId", "UserId");
 
                     b.ToTable("AccessTable");
                 });
@@ -96,8 +96,6 @@ namespace Inspicio.Migrations
 
                     b.Property<int>("CommentUrgency");
 
-                    b.Property<int>("ImageId");
-
                     b.Property<float>("Lat");
 
                     b.Property<float>("Lng");
@@ -108,20 +106,22 @@ namespace Inspicio.Migrations
 
                     b.Property<string>("ParentId");
 
+                    b.Property<int>("ScreenId");
+
                     b.Property<DateTime>("Timestamp");
 
                     b.HasKey("CommentId");
 
-                    b.HasIndex("ImageId");
-
                     b.HasIndex("OwnerId");
+
+                    b.HasIndex("ScreenId");
 
                     b.ToTable("Comments");
                 });
 
-            modelBuilder.Entity("Inspicio.Models.Image", b =>
+            modelBuilder.Entity("Inspicio.Models.Screen", b =>
                 {
-                    b.Property<int>("ImageID")
+                    b.Property<int>("ScreenId")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("Content");
@@ -130,17 +130,17 @@ namespace Inspicio.Migrations
 
                     b.Property<string>("OwnerId");
 
-                    b.Property<int>("ReviewStatus");
+                    b.Property<int>("ScreenStatus");
 
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(150);
 
-                    b.HasKey("ImageID");
+                    b.HasKey("ScreenId");
 
                     b.HasIndex("OwnerId");
 
-                    b.ToTable("Images");
+                    b.ToTable("Screens");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRole", b =>
@@ -252,9 +252,9 @@ namespace Inspicio.Migrations
 
             modelBuilder.Entity("Inspicio.Models.AccessTable", b =>
                 {
-                    b.HasOne("Inspicio.Models.Image", "Images")
+                    b.HasOne("Inspicio.Models.Screen", "Screens")
                         .WithMany("Reviews")
-                        .HasForeignKey("ImageId")
+                        .HasForeignKey("ScreenId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Inspicio.Models.ApplicationUser", "ApplicationUsers")
@@ -265,17 +265,17 @@ namespace Inspicio.Migrations
 
             modelBuilder.Entity("Inspicio.Models.Comment", b =>
                 {
-                    b.HasOne("Inspicio.Models.Image", "Images")
-                        .WithMany("Comments")
-                        .HasForeignKey("ImageId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
                     b.HasOne("Inspicio.Models.ApplicationUser", "ApplicationUser")
                         .WithMany("Comments")
                         .HasForeignKey("OwnerId");
+
+                    b.HasOne("Inspicio.Models.Screen", "Screens")
+                        .WithMany("Comments")
+                        .HasForeignKey("ScreenId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Inspicio.Models.Image", b =>
+            modelBuilder.Entity("Inspicio.Models.Screen", b =>
                 {
                     b.HasOne("Inspicio.Models.ApplicationUser", "ApplicationUsers")
                         .WithMany("Images")

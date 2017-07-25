@@ -15,7 +15,7 @@ namespace Inspicio.Models
 
         [Key]
         [Column(Order = 2)]
-        public int ImageId { get; set; }
+        public int ScreenId { get; set; }
 
         [EnumDataType(typeof(States))]
         public States State { get; set; }
@@ -25,7 +25,7 @@ namespace Inspicio.Models
         [ForeignKey("UserId")]
         public ApplicationUser ApplicationUsers { get; set; }
 
-        [ForeignKey("ImageId")]
-        public Image Images { get; set; }
+        [ForeignKey("ScreenId")]
+        public Screen Screens { get; set; }
     }
 }

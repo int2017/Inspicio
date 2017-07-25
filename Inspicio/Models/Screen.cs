@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace Inspicio.Models
 {
-    public class Image
+    public class Screen
     {
-        public int ImageID { get; set; }
+        public int ScreenId { get; set; }
 
         public string OwnerId { get; set; }
 
@@ -24,13 +24,9 @@ namespace Inspicio.Models
 
         [EnumDataType(typeof(Status))]
         [DisplayName("Status")]
-        public Status ReviewStatus { get; set; }
+        public Status ScreenStatus { get; set; }
 
-        public enum Status
-        {
-           Open,
-           Closed
-        }
+        public enum Status { Open,  Closed }
 
         public ICollection<Comment> Comments { get; set; }
         public ICollection<AccessTable> Reviews { get; set; }

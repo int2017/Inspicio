@@ -18,15 +18,15 @@ namespace Inspicio.Data
         }
 
         public DbSet<Comment> Comments { get; set; }
-        public DbSet<Image> Images { get; set; }
+        public DbSet<Screen> Screens { get; set; }
         public DbSet<AccessTable> AccessTable { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<AccessTable>().HasKey(r => new { r.UserId, r.ImageId });
+            modelBuilder.Entity<AccessTable>().HasKey(r => new { r.UserId, r.ScreenId });
             modelBuilder.Entity<ApplicationUser>().HasMany(a => a.Images);
             modelBuilder.Entity<ApplicationUser>().HasMany(a => a.Comments);
-            modelBuilder.Entity<Image>().HasMany(i => i.Comments).WithOne(i => i.Images);
+            modelBuilder.Entity<Screen>().HasMany(i => i.Comments).WithOne(i => i.Screens);
 
             base.OnModelCreating(modelBuilder);
         }

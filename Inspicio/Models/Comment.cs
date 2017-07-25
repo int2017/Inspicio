@@ -13,16 +13,15 @@ namespace Inspicio.Models
         public int CommentId { get; set; }
 
         public string OwnerId { get; set; }
+
         public Urgency CommentUrgency { get; set; }
-        public enum Urgency
-        {
-            Default,
-            Urgent
-            
-        }
-        public int ImageId { get; set; }
+        public enum Urgency { Default, Urgent }
+
+        public int ScreenId { get; set; }
+
         public float Lat { get; set; }
         public float Lng { get; set; }
+
         public string Message { get; set; }
 
         [DisplayName("Time Posted")]
@@ -34,7 +33,7 @@ namespace Inspicio.Models
         [ForeignKey("OwnerId")]
         public ApplicationUser ApplicationUser { get; set; }
 
-        [ForeignKey("ImageId")]
-        public Image Images { get; set; }
+        [ForeignKey("ScreenId")]
+        public Screen Screens { get; set; }
     }
 }

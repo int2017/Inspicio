@@ -22,7 +22,7 @@ namespace Inspicio.Models
         public string ProfilePicture { get; set; }
 
         public ICollection<Comment> Comments { get; set; }
-        public ICollection<Image> Images { get; set; }
+        public ICollection<Screen> Images { get; set; }
         public ICollection<AccessTable> Reviews { get; set; }
     }
 }

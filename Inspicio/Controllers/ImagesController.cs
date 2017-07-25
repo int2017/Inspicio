@@ -33,7 +33,7 @@ namespace Inspicio.Controllers
         // GET: Images
         public class IndexModel
         {
-            public Image Image { get; set; }
+            public Screen Image { get; set; }
             public int approvals { get; set; }
             public int rejections { get; set; }
             public int needsWorks { get; set; }
@@ -45,11 +45,11 @@ namespace Inspicio.Controllers
             // Only images with the user id set as the owner should be passed into the view
             var UserId = _userManager.GetUserId(HttpContext.User);
 
-            var ImageIds = _context.AccessTable.Where(r => r.UserId == UserId).Select(i => i.ImageId);
-            var AllImages = new List<Image>();
+            var ImageIds = _context.AccessTable.Where(r => r.UserId == UserId).Select(i => i.ScreenId);
+            var AllImages = new List<Screen>();
             foreach (var Id in ImageIds)
             {
-                AllImages.Add(_context.Images.Where(i => i.ImageID == Id).SingleOrDefault());
+                AllImages.Add(_context.Screens.Where(i => i.ScreenId == Id).SingleOrDefault());
             }
 
             var ImageEntries = new List<IndexModel>();
@@ -58,9 +58,9 @@ namespace Inspicio.Controllers
                 ImageEntries.Add(new IndexModel
                 {
                     Image = a,
-                    approvals = _context.AccessTable.Count(x => (x.ImageId == a.ImageID) && x.State == AccessTable.States.Approved),
-                    needsWorks = _context.AccessTable.Count(x => (x.ImageId == a.ImageID) && x.State == AccessTable.States.NeedsWork),
-                    rejections = _context.AccessTable.Count(x => (x.ImageId == a.ImageID) && x.State == AccessTable.States.Rejected)
+                    approvals = _context.AccessTable.Count(x => (x.ScreenId == a.ScreenId) && x.State == AccessTable.States.Approved),
+                    needsWorks = _context.AccessTable.Count(x => (x.ScreenId == a.ScreenId) && x.State == AccessTable.States.NeedsWork),
+                    rejections = _context.AccessTable.Count(x => (x.ScreenId == a.ScreenId) && x.State == AccessTable.States.Rejected)
                 });
             }
 
@@ -76,7 +76,7 @@ namespace Inspicio.Controllers
                 return NotFound();
             }
 
-            var Image = await _context.Images.SingleOrDefaultAsync(m => m.ImageID == Id);
+            var Image = await _context.Screens.SingleOrDefaultAsync(m => m.ScreenId == Id);
             if (Image == null)
             {
                 return NotFound();
@@ -95,7 +95,7 @@ namespace Inspicio.Controllers
         {
 
             public List<SelectableUser> Users { get; set; }
-            public Image Image { get; set; }
+            public Screen Image { get; set; }
         }
         // GET: Images/Create
         public IActionResult Create()
@@ -121,16 +121,16 @@ namespace Inspicio.Controllers
             if (ModelState.IsValid)
             {
                 CreatePageModel.Image.OwnerId = _userManager.GetUserId(HttpContext.User);
-                CreatePageModel.Image.ReviewStatus = Image.Status.Open;
+                CreatePageModel.Image.ScreenStatus = Screen.Status.Open;
                 _context.Add(CreatePageModel.Image);
 
                 var ReviewOwner = new AccessTable();
-                ReviewOwner.ImageId = CreatePageModel.Image.ImageID;
+                ReviewOwner.ScreenId = CreatePageModel.Image.ScreenId;
                 ReviewOwner.UserId = CreatePageModel.Image.OwnerId;
                 ReviewOwner.State = AccessTable.States.Undecided;
                 _context.Add(ReviewOwner);
 
-                CreatePageModel.Image.ReviewStatus = Image.Status.Open;
+                CreatePageModel.Image.ScreenStatus = Screen.Status.Open;
                 var Reviewees = new List<AccessTable>();
                 if (CreatePageModel.Users != null)
                 {
@@ -140,7 +140,7 @@ namespace Inspicio.Controllers
                         reviewee.State = AccessTable.States.Undecided;
 
                         reviewee.UserId = u.Id;
-                        reviewee.ImageId = CreatePageModel.Image.ImageID;
+                        reviewee.ScreenId = CreatePageModel.Image.ScreenId;
                         _context.Add(reviewee);
                     }
                 }
@@ -158,7 +158,7 @@ namespace Inspicio.Controllers
 
             public class ImageData
             {
-                public Image Image { get; set; }
+                public Screen Image { get; set; }
                 public int approvals { get; set; }
                 public int rejections { get; set; }
                 public int needsWorks { get; set; }
@@ -184,7 +184,7 @@ namespace Inspicio.Controllers
             }
 
             // Fetch the image by the id pass in '/5'
-            var Image = await _context.Images.SingleOrDefaultAsync(m => m.ImageID == Id);
+            var Image = await _context.Screens.SingleOrDefaultAsync(m => m.ScreenId == Id);
             if (Image == null)
             {
                 return NotFound();
@@ -202,13 +202,13 @@ namespace Inspicio.Controllers
 
             FullReviewData.Info = new ViewModel.ImageData();
             FullReviewData.Info.Image = Image;
-            FullReviewData.Info.Image.ReviewStatus = Image.ReviewStatus;
-            FullReviewData.Info.approvals = _context.AccessTable.Count(x => x.ImageId == Id && x.State == AccessTable.States.Approved);
-            FullReviewData.Info.rejections = _context.AccessTable.Count(x => x.ImageId == Id && x.State == AccessTable.States.Rejected);
-            FullReviewData.Info.needsWorks = _context.AccessTable.Count(x => x.ImageId == Id && x.State == AccessTable.States.NeedsWork);
-            FullReviewData.Reviews = _context.AccessTable.Where(u => u.ImageId == Id).ToList();
+            FullReviewData.Info.Image.ScreenStatus = Image.ScreenStatus;
+            FullReviewData.Info.approvals = _context.AccessTable.Count(x => x.ScreenId == Id && x.State == AccessTable.States.Approved);
+            FullReviewData.Info.rejections = _context.AccessTable.Count(x => x.ScreenId == Id && x.State == AccessTable.States.Rejected);
+            FullReviewData.Info.needsWorks = _context.AccessTable.Count(x => x.ScreenId == Id && x.State == AccessTable.States.NeedsWork);
+            FullReviewData.Reviews = _context.AccessTable.Where(u => u.ScreenId == Id).ToList();
             // Changed from getting all comments then working out which we want to only getting the ones we want.
-            var AllComments = _context.Comments.Where(c => c.ImageId == Id);
+            var AllComments = _context.Comments.Where(c => c.ScreenId == Id);
             foreach (Comment SingleComment in AllComments)
             {
                 // add it and query the user table for the profilename.
@@ -228,13 +228,13 @@ namespace Inspicio.Controllers
         public JsonResult GetRating(int? id)
         {
             var userId = _userManager.GetUserId(HttpContext.User);
-            var review = _context.AccessTable.Where(u => u.UserId == userId).Where(i => i.ImageId == id).SingleOrDefault();
+            var review = _context.AccessTable.Where(u => u.UserId == userId).Where(i => i.ScreenId == id).SingleOrDefault();
             return Json(review.State);
         }
         public JsonResult GetComments(int? Id)
         {
             List<ViewModel.CommentInfo> comments = new List<ViewModel.CommentInfo>();
-            var AllComments = _context.Comments.Where(c => c.ImageId == Id);
+            var AllComments = _context.Comments.Where(c => c.ScreenId == Id);
             foreach (Comment SingleComment in AllComments)
             {
                 var CommentInfo = new ViewModel.CommentInfo();
@@ -249,10 +249,10 @@ namespace Inspicio.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> View(int Id, [Bind("ImageID,Content,DownRating,UpRating,Description,Title")] Image Image)
+        public async Task<IActionResult> View(int Id, [Bind("ImageID,Content,DownRating,UpRating,Description,Title")] Screen Image)
         {
 
-            if (Id != Image.ImageID)
+            if (Id != Image.ScreenId)
             {
                 return NotFound();
             }
@@ -266,7 +266,7 @@ namespace Inspicio.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ImageExists(Image.ImageID))
+                    if (!ImageExists(Image.ScreenId))
                     {
                         return NotFound();
                     }
@@ -288,7 +288,7 @@ namespace Inspicio.Controllers
                 return NotFound();
             }
 
-            var Image = await _context.Images.SingleOrDefaultAsync(m => m.ImageID == Id);
+            var Image = await _context.Screens.SingleOrDefaultAsync(m => m.ScreenId == Id);
             if (Image == null)
             {
                 return NotFound();
@@ -302,15 +302,15 @@ namespace Inspicio.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int Id)
         {
-            var Image = await _context.Images.SingleOrDefaultAsync(m => m.ImageID == Id);
-            _context.Images.Remove(Image);
+            var Image = await _context.Screens.SingleOrDefaultAsync(m => m.ScreenId == Id);
+            _context.Screens.Remove(Image);
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
         private bool ImageExists(int Id)
         {
-            return _context.Images.Any(e => e.ImageID == Id);
+            return _context.Screens.Any(e => e.ScreenId == Id);
         }
 
         public class DataFromBody
@@ -335,7 +335,7 @@ namespace Inspicio.Controllers
 
             var userId = _userManager.GetUserId(HttpContext.User);
             comment.OwnerId = userId;
-            comment.ImageId = DataFromBody.ImageId;
+            comment.ScreenId = DataFromBody.ImageId;
             comment.Message = DataFromBody.Message;
             comment.Timestamp = System.DateTime.Now;
             comment.Lat = DataFromBody.Lat;
@@ -370,7 +370,7 @@ namespace Inspicio.Controllers
         public async Task<IActionResult> ChangeRating([FromBody] RatingBody data)
         {
             var userId = _userManager.GetUserId(HttpContext.User);
-            var review = _context.AccessTable.Where(u => u.UserId == userId).Where(i => i.ImageId == data.ImageID).SingleOrDefault();
+            var review = _context.AccessTable.Where(u => u.UserId == userId).Where(i => i.ScreenId == data.ImageID).SingleOrDefault();
 
             if (review == null)
             {
@@ -379,7 +379,7 @@ namespace Inspicio.Controllers
 
 
             int id = data.ImageID;
-            var image = await _context.Images.SingleOrDefaultAsync(m => m.ImageID == id);
+            var image = await _context.Screens.SingleOrDefaultAsync(m => m.ScreenId == id);
 
             if (data.state == State.Approved)
             {
@@ -412,15 +412,15 @@ namespace Inspicio.Controllers
             var userId = _userManager.GetUserId(HttpContext.User);
 
             int id = data.ImageID;
-            var image = await _context.Images.SingleOrDefaultAsync(m => m.ImageID == id);
+            var image = await _context.Screens.SingleOrDefaultAsync(m => m.ScreenId == id);
 
             if (data.Open)
             {
-                image.ReviewStatus = Image.Status.Open;
+                image.ScreenStatus = Screen.Status.Open;
             }
             else
             {
-                image.ReviewStatus = Image.Status.Closed;
+                image.ScreenStatus = Screen.Status.Closed;
             }
             await _context.SaveChangesAsync();
             return Ok(1);
