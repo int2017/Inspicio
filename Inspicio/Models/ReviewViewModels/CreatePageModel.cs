@@ -4,13 +4,9 @@ using Inspicio.Models;
 
 namespace Inspicio.Controllers
 {
-    public partial class ImagesController : Controller
+    public class CreatePageModel
     {
-        public class CreatePageModel
-        {
-
-            public List<SelectableUser> Users { get; set; }
-            public Screen Screen { get; set; }
-        }
+        public List<SelectableUser> Users { get; set; }
+        public Screen Screen { get; set; }
     }
 }

@@ -2,13 +2,10 @@
 
 namespace Inspicio.Controllers
 {
-    public partial class ImagesController : Controller
+    public class DataFromToggle
     {
-        public class DataFromToggle
-        {
-            public int ReviewId { get; set; }
-            public bool Open { get; set; }
+        public int ReviewId { get; set; }
+        public bool Open { get; set; }
 
-        }
     }
 }

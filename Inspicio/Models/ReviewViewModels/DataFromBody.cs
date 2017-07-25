@@ -3,24 +3,20 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Inspicio.Controllers
 {
-    public partial class ImagesController : Controller
+    public enum Urgency
     {
+        Default,
+        Urgent
 
-        public enum Urgency
-        {
-            Default,
-            Urgent
+    }
 
-        }
-
-        public class DataFromBody
-        {
-            public String Message { get; set; }
-            public int ScreenId { get; set; }
-            public float Lat { get; set; }
-            public float Lng { get; set; }
-            public String ParentId { get; set; }
-            public Urgency CommentUrgency { get; set; }
-        }
+    public class DataFromBody
+    {
+        public String Message { get; set; }
+        public int ScreenId { get; set; }
+        public float Lat { get; set; }
+        public float Lng { get; set; }
+        public String ParentId { get; set; }
+        public Urgency CommentUrgency { get; set; }
     }
 }
