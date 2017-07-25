@@ -18,8 +18,11 @@ namespace Inspicio.Models
 
         [EnumDataType(typeof(States))]
         public States ReviewState { get; set; }
+        public enum States { Open, Closed };
 
-        public enum States { Approved, NeedsWork, Rejected, Undecided };
+        [EnumDataType(typeof(Status))]
+        public Status ReviewStatus { get; set; }
+        public enum Status { Approved, NeedsWork, Rejected, Undecided };
 
         public ICollection<AccessTable> AccessTable { get; set; }
 

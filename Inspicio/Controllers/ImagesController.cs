@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -12,10 +11,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
+
+using Inspicio.Models.ReviewViewModels;
+
 namespace Inspicio.Controllers
 {
     [Authorize]
-    public class ImagesController : Controller
+    public partial class ImagesController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IHostingEnvironment _environment;
@@ -31,14 +33,6 @@ namespace Inspicio.Controllers
         }
 
         // GET: Images
-        public class IndexModel
-        {
-            public Screen Screen { get; set; }
-            public int approvals { get; set; }
-            public int rejections { get; set; }
-            public int needsWorks { get; set; }
-        }
-
         public async Task<IActionResult> Index(string SearchString)
         {
 
@@ -84,19 +78,6 @@ namespace Inspicio.Controllers
 
             return View(Screen);
         }
-
-
-
-        public class SelectableUser : ApplicationUser
-        {
-            public bool IsSelected { get; set; }
-        }
-        public class CreatePageModel
-        {
-
-            public List<SelectableUser> Users { get; set; }
-            public Screen Screen { get; set; }
-        }
         // GET: Images/Create
         public IActionResult Create()
         {
@@ -113,6 +94,10 @@ namespace Inspicio.Controllers
             return View(CreatePageModel);
         }
 
+
+
+
+
         // POST: Images/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -121,27 +106,32 @@ namespace Inspicio.Controllers
             if (ModelState.IsValid)
             {
                 CreatePageModel.Screen.OwnerId = _userManager.GetUserId(HttpContext.User);
-                CreatePageModel.Screen.ScreenStatus = Screen.Status.Open;
+                CreatePageModel.Screen.ScreenStatus = Screen.Status.Undecided;
                 _context.Add(CreatePageModel.Screen);
 
-                var ReviewOwner = new AccessTable();
-                ReviewOwner.ReviewId = CreatePageModel.Screen.ScreenId;
-                ReviewOwner.UserId = CreatePageModel.Screen.OwnerId;
-                //ReviewOwner.State = AccessTable.States.Undecided;
-                _context.Add(ReviewOwner);
+                var Review = new Review();
+                //Review.ReviewId = ?
+                Review.ScreenId = CreatePageModel.Screen.ScreenId;
+                Review.ReviewState = Review.States.Open;
+                Review.ReviewStatus = Review.Status.Undecided;
+                //Review.NextScreenId = -1;
+                //Review.NextVersionId = -1;
+                _context.Add(Review);
 
-                CreatePageModel.Screen.ScreenStatus = Screen.Status.Open;
-                var Reviewees = new List<AccessTable>();
+                var OwnerEntry = new AccessTable();
+                OwnerEntry.ReviewId = CreatePageModel.Screen.ScreenId;
+                OwnerEntry.UserId = CreatePageModel.Screen.OwnerId;
+                _context.Add(OwnerEntry);
+                
                 if (CreatePageModel.Users != null)
                 {
                     foreach (var u in CreatePageModel.Users.Where(m => m.IsSelected))
                     {
-                        var reviewee = new AccessTable();
-                        //reviewee.State = AccessTable.States.Undecided;
+                        var ReviewerEntry = new AccessTable();
 
-                        reviewee.UserId = u.Id;
-                        reviewee.ReviewId = CreatePageModel.Screen.ScreenId;
-                        _context.Add(reviewee);
+                        ReviewerEntry.UserId = u.Id;
+                        ReviewerEntry.ReviewId = CreatePageModel.Screen.ScreenId;
+                        _context.Add(ReviewerEntry);
                     }
                 }
 
@@ -152,27 +142,9 @@ namespace Inspicio.Controllers
         }
 
 
-        public class ViewModel
-        {
-            public string OwnerId { get; set; }
 
-            public class ImageData
-            {
-                public Screen Screen { get; set; }
-                public int approvals { get; set; }
-                public int rejections { get; set; }
-                public int needsWorks { get; set; }
-            }
-            public ImageData Info { get; set; }
 
-            public List<CommentInfo> Comments { get; set; }
-            public class CommentInfo
-            {
-                public String PosterProfileName { get; set; }
-                public Comment comment { get; set; }
-            }
-            public List<AccessTable> Reviews = new List<AccessTable>();
-        }
+
 
 
         // GET: Images/View/5
@@ -312,22 +284,7 @@ namespace Inspicio.Controllers
         {
             return _context.Screens.Any(e => e.ScreenId == Id);
         }
-
-        public class DataFromBody
-        {
-            public String Message { get; set; }
-            public int ScreenId { get; set; }
-            public float Lat { get; set; }
-            public float Lng { get; set; }
-            public String ParentId { get; set; }
-            public Urgency CommentUrgency { get; set; }
-        }
-        public enum Urgency
-        {
-            Default,
-            Urgent
-
-        }
+       
         [HttpPost]
         public async Task<IActionResult> Comment([FromBody] DataFromBody DataFromBody)
         {
@@ -353,19 +310,7 @@ namespace Inspicio.Controllers
         }
 
 
-        public enum State
-        {
-            Approved,
-            NeedsWork,
-            Rejected
-        };
-        public class RatingBody
-        {
-            // Integer determines which button has been pressed
-            public State state { get; set; }
-            public int ScreenId { get; set; }
-
-        }
+       
         [HttpPost]
         public async Task<IActionResult> ChangeRating([FromBody] RatingBody data)
         {
@@ -398,29 +343,21 @@ namespace Inspicio.Controllers
             return Ok(1);
         }
 
-
-        public class DataFromToggle
-        {
-            public int ScreenId { get; set; }
-            public bool Open { get; set; }
-
-        }
-
         [HttpPost]
         public async Task<IActionResult> CloseReview([FromBody] DataFromToggle data)
         {
             var userId = _userManager.GetUserId(HttpContext.User);
 
-            int id = data.ScreenId;
-            var image = await _context.Screens.SingleOrDefaultAsync(m => m.ScreenId == id);
+            int id = data.ReviewId;
+            var review = await _context.Review.SingleOrDefaultAsync(m => m.ReviewId == id);
 
             if (data.Open)
             {
-                image.ScreenStatus = Screen.Status.Open;
+                review.ReviewState = Review.States.Open;
             }
             else
             {
-                image.ScreenStatus = Screen.Status.Closed;
+                review.ReviewState = Review.States.Closed;
             }
             await _context.SaveChangesAsync();
             return Ok(1);

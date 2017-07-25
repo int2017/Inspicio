@@ -25,7 +25,7 @@ namespace Inspicio.Models
         [EnumDataType(typeof(Status))]
         public Status ScreenStatus { get; set; }
 
-        public enum Status { Open,  Closed }
+        public enum Status { Approved, NeedsWork, Rejected, Undecided }
 
         public ICollection<Comment> Comments { get; set; }
 
