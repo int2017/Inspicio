@@ -11,6 +11,8 @@ using Inspicio.Models;
 using Inspicio.Models.ManageViewModels;
 using Inspicio.Services;
 using Inspicio.Classes;
+using Inspicio.Data;
+using System.Security.Claims;
 
 namespace Inspicio.Controllers
 {
@@ -23,6 +25,7 @@ namespace Inspicio.Controllers
         private readonly IEmailSender _emailSender;
         private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
+        private readonly ApplicationDbContext _context;
 
         public ManageController(
           UserManager<ApplicationUser> userManager,
@@ -30,7 +33,8 @@ namespace Inspicio.Controllers
           IOptions<IdentityCookieOptions> identityCookieOptions,
           IEmailSender emailSender,
           ISmsSender smsSender,
-          ILoggerFactory loggerFactory)
+          ILoggerFactory loggerFactory,
+          ApplicationDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -38,6 +42,7 @@ namespace Inspicio.Controllers
             _emailSender = emailSender;
             _smsSender = smsSender;
             _logger = loggerFactory.CreateLogger<ManageController>();
+            _context = context;
         }
 
         //
@@ -242,6 +247,36 @@ namespace Inspicio.Controllers
                 return View(model);
             }
             return RedirectToAction(nameof(Index), new { Message = ManageMessageId.Error });
+        }
+
+        // POST: /Manage/ChangeAvatar
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangeAvatar(IndexViewModel model)
+        {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if( model.ProfilePicture == "gravatar")
+            {
+                user.ProfilePicture = Gravatar.GetLink(user.Email);
+            }
+            else
+            {
+                user.ProfilePicture = model.ProfilePicture;
+            }
+
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
+
+            var NewModel = new IndexViewModel
+            {
+                HasPassword = await _userManager.HasPasswordAsync(user),
+                PhoneNumber = await _userManager.GetPhoneNumberAsync(user),
+                TwoFactor = await _userManager.GetTwoFactorEnabledAsync(user),
+                Logins = await _userManager.GetLoginsAsync(user),
+                BrowserRemembered = await _signInManager.IsTwoFactorClientRememberedAsync(user),
+                ProfilePicture = user.ProfilePicture
+            };
+            return View("Index", NewModel);
         }
 
         //

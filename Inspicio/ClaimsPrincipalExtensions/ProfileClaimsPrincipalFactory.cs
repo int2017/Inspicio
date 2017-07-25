@@ -35,7 +35,6 @@ namespace Inspicio.ClaimsPrincipalExtensions
             ((ClaimsIdentity)principal.Identity).AddClaims(new[]
             {
                 new Claim("Name", user.ProfileName),
-                new Claim("Picture", user.ProfilePicture),
                 new Claim("Email", user.Email),
                 new Claim("Id", user.Id)
             });

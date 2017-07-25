@@ -12,7 +12,7 @@
     position: relative;
     width: auto;
     z-index: 5;
-    height:100vh;
+    min-height:100vh;
     overflow: hidden;
     padding: 30px;
     
@@ -48,6 +48,10 @@
     justify-content: center;
     
 }
+#image-container{
+    padding:0px;
+}
+
 .progress {
     height: 30px;
     background-color: rgba(255, 255, 255, 0);
@@ -86,7 +90,7 @@
 }
 #img-txt >.row-eq-height{
     margin:10px 0;
-    height:350px;
+    min-height:350px;
     position:relative;
 }
 .row-eq-height > *{
