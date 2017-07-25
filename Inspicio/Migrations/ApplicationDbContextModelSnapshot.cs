@@ -48,7 +48,10 @@ namespace Inspicio.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed");
 
-                    b.Property<string>("ProfileName");
+                    b.Property<string>("ProfileName")
+                        .HasMaxLength(16);
+
+                    b.Property<string>("ProfilePicture");
 
                     b.Property<string>("SecurityStamp");
 
@@ -75,6 +78,8 @@ namespace Inspicio.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("ChildId");
+
+                    b.Property<int>("CommentUrgency");
 
                     b.Property<int>("ImageId");
 
@@ -112,7 +117,9 @@ namespace Inspicio.Migrations
 
                     b.Property<int>("ReviewStatus");
 
-                    b.Property<string>("Title");
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(150);
 
                     b.HasKey("ImageID");
 

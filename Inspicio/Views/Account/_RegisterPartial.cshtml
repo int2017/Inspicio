@@ -1,0 +1,49 @@
+﻿
+@model Inspicio.Models.AccountViewModels.LogRegModel
+
+<script type="text/javascript" src="~/js/login_register.js"></script>
+
+<!-- ▼▼ Register Form ▼▼ -->
+<form id="registerform"  align="center" asp-controller="Account" asp-action="Register" method="post" class="form-horizontal">
+    <h4>Create a new account.</h4>
+    <hr />
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div  align="center" class="log-form form-group">
+        <label asp-for="Register.ProfileName" class="col-md-3 control-label"></label>
+        <div class="col-md-9">
+            <input asp-for="Register.ProfileName" class="form-control" />
+            <span asp-validation-for="Register.ProfileName" class="text-danger"></span>
+        </div>
+    </div>
+    <div  align="center" class="log-form form-group">
+        <label asp-for="Register.Email" class="col-md-3 control-label"></label>
+        <div class="col-md-9">
+            <input asp-for="Register.Email" class="form-control" />
+            <span asp-validation-for="Register.Email" class="text-danger"></span>
+        </div>
+    </div>
+    <div align="center" class="log-form form-group">
+        <label asp-for="Register.Password" class="col-md-3 control-label"></label>
+        <div class="col-md-9">
+            <input asp-for="Register.Password" class="form-control" />
+            <span asp-validation-for="Register.Password" class="text-danger"></span>
+        </div>
+    </div>
+    <div  align="center" class="log-form form-group">
+        <label asp-for="Register.ConfirmPassword" class="col-md-3 control-label"></label>
+        <div class="col-md-9">
+            <input asp-for="Register.ConfirmPassword" class="form-control" />
+            <span asp-validation-for="Register.ConfirmPassword" class="text-danger"></span>
+        </div>
+    </div>
+    <div align="center" class="log-form form-group">
+        <div class="col-md-offset-1 col-md-10">
+            <button type="submit" class="btn btn-default">Register</button>
+        </div>
+    </div>
+
+</form>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

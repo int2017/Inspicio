@@ -13,7 +13,13 @@ namespace Inspicio.Models
         public int CommentId { get; set; }
 
         public string OwnerId { get; set; }
-
+        public Urgency CommentUrgency { get; set; }
+        public enum Urgency
+        {
+            Default,
+            Urgent
+            
+        }
         public int ImageId { get; set; }
         public float Lat { get; set; }
         public float Lng { get; set; }

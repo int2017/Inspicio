@@ -1,5 +1,4 @@
-﻿    
-    // Jack Lloyd [06/07/17]
+﻿
 /*
     Extension methods for the Identity. (ApplicationUser additional columns)
  */
@@ -11,15 +10,22 @@ using System.Security.Claims;
 using System.Security.Principal;
 using System.Threading.Tasks;
 
+using Inspicio.Classes;
+
 namespace Inspicio.Extensions
 {
     public static class IdentityExtensions
     {
-        public static string GetProfileName(this ClaimsPrincipal user)
+        public static string GetProfileEmail(this ClaimsPrincipal user)
         {
-            // ClaimTypes.GivenName returning the ProfileName
-            // avoiding null issues locally
-            return user.Claims.FirstOrDefault(v => v.Type == ClaimTypes.GivenName).Value ?? string.Empty;
+            // Email returning the ProfilePicture
+            return user.FindFirst("Email").Value;
+        }
+
+        public static string GetProfileId(this ClaimsPrincipal user)
+        {
+            // Id returning the ProfileId
+            return user.FindFirst("Id").Value;
         }
     }
 }

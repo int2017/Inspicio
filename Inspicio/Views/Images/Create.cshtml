@@ -1,5 +1,8 @@
 @model Inspicio.Controllers.ImagesController.CreatePageModel
 
+<script type="text/javascript" src="https://cdn.rawgit.com/showdownjs/showdown/1.7.1/dist/showdown.min.js"></script>
+<script type="text/javascript" src="~/js/markdownConverter.js"></script>
+
 <h3> New Review </h3>
 
 <form asp-action="Create">
@@ -7,15 +10,17 @@
     <div class="form-group">
         <!-- Review Title -->
         <label class="control-label">Review Title</label>
-        <input asp-for="@Model.Image.Title" type="text" class="form-control" placeholder="#7634 ... .. .">
+        <input asp-for="@Model.Image.Title" type="text" class="form-control" placeholder=" #7634 ... .. .">
         <span asp-validation-for="@Model.Image.Title" class="text-danger"></span>
     </div>
 
     <div class="form-group">
         <!-- Review Description -->
-        <label class="control-label">Review Description</label>
-        <textarea asp-for="@Model.Image.Description" class="form-control" rows="4" placeholder="Reviewees please provide feedback regarding the fix for #7634 ... .. ."></textarea>
+        <label class="control-label">Review Description &lt;markdown supported&gt;</label>
+        <textarea class="form-control" id="Image_Description_UserInput" rows="8" placeholder=" Reviewees please provide feedback regarding the fix for #7634 ... .. ."></textarea>
         <span asp-validation-for="@Model.Image.Description" class="text-danger"></span>
+
+        <textarea asp-for="@Model.Image.Description" id="Image_DescriptionHTML"></textarea>
     </div>
 
     @{
@@ -68,52 +73,14 @@
 
 </form>
 
-<!-- SCRIPTS -->
-<!--encodeBase64
-    This function take the chosen file (image file) and 
-    converts it to base64encoding. This is then used to 
-    set a temp input tag value. This is then sent to 
-    the server when create new is pressed.
--->
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+<script type="text/javascript" src="~/js/createDropzone.js"></script>
 <script>
-
-    function encodeBase64(file) {
-
-        if (file) {
-            var FR = new FileReader();
-            FR.addEventListener("load", function (e) {
-
-                document.getElementById("b64").value = e.target.result;
-                $(".dropzone").css("background-image", "url(" + e.target.result + ")");
-            });
-
-            FR.readAsDataURL(file);
-        }
-    }
-
-    Dropzone.autoDiscover = false;
-    var myDropzone = new Dropzone(".dropzone", {
-
-        maxFiles: 1,
-        autoProcessQueue: false,
-        init: function () {
-
-            this.on("addedfile", function (file) {
-
-                encodeBase64(myDropzone.files[0]);
-            });
-        },
-
-        // Function to be called on the server
-        url: "doNothing"
-    });
-
-    myDropzone.on("maxfilesexceeded", function (file) {
-        this.removeAllFiles();
-        this.addFile(file);
-    });
-
-
     function filterUsers() {
         // Declare variables
         var input, filter, ul, li, a, i;
@@ -123,37 +90,33 @@
         li = ul.getElementsByTagName('li');
 
         // Loop through all list items, and hide those who don't match the search query
-        for (i = 0; i < li.length; i++)
-        {
+        for (i = 0; i < li.length; i++) {
             a = li[i].getElementsByTagName("label")[0];
 
-            if (a.innerHTML.toUpperCase().indexOf(filter) > -1)
-            {
+            if (a.innerHTML.toUpperCase().indexOf(filter) > -1) {
                 li[i].style.display = "";
             }
-            else
-            {
+            else {
                 li[i].style.display = "none";
             }
         }
     }
 
+    $('#Image_Description_UserInput').on('blur', function (e) {
+
+        $("#Image_DescriptionHTML").html(convertToHTML($("#Image_Description_UserInput").val()));
+    });
+
 </script>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
-
 <style>
-    .dropzone {
-        height: 300px;
-        width: auto;
-        background-size: contain;
-    }
 
     ul {
         margin: 0;
         list-style: none;
         float: left;
+    }
+
+    #Image_DescriptionHTML{
+        display:none;
     }
 </style>

@@ -3,6 +3,9 @@
     ViewData["Title"] = "Manage your account";
 }
 
+@using Inspicio.Extensions
+
+
 <h2>@ViewData["Title"].</h2>
 <p class="text-success">@ViewData["StatusMessage"]</p>
 
@@ -10,6 +13,24 @@
     <h4>Change your account settings</h4>
     <hr />
     <dl class="dl-horizontal">
+        
+        <dt>Profile Picture:</dt>
+        <dd>
+            <img id="profilePicture" src="@Model.ProfilePicture" style="width:80px;height:80px;margin-top: -2em;"/>
+            <form asp-action="ChangeAvatar" style="display:inline-block;margin-top: 10px;">
+                <input id="b64" asp-for="@Model.ProfilePicture" type="hidden" value="gravatar" />
+                <input id="fileInput" type="file" style="display:none;" onchange="changeAvatar();">
+                <ul style="display:inline-block;list-style-type: none;">
+                    <li style="margin: 2%;"><input type="button" value="Change Avatar" onclick="newAvatar();" /></li>
+                    <li style="margin: 2%;display:inline">
+                        <input id="upload_btn" type="submit" value="Upload" />
+                        <input type="button" value="Use Gravatar" onclick="document.getElementById('upload_btn').click()" />
+                    </li>
+                </ul>
+            </form>
+        </dd>
+
+        <br />
         <dt>Password:</dt>
         <dd>
             @if (Model.HasPassword)
@@ -69,3 +90,22 @@
         </dd>
     </dl>
 </div>
+
+<script>
+    function newAvatar() {
+
+        document.getElementById('fileInput').click();
+    }
+
+    function changeAvatar() {
+
+        var x = document.getElementById("fileInput");
+
+        var fr = new FileReader();
+        fr.onload = function () {
+            document.getElementById("profilePicture").src = fr.result;
+            document.getElementById("b64").value = fr.result;
+        }
+        fr.readAsDataURL(x.files[0]);
+    }
+</script>

@@ -1,5 +1,4 @@
 ﻿
-    // Jack Lloyd [06/07/17]
 /*
     Overriding the UserClaimsprincipalFactory
     in order to add a 'ProfileName' claim 
@@ -17,9 +16,9 @@ using System.Threading.Tasks;
 
 namespace Inspicio.ClaimsPrincipalExtensions
 {
-    public class ProfileNameClaimsPrincipalFactory : UserClaimsPrincipalFactory<ApplicationUser, IdentityRole>
+    public class ProfileClaimsPrincipalFactory : UserClaimsPrincipalFactory<ApplicationUser, IdentityRole>
     {
-        public ProfileNameClaimsPrincipalFactory (
+        public ProfileClaimsPrincipalFactory (
             UserManager<ApplicationUser> userManager,
             RoleManager<IdentityRole> roleManager,
             IOptions<IdentityOptions> optionsAccessor ) : base( userManager, roleManager, optionsAccessor )
@@ -35,8 +34,9 @@ namespace Inspicio.ClaimsPrincipalExtensions
             // Adding the ProfileName property to Claims.
             ((ClaimsIdentity)principal.Identity).AddClaims(new[]
             {
-                // ClaimTypes.GivenName, this will be how we access our property when needed
-                new Claim(ClaimTypes.GivenName, user.ProfileName)
+                new Claim("Name", user.ProfileName),
+                new Claim("Email", user.Email),
+                new Claim("Id", user.Id)
             });
 
             return principal;

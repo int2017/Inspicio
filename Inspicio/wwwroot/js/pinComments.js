@@ -7,14 +7,14 @@ var imageMap = L.map("imageMap", {
 });
 //Creates custom pin
 var customPin = L.icon({
-    iconUrl: "../../images/pin.svg",
+    iconUrl: "../../images/pinNormal.svg",
     shadowUrl: "../../images/pinshadow.svg",
     iconSize: [38, 58], // size of the icon
     shadowSize: [80, 120], // size of the shadow
     iconAnchor: [15, 58], // point of the icon which will correspond to marker's location
     shadowAnchor: [11, 62],  // the same for the shadow
     popupAnchor: [3, -45]
-})
+});
 var hoverPin = L.icon({
     iconUrl: "../../images/pinLit.svg",
     shadowUrl: "../../images/pinshadow.svg",
@@ -23,7 +23,7 @@ var hoverPin = L.icon({
     iconAnchor: [15, 58], // point of the icon which will correspond to marker's location
     shadowAnchor: [11, 62],  // the same for the shadow
     popupAnchor: [3, -45]
-})
+});
 //Changing map size/location when window is resized
 $(window).resize(function () {
     setTimeout(
@@ -67,7 +67,6 @@ $(".leaflet-map-pane").attr("id", "map-pane");
 function popupState() {
     if ($("#map-pane").hasClass("hidden")) {
         $("#map-pane").removeClass("hidden");
-        $("#hide-pop").html("Hide markers");
         imageMap.on('click', function (e) {
             mapOnClick(e);
         });
@@ -75,7 +74,6 @@ function popupState() {
     else {
         $("#map-pane").addClass("hidden");
         imageMap.off('click');
-        $("#hide-pop").html("Show markers");
     }
 }
 //Array of all the popups and markers
@@ -90,7 +88,7 @@ function mapOnClick(e) {
 //Creating individual markers. Needed because onClick event sends a different object than createMarkers()
 //clickBool determines wether the markers and popups are created by clicking on map or by fetching data from DB
 function createMarker(latlng, clickBool) {
-    var uniqID = Math.round(new Date().getTime() + (Math.random() * 100));
+    var uniqID = Math.round(new Date().getTime() +(Math.random() * 100));
     var marker = new L.marker(latlng, { icon: customPin }).addTo(markerGroup);
     var popup = new L.Popup();
     //Removes marker if popup is empty
@@ -129,7 +127,7 @@ function createBtn(uniqID) {
 
     var btn = "<button onclick='commentClick(" + uniqID + ")' class='btn btn-success popup-btn'> <i class='glyphicon glyphicon-share-alt'></i></button>";
     Math.floor(Math.random() * 100);
-    var strng = "<div id='popup" + uniqID + "' class='container-fluid popup-comment-container'></div> <div id=popupinput" + uniqID + "' class='row comment-popup-input'><div class='col-xs-4 col-sm-4 col-md-4 text-center'>You</div><div class='col-xs-8 col-sm-8 col-md-8 input-group'><textarea id='popuptext" + uniqID + "' rows= '2' class='form-control popup-textarea' o id='popuptext" + uniqID + "' ></textarea > <span class='input-group-btn'> " + btn + " </span></div > ";
+    var strng = "<div id='popup" + uniqID + "' class='container-fluid popup-comment-container'></div> <div id=popupinput" + uniqID + "' class='row comment-popup-input'><div class='col-xs-4 col-sm-4 col-md-4 text-center'>You</div><div class='col-xs-8 col-sm-8 col-md-8 input-group'><textarea id='popuptext" + uniqID + "' rows= '2' class='form-control popup-textarea' o id='popuptext" + uniqID + "' ></textarea ><div class='comment-status'><label><input type='checkbox' class='urgency-popup'>Urgent</label></div> <span class='input-group-btn'> " + btn + " </span></div > ";
 
 
 
@@ -137,10 +135,16 @@ function createBtn(uniqID) {
 }
 
 //Creating a new comment row
-function createCommentRow(user, comment, uniqID, parent) {
+function createCommentRow(user, comment, uniqID, parent, urgency) {
 
-    var row = "<div class='row popup-comment'> <div class='col-xs-4 col-sm-4 col-md-4'><p>" + user + "</p></div><div class='col-xs-8 col-sm-8 col-md-8'>" + comment + "</div></div>";
-    popupX = popupsArray[popupsArray.findIndex(x => parseInt(x.myData.id) === parseInt(uniqID))].setContent(appendRow(row, uniqID, parent));
+    var urgencyEl; //Urgency element
+    if (urgency === 1) {
+        urgencyEl = "<div class='urgent'><span class='glyphicon glyphicon-star' aria-hidden='true'></span></div>";
+    }
+    else urgencyEl = "";
+    var row = "<div class='row-eq-height popup-comment'> <div class='col-xs-4 col-sm-4 col-md-4'><p>" + user + "</p></div><div class='col-xs-8 col-sm-8 col-md-8'>" + comment + "</div>" + urgencyEl + "</div>";
+    popupX = popupsArray[popupsArray.findIndex(x => parseInt(x.myData.id) === parseInt(uniqID))];
+    popupX.setContent(appendRow(row, uniqID, parent));
 
 }
 //Since the whole popup has to be recreated, this method clones it's previous HTML and adds a new comment row
@@ -163,32 +167,31 @@ function appendRow(row, uniqID, parent) {
 
     }
     //A new input section has to be created each time to keep things consistent, otherwise it messes up the HTML
-    var result = $('<div>').append($(div).clone()).html() + inputBox;
     return openingTag + div.html() + "</div>" + inputBox;
 
 }
 
 
 //Creates markers from existing comments in the DB
-function createMarkers(comment, user, lat, lng, parent, reload) {
-
+function createMarkers(comment, user, lat, lng, parent,urgency, reload) {
     if (lat !== 0 && lng !== 0) {
-        var latCollection = locations.map(function (value, index) { return value[1] });
-        var lngCollection = locations.map(function (value, index) { return value[2] });
+        var latCollection = locations.map(function (value, index) { return value[1]; });
+        var lngCollection = locations.map(function (value, index) { return value[2]; });
+        var uniqID;
         if ($.inArray(lat, latCollection) !== -1 && $.inArray(lng, lngCollection) !== -1) {
 
             if ($.inArray(lat, latCollection) === $.inArray(lng, lngCollection)) {
-                var idCollection = locations.map(function (value, index) { return value[0] });
-                var uniqID = idCollection[$.inArray(lat, latCollection)];
-                createCommentRow(user, comment, uniqID, parent);
+                var idCollection = locations.map(function (value, index) { return value[0]; });
+                uniqID = idCollection[$.inArray(lat, latCollection)];
+                createCommentRow(user, comment, uniqID, parent,urgency);
 
             }
         }
         else {
             var latlng = L.latLng(lat, lng);
-            var uniqID = createMarker(latlng, false);
+            uniqID = createMarker(latlng, false);
             locations.push([uniqID, lat, lng]);
-            createCommentRow(user, comment, uniqID, parent);
+            createCommentRow(user, comment, uniqID, parent, urgency);
         }
 
     }
@@ -217,57 +220,56 @@ $(document).ready(function () {
         var loc = $(this).data("location").split(' ');
         var lat = loc[0];
         var lng = loc[2];
-        var latCollection = locations.map(function (value, index) { return value[1] });
-        var lngCollection = locations.map(function (value, index) { return value[2] });
+        var latCollection = locations.map(function (value, index) { return value[1]; });
+        var lngCollection = locations.map(function (value, index) { return value[2]; });
 
         if ($.inArray(parseInt(lat), latCollection) !== -1 && $.inArray(parseInt(lng), lngCollection) !== -1) {
 
             var latlng = L.latLng(lat, lng);
-            var idCollection = locations.map(function (value, index) { return value[0] });
+            var idCollection = locations.map(function (value, index) { return value[0]; });
             var uniqID = idCollection[$.inArray(parseInt(lat), latCollection)];
             markerX = markersArray[markersArray.findIndex(x => parseInt(x.myData.id) === parseInt(uniqID))];
-            markerX.setIcon(hoverPin); 
+            markerX.setIcon(hoverPin);
         }
     }).on("mouseleave", ".open-pin", function () {
         var loc = $(this).data("location").split(' ');
         var lat = loc[0];
         var lng = loc[2];
-        var latCollection = locations.map(function (value, index) { return value[1] });
-        var lngCollection = locations.map(function (value, index) { return value[2] });
+        var latCollection = locations.map(function (value, index) { return value[1]; });
+        var lngCollection = locations.map(function (value, index) { return value[2]; });
 
         if ($.inArray(parseInt(lat), latCollection) !== -1 && $.inArray(parseInt(lng), lngCollection) !== -1) {
 
             var latlng = L.latLng(lat, lng);
-            var idCollection = locations.map(function (value, index) { return value[0] });
+            var idCollection = locations.map(function (value, index) { return value[0]; });
             var uniqID = idCollection[$.inArray(parseInt(lat), latCollection)];
             markerX = markersArray[markersArray.findIndex(x => parseInt(x.myData.id) === parseInt(uniqID))];
             markerX.setIcon(customPin);
-            
+
         }
     }).on("click", ".open-pin", function () {
         var loc = $(this).data("location").split(' ');
         var lat = loc[0];
         var lng = loc[2];
-        var latCollection = locations.map(function (value, index) { return value[1] });
-        var lngCollection = locations.map(function (value, index) { return value[2] });
+        var latCollection = locations.map(function (value, index) { return value[1]; });
+        var lngCollection = locations.map(function (value, index) { return value[2]; });
 
         if ($.inArray(parseInt(lat), latCollection) !== -1 && $.inArray(parseInt(lng), lngCollection) !== -1) {
 
             var latlng = L.latLng(lat, lng);
-            var idCollection = locations.map(function (value, index) { return value[0] });
+            var idCollection = locations.map(function (value, index) { return value[0]; });
             var uniqID = idCollection[$.inArray(parseInt(lat), latCollection)];
             markerX = markersArray[markersArray.findIndex(x => parseInt(x.myData.id) === parseInt(uniqID))].openPopup();
         }
 
-    })
+    });
     $(document).on("keypress", ".popup-textarea", function (e) {
         if (e.which === 13) {
             $('.leaflet-popup-content button').click();
             // prevent duplicate submission
             return false;
         }
-        });
+    });
+
+
 })
-
-
-
