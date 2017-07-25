@@ -20,6 +20,7 @@ namespace Inspicio.Data
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Screen> Screens { get; set; }
         public DbSet<AccessTable> AccessTable { get; set; }
+        public DbSet<Review> Review { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

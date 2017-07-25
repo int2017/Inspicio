@@ -119,6 +119,24 @@ namespace Inspicio.Migrations
                     b.ToTable("Comments");
                 });
 
+            modelBuilder.Entity("Inspicio.Models.Review", b =>
+                {
+                    b.Property<int>("ReviewId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("NextScreenId");
+
+                    b.Property<int>("NextVersionId");
+
+                    b.Property<int>("ScreenId");
+
+                    b.Property<int>("ScreenState");
+
+                    b.HasKey("ReviewId");
+
+                    b.ToTable("Review");
+                });
+
             modelBuilder.Entity("Inspicio.Models.Screen", b =>
                 {
                     b.Property<int>("ScreenId")
