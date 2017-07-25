@@ -29,7 +29,7 @@ namespace Inspicio.Models
 
         public ICollection<Comment> Comments { get; set; }
 
-        public ICollection<Review> Reviews { get; set; }
+        public virtual ICollection<Review> Reviews { get; set; }
 
         [ForeignKey("OwnerId")]
         public ApplicationUser ApplicationUsers { get; set; }

@@ -13,6 +13,9 @@ namespace Inspicio.Models
 
         public int ScreenId { get; set; }
 
+        public int NextScreenId { get; set; }
+        public int NextVersionId { get; set; }
+
         [EnumDataType(typeof(States))]
         public States ReviewState { get; set; }
 

@@ -122,6 +122,10 @@ namespace Inspicio.Migrations
                     b.Property<int>("ReviewId")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<int>("NextScreenId");
+
+                    b.Property<int>("NextVersionId");
+
                     b.Property<int>("ReviewState");
 
                     b.Property<int>("ScreenId");
@@ -141,6 +145,10 @@ namespace Inspicio.Migrations
                     b.Property<string>("Content");
 
                     b.Property<string>("Description");
+
+                    b.Property<int>("NextScreenId");
+
+                    b.Property<int>("NextVersionId");
 
                     b.Property<string>("OwnerId");
 
