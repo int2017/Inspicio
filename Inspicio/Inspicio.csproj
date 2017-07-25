@@ -45,6 +45,8 @@
     <Content Include="wwwroot\js\login_register.js" />
     <Content Include="wwwroot\js\markdownConverter.js" />
     <Content Include="wwwroot\js\homepageScripts.js" />
+    <Content Include="wwwroot\js\multiple-images.js" />
+    <Content Include="wwwroot\js\multipleImages.js" />
     <Content Include="wwwroot\js\pinComments.js" />
     <Content Include="wwwroot\js\ajaxThumbs.js" />
     <Content Include="wwwroot\js\replies.js" />
