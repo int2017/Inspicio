@@ -1,7 +1,5 @@
 ﻿$(document).ready(function () {
    
-
-    addComDates();
     $(document).on("click",".date-header",function () {
         var date = $(this).children().data("value");
         $(".date-header").removeClass("active");
@@ -32,7 +30,6 @@
 });
 
 function addComDates() {
-    alert("addc")
     $("#comment-date").html("<option value='all'>All</option>");
     var dates = [];
     $(".date-header").each(function () {
@@ -43,7 +40,7 @@ function addComDates() {
             $(option).appendTo("#comment-date");
             dates.push(dateVal.toLowerCase());
         }
-        })
-    }
+    })
+}
         
     

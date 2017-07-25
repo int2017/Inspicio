@@ -41,6 +41,7 @@
     <Content Include="wwwroot\js\background-selector.js" />
     <Content Include="wwwroot\js\createDropzone.js" />
     <Content Include="wwwroot\js\filter.js" />
+    <Content Include="wwwroot\js\jquery.initialize.js" />
     <Content Include="wwwroot\js\login_register.js" />
     <Content Include="wwwroot\js\markdownConverter.js" />
     <Content Include="wwwroot\js\homepageScripts.js" />

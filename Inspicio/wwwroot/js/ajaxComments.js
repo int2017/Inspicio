@@ -45,9 +45,6 @@ function commentClick(uniqID, chosenState) {
                 reloadMarkers();
                 $(".leaflet-popup-content").fadeIn();
                 $("#comment-section").load(window.location.href + " #comment-section > * ");
-                setTimeout(function () {
-                    addComDates();
-                }, 2000)
                 $("#comment-textarea").val("");
 
             }
@@ -82,13 +79,7 @@ function commentClick(uniqID, chosenState) {
                 dataType: "text",
                 data: JSON.stringify(DataFromBody),
                 success: function () {
-                    $("#comment-section").load(window.location.href + " #comment-section > * ");
-                    $(window).on('load', function () {
-                        addComDates();
-                    })
-
-                    
-                    
+                    $("#comment-section").load(window.location.href + " #comment-section > * ");                 
                     $("#comment-textarea").val("");
                 }
             });
