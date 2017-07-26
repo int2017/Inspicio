@@ -173,12 +173,12 @@ namespace Inspicio.Controllers
 
             FullReviewData.OwnerId = User.Id;
 
-            FullReviewData.Info = new ViewModel.ImageData();
-            FullReviewData.Info.Screen = Screen;
-            FullReviewData.Info.Screen.ScreenStatus = Screen.ScreenStatus;
-            FullReviewData.Info.approvals = 0;//_context.AccessTable.Count(x => x.ReviewId == Id && x.State == AccessTable.States.Approved);
-            FullReviewData.Info.rejections = 0;//_context.AccessTable.Count(x => x.ReviewId == Id && x.State == AccessTable.States.Rejected);
-            FullReviewData.Info.needsWorks = 0;//_context.AccessTable.Count(x => x.ReviewId == Id && x.State == AccessTable.States.NeedsWork);
+            FullReviewData.ScreenData = new ViewModel.ImageData();
+            FullReviewData.ScreenData.Screen = Screen;
+            FullReviewData.ScreenData.Screen.ScreenStatus = Screen.ScreenStatus;
+            FullReviewData.ScreenData.approvals = 0;//_context.AccessTable.Count(x => x.ReviewId == Id && x.State == AccessTable.States.Approved);
+            FullReviewData.ScreenData.rejections = 0;//_context.AccessTable.Count(x => x.ReviewId == Id && x.State == AccessTable.States.Rejected);
+            FullReviewData.ScreenData.needsWorks = 0;//_context.AccessTable.Count(x => x.ReviewId == Id && x.State == AccessTable.States.NeedsWork);
             FullReviewData.Reviews = _context.AccessTable.Where(u => u.ReviewId == Id).ToList();
             // Changed from getting all comments then working out which we want to only getting the ones we want.
             var AllComments = _context.Comments.Where(c => c.ScreenId == Id);

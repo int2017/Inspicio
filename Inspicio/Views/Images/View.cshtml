@@ -1,39 +1,40 @@
-@model Inspicio.Models.ReviewViewModels.
+@model Inspicio.Models.ReviewViewModels.ViewModel
 @using Inspicio.Extensions
 @inject UserManager<ApplicationUser> UserManager
 
 
 <div class="view-container">
-    <h2>@Model.Info.Screen.Title</h2>
+    <h2>@Model.Data.Screen.Title</h2>
     <input type="checkbox"
-           @{ if (Model.Info.Screen.ScreenStatus == Screen.Status.Open)
+           @{ if (Model.Review.ReviewState == Review.States.Open)
                {
                    @:checked="checked"
                 }
              
-             if (User.GetProfileId() != Model.Info.Screen.OwnerId)
+               
+             if (User.GetProfileId() != Model.Review.CreatorId)
                {
                    @:disabled = "disabled";
 
                }
             } 
-     data-toggle="toggle" data-on="Open" data-off="Closed" data-onstyle="success" data-offstyle="danger" id="toggle">
+     data-toggle="toggle" data-on="Open" data-off="Closed" data-onstyle="success" data-offstyle="danger" id="toggle" >
     <hr />
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <input id="ScreenId" type="hidden" asp-for="@Model.Info.Screen.ScreenId" />
+    <input id="ScreenId" type="hidden" asp-for="@Model.Data.Screen.ScreenId" />
 
     
 
 
     <div class="img-wrapper">
         <button type="button" class="btn lightbox-button " id="hide-pop" onclick="popupState()"><i class="glyphicon glyphicon-map-marker"></i></button>
-        <button class="lightbox-button btn" href="@Url.Content(Model.Info.Screen.Content)" data-lity data-lity-desc="@Model.Info.Screen.Title"><i class="fa fa-expand" aria-hidden="true"></i></button>
+        <button class="lightbox-button btn" href="@Url.Content(Model.Data.Screen.Content)" data-lity data-lity-desc="@Model.Data.Screen.Title"><i class="fa fa-expand" aria-hidden="true"></i></button>
         <button class="lightbox-button btn" id="color-picker"><i class="fa fa-paint-brush" aria-hidden="true"></i></button>
         <div id="image-container">
             <div id="background-selector"></div>
             <div id="imageMap"></div>
 
-            <img src="@Url.Content(Model.Info.Screen.Content)" title="@Model.Info.Screen.Title" alt="@Model.Info.Screen.Title" />
+            <img src="@Url.Content(Model.Data.Screen.Content)" title="@Model.Data.Screen.Title" alt="@Model.Data.Screen.Title" />
 
 
         </div>
@@ -41,12 +42,12 @@
 
         <div id="image-description">
         @{
-            var user = await UserManager.FindByIdAsync(Model.OwnerId);
+            var user = await UserManager.FindByIdAsync(Model.Review.CreatorId);
             <h4> By :<img style="height:40px;width:40px" src="@user.ProfilePicture" /> @user.ProfileName</h4>
             <h3>Description</h3>
             <hr />
             <div id="description-section" style="width:95%;margin-top:-2em;">
-                @Html.Raw( Model.Info.Screen.Description )
+                @Html.Raw( Model.Data.Screen.Description )
             </div>
             <hr />
         }
@@ -58,16 +59,16 @@
 
                     <!--If the user has already voted either thumbs up or down,change the fill to black-->
                     <div class="row">
-                        <button type="button" id="thumbs-up" class="btn btn-success thumb"> <i class="fa fa-thumbs-o-up " aria-hidden="true"></i> : <span class="rating">@Model.Info.approvals</span></button>
-                        <button type="button" id="thumbs-middle" class="btn btn-warning thumb"> <i class="fa fa-thumbs-o-up fa-rotate-90" aria-hidden="true"></i> : <span class="rating">@Model.Info.needsWorks</span></button>
-                        <button type="button" id="thumbs-down" class="btn btn-danger thumb"><i class="fa fa-thumbs-o-down " aria-hidden="true"></i> : <span class="rating">@Model.Info.rejections</span></button>
+                        <button type="button" id="thumbs-up" class="btn btn-success thumb"> <i class="fa fa-thumbs-o-up " aria-hidden="true"></i> : <span class="rating">@Model.Data.Num_Approvals</span></button>
+                        <button type="button" id="thumbs-middle" class="btn btn-warning thumb"> <i class="fa fa-thumbs-o-up fa-rotate-90" aria-hidden="true"></i> : <span class="rating">@Model.Data.Num_NeedsWorks</span></button>
+                        <button type="button" id="thumbs-down" class="btn btn-danger thumb"><i class="fa fa-thumbs-o-down " aria-hidden="true"></i> : <span class="rating">@Model.Data.Num_Rejections</span></button>
                     </div>
 
                     <div class="row reviewer-row" >
-                        @foreach (var r in Model.Reviews)
+                        @foreach (var r in Model.Reviewees)
                         {
                             var replyOwner = await UserManager.FindByIdAsync(r.UserId);
-                            <div class="col-md-2 reviewers approved @r.State">@replyOwner.ProfileName</div>
+                            <div class="col-md-2 reviewers approved @r.">@replyOwner.ProfileName</div>
                         }
                     </div>
                     <div id="showmarker" class="text-center">
@@ -104,9 +105,9 @@
         var dateClass = "date-comment";
         foreach (var c in Model.Comments)
         {
-            String currentDate = @c.comment.Timestamp.ToString("MMM d");
+            String currentDate = @c.Timestamp.ToString("MMM d");
 
-            if (c.comment.ParentId == null)
+            if (c.ParentId == null)
             {
                 @if (currentDate != previousDate)
                     {
@@ -124,8 +125,8 @@
                         }
                         else
                         {
-                            <p data-value="@c.comment.Timestamp.ToString("MMM d").Replace(" ","-")"> @c.comment.Timestamp.ToString("MMM d")</p>
-                            dateClass = c.comment.Timestamp.ToString("MMM d");
+                            <p data-value="@c.Timestamp.ToString("MMM d").Replace(" ","-")"> @c.Timestamp.ToString("MMM d")</p>
+                            dateClass = c.Timestamp.ToString("MMM d");
                         }
                     </div>
                 }
@@ -134,23 +135,23 @@
                     <div class="row ">
                         <div class="comment-user row-eq-height">
                             <div class="col-md-4">
-                                <h5 class="username">@c.PosterProfileName</h5>
+                                <h5 class="username">@c.OwnerId</h5>
                             </div>
                             <div class="col-md-4">
-                                <p>@c.comment.Timestamp.ToString("h:mm tt")</p>
+                                <p>@c.Timestamp.ToString("h:mm tt")</p>
                             </div>
                             <div class="col-md-4 text-right">
-                                @if (c.comment.Lat != 0 && c.comment.Lng != 0)
+                                @if (c.Lat != 0 && c.Lng != 0)
                                 {
-                                    <p><a id="loc-@c.comment.CommentId" class="open-pin" data-location="@c.comment.Lat  @c.comment.Lng">Open pin</a></p>
+                                    <p><a id="loc-@c.CommentId" class="open-pin" data-location="@c.Lat  @c.Lng">Open pin</a></p>
                                 }
-                                <p><a class="reply" data-target="@c.comment.CommentId">Reply</a></p>
+                                <p><a class="reply" data-target="@c.CommentId">Reply</a></p>
                             </div>
                         </div>
                         <div class="row-eq-height comment-msg">
                             <div class="col-xs-12 col-sm-12 col-md-12">
-                                <p>@c.comment.Message</p>
-                                @if (c.comment.CommentUrgency == Comment.Urgency.Urgent)
+                                <p>@c.Message</p>
+                                @if (c.CommentUrgency == Comment.Urgency.Urgent)
                                 {
                                     <div class='urgent text-right'>
                                         <span title="Urgent!" class="glyphicon glyphicon-star" aria-hidden="true"></span>
@@ -159,40 +160,40 @@
                             </div>
                         </div>
                     </div>
-                    <div class="replied-section" id="replies-@c.comment.CommentId">
+                    <div class="replied-section" id="replies-@c.CommentId">
                         <div class="comment-container">
                             @foreach (var x in Model.Comments)
                             {
-                                if (x.comment.ParentId != null && c.comment.CommentId.ToString().Equals(x.comment.ParentId))
+                                if (x.ParentId != null && c.CommentId.ToString().Equals(x.ParentId))
                                 {
                                     <div class="comment">
                                         <div class="row">
                                             <div class='row-eq-height comment-user'>
                                                 <div class='col-md-6'>
-                                                    <h5 class='username'> @x.PosterProfileName</h5>
+                                                    <h5 class='username'> @x.OwnerId</h5>
                                                 </div>
                                                 <div class="col-md-6">
-                                                    @if (((DateTime.Now.Date - x.comment.Timestamp.Date).TotalDays) <= 0)
+                                                    @if (((DateTime.Now.Date - x.Timestamp.Date).TotalDays) <= 0)
                                                     {
                                                         <p>Today</p>
                                                         
                                                             }
-                                                            else if (((DateTime.Now.Date - x.comment.Timestamp.Date).TotalDays) <= 1)
+                                                            else if (((DateTime.Now.Date - x.Timestamp.Date).TotalDays) <= 1)
                                                             {
                                                             <p>Yesterday</p>
                                                             
                                                                 }
                                                                 else
                                                                 {
-                                                                <p> @((DateTime.Now.Date - x.comment.Timestamp.Date).TotalDays) days ago</p>
+                                                                <p> @((DateTime.Now.Date - x.Timestamp.Date).TotalDays) days ago</p>
                                                                 
                                                                     }
-                                                                    <p>@x.comment.Timestamp.ToString("h:mm tt")</p>
+                                                                    <p>@x.Timestamp.ToString("h:mm tt")</p>
                                                                 </div>
                                                         </div>
                                             <div class='row-eq-height comment-msg'>
                                                 <div class='col-xs-8 col-sm-8 col-md-8'>
-                                                    <p> @x.comment.Message</p>
+                                                    <p> @x.Message</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -200,11 +201,11 @@
                                 }
                             }
                         </div>
-                        <div class="row-eq-height reply-comment" id="replycomm-@c.comment.CommentId">
+                        <div class="row-eq-height reply-comment" id="replycomm-@c.CommentId">
                             <div class="col-xs-12 col-sm-12 col-md-12 input-group">
-                                <textarea class="form-control reply-textarea" id="text-@c.comment.CommentId" rows="5" placeholder="Reply..."></textarea>
+                                <textarea class="form-control reply-textarea" id="text-@c.CommentId" rows="5" placeholder="Reply..."></textarea>
                                 <span class="input-group-btn">
-                                    <button class="btn btn-success reply-button" type="submit" id="button-@c.comment.CommentId" data-parent="@c.comment.CommentId">
+                                    <button class="btn btn-success reply-button" type="submit" id="button-@c.CommentId" data-parent="@c.CommentId">
                                         <i class="glyphicon glyphicon-share-alt"></i>
                                     </button>
                                 </span>

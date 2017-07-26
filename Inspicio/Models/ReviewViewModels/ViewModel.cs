@@ -7,31 +7,21 @@ namespace Inspicio.Models.ReviewViewModels
 {
     public class ViewModel
     {
-
         public Review Review { get; set; }
 
-
-
-
-
-
-        public string OwnerId { get; set; }
-
-        public class ImageData
+        public class ScreenData
         {
             public Screen Screen { get; set; }
-            public int approvals { get; set; }
-            public int rejections { get; set; }
-            public int needsWorks { get; set; }
-        }
-        public ImageData Info { get; set; }
 
-        public List<CommentInfo> Comments { get; set; }
-        public class CommentInfo
-        {
-            public String PosterProfileName { get; set; }
-            public Comment comment { get; set; }
+            public int Num_Approvals { get; set; }
+            public int Num_Rejections { get; set; }
+            public int Num_NeedsWorks { get; set; }
         }
-        public List<AccessTable> Reviews = new List<AccessTable>();
+        public ScreenData Data { get; set; }
+
+        public Comment Comment { get; set; }
+        public List<Comment> Comments { get; set; }
+
+        public List<AccessTable> Reviewees = new List<AccessTable>();
     }
 }
