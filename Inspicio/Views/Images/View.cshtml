@@ -4,7 +4,7 @@
 
 
 <div class="view-container">
-    <h2>@Model.Data.Screen.Title</h2>
+    <h2>@Model.Review.Title</h2>
     <input type="checkbox"
            @{ if (Model.Review.ReviewState == Review.States.Open)
                {
@@ -27,13 +27,13 @@
 
     <div class="img-wrapper">
         <button type="button" class="btn lightbox-button " id="hide-pop" onclick="popupState()"><i class="glyphicon glyphicon-map-marker"></i></button>
-        <button class="lightbox-button btn" href="@Url.Content(Model.Data.Screen.Content)" data-lity data-lity-desc="@Model.Data.Screen.Title"><i class="fa fa-expand" aria-hidden="true"></i></button>
+        <button class="lightbox-button btn" href="@Url.Content(Model.ScreensList[0].Screen.Content)" data-lity data-lity-desc="@Model.ScreensList[0].Screen.Title"><i class="fa fa-expand" aria-hidden="true"></i></button>
         <button class="lightbox-button btn" id="color-picker"><i class="fa fa-paint-brush" aria-hidden="true"></i></button>
         <div id="image-container">
             <div id="background-selector"></div>
             <div id="imageMap"></div>
 
-            <img src="@Url.Content(Model.Data.Screen.Content)" title="@Model.Data.Screen.Title" alt="@Model.Data.Screen.Title" />
+            <img src="@Url.Content(Model.ScreensList[0].Screen.Content)" title="@Model.ScreensList[0].Screen.Title" alt="@Model.ScreensList[0].Screen.Title" />
 
 
         </div>
@@ -46,7 +46,7 @@
             <h3>Description</h3>
             <hr />
             <div id="description-section" style="width:95%;margin-top:-2em;">
-                @Html.Raw( Model.Data.Screen.Description )
+                @Html.Raw( Model.ScreensList[0].Screen.Description )
             </div>
             <hr />
         }
@@ -58,9 +58,9 @@
 
                     <!--If the user has already voted either thumbs up or down,change the fill to black-->
                     <div class="row">
-                        <button type="button" id="thumbs-up" class="btn btn-success thumb"> <i class="fa fa-thumbs-o-up " aria-hidden="true"></i> : <span class="rating">@Model.Data.Num_Approvals</span></button>
-                        <button type="button" id="thumbs-middle" class="btn btn-warning thumb"> <i class="fa fa-thumbs-o-up fa-rotate-90" aria-hidden="true"></i> : <span class="rating">@Model.Data.Num_NeedsWorks</span></button>
-                        <button type="button" id="thumbs-down" class="btn btn-danger thumb"><i class="fa fa-thumbs-o-down " aria-hidden="true"></i> : <span class="rating">@Model.Data.Num_Rejections</span></button>
+                        <button type="button" id="thumbs-up" class="btn btn-success thumb"> <i class="fa fa-thumbs-o-up " aria-hidden="true"></i> : <span class="rating">@Model.ScreensList[0].Num_Approvals</span></button>
+                        <button type="button" id="thumbs-middle" class="btn btn-warning thumb"> <i class="fa fa-thumbs-o-up fa-rotate-90" aria-hidden="true"></i> : <span class="rating">@Model.ScreensList[0].Num_NeedsWorks</span></button>
+                        <button type="button" id="thumbs-down" class="btn btn-danger thumb"><i class="fa fa-thumbs-o-down " aria-hidden="true"></i> : <span class="rating">@Model.ScreensList[0].Num_Rejections</span></button>
                     </div>
 
                     <div class="row reviewer-row" >
@@ -102,7 +102,7 @@
 
         String previousDate = ("Jan 1, 0000");
         var dateClass = "date-comment";
-        foreach (var c in Model.Comments)
+        foreach (var c in Model.ScreensList[0].Comments)
         {
             String currentDate = @c.Timestamp.ToString("MMM d");
 
@@ -161,7 +161,7 @@
                     </div>
                     <div class="replied-section" id="replies-@c.CommentId">
                         <div class="comment-container">
-                            @foreach (var x in Model.Comments)
+                            @foreach (var x in Model.ScreensList[0].Comments)
                             {
                                 if (x.ParentId != null && c.CommentId.ToString().Equals(x.ParentId))
                                 {

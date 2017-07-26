@@ -104,10 +104,12 @@ namespace Inspicio.Controllers
         {
             if (ModelState.IsValid)
             {
+                // Screen creation
                 CreatePageModel.Screen.OwnerId = _userManager.GetUserId(HttpContext.User);
                 CreatePageModel.Screen.ScreenStatus = Screen.Status.Undecided;
                 _context.Add(CreatePageModel.Screen);
 
+                // Review creation
                 var Review = new Review();
                 //Review.ReviewId = ?
                 Review.CreatorId = _userManager.GetUserId(HttpContext.User);
@@ -120,6 +122,7 @@ namespace Inspicio.Controllers
                 Review.Description = "Default Description HardCoded";
                 _context.Add(Review);
 
+                // Access creations
                 var OwnerEntry = new Access();
                 OwnerEntry.ReviewId = CreatePageModel.Screen.ScreenId;
                 OwnerEntry.UserId = CreatePageModel.Screen.OwnerId;
@@ -134,6 +137,19 @@ namespace Inspicio.Controllers
                         ReviewerEntry.UserId = u.Id;
                         ReviewerEntry.ReviewId = CreatePageModel.Screen.ScreenId;
                         _context.Add(ReviewerEntry);
+                    }
+                }
+
+                // ScreenStatus creation
+                if (CreatePageModel.Users != null)
+                {
+                    foreach (var u in CreatePageModel.Users.Where(m => m.IsSelected))
+                    {
+
+                        var ScreenStatus = new ScreenStatus();
+                        ScreenStatus.ScreenId = CreatePageModel.Screen.ScreenId;
+                        ScreenStatus.UserId = u.Id;
+                        _context.Add(ScreenStatus);
                     }
                 }
 
@@ -164,27 +180,32 @@ namespace Inspicio.Controllers
                 return NotFound();
             }
 
-            // Create a new FullReview object
             // This will be passed into the view as the model.
-            var FullReviewData = new ViewModel();
+            var ViewModel = new ViewModel();
 
             // Added OwnerProfileName to be passed into the model.
-            FullReviewData.Review = Review;
+            ViewModel.Review = Review;
 
-            FullReviewData.Data = new ViewModel.ScreenData();
-            FullReviewData.Data.Screen = _context.Screens.Where(s => s.ScreenId == Id).SingleOrDefault();
+            //var allScreens = from screen in _context.Screens
+            //             where screen.ReviewId == Id
+            //             select new ViewModel.ScreenData()
+            //             {
+            //                 Screen = screen,
+            //                 Comments = (from comment in _context.Comments
+            //                             where comment.ScreenId == screen.ScreenId
+            //                             select comment).ToList(),
 
-            FullReviewData.Data.Num_Approvals = 0;//_context.AccessTable.Count(x => x.ReviewId == Id && x.State == AccessTable.States.Approved);
-            FullReviewData.Data.Num_Rejections = 0;//_context.AccessTable.Count(x => x.ReviewId == Id && x.State == AccessTable.States.Rejected);
-            FullReviewData.Data.Num_NeedsWorks = 0;//_context.AccessTable.Count(x => x.ReviewId == Id && x.State == AccessTable.States.NeedsWork);
+            //                 Num_Approvals = 0,
+            //                 Num_NeedsWorks = 0,
+            //                 Num_Rejections = 0
+            //             };
 
+
+            //ViewModel.ScreensList = allScreens.ToList();
 
             //FullReviewData.Reviewees = _context.Access.Where(u => u.ReviewId == Id).ToList();
-            // Changed from getting all comments then working out which we want to only getting the ones we want.
-            FullReviewData.Comments = _context.Comments.Where(c => c.ScreenId == Id).ToList();
 
-            // FullReview model to the View.
-            return View(FullReviewData);
+            return View(ViewModel);
         }
 
         public JsonResult GetRating(int? id)
