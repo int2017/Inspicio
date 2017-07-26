@@ -122,6 +122,8 @@ namespace Inspicio.Migrations
                     b.Property<int>("ReviewId")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("CreatorId");
+
                     b.Property<int>("NextScreenId");
 
                     b.Property<int>("NextVersionId");
@@ -133,6 +135,8 @@ namespace Inspicio.Migrations
                     b.Property<int>("ScreenId");
 
                     b.HasKey("ReviewId");
+
+                    b.HasIndex("CreatorId");
 
                     b.HasIndex("ScreenId");
 
@@ -297,6 +301,10 @@ namespace Inspicio.Migrations
 
             modelBuilder.Entity("Inspicio.Models.Review", b =>
                 {
+                    b.HasOne("Inspicio.Models.ApplicationUser", "ApplicationUsers")
+                        .WithMany()
+                        .HasForeignKey("CreatorId");
+
                     b.HasOne("Inspicio.Models.Screen", "Screens")
                         .WithMany("Reviews")
                         .HasForeignKey("ScreenId")

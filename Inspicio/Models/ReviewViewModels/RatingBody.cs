@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace Inspicio.Controllers
+namespace Inspicio.Models.ReviewViewModels
 {
     public enum State
     {

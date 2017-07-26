@@ -111,6 +111,7 @@ namespace Inspicio.Controllers
 
                 var Review = new Review();
                 //Review.ReviewId = ?
+                Review.CreatorId = _userManager.GetUserId(HttpContext.User);
                 Review.ScreenId = CreatePageModel.Screen.ScreenId;
                 Review.ReviewState = Review.States.Open;
                 Review.ReviewStatus = Review.Status.Undecided;

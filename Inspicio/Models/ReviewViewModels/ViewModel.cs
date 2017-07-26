@@ -3,10 +3,18 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Inspicio.Models;
 
-namespace Inspicio.Controllers
+namespace Inspicio.Models.ReviewViewModels
 {
     public class ViewModel
     {
+
+        public Review Review { get; set; }
+
+
+
+
+
+
         public string OwnerId { get; set; }
 
         public class ImageData

@@ -11,6 +11,8 @@ namespace Inspicio.Models
     {
         public int ReviewId { get; set; }
 
+        public string CreatorId { get; set; }
+
         public int ScreenId { get; set; }
 
         public int NextScreenId { get; set; }
@@ -28,5 +30,8 @@ namespace Inspicio.Models
 
         [ForeignKey("ScreenId")]
         public Screen Screens { get; set; }
+
+        [ForeignKey("CreatorId")]
+        public ApplicationUser ApplicationUsers { get; set; }
     }
 }
