@@ -17,8 +17,10 @@ the server when create new is pressed.
                 }
                 document.getElementById("b64").value = e.target.result;
                 var image = new Image();
+                
                 image.src = e.target.result;
                 $(image).appendTo(".dropzone#uploader > .dz-preview >.dz-image");
+                
                 $(image).click(function () {
                     $(".dropzone#uploader").click();
                 })
@@ -36,7 +38,8 @@ the server when create new is pressed.
         init: function () {
 
             this.on("addedfile", function (file) {
-
+                $(".dropzone").css("width", "auto");
+                $("#add-img").addClass("ready");
                 encodeBase64(myDropzone.files[0]);
             });
         },

@@ -1,11 +1,12 @@
-#loginsection, #registersection {
+#loginsection,
+#registersection {
     font-size: 30px;
     font-weight: bold;
     width: 270px;
     cursor: pointer;
     border: 1px solid black;
     border-bottom: none;
-    text-align:center;
+    text-align: center;
 }
 
     #loginsection:hover {
@@ -61,7 +62,7 @@ div.colorpicker {
     border: 1px solid black;
 }
 
-﻿ hr {
+hr {
     border-color: #e6e6e6;
 }
 
@@ -72,12 +73,12 @@ a {
 body {
     padding-top: 0px;
     padding-bottom: 0px;
-    font-family: 'Century Gothic' !important;
+    font-family: FontAwesome, 'Century Gothic' !important;
     padding-left: 0px;
 }
-
 /* Wrapping element */
 /* Set some basic padding to keep content from hitting the edges */
+
 .body-content {
     padding-left: 30px;
     padding-right: 30px;
@@ -103,7 +104,8 @@ body {
     margin: 10px auto;
 }
 
-#table td, #table th {
+#table td,
+#table th {
     padding-bottom: 5px;
     border-collapse: collapse;
 }
@@ -121,12 +123,22 @@ loginsection {
     font-size: 30px;
 }
 
-#table th#content, td#content, td#status, th#status, td#creator, th#creator {
+#table th#content,
+td#content,
+td#status,
+th#status,
+td#creator,
+th#creator {
     width: 12%;
     text-align: center;
 }
 
-#table th#up-col, td#up-col, td#mid-col, th#mid-col, td#down-col, th#down-col {
+#table th#up-col,
+td#up-col,
+td#mid-col,
+th#mid-col,
+td#down-col,
+th#down-col {
     width: 4%;
     text-align: center;
 }
@@ -155,16 +167,19 @@ loginsection {
     margin-bottom: 12px;
 }
 
-.create-img input:not(.btn), .create-img select, .create-img textarea {
+.create-img input:not(.btn),
+.create-img select,
+.create-img textarea {
     max-width: none;
 }
 /* Carousel */
+
 .carousel-caption p {
     font-size: 20px;
     line-height: 1.4;
 }
-
 /* buttons and links extension to use brackets: [ click me ] */
+
 .btn-bracketed::before {
     display: inline-block;
     content: "[";
@@ -176,8 +191,8 @@ loginsection {
     content: "]";
     padding-left: 0.5em;
 }
-
 /* Make .svg files in the carousel display properly in older browsers */
+
 .carousel-inner .item img[src$=".svg"] {
     width: 100%;
 }
@@ -254,48 +269,148 @@ loginsection {
 .dz-max-files-reached {
     background-color: red
 }
+
 #thumbnail-container {
     margin: 10px 0px;
     border-radius: 2px;
-    background-color: #b9b9b9;
+    background: rgb(168,168,168);
+    background: -moz-linear-gradient(top, rgba(168,168,168,1) 0%, rgba(147,147,147,1) 36%, rgba(122,122,122,1) 91%);
+    background: -webkit-linear-gradient(top, rgba(168,168,168,1) 0%,rgba(147,147,147,1) 36%,rgba(122,122,122,1) 91%);
+    background: linear-gradient(to bottom, rgba(168,168,168,1) 0%,rgba(147,147,147,1) 36%,rgba(122,122,122,1) 91%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a8a8a8', endColorstr='#7a7a7a',GradientType=0 );
+    border: 2px solid #a2a2a2;
     flex-wrap: wrap;
-    padding: 15px 0;
+    padding:0;
+    padding-top: 15px;
 }
-#add-img {
-    color: #417686;
+
+a.delete-screen {
+    padding: 5px 10px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.67);
 }
 .thumbnail-inner {
+    border: 1px solid #8c8c8c;
     display: flex;
     align-items: center;
     justify-content: center;
     height: 150px;
-    background-color: #e6e6e6;
+    background-color: #e0e0e0;
     border-radius: 4px;
     cursor: pointer;
+    padding: 0;
+    position: relative;
+    margin-bottom: 15px;
+    overflow: hidden;
+    -webkit-box-shadow: 0px 0px 19px 5px rgba(0, 0, 0, 0.08);
+    -moz-box-shadow: 0px 0px 19px 5px rgba(0, 0, 0, 0.08);
+    box-shadow: 0px 0px 19px 5px rgba(0, 0, 0, 0.08);
 }
-    #thumbnail-container > div:nth-child(6n) {
-        margin-right: 0;
+
+    .thumbnail-inner img {
+        max-height: 100%;
     }
+#add-img {
+    transition: all 0.3s ease-in;
+}
+#add-img.ready {
+        color: #437888;
+        transition:all 0.4s ease-out;
+    }
+#thumbnail-container > div:nth-child(6n) {
+    margin-right: 0;
+}
+
 body .dropzone .dz-preview .dz-image {
     width: auto;
     height: auto;
 }
+
 .dz-size {
     display: none;
 }
-#edit-img{
-    display:none;
+
+#edit-img {
+    display: none;
 }
+
 .dropzone {
     border-radius: 2px !important;
-    background-repeat: no-repeat !important;
-    background-size: 100% 100% !important;
-    background-position: center !important;
-    object-fit: cover;
     padding: 0;
+    width: 100%;
+    background-color: rgba(193, 193, 193, 0.49) !important;
     display: inline-block;
-    min-width: 500px;
+    color: #333333;
+}
+
+.panel {
+    background-color: #e8e8e8;
+    -webkit-box-shadow: 0px 0px 19px 5px rgba(0, 0, 0, 0.28);
+    -moz-box-shadow: 0px 0px 19px 5px rgba(0, 0, 0, 0.28);
+    box-shadow: 0px 0px 19px 5px rgba(0, 0, 0, 0.28);
+    border-color: rgba(0, 0, 0, 0.6);
+}
+
+.panel-footer {
+    background-color: rgba(218, 218, 218, 0.98);
+}
+
+.panel-body {
+    color: black;
+}
+
+.panel-heading {
+    background-color: rgb(166, 195, 166) !important;
+}
+
+.add-reviewers {
+    max-height: 300px;
+    
+}
+.reviewer-content{
+    max-height:500px;
+    overflow-y:auto;
+}
+#review-thumbnail-container {
+    border: none;
+}
+#review-thumbnail-container .thumbnail-inner{
+    height:70px;
+    padding:5px;
+    cursor:inherit;
+}
+
+.add-reviewers-overlay {
     margin: auto;
+    display: none;
+    position: fixed;
+    height: 100%;
+    left: 0;
+    top: 0;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.77);
+}
+
+.reviewer-info:nth-child(even) {
+    background-color: #fff;
+}
+
+#filter_reviewees_id {
+    border: none;
+    padding: 3px 5px;
+    border: none;
+    padding: 3px 5px;
+    background: transparent;
+    border-bottom: 1px solid rgb(202, 202, 202);
+}
+
+.panel-body .row-eq-height {
+    margin: 10px auto;
+    padding: 5px;
+    border-top: 1px solid rgb(202, 202, 202);
 }
 
 #comment-section {
@@ -391,7 +506,7 @@ body .dropzone .dz-preview .dz-image {
     border-radius: 2px;
     border-top-left-radius: 0;
     padding-right: 40px;
-    background-color: rgba(255,255,255,1);
+    background-color: rgba(255, 255, 255, 1);
     padding-left: 10px;
 }
 
@@ -431,7 +546,7 @@ nav.navbar.navbar-inverse.navbar-fixed-top {
 
 .popup-comment-container {
     max-height: 110px;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 #image-description {
@@ -443,7 +558,7 @@ nav.navbar.navbar-inverse.navbar-fixed-top {
         font-size: 16px;
     }
 
-    #image-description :first-child {
+    #image-description:first-child {
         display: inline-block;
     }
 
@@ -487,9 +602,9 @@ nav.navbar.navbar-inverse.navbar-fixed-top {
     margin: 5px auto;
     width: 30%;
     height: 40px;
-    -webkit-box-shadow: 0px 0px 41px -6px rgba(0,0,0,0.5);
-    -moz-box-shadow: 0px 0px 41px -6px rgba(0,0,0,0.5);
-    box-shadow: 0px 0px 41px -6px rgba(0,0,0,0.5);
+    -webkit-box-shadow: 0px 0px 41px -6px rgba(0, 0, 0, 0.5);
+    -moz-box-shadow: 0px 0px 41px -6px rgba(0, 0, 0, 0.5);
+    box-shadow: 0px 0px 41px -6px rgba(0, 0, 0, 0.5);
     transition: all 0.2s ease-out;
     -webkit-transition: all 0.2s ease-out;
 }
@@ -510,7 +625,7 @@ input:focus {
     top: 71px;
     background-color: rgb(195, 195, 195);
     bottom: 0;
-    overflow-y: scroll;
+    overflow-y: auto;
     overflow-x: hidden;
     transition: all 0.3s linear;
     -moz-transition: all 0.3s linear;
@@ -640,7 +755,7 @@ select#comment-date {
 }
 
 #comment-status {
-    background-color: rgba(255,255,255,1);
+    background-color: rgba(255, 255, 255, 1);
     border: none;
     border-radius: 2px;
     margin-bottom: 0px;
@@ -723,7 +838,8 @@ body .dropzone .dz-preview.dz-image-preview {
     margin: 0px;
 }
 
-#comment-section .date-header:before, #comment-section .date-header:after {
+#comment-section .date-header:before,
+#comment-section .date-header:after {
     content: '';
     width: 50px;
     height: 2px;
@@ -732,27 +848,33 @@ body .dropzone .dz-preview.dz-image-preview {
     transition: all 0.2s ease-in;
 }
 
-#comment-section .date-header:hover:before, #comment-section .date-header:hover:after {
+#comment-section .date-header:hover:before,
+#comment-section .date-header:hover:after {
     width: 80px;
     transition: all 0.3s ease-out;
 }
 
-#comment-section .date-header.active:before, #comment-section .date-header.active:after {
+#comment-section .date-header.active:before,
+#comment-section .date-header.active:after {
     width: 100px;
     transition: all 0.3s ease-out;
     background-color: rgba(124, 149, 193, 0.79);
 }
 
-.nav.navbar-nav, .navbar-brand {
+.nav.navbar-nav,
+.navbar-brand {
     display: flex;
     align-items: center;
     height: 71px;
 }
+
 .flex-sidebar.side-hide #comment-date {
     display: none;
 }
+
 @media screen and (max-width: 767px) {
     /* Hide captions */
+
     .carousel-caption {
         display: none;
     }
@@ -780,8 +902,6 @@ body .dropzone .dz-preview.dz-image-preview {
         .flex-sidebar.side-hide {
             width: 50px;
         }
-        
-
 
     .view-container {
         width: 100%;

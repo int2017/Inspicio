@@ -1,13 +1,19 @@
 ﻿$(document).ready(function () {
+    var dropzoneText = $(".dz-message.needsclick");
     //Creating the list of images and users to be passed into the controller
     var listOfImages = [];
     var listOfUsers = [];
+    var listOfDeleted = [];
     //Creates an Image object that is added to the list of Images
-    $("#add-img").click(function () {
-        
+    $(document).on("click", "#add-img",function () {
         var title = $("#Image_Title").val();
         var description = $("#Image_Description_UserInput").val();
         var content = $("#b64").val();
+        if (title.length !== 0 &&  content.length !== 0) {
+
+       
+        $(".dropzone").css("width", "100%");
+        $(this).removeClass("ready");
         var contentCol = listOfImages.map(v => v.Content);
         if ($.inArray(content, contentCol) > -1) {
             alert("This image is already added");
@@ -22,26 +28,31 @@
             };
             listOfImages.push(image);
             
-            $("#Image_Title").val("");
+            $("#Image_Title").val("").html("");
             $("#Image_Description_UserInput").val("");
             $("#b64").val("");
             myDropzone.removeAllFiles();
-            $(".dropzone").html("");
+            $(".dropzone").html("").append(dropzoneText);
             appendThumbnail(listOfImages.length - 1, content);
         }
-        //Clear the fields for another image
         
+        }
+        else {
+            alert("You must add a screen and a title!")
+        }
     })
-    var currentImage;
+
     function appendThumbnail(index, image) {
         
-        var container = $(document.createElement('div')).addClass("col-xs-4 col-md-2").attr('id', "image-" + index);
+        var containerMain = $(document.createElement('div')).addClass("col-xs-4 col-md-2").attr('id', "image-" + index);
+        var containerReview = $(document.createElement('div')).addClass("col-xs-3 col-md-3").attr('id', "image-rev-" + index);
+        var deleteReview = $(document.createElement('a')).addClass("delete-screen").html("<i class='fa fa-trash-o' aria-hidden='true'></i>");
         var innerContainer = $(document.createElement('div')).addClass("col-xs-12 col-md-12 thumbnail-inner");
-        var image = $(document.createElement('img')).addClass('img-responsive').attr('src', image);
+        var image = $(document.createElement('img')).attr('src', image);
         $(innerContainer).click(function () {
-            currentImage = index;
-            $(".dropzone").html("");
-            $("#Image_Title").val(listOfImages[index].Title);
+            $("#edit-img").hide();
+            $(".dropzone").html("").append(dropzoneText);
+            $("#Image_Title").html("").val(listOfImages[index].Title);
             $("#Image_Description_UserInput").val(listOfImages[index].Description);
             $("#b64").val(listOfImages[index].Content);
             var image = $(document.createElement("img")).addClass("img-responsive").attr('src', listOfImages[index].Content);
@@ -59,11 +70,19 @@
             myDropzone.emit("addedfile", myImage);
             myDropzone.emit("thumbnail", myImage, listOfImages[index].Content);
         })
+        $(deleteReview).click(function (e) {
+            e.stopPropagation();
+            index.push(listOfDeleted);
+            $("#image-" + index).detach();
+            $("#image-rev-" + index).detach();
+        })
         $(image).appendTo(innerContainer);
-        $(innerContainer).appendTo(container);
-        $(container).appendTo("#thumbnail-container");
+        $(innerContainer).appendTo(containerReview);
+        $(innerContainer).clone().append(deleteReview).appendTo(containerMain);
+        $(containerMain).appendTo("#thumbnail-container");
+        $(containerReview).appendTo("#review-thumbnail-container")
     }
-
+    
     $("#edit-img").click(function () {
         listOfImages[currentImage].Title = $("#Image_Title").val();
         listOfImages[currentImage].Description = $("#Image_Description_UserInput").val();
@@ -71,19 +90,34 @@
         $("#Image_Description_UserInput").off();
         $(this).hide();
     })
+    $("#create-reviewer").click(function () {
+        $(".add-reviewers-overlay").css("display","flex").hide().fadeIn(400);
+    })
+    $(".add-reviewers-overlay > div").click(function (e) {
+        e.stopPropagation();
+    })
+    $(".add-reviewers-overlay").click(function () {
+        $(this).fadeOut(200);
+    })
     $("#submit-images").click(function () {
-        //Get the details of the users who were checked as reviewers
-        $("#users input[type='checkbox']:checked").each(function () {
-            var element = $(this).attr("name").split(".")[0];
-            var userId = $(document.getElementsByName(element + ".Id")).val();
-            var profileName = $(this).nextAll().eq(0).html();
-            var email = $(this).nextAll().eq(1).html();
-            var user = {
-                "UserId": userId,
-                "ProfileName": profileName,
-                "Email": email
-            };
-            listOfUsers.push(user);
+        $(listOfDeleted).each(function () {
+            listOfImages()
+        })
+        //Get the details of the users who were checked as reviewers NEEDS TO BE UPDATED
+        $(".reviewer-info input[type='checkbox']").each(function (index) {
+            if ($(this).is(":checked")) {
+                var element = $(this).attr("name").split(".")[0];
+                var userId = $(document.getElementsByName(element + ".Id")).val();
+                var profileName = $("#profilename-" + index + " label").html();
+                var email = $("#email-" + index +" label").html();
+                var user = {
+                    "UserId": userId,
+                    "ProfileName": profileName,
+                    "Email": email
+                };
+                listOfUsers.push(user);
+            }
+            
         })
         var CreatePageModel = {
             "Users": listOfUsers,
@@ -101,4 +135,6 @@
                 }
             });
     })
+    
+    
 })
