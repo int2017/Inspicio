@@ -39,19 +39,20 @@ namespace Inspicio.Controllers
             // Only images with the user id set as the owner should be passed into the view
             var UserId = _userManager.GetUserId(HttpContext.User);
 
-            var ImageIds = _context.AccessTable.Where(r => r.UserId == UserId).Select(i => i.ReviewId);
-            var AllImages = new List<Screen>();
-            foreach (var Id in ImageIds)
+            var ReviewsIds = _context.AccessTable.Where(r => r.UserId == UserId).Select(i => i.ReviewId);     
+            var allReviews = new List<Review>();
+
+            foreach (var Id in ReviewsIds)
             {
-                AllImages.Add(_context.Screens.Where(i => i.ScreenId == Id).SingleOrDefault());
+                allReviews.Add(_context.Review.Where(i => i.ReviewId == Id).SingleOrDefault());
             }
 
-            var ImageEntries = new List<IndexModel>();
-            foreach (var a in AllImages)
+            var Reviews = new List<IndexModel>();
+            foreach (var a in allReviews)
             {
-                ImageEntries.Add(new IndexModel
+                Reviews.Add(new IndexModel
                 {
-                    Screen = a,
+                    Review = a,
                     approvals = 0,//_context.AccessTable.Count(x => (x.ReviewId == a.ScreenId) && x.State == AccessTable.States.Approved),
                     needsWorks = 0,//_context.AccessTable.Count(x => (x.ReviewId == a.ScreenId) && x.State == AccessTable.States.NeedsWork),
                     rejections = 0//_context.AccessTable.Count(x => (x.ReviewId == a.ScreenId) && x.State == AccessTable.States.Rejected)
@@ -59,7 +60,8 @@ namespace Inspicio.Controllers
             }
 
             await _context.SaveChangesAsync();
-            return View(ImageEntries);
+
+            return View(Reviews);
         }
 
         // GET: Images/Details/5

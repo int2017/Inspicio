@@ -13,6 +13,12 @@ namespace Inspicio.Models
 
         public string CreatorId { get; set; }
 
+        [Required]
+        [StringLength(150, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 5)]
+        public string Title { get; set; }
+
+        public string Description { get; set; }
+
         public int ScreenId { get; set; }
 
         public int NextScreenId { get; set; }
