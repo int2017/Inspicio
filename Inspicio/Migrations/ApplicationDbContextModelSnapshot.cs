@@ -126,10 +126,6 @@ namespace Inspicio.Migrations
 
                     b.Property<string>("Description");
 
-                    b.Property<int>("NextScreenId");
-
-                    b.Property<int>("NextVersionId");
-
                     b.Property<int>("ReviewState");
 
                     b.Property<int>("ReviewStatus");
@@ -163,6 +159,8 @@ namespace Inspicio.Migrations
                     b.Property<int>("NextVersionId");
 
                     b.Property<string>("OwnerId");
+
+                    b.Property<int>("ReviewId");
 
                     b.Property<int>("ScreenStatus");
 

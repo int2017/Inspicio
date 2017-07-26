@@ -12,6 +12,8 @@ namespace Inspicio.Models
     {
         public int ScreenId { get; set; }
 
+        public int ReviewId { get; set; }
+
         public int NextScreenId { get; set; }
         public int NextVersionId { get; set; }
 

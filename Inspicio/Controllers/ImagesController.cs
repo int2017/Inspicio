@@ -122,6 +122,8 @@ namespace Inspicio.Controllers
                 Review.Description = "Default Description HardCoded";
                 _context.Add(Review);
 
+                CreatePageModel.Screen.ReviewId = (_context.Review.Where(r => r.ScreenId == CreatePageModel.Screen.ScreenId)).Select(s => s.ReviewId).SingleOrDefault();
+
                 // Access creations
                 var OwnerEntry = new Access();
                 OwnerEntry.ReviewId = CreatePageModel.Screen.ScreenId;
@@ -186,22 +188,22 @@ namespace Inspicio.Controllers
             // Added OwnerProfileName to be passed into the model.
             ViewModel.Review = Review;
 
-            //var allScreens = from screen in _context.Screens
-            //             where screen.ReviewId == Id
-            //             select new ViewModel.ScreenData()
-            //             {
-            //                 Screen = screen,
-            //                 Comments = (from comment in _context.Comments
-            //                             where comment.ScreenId == screen.ScreenId
-            //                             select comment).ToList(),
+            var allScreens = (from screen in _context.Screens
+                              where screen.ReviewId == Id
+                              select new ViewModel.ScreenData()
+                              {
+                                  Screen = screen,
+                                  Comments = (from comment in _context.Comments
+                                              where comment.ScreenId == screen.ScreenId
+                                              select comment).ToList(),
 
-            //                 Num_Approvals = 0,
-            //                 Num_NeedsWorks = 0,
-            //                 Num_Rejections = 0
-            //             };
+                                  Num_Approvals = 0,
+                                  Num_NeedsWorks = 0,
+                                  Num_Rejections = 0
+                              }).ToList();
 
 
-            //ViewModel.ScreensList = allScreens.ToList();
+            ViewModel.ScreensList = allScreens.ToList();
 
             //FullReviewData.Reviewees = _context.Access.Where(u => u.ReviewId == Id).ToList();
 
