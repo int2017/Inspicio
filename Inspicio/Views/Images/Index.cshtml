@@ -40,8 +40,8 @@
     <tbody id="tBody" style="border-bottom: solid; border-width: 3px;">
 
 @foreach (var item in Model)
-{
-        <tr title="@item.Review.Title" onclick="document.location = 'Images/View/@item.Review.ScreenId'" style="cursor:pointer; border-bottom:solid;border-bottom-width:1px;" >
+{ 
+        <tr title="@item.Review.Title" onclick="document.location = 'Images/View/@item.Review.ReviewId'" style="cursor:pointer; border-bottom:solid;border-bottom-width:1px;" >
                 <td id="content">
                     <img style="max-height: 100px; max-width: 100px; margin-top:15px;" src="" />
                 </td>

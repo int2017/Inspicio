@@ -199,7 +199,7 @@ namespace Inspicio.Controllers
                                   Num_Approvals = 0,
                                   Num_NeedsWorks = 0,
                                   Num_Rejections = 0
-                              }).ToList();
+                              });
 
 
             ViewModel.ScreensList = allScreens.ToList();
