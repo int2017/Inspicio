@@ -382,7 +382,9 @@ body .dropzone .dz-preview .dz-image {
     padding:5px;
     cursor:inherit;
 }
-
+.image-upload-container{
+    display:none;
+}
 .add-reviewers-overlay {
     margin: auto;
     display: none;
@@ -837,7 +839,14 @@ select#comment-date {
 body .dropzone .dz-preview.dz-image-preview {
     margin: 0px;
 }
-
+.dz-progress{
+    display:none;
+}
+.dz-filename{
+        font-size: 1.4em;
+    padding: 10px;
+    font-weight: 700;
+}
 #comment-section .date-header:before,
 #comment-section .date-header:after {
     content: '';

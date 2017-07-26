@@ -10,8 +10,6 @@
         var description = $("#Image_Description_UserInput").val();
         var content = $("#b64").val();
         if (title.length !== 0 &&  content.length !== 0) {
-
-       
         $(".dropzone").css("width", "100%");
         $(this).removeClass("ready");
         var contentCol = listOfImages.map(v => v.Content);
@@ -41,15 +39,24 @@
             alert("You must add a screen and a title!")
         }
     })
-
+    $("#create-screens").click(function () {
+        $("#project-info").hide();
+        $(".image-upload-container").show();
+    })
     function appendThumbnail(index, image) {
         
         var containerMain = $(document.createElement('div')).addClass("col-xs-4 col-md-2").attr('id', "image-" + index);
         var containerReview = $(document.createElement('div')).addClass("col-xs-3 col-md-3").attr('id', "image-rev-" + index);
-        var deleteReview = $(document.createElement('a')).addClass("delete-screen").html("<i class='fa fa-trash-o' aria-hidden='true'></i>");
-        var innerContainer = $(document.createElement('div')).addClass("col-xs-12 col-md-12 thumbnail-inner");
+        var deleteReview = $(document.createElement('a')).addClass("delete-screen").html("<i class='fa fa-trash-o' aria-hidden='true'></i>");  
         var image = $(document.createElement('img')).attr('src', image);
-        $(innerContainer).click(function () {
+        var innerContainer = $(document.createElement('div')).addClass("col-xs-12 col-md-12 thumbnail-inner");
+        $(image).appendTo(innerContainer);
+        $(innerContainer).appendTo(containerReview);
+        var mainInnerContainer = $(innerContainer).clone().append(deleteReview).appendTo(containerMain);
+        $(containerMain).appendTo("#thumbnail-container");
+        $(containerReview).appendTo("#review-thumbnail-container");
+        $(mainInnerContainer).click(function () {
+            alert("lol");
             $("#edit-img").hide();
             $(".dropzone").html("").append(dropzoneText);
             $("#Image_Title").html("").val(listOfImages[index].Title);
@@ -70,17 +77,13 @@
             myDropzone.emit("addedfile", myImage);
             myDropzone.emit("thumbnail", myImage, listOfImages[index].Content);
         })
+
         $(deleteReview).click(function (e) {
             e.stopPropagation();
-            index.push(listOfDeleted);
+            $(listOfDeleted).push(index);
             $("#image-" + index).detach();
             $("#image-rev-" + index).detach();
         })
-        $(image).appendTo(innerContainer);
-        $(innerContainer).appendTo(containerReview);
-        $(innerContainer).clone().append(deleteReview).appendTo(containerMain);
-        $(containerMain).appendTo("#thumbnail-container");
-        $(containerReview).appendTo("#review-thumbnail-container")
     }
     
     $("#edit-img").click(function () {
