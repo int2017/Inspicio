@@ -166,33 +166,23 @@ namespace Inspicio.Controllers
             // Create a new FullReview object
             // This will be passed into the view as the model.
             var FullReviewData = new ViewModel();
-            FullReviewData.Comments = new List<ViewModel.CommentInfo>();
+            FullReviewData.Comments = new List<Comment>();
 
             // Added OwnerProfileName to be passed into the model.
             ApplicationUser User = await _userManager.FindByIdAsync(Screen.OwnerId);
 
-            FullReviewData.OwnerId = User.Id;
+            FullReviewData.Review.CreatorId = User.Id;
 
-            FullReviewData.ScreenData = new ViewModel.ImageData();
-            FullReviewData.ScreenData.Screen = Screen;
-            FullReviewData.ScreenData.Screen.ScreenStatus = Screen.ScreenStatus;
-            FullReviewData.ScreenData.approvals = 0;//_context.AccessTable.Count(x => x.ReviewId == Id && x.State == AccessTable.States.Approved);
-            FullReviewData.ScreenData.rejections = 0;//_context.AccessTable.Count(x => x.ReviewId == Id && x.State == AccessTable.States.Rejected);
-            FullReviewData.ScreenData.needsWorks = 0;//_context.AccessTable.Count(x => x.ReviewId == Id && x.State == AccessTable.States.NeedsWork);
-            FullReviewData.Reviews = _context.AccessTable.Where(u => u.ReviewId == Id).ToList();
+            FullReviewData.Data = new ViewModel.ScreenData();
+            FullReviewData.Data.Screen = Screen;
+            FullReviewData.Data.Screen.ScreenStatus = Screen.ScreenStatus;
+            FullReviewData.Data.Num_Approvals = 0;//_context.AccessTable.Count(x => x.ReviewId == Id && x.State == AccessTable.States.Approved);
+            FullReviewData.Data.Num_Rejections = 0;//_context.AccessTable.Count(x => x.ReviewId == Id && x.State == AccessTable.States.Rejected);
+            FullReviewData.Data.Num_NeedsWorks = 0;//_context.AccessTable.Count(x => x.ReviewId == Id && x.State == AccessTable.States.NeedsWork);
+
+            FullReviewData.Reviewees = _context.AccessTable.Where(u => u.ReviewId == Id).ToList();
             // Changed from getting all comments then working out which we want to only getting the ones we want.
-            var AllComments = _context.Comments.Where(c => c.ScreenId == Id);
-            foreach (Comment SingleComment in AllComments)
-            {
-                // add it and query the user table for the profilename.
-
-                // add it and query the user table for the profilename.
-                var CommentInfo = new ViewModel.CommentInfo();
-                CommentInfo.PosterProfileName = _context.Users.Where(u => u.Id == SingleComment.OwnerId).Select(u => u.ProfileName).SingleOrDefault();
-                CommentInfo.comment = SingleComment;
-
-                FullReviewData.Comments.Add(CommentInfo);
-            }
+            FullReviewData.Comments = _context.Comments.Where(c => c.ScreenId == Id).ToList();
 
             // FullReview model to the View.
             return View(FullReviewData);
@@ -206,16 +196,8 @@ namespace Inspicio.Controllers
         }
         public JsonResult GetComments(int? Id)
         {
-            List<ViewModel.CommentInfo> comments = new List<ViewModel.CommentInfo>();
             var AllComments = _context.Comments.Where(c => c.ScreenId == Id);
-            foreach (Comment SingleComment in AllComments)
-            {
-                var CommentInfo = new ViewModel.CommentInfo();
-                CommentInfo.comment = SingleComment;
-                CommentInfo.PosterProfileName = _context.Users.Where(u => u.Id == SingleComment.OwnerId).Select(u => u.ProfileName).Single();
-                comments.Add(CommentInfo);
-            }
-            return Json(comments);
+            return Json(AllComments);
         }
         // POST: Images/View/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 

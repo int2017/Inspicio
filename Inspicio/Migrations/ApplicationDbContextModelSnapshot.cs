@@ -167,6 +167,21 @@ namespace Inspicio.Migrations
                     b.ToTable("Screens");
                 });
 
+            modelBuilder.Entity("Inspicio.Models.ScreenStatus", b =>
+                {
+                    b.Property<string>("UserId");
+
+                    b.Property<int>("ScreenId");
+
+                    b.Property<int>("Status");
+
+                    b.HasKey("UserId", "ScreenId");
+
+                    b.HasAlternateKey("ScreenId", "UserId");
+
+                    b.ToTable("ScreenStatus");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -316,6 +331,19 @@ namespace Inspicio.Migrations
                     b.HasOne("Inspicio.Models.ApplicationUser", "ApplicationUsers")
                         .WithMany("Screens")
                         .HasForeignKey("OwnerId");
+                });
+
+            modelBuilder.Entity("Inspicio.Models.ScreenStatus", b =>
+                {
+                    b.HasOne("Inspicio.Models.Review", "Reviews")
+                        .WithMany()
+                        .HasForeignKey("ScreenId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Inspicio.Models.ApplicationUser", "ApplicationUsers")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRoleClaim<string>", b =>
