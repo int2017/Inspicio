@@ -22,6 +22,6 @@ namespace Inspicio.Models.ReviewViewModels
         public Comment Comment { get; set; }
         public List<Comment> Comments { get; set; }
 
-        public List<AccessTable> Reviewees = new List<AccessTable>();
+        public List<Access> Reviewees = new List<Access>();
     }
 }

@@ -9,7 +9,7 @@ $(function () {
     $('#toggle').change(function () {
         var DataFromToggle = {
 
-            "ScreenId": $("#ScreenId").val(),
+            "ReviewId": $("#ReviewId").val(),
             "Open": $("#toggle").prop('checked')
         };
 

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Inspicio.Models
 {
-    public class AccessTable
+    public class Access
     {
         [Key]
         [Column(Order = 1)]

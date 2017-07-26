@@ -23,7 +23,7 @@ namespace Inspicio.Models
 
         public ICollection<Comment> Comments { get; set; }
         public ICollection<Screen> Screens { get; set; }
-        public ICollection<AccessTable> AccessTable { get; set; }
+        public ICollection<Access> Access { get; set; }
     }
 }
 

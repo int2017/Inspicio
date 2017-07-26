@@ -19,13 +19,13 @@ namespace Inspicio.Data
 
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Screen> Screens { get; set; }
-        public DbSet<AccessTable> AccessTable { get; set; }
         public DbSet<Review> Review { get; set; }
         public DbSet<ScreenStatus> ScreenStatus { get; set; }
+        public DbSet<Access> Access { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<AccessTable>().HasKey(a => new { a.UserId, a.ReviewId });
+            modelBuilder.Entity<Access>().HasKey(a => new { a.UserId, a.ReviewId });
             modelBuilder.Entity<ScreenStatus>().HasKey(s => new { s.UserId, s.ScreenId });
             modelBuilder.Entity<ApplicationUser>().HasMany(a => a.Screens);
             modelBuilder.Entity<ApplicationUser>().HasMany(a => a.Comments);

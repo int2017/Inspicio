@@ -39,10 +39,10 @@ namespace Inspicio.Controllers
             // Only images with the user id set as the owner should be passed into the view
             var UserId = _userManager.GetUserId(HttpContext.User);
 
-            var ReviewsIds = _context.AccessTable.Where(r => r.UserId == UserId).Select(i => i.ReviewId);     
+            var ReviewIds = _context.Access.Where(r => r.UserId == UserId).Select(i => i.ReviewId).ToList();
             var allReviews = new List<Review>();
 
-            foreach (var Id in ReviewsIds)
+            foreach (var Id in ReviewIds)
             {
                 allReviews.Add(_context.Review.Where(i => i.ReviewId == Id).SingleOrDefault());
             }
@@ -58,9 +58,6 @@ namespace Inspicio.Controllers
                     rejections = 0//_context.AccessTable.Count(x => (x.ReviewId == a.ScreenId) && x.State == AccessTable.States.Rejected)
                 });
             }
-
-            await _context.SaveChangesAsync();
-
             return View(Reviews);
         }
 
@@ -119,9 +116,11 @@ namespace Inspicio.Controllers
                 Review.ReviewStatus = Review.Status.Undecided;
                 //Review.NextScreenId = -1;
                 //Review.NextVersionId = -1;
+                Review.Title = "Default Title HardCoded";
+                Review.Description = "Default Description HardCoded";
                 _context.Add(Review);
 
-                var OwnerEntry = new AccessTable();
+                var OwnerEntry = new Access();
                 OwnerEntry.ReviewId = CreatePageModel.Screen.ScreenId;
                 OwnerEntry.UserId = CreatePageModel.Screen.OwnerId;
                 _context.Add(OwnerEntry);
@@ -130,7 +129,7 @@ namespace Inspicio.Controllers
                 {
                     foreach (var u in CreatePageModel.Users.Where(m => m.IsSelected))
                     {
-                        var ReviewerEntry = new AccessTable();
+                        var ReviewerEntry = new Access();
 
                         ReviewerEntry.UserId = u.Id;
                         ReviewerEntry.ReviewId = CreatePageModel.Screen.ScreenId;
@@ -158,9 +157,9 @@ namespace Inspicio.Controllers
                 return NotFound();
             }
 
-            // Fetch the image by the id pass in '/5'
-            var Screen = await _context.Screens.SingleOrDefaultAsync(m => m.ScreenId == Id);
-            if (Screen == null)
+            // Fetch the review by the id pass in '/5'
+            var Review = await _context.Review.SingleOrDefaultAsync(m => m.ReviewId == Id);
+            if (Review == null)
             {
                 return NotFound();
             }
@@ -168,21 +167,19 @@ namespace Inspicio.Controllers
             // Create a new FullReview object
             // This will be passed into the view as the model.
             var FullReviewData = new ViewModel();
-            FullReviewData.Comments = new List<Comment>();
 
             // Added OwnerProfileName to be passed into the model.
-            ApplicationUser User = await _userManager.FindByIdAsync(Screen.OwnerId);
-
-            FullReviewData.Review.CreatorId = User.Id;
+            FullReviewData.Review = Review;
 
             FullReviewData.Data = new ViewModel.ScreenData();
-            FullReviewData.Data.Screen = Screen;
-            FullReviewData.Data.Screen.ScreenStatus = Screen.ScreenStatus;
+            FullReviewData.Data.Screen = _context.Screens.Where(s => s.ScreenId == Id).SingleOrDefault();
+
             FullReviewData.Data.Num_Approvals = 0;//_context.AccessTable.Count(x => x.ReviewId == Id && x.State == AccessTable.States.Approved);
             FullReviewData.Data.Num_Rejections = 0;//_context.AccessTable.Count(x => x.ReviewId == Id && x.State == AccessTable.States.Rejected);
             FullReviewData.Data.Num_NeedsWorks = 0;//_context.AccessTable.Count(x => x.ReviewId == Id && x.State == AccessTable.States.NeedsWork);
 
-            FullReviewData.Reviewees = _context.AccessTable.Where(u => u.ReviewId == Id).ToList();
+
+            //FullReviewData.Reviewees = _context.Access.Where(u => u.ReviewId == Id).ToList();
             // Changed from getting all comments then working out which we want to only getting the ones we want.
             FullReviewData.Comments = _context.Comments.Where(c => c.ScreenId == Id).ToList();
 
@@ -193,7 +190,7 @@ namespace Inspicio.Controllers
         public JsonResult GetRating(int? id)
         {
             var userId = _userManager.GetUserId(HttpContext.User);
-            var review = _context.AccessTable.Where(u => u.UserId == userId).Where(i => i.ReviewId == id).SingleOrDefault();
+           // var review = _context.AccessTable.Where(u => u.UserId == userId).Where(i => i.ReviewId == id).SingleOrDefault();
             return Json(0);// review.State);
         }
         public JsonResult GetComments(int? Id)
@@ -300,12 +297,12 @@ namespace Inspicio.Controllers
         public async Task<IActionResult> ChangeRating([FromBody] RatingBody data)
         {
             var userId = _userManager.GetUserId(HttpContext.User);
-            var review = _context.AccessTable.Where(u => u.UserId == userId).Where(i => i.ReviewId == data.ScreenId).SingleOrDefault();
+            //var review = _context.AccessTable.Where(u => u.UserId == userId).Where(i => i.ReviewId == data.ScreenId).SingleOrDefault();
 
-            if (review == null)
-            {
-                return NotFound();
-            }
+            //if (review == null)
+            //{
+            //    return NotFound();
+            //}
 
 
             int id = data.ScreenId;

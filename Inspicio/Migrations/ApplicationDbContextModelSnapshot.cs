@@ -17,7 +17,7 @@ namespace Inspicio.Migrations
                 .HasAnnotation("ProductVersion", "1.1.2")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Inspicio.Models.AccessTable", b =>
+            modelBuilder.Entity("Inspicio.Models.Access", b =>
                 {
                     b.Property<string>("UserId");
 
@@ -27,7 +27,7 @@ namespace Inspicio.Migrations
 
                     b.HasAlternateKey("ReviewId", "UserId");
 
-                    b.ToTable("AccessTable");
+                    b.ToTable("Access");
                 });
 
             modelBuilder.Entity("Inspicio.Models.ApplicationUser", b =>
@@ -295,15 +295,15 @@ namespace Inspicio.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("Inspicio.Models.AccessTable", b =>
+            modelBuilder.Entity("Inspicio.Models.Access", b =>
                 {
                     b.HasOne("Inspicio.Models.Review", "Reviews")
-                        .WithMany("AccessTable")
+                        .WithMany("Access")
                         .HasForeignKey("ReviewId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Inspicio.Models.ApplicationUser", "ApplicationUsers")
-                        .WithMany("AccessTable")
+                        .WithMany("Access")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

@@ -32,7 +32,7 @@ namespace Inspicio.Models
         public Status ReviewStatus { get; set; }
         public enum Status { Approved, NeedsWork, Rejected, Undecided };
 
-        public ICollection<AccessTable> AccessTable { get; set; }
+        public ICollection<Access> Access { get; set; }
 
         [ForeignKey("ScreenId")]
         public Screen Screens { get; set; }
