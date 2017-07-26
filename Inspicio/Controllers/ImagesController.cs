@@ -113,7 +113,6 @@ namespace Inspicio.Controllers
                 var Review = new Review();
                 //Review.ReviewId = ?
                 Review.CreatorId = _userManager.GetUserId(HttpContext.User);
-                Review.ScreenId = CreatePageModel.Screen.ScreenId;
                 Review.ReviewState = Review.States.Open;
                 Review.ReviewStatus = Review.Status.Undecided;
                 //Review.NextScreenId = -1;
@@ -122,7 +121,7 @@ namespace Inspicio.Controllers
                 Review.Description = "Default Description HardCoded";
                 _context.Add(Review);
 
-                CreatePageModel.Screen.ReviewId = (_context.Review.Where(r => r.ScreenId == CreatePageModel.Screen.ScreenId)).Select(s => s.ReviewId).SingleOrDefault();
+                CreatePageModel.Screen.ReviewId = Review.ReviewId;
 
                 // Access creations
                 var OwnerEntry = new Access();

@@ -19,8 +19,6 @@ namespace Inspicio.Models
 
         public string Description { get; set; }
 
-        public int ScreenId { get; set; }
-
         [EnumDataType(typeof(States))]
         public States ReviewState { get; set; }
         public enum States { Open, Closed };
@@ -30,9 +28,6 @@ namespace Inspicio.Models
         public enum Status { Approved, NeedsWork, Rejected, Undecided };
 
         public ICollection<Access> Access { get; set; }
-
-        [ForeignKey("ScreenId")]
-        public Screen Screens { get; set; }
 
         [ForeignKey("CreatorId")]
         public ApplicationUser ApplicationUsers { get; set; }

@@ -34,7 +34,8 @@ namespace Inspicio.Models
 
         public ICollection<Comment> Comments { get; set; }
 
-        public virtual ICollection<Review> Reviews { get; set; }
+        [ForeignKey("ReviewId")]
+        public Review Review { get; set; }
 
         [ForeignKey("OwnerId")]
         public ApplicationUser ApplicationUsers { get; set; }

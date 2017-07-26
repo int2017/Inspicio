@@ -130,8 +130,6 @@ namespace Inspicio.Migrations
 
                     b.Property<int>("ReviewStatus");
 
-                    b.Property<int>("ScreenId");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(150);
@@ -139,8 +137,6 @@ namespace Inspicio.Migrations
                     b.HasKey("ReviewId");
 
                     b.HasIndex("CreatorId");
-
-                    b.HasIndex("ScreenId");
 
                     b.ToTable("Review");
                 });
@@ -171,6 +167,8 @@ namespace Inspicio.Migrations
                     b.HasKey("ScreenId");
 
                     b.HasIndex("OwnerId");
+
+                    b.HasIndex("ReviewId");
 
                     b.ToTable("Screens");
                 });
@@ -327,11 +325,6 @@ namespace Inspicio.Migrations
                     b.HasOne("Inspicio.Models.ApplicationUser", "ApplicationUsers")
                         .WithMany()
                         .HasForeignKey("CreatorId");
-
-                    b.HasOne("Inspicio.Models.Screen", "Screens")
-                        .WithMany("Reviews")
-                        .HasForeignKey("ScreenId")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Inspicio.Models.Screen", b =>
@@ -339,6 +332,11 @@ namespace Inspicio.Migrations
                     b.HasOne("Inspicio.Models.ApplicationUser", "ApplicationUsers")
                         .WithMany("Screens")
                         .HasForeignKey("OwnerId");
+
+                    b.HasOne("Inspicio.Models.Review", "Review")
+                        .WithMany()
+                        .HasForeignKey("ReviewId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Inspicio.Models.ScreenStatus", b =>
