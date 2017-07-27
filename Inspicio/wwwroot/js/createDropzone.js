@@ -16,7 +16,7 @@ the server when create new is pressed.
                     images[0].parentNode.removeChild(images[0]);
                 }
                 document.getElementById("b64").value = e.target.result;
-                var image = new Image();
+                var image = document.createElement("img");
                 
                 image.src = e.target.result;
                 $(image).appendTo(".dropzone#uploader > .dz-preview >.dz-image");

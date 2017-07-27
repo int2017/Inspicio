@@ -93,7 +93,7 @@ namespace Inspicio.Controllers
         public IActionResult Create()
         {
             var CreatePageModel = new CreatePageModel();
-            CreatePageModel.Users = new List<SelectableUser>();
+            CreatePageModel.Users = new List<ApplicationUser>();
 
             var users = _context.Users.Where(u => u.Id != _userManager.GetUserId(HttpContext.User)).ToList();
             foreach (var u in users)
@@ -114,11 +114,12 @@ namespace Inspicio.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreatePageModel CreatePageModel)
         {
+         
             if (ModelState.IsValid)
             {
                 // Screen creation
-                CreatePageModel.Screen.OwnerId = _userManager.GetUserId(HttpContext.User);
-                CreatePageModel.Screen.ScreenStatus = Screen.Status.Undecided;
+                CreatePageModel.Screen[0].OwnerId = _userManager.GetUserId(HttpContext.User);
+                CreatePageModel.Screen[0].ScreenStatus = Screen.Status.Undecided;
                 _context.Add(CreatePageModel.Screen);
 
                 // Review creation
@@ -133,7 +134,7 @@ namespace Inspicio.Controllers
                 Review.Description = "Default Description HardCoded";
                 _context.Add(Review);
 
-                CreatePageModel.Screen.ReviewId = Review.ReviewId;
+                CreatePageModel.Screen[0].ReviewId = Review.ReviewId;
 
                 // Access creations
                 var OwnerEntry = new Access();
@@ -143,7 +144,7 @@ namespace Inspicio.Controllers
                 
                 if (CreatePageModel.Users != null)
                 {
-                    foreach (var u in CreatePageModel.Users.Where(m => m.IsSelected))
+                    foreach (var u in CreatePageModel.Users)
                     {
                         var ReviewerEntry = new Access();
 
@@ -156,11 +157,11 @@ namespace Inspicio.Controllers
                 // ScreenStatus creation
                 if (CreatePageModel.Users != null)
                 {
-                    foreach (var u in CreatePageModel.Users.Where(m => m.IsSelected))
+                    foreach (var u in CreatePageModel.Users)
                     {
 
                         var ScreenStatus = new ScreenStatus();
-                        ScreenStatus.ScreenId = CreatePageModel.Screen.ScreenId;
+                        ScreenStatus.ScreenId = CreatePageModel.Screen[0].ScreenId;
                         ScreenStatus.UserId = u.Id;
                         ScreenStatus.Status = ScreenStatus.PossibleStatus.Undecided;
                         _context.Add(ScreenStatus);

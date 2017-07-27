@@ -43,12 +43,12 @@
         $("#project-info").hide();
         $(".image-upload-container").show();
     })
-    function appendThumbnail(index, image) {
+    function appendThumbnail(index, content) {
         
         var containerMain = $(document.createElement('div')).addClass("col-xs-4 col-md-2").attr('id', "image-" + index);
         var containerReview = $(document.createElement('div')).addClass("col-xs-3 col-md-3").attr('id', "image-rev-" + index);
         var deleteReview = $(document.createElement('a')).addClass("delete-screen").html("<i class='fa fa-trash-o' aria-hidden='true'></i>");  
-        var image = $(document.createElement('img')).attr('src', image);
+        var image = $(document.createElement('img')).attr('src', content);
         var innerContainer = $(document.createElement('div')).addClass("col-xs-12 col-md-12 thumbnail-inner");
         $(image).appendTo(innerContainer);
         $(innerContainer).appendTo(containerReview);
@@ -108,7 +108,7 @@
         })
         //Get the details of the users who were checked as reviewers NEEDS TO BE UPDATED
         $(".reviewer-info input[type='checkbox']").each(function (index) {
-            if ($(this).is(":checked")) {
+            /*if ($(this).is(":checked")) {
                 var element = $(this).attr("name").split(".")[0];
                 var userId = $(document.getElementsByName(element + ".Id")).val();
                 var profileName = $("#profilename-" + index + " label").html();
@@ -119,20 +119,22 @@
                     "Email": email
                 };
                 listOfUsers.push(user);
-            }
+            }*/
             
         })
         var CreatePageModel = {
-            "Users": listOfUsers,
-            "Images": listOfImages
-            }
+            Screen: listOfImages,
+            Users: listOfUsers
+        }
+        var data={
+            __RequestVerificationToken: $('[name= "__RequestVerificationToken"]').val(),
+            CreatePageModel: CreatePageModel
+        }
         $.ajax(
             {
                 type: "POST", //HTTP POST Method  
-                url: "../Create", // Controller  
-                contentType: "application/json;",
-                dataType: "text",
-                data: JSON.stringify(CreatePageModel),
+                url: "/Images/Create", // Controller  
+                data: data,
                 success: function () {
                     
                 }

@@ -5,7 +5,7 @@ namespace Inspicio.Models.ReviewViewModels
 {
     public class CreatePageModel
     {
-        public List<SelectableUser> Users { get; set; }
-        public Screen Screen { get; set; }
+        public List<ApplicationUser> Users { get; set; }
+        public List<Screen> Screen { get; set; }
     }
 }

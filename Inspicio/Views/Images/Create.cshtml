@@ -30,7 +30,7 @@
 </style>
 <h3> New Review </h3>
 
-<form asp-action="Create">
+
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div  id="project-info">
         <div class="row">
@@ -49,14 +49,14 @@
                 </div>
             </div>
             <div class="col-md-6">
-                <div id="projectThumbDropzoneDiv">
+               <!--<div id="projectThumbDropzoneDiv">
                     <div class="dropzone needsclick dz-clickable" id="uploader">
                         <div class="dz-message needsclick">
                             <i class="fa fa-file-image-o fa-5x" aria-hidden="true"></i>
                             <h4>Drag and drop your thumbnail here or click to upload</h4>
                         </div>
                     </div>
-                </div>
+                </div>-->
             </div>
         </div>
         <div class="form-group text-center">
@@ -67,17 +67,17 @@
         <div class="form-group">
             <!-- Review Title -->
             <input  type="text" id="Image_Title" class="form-control" placeholder="Screen Title">
-        <input asp-for="@Model.Screen.Title" type="text" class="form-control" placeholder=" #7634 ... .. .">
-        <span asp-validation-for="@Model.Screen.Title" class="text-danger"></span>
+        
+        <span class="text-danger"></span>
         </div>
 
         <div class="form-group">
             <!-- Review Description -->
             <textarea class="form-control" id="Image_Description_UserInput" rows="4" placeholder="Screen Description &lt;markdown supported&gt;"></textarea>
             <span  class="text-danger"></span>
-        <span asp-validation-for="@Model.Screen.Description" class="text-danger"></span>
+        <span class="text-danger"></span>
 
-        <textarea asp-for="@Model.Screen.Description" id="Image_DescriptionHTML"></textarea>
+        <textarea id="Image_DescriptionHTML"></textarea>
         </div>
 
 
@@ -153,13 +153,13 @@
                         {
                             <div class="row-eq-height reviewer-info">
                                 <div class="col-md-1 text-center">
-                                    <input type="checkbox" asp-for="@Model.Users[i].IsSelected" />
+                                    <input type="checkbox"  />
                                 </div>
                                 <div id="profilename-@i" class="col-md-6 text-left">
-                                    <label asp-for="@Model.Users[i].IsSelected"> @Model.Users[i].ProfileName</label>
+                                    <label > @Model.Users[i].ProfileName</label>
                                 </div>
                                 <div id="email-@i" class="col-md-5">
-                                    <label asp-for="@Model.Users[i].IsSelected"> @Model.Users[i].Email</label><input type="hidden" asp-for="@Model.Users[i].Id" />
+                                    <label > @Model.Users[i].Email</label><input type="hidden" asp-for="@Model.Users[i].Id" />
                                 </div>
 
                             </div>
@@ -169,7 +169,7 @@
                     </div>
                     </div>
                     <div class="panel-footer">
-        <input id="b64" asp-for="@Model.Screen.Content" type="hidden" />
+        <input id="b64" asp-for="@Model.Screen[0].Content" type="hidden" />
                             <!-- Submit Button -->
                             <button type="button" id="submit-images" class="btn btn-success">Create Review</button>
                         </div>
@@ -178,11 +178,11 @@
             </div>
            
             
-        </div>
+        
       
     
 
-</form>
+
 
 
 
@@ -191,7 +191,9 @@
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
 <script type="text/javascript" src="~/js/createDropzone.js"></script>
+
 <script>
+   
     function filterUsers() {
         // Declare variables
         var input, filter, ul, li, a, i;
