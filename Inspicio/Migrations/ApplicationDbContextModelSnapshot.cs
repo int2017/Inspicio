@@ -130,6 +130,8 @@ namespace Inspicio.Migrations
 
                     b.Property<int>("ReviewStatus");
 
+                    b.Property<string>("Thumbnail");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(150);
