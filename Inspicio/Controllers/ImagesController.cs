@@ -176,13 +176,12 @@ namespace Inspicio.Controllers
                 return NotFound();
             }
 
-            // This will be passed into the view as the model.
             var ViewModel = new ViewModel();
 
-            // Added OwnerProfileName to be passed into the model.
             ViewModel.Review = Review;
 
-            var allScreens = (from screen in _context.Screens
+            // TODO: Does this work correctly, order may be off! :|
+            ViewModel.Screen = (from screen in _context.Screens
                               where screen.ReviewId == Id
                               select new ScreenData()
                               {
@@ -194,12 +193,11 @@ namespace Inspicio.Controllers
                                   Num_Approvals = _context.ScreenStatus.Count(x => (x.ScreenId == screen.ScreenId) && x.Status == ScreenStatus.PossibleStatus.Approved),
                                   Num_NeedsWorks = _context.ScreenStatus.Count(x => (x.ScreenId == screen.ScreenId) && x.Status == ScreenStatus.PossibleStatus.NeedsWork),
                                   Num_Rejections = _context.ScreenStatus.Count(x => (x.ScreenId == screen.ScreenId) && x.Status == ScreenStatus.PossibleStatus.Rejected)
-                              });
-
-
-           // ViewModel.ScreensList = allScreens.ToList();
+                              }).FirstOrDefault();
 
             ViewModel.Reviewees = _context.Access.Where(u => u.ReviewId == Id).ToList();
+
+            ViewModel.ScreenThumbnails = new List<string>();
 
             return View(ViewModel);
         }
