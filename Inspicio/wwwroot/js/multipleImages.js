@@ -8,7 +8,7 @@
     $(document).on("click", "#add-img",function () {
         var title = $("#Image_Title").val();
         var description = $("#Image_Description_UserInput").val();
-        var content = $("#b64").val();
+        var content = $("#b64uploader").val();
         if (title.length !== 0 &&  content.length !== 0) {
         $(".dropzone").css("width", "100%");
         $(this).removeClass("ready");
@@ -28,7 +28,7 @@
             
             $("#Image_Title").val("").html("");
             $("#Image_Description_UserInput").val("");
-            $("#b64").val("");
+            $("#b64uploader").val("");
             myDropzone.removeAllFiles();
             $(".dropzone").html("").append(dropzoneText);
             appendThumbnail(listOfImages.length - 1, content);
@@ -61,7 +61,7 @@
             $(".dropzone").html("").append(dropzoneText);
             $("#Image_Title").html("").val(listOfImages[index].Title);
             $("#Image_Description_UserInput").val(listOfImages[index].Description);
-            $("#b64").val(listOfImages[index].Content);
+            $("#b64uploader").val(listOfImages[index].Content);
             var image = $(document.createElement("img")).addClass("img-responsive").attr('src', listOfImages[index].Content);
             var myImage = {
                 name: listOfImages[index].Title
@@ -108,9 +108,9 @@
         })
         //Get the details of the users who were checked as reviewers NEEDS TO BE UPDATED
         $(".reviewer-info input[type='checkbox']").each(function (index) {
-            /*if ($(this).is(":checked")) {
-                var element = $(this).attr("name").split(".")[0];
-                var userId = $(document.getElementsByName(element + ".Id")).val();
+            if ($(this).is(":checked")) {
+                
+                var userId = $("#Reviewer_"+index+"__Id").val();
                 var profileName = $("#profilename-" + index + " label").html();
                 var email = $("#email-" + index +" label").html();
                 var user = {
@@ -119,12 +119,15 @@
                     "Email": email
                 };
                 listOfUsers.push(user);
-            }*/
+            }
             
         })
         var CreatePageModel = {
-            Screen: listOfImages,
-            Users: listOfUsers
+            Screens: listOfImages,
+            Reviewers: listOfUsers,
+            ReviewTitle: $("#project-title").val(),
+            ReviewDescription: $("#project-description").val(),
+            ReviewThumbnail : $("#b64uploaderThumb").val()
         }
         var data={
             __RequestVerificationToken: $('[name= "__RequestVerificationToken"]').val(),

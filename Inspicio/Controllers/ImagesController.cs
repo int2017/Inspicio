@@ -93,13 +93,13 @@ namespace Inspicio.Controllers
         public IActionResult Create()
         {
             var CreatePageModel = new CreatePageModel();
-            CreatePageModel.Users = new List<ApplicationUser>();
+            CreatePageModel.Reviewers = new List<ApplicationUser>();
 
             var users = _context.Users.Where(u => u.Id != _userManager.GetUserId(HttpContext.User)).ToList();
             foreach (var u in users)
             {
                 // Selectable user constructor
-                CreatePageModel.Users.Add(new SelectableUser { Id = u.Id, Email = u.Email, ProfileName = u.ProfileName, IsSelected = false });
+                CreatePageModel.Reviewers.Add(new SelectableUser { Id = u.Id, Email = u.Email, ProfileName = u.ProfileName, IsSelected = false });
             }
 
             return View(CreatePageModel);
@@ -118,9 +118,9 @@ namespace Inspicio.Controllers
             if (ModelState.IsValid)
             {
                 // Screen creation
-                CreatePageModel.Screen[0].OwnerId = _userManager.GetUserId(HttpContext.User);
-                CreatePageModel.Screen[0].ScreenStatus = Screen.Status.Undecided;
-                _context.Add(CreatePageModel.Screen);
+                CreatePageModel.Screens[0].OwnerId = _userManager.GetUserId(HttpContext.User);
+                CreatePageModel.Screens[0].ScreenStatus = Screen.Status.Undecided;
+                _context.Add(CreatePageModel.Screens);
 
                 // Review creation
                 var Review = new Review();
@@ -134,7 +134,7 @@ namespace Inspicio.Controllers
                 Review.Description = "Default Description HardCoded";
                 _context.Add(Review);
 
-                CreatePageModel.Screen[0].ReviewId = Review.ReviewId;
+                CreatePageModel.Screens[0].ReviewId = Review.ReviewId;
 
                 // Access creations
                 var OwnerEntry = new Access();
@@ -142,9 +142,9 @@ namespace Inspicio.Controllers
                 OwnerEntry.UserId = _userManager.GetUserId(HttpContext.User);
                 _context.Add(OwnerEntry);
                 
-                if (CreatePageModel.Users != null)
+                if (CreatePageModel.Reviewers != null)
                 {
-                    foreach (var u in CreatePageModel.Users)
+                    foreach (var u in CreatePageModel.Reviewers)
                     {
                         var ReviewerEntry = new Access();
 
@@ -155,13 +155,13 @@ namespace Inspicio.Controllers
                 }
 
                 // ScreenStatus creation
-                if (CreatePageModel.Users != null)
+                if (CreatePageModel.Reviewers != null)
                 {
-                    foreach (var u in CreatePageModel.Users)
+                    foreach (var u in CreatePageModel.Reviewers)
                     {
 
                         var ScreenStatus = new ScreenStatus();
-                        ScreenStatus.ScreenId = CreatePageModel.Screen[0].ScreenId;
+                        ScreenStatus.ScreenId = CreatePageModel.Screens[0].ScreenId;
                         ScreenStatus.UserId = u.Id;
                         ScreenStatus.Status = ScreenStatus.PossibleStatus.Undecided;
                         _context.Add(ScreenStatus);
@@ -171,7 +171,7 @@ namespace Inspicio.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            return View(CreatePageModel.Screen);
+            return View(CreatePageModel.Screens);
         }
 
 

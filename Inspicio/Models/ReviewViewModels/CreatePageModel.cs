@@ -5,7 +5,14 @@ namespace Inspicio.Models.ReviewViewModels
 {
     public class CreatePageModel
     {
-        public List<ApplicationUser> Users { get; set; }
-        public List<Screen> Screen { get; set; }
+
+        public string ReviewTitle { get; set; }
+
+        public string ReviewDescription { get; set; }
+
+        public string ReviewThumbnail { get; set; }
+
+        public List<ApplicationUser> Reviewers { get; set; }
+        public List<Screen> Screens { get; set; }
     }
 }

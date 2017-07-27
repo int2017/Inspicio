@@ -37,26 +37,26 @@
             <div class="col-md-6">
                 <div class="form-group">
 
-                    <input type="text" id="project_title" class="form-control" placeholder="Project Title">
+                    <input type="text" id="project-title" class="form-control" placeholder="Project Title">
                     <span class="text-danger"></span>
                 </div>
                 <div class="form-group">
 
-                    <textarea class="form-control" id="Image_Description_UserInput" rows="4" placeholder="Project Description &lt;markdown supported&gt;"></textarea>
+                    <textarea class="form-control" id="project-description" rows="4" placeholder="Project Description &lt;markdown supported&gt;"></textarea>
                     <span class="text-danger"></span>
 
                     <textarea id="Image_DescriptionHTML"></textarea>
                 </div>
             </div>
             <div class="col-md-6">
-               <!--<div id="projectThumbDropzoneDiv">
-                    <div class="dropzone needsclick dz-clickable" id="uploader">
+               <div id="projectThumbDropzoneDiv">
+                    <div class="dropzone needsclick dz-clickable" id="uploaderThumb">
                         <div class="dz-message needsclick">
                             <i class="fa fa-file-image-o fa-5x" aria-hidden="true"></i>
                             <h4>Drag and drop your thumbnail here or click to upload</h4>
                         </div>
                     </div>
-                </div>-->
+                </div>
             </div>
         </div>
         <div class="form-group text-center">
@@ -85,7 +85,7 @@
         <div class="form-group">
 
             <!--input below will be used to temp store the base64 encoding of the image-->
-            <input id="b64" type="hidden" />
+            <input id="b64uploaderThumb" type="hidden" />
 
             <!-- Dropzone Image Upload-->
             <div id="dropzoneDiv">
@@ -147,19 +147,19 @@
                         <h3>Add reviewers</h3>
                         <input id="filter_reviewees_id" name="filter_reviewees" onkeyup="filterUsers()" type="text" placeholder="&#xf002; " />
 @{
-    if (Model.Users.Count > 0)
+    if (Model.Reviewers.Count > 0)
     {
-                        @for (var i = 0; i < Model.Users.Count; i++)
+                        @for (var i = 0; i < Model.Reviewers.Count; i++)
                         {
                             <div class="row-eq-height reviewer-info">
                                 <div class="col-md-1 text-center">
                                     <input type="checkbox"  />
                                 </div>
                                 <div id="profilename-@i" class="col-md-6 text-left">
-                                    <label > @Model.Users[i].ProfileName</label>
+                                    <label > @Model.Reviewers[i].ProfileName</label>
                                 </div>
                                 <div id="email-@i" class="col-md-5">
-                                    <label > @Model.Users[i].Email</label><input type="hidden" asp-for="@Model.Users[i].Id" />
+                                    <label > @Model.Reviewers[i].Email</label><input type="hidden" asp-for="@Model.Reviewers[i].Id" />
                                 </div>
 
                             </div>
@@ -169,7 +169,7 @@
                     </div>
                     </div>
                     <div class="panel-footer">
-        <input id="b64" asp-for="@Model.Screen[0].Content" type="hidden" />
+        <input id="b64uploader" type="hidden" />
                             <!-- Submit Button -->
                             <button type="button" id="submit-images" class="btn btn-success">Create Review</button>
                         </div>
