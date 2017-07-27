@@ -184,7 +184,7 @@ namespace Inspicio.Controllers
 
             var allScreens = (from screen in _context.Screens
                               where screen.ReviewId == Id
-                              select new ViewModel.ScreenData()
+                              select new ScreenData()
                               {
                                   Screen = screen,
                                   Comments = (from comment in _context.Comments
@@ -197,12 +197,37 @@ namespace Inspicio.Controllers
                               });
 
 
-            ViewModel.ScreensList = allScreens.ToList();
+           // ViewModel.ScreensList = allScreens.ToList();
 
             ViewModel.Reviewees = _context.Access.Where(u => u.ReviewId == Id).ToList();
 
             return View(ViewModel);
         }
+
+
+        // GET: Images/View/?/screen
+        public async Task<IActionResult> GetScreenData(ViewModel viewModel)
+        {
+            var s = (from screen in _context.Screens
+                     where screen.ScreenId == viewModel.ScreenId
+                     select new ScreenData()
+                              {
+                                  Screen = screen,
+                                  Comments = (from comment in _context.Comments
+                                              where comment.ScreenId == screen.ScreenId
+                                              select comment).ToList(),
+
+                                  Num_Approvals = _context.ScreenStatus.Count(x => (x.ScreenId == screen.ScreenId) && x.Status == ScreenStatus.PossibleStatus.Approved),
+                                  Num_NeedsWorks = _context.ScreenStatus.Count(x => (x.ScreenId == screen.ScreenId) && x.Status == ScreenStatus.PossibleStatus.NeedsWork),
+                                  Num_Rejections = _context.ScreenStatus.Count(x => (x.ScreenId == screen.ScreenId) && x.Status == ScreenStatus.PossibleStatus.Rejected)
+                              }).FirstOrDefault();
+            viewModel.Screen = s;
+
+            return View(viewModel);
+        }
+
+
+
 
         public JsonResult GetRating(int? id)
         {

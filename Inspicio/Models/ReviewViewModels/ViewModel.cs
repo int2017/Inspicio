@@ -9,18 +9,12 @@ namespace Inspicio.Models.ReviewViewModels
     {
         public Review Review { get; set; }
 
-        public class ScreenData
-        {
-            public Screen Screen { get; set; }
-
-            public List<Comment> Comments { get; set; }
-
-            public int Num_Approvals { get; set; }
-            public int Num_Rejections { get; set; }
-            public int Num_NeedsWorks { get; set; }
-        }
-        public List<ScreenData> ScreensList { get; set; }
+        public List<String> ScreenThumbnails { get; set; }
 
         public List<Access> Reviewees = new List<Access>();
+
+        public ScreenData Screen { get; set; }
+
+        public int ScreenId { get; set; }
     }
 }
