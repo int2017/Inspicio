@@ -4,7 +4,7 @@
 
 
 <div class="view-container">
-    <h2>@Model.Review.Title</h2>
+    <h2>@Model.ScreensList[0].Screen.Title</h2>
     <input type="checkbox"
            @{ if (Model.Review.ReviewState == Review.States.Open)
                {
@@ -135,7 +135,10 @@
                     <div class="row ">
                         <div class="comment-user row-eq-height">
                             <div class="col-md-4">
-                                <h5 class="username">@c.OwnerId</h5>
+                                @{ 
+                                    var UserName = (await UserManager.FindByIdAsync(c.OwnerId)).ProfileName;
+                                }
+                                <h5 class="username">@UserName</h5>
                             </div>
                             <div class="col-md-4">
                                 <p>@c.Timestamp.ToString("h:mm tt")</p>
