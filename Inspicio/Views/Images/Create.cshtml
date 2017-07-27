@@ -28,12 +28,12 @@
             box-shadow: none;
         }
 </style>
-<h3> New Review </h3>
+<h2 id="review-title-header"> New Review</h2>
 
 
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div  id="project-info">
-        <div class="row">
+        <div id="project-info-row" class="row">
             <div class="col-md-6">
                 <div class="form-group">
 
@@ -59,10 +59,11 @@
                 </div>
             </div>
         </div>
-        <div class="form-group text-center">
+        <div class="form-group text-center next-button">
             <button type="button" id="create-screens" class="btn btn-info">Next</button>
         </div>
     </div>
+<h3>Add screens</h3>
     <div class="image-upload-container">
         <div class="form-group">
             <!-- Review Title -->
@@ -153,13 +154,16 @@
                         {
                             <div class="row-eq-height reviewer-info">
                                 <div class="col-md-1 text-center">
-                                    <input type="checkbox"  />
+                                    <input id="reviewer-@i" type="checkbox"  />
                                 </div>
-                                <div id="profilename-@i" class="col-md-6 text-left">
-                                    <label > @Model.Reviewers[i].ProfileName</label>
+                                <div class="col-md-3">
+                                    <img height="40" alt="@Model.Reviewers[i].ProfileName" src="@Model.Reviewers[i].ProfilePicture" />
                                 </div>
-                                <div id="email-@i" class="col-md-5">
-                                    <label > @Model.Reviewers[i].Email</label><input type="hidden" asp-for="@Model.Reviewers[i].Id" />
+                                <div id="profilename-@i" class="col-md-4 text-left">
+                                    <label for="reviewer-@i"> @Model.Reviewers[i].ProfileName</label>
+                                </div>
+                                <div id="email-@i" class="col-md-4">
+                                    <label for="reviewer-@i"> @Model.Reviewers[i].Email</label><input type="hidden" asp-for="@Model.Reviewers[i].Id" />
                                 </div>
 
                             </div>
@@ -168,7 +172,7 @@
 }
                     </div>
                     </div>
-                    <div class="panel-footer">
+                    <div class="panel-footer text-center">
         <input id="b64uploader" type="hidden" />
                             <!-- Submit Button -->
                             <button type="button" id="submit-images" class="btn btn-success">Create Review</button>

@@ -1,5 +1,5 @@
 ﻿$(document).ready(function () {
-    var dropzoneText = $(".dz-message.needsclick");
+    var dropzoneMainText = $("#uploader .dz-message.needsclick");
     //Creating the list of images and users to be passed into the controller
     var listOfImages = [];
     var listOfUsers = [];
@@ -30,7 +30,7 @@
             $("#Image_Description_UserInput").val("");
             $("#b64uploader").val("");
             myDropzone.removeAllFiles();
-            $(".dropzone").html("").append(dropzoneText);
+            $(".dropzone").html("").append(dropzoneMainText);
             appendThumbnail(listOfImages.length - 1, content);
         }
         
@@ -41,6 +41,10 @@
     })
     $("#create-screens").click(function () {
         $("#project-info").hide();
+        var icon = $(document.createElement("i")).addClass("glyphicon glyphicon-edit");
+        $(icon).insertAfter("#review-title-header");
+        $("#review-title-header").html($("#project-title").val());
+
         $(".image-upload-container").show();
     })
     function appendThumbnail(index, content) {
@@ -58,7 +62,7 @@
         $(mainInnerContainer).click(function () {
             alert("lol");
             $("#edit-img").hide();
-            $(".dropzone").html("").append(dropzoneText);
+            $("#uploader").html("").append(dropzoneMainText);
             $("#Image_Title").html("").val(listOfImages[index].Title);
             $("#Image_Description_UserInput").val(listOfImages[index].Description);
             $("#b64uploader").val(listOfImages[index].Content);
@@ -103,6 +107,7 @@
         $(this).fadeOut(200);
     })
     $("#submit-images").click(function () {
+        $(this).prop("disabled", true);
         $(listOfDeleted).each(function () {
             listOfImages()
         })
@@ -110,11 +115,11 @@
         $(".reviewer-info input[type='checkbox']").each(function (index) {
             if ($(this).is(":checked")) {
                 
-                var userId = $("#Reviewer_"+index+"__Id").val();
+                var userId = $("#Reviewers_" + index + "__Id").val();
                 var profileName = $("#profilename-" + index + " label").html();
                 var email = $("#email-" + index +" label").html();
                 var user = {
-                    "UserId": userId,
+                    "Id": userId,
                     "ProfileName": profileName,
                     "Email": email
                 };

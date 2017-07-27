@@ -46,14 +46,15 @@
     justify-content: center;
     
 }
-#image-container{
-    padding:0px;
-}
+
 
 .progress {
     height: 30px;
     background-color: rgba(255, 255, 255, 0);
     border: 2px solid rgba(255, 255, 255, 0.26);
+}
+#image-container {
+    padding: 0px;
 }
 #section1 .success {
     background-color: #437888;

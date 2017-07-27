@@ -93,15 +93,7 @@ namespace Inspicio.Controllers
         public IActionResult Create()
         {
             var CreatePageModel = new CreatePageModel();
-            CreatePageModel.Reviewers = new List<ApplicationUser>();
-
-            var users = _context.Users.Where(u => u.Id != _userManager.GetUserId(HttpContext.User)).ToList();
-            foreach (var u in users)
-            {
-                // Selectable user constructor
-                CreatePageModel.Reviewers.Add(new SelectableUser { Id = u.Id, Email = u.Email, ProfileName = u.ProfileName, IsSelected = false });
-            }
-
+            CreatePageModel.Reviewers = _context.Users.Where(u => u.Id != _userManager.GetUserId(HttpContext.User)).ToList();
             return View(CreatePageModel);
         }
 

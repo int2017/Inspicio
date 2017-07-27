@@ -196,21 +196,7 @@ th#down-col {
     width: 100%;
 }
 
-.dash-project > h3 {
-    display: inline;
-}
 
-.notification-img {
-    font-size: 24px;
-    margin: 15px;
-    align-self: center;
-}
-
-.dashboard {
-    background-color: rgba(204, 204, 204, 0.53);
-    border-radius: 2px;
-    padding: 0;
-}
 
 .row-eq-height {
     align-items: center;
@@ -223,47 +209,6 @@ th#down-col {
     margin-left: -15px;
 }
 
-.dash-filter select {
-    width: 90%;
-    display: inline-block;
-}
-
-.dash-filter {
-    padding: 5px;
-    align-items: center;
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -ms-flexbox;
-    display: flex;
-}
-
-    .dash-filter [class^="col-"] {
-        margin: 10px 0;
-    }
-
-.dashboard > .row-eq-height {
-    border-bottom: 1px solid #b5b5b5;
-}
-
-.checkbox-inline {
-    margin: 0 15px;
-}
-
-.closed {
-    background-color: rgba(144, 75, 75, 0.47);
-}
-
-.completed {
-    background-color: rgba(155, 199, 169, 0.47);
-}
-
-.your {
-    background-color: rgba(255, 255, 255, 0.47);
-}
-
-.waiting {
-    background-color: rgba(232, 215, 9, 0.17);
-}
 
 .dz-max-files-reached {
     background-color: red
@@ -383,6 +328,13 @@ body .dropzone .dz-preview .dz-image {
 }
 .image-upload-container{
     display:none;
+}
+#project-info{
+    margin-top:150px;
+}
+
+div.next-button{
+    margin:50px 0;
 }
 .add-reviewers-overlay {
     margin: auto;
@@ -893,10 +845,6 @@ body .dropzone .dz-preview.dz-image-preview {
 
     #sel1 {
         width: 80%;
-    }
-
-    .dash-filter {
-        display: block;
     }
 
     #image-description {
