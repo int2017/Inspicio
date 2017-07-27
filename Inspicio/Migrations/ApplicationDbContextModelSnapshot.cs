@@ -341,7 +341,7 @@ namespace Inspicio.Migrations
 
             modelBuilder.Entity("Inspicio.Models.ScreenStatus", b =>
                 {
-                    b.HasOne("Inspicio.Models.Review", "Reviews")
+                    b.HasOne("Inspicio.Models.Screen", "Screen")
                         .WithMany()
                         .HasForeignKey("ScreenId")
                         .OnDelete(DeleteBehavior.Cascade);

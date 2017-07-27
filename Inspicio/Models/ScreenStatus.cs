@@ -25,6 +25,6 @@ namespace Inspicio.Models
         public ApplicationUser ApplicationUsers { get; set; }
 
         [ForeignKey("ScreenId")]
-        public Review Reviews { get; set; }
+        public Screen Screen { get; set; }
     }
 }
