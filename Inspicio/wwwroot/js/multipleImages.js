@@ -110,11 +110,11 @@
         $(".reviewer-info input[type='checkbox']").each(function (index) {
             if ($(this).is(":checked")) {
                 
-                var userId = $("#Reviewer_"+index+"__Id").val();
+                var userId = $("#Reviewers_"+index+"__Id").val();
                 var profileName = $("#profilename-" + index + " label").html();
                 var email = $("#email-" + index +" label").html();
                 var user = {
-                    "UserId": userId,
+                    "Id": userId,
                     "ProfileName": profileName,
                     "Email": email
                 };

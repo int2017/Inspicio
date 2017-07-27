@@ -93,55 +93,45 @@ namespace Inspicio.Controllers
         public IActionResult Create()
         {
             var CreatePageModel = new CreatePageModel();
-            CreatePageModel.Reviewers = new List<ApplicationUser>();
-
-            var users = _context.Users.Where(u => u.Id != _userManager.GetUserId(HttpContext.User)).ToList();
-            foreach (var u in users)
-            {
-                // Selectable user constructor
-                CreatePageModel.Reviewers.Add(new SelectableUser { Id = u.Id, Email = u.Email, ProfileName = u.ProfileName, IsSelected = false });
-            }
+            CreatePageModel.Reviewers = _context.Users.Where(u => u.Id != _userManager.GetUserId(HttpContext.User)).ToList();
 
             return View(CreatePageModel);
         }
-
-
-
-
 
         // POST: Images/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreatePageModel CreatePageModel)
         {
-         
             if (ModelState.IsValid)
             {
-                // Screen creation
-                CreatePageModel.Screens[0].OwnerId = _userManager.GetUserId(HttpContext.User);
-                CreatePageModel.Screens[0].ScreenStatus = Screen.Status.Undecided;
-                _context.Add(CreatePageModel.Screens);
-
-                // Review creation
+                    // Review creation
                 var Review = new Review();
                 //Review.ReviewId = ?
                 Review.CreatorId = _userManager.GetUserId(HttpContext.User);
                 Review.ReviewState = Review.States.Open;
                 Review.ReviewStatus = Review.Status.Undecided;
-                //Review.NextScreenId = -1;
-                //Review.NextVersionId = -1;
-                Review.Title = "Default Title HardCoded";
-                Review.Description = "Default Description HardCoded";
+                Review.Title = CreatePageModel.ReviewTitle;
+                Review.Description = CreatePageModel.ReviewDescription;
+                Review.Thumbnail = CreatePageModel.ReviewThumbnail;
                 _context.Add(Review);
 
-                CreatePageModel.Screens[0].ReviewId = Review.ReviewId;
 
-                // Access creations
+                foreach( var s in CreatePageModel.Screens )
+                {
+                        // Screen creation
+                    s.OwnerId = _userManager.GetUserId(HttpContext.User);
+                    s.ScreenStatus = Screen.Status.Undecided;
+                    s.ReviewId = Review.ReviewId;
+                    _context.Add(s);
+                }
+
+                // Access creation
                 var OwnerEntry = new Access();
                 OwnerEntry.ReviewId = Review.ReviewId;
                 OwnerEntry.UserId = _userManager.GetUserId(HttpContext.User);
                 _context.Add(OwnerEntry);
-                
+
                 if (CreatePageModel.Reviewers != null)
                 {
                     foreach (var u in CreatePageModel.Reviewers)
@@ -151,32 +141,24 @@ namespace Inspicio.Controllers
                         ReviewerEntry.UserId = u.Id;
                         ReviewerEntry.ReviewId = Review.ReviewId;
                         _context.Add(ReviewerEntry);
-                    }
-                }
 
-                // ScreenStatus creation
-                if (CreatePageModel.Reviewers != null)
-                {
-                    foreach (var u in CreatePageModel.Reviewers)
-                    {
-
-                        var ScreenStatus = new ScreenStatus();
-                        ScreenStatus.ScreenId = CreatePageModel.Screens[0].ScreenId;
-                        ScreenStatus.UserId = u.Id;
-                        ScreenStatus.Status = ScreenStatus.PossibleStatus.Undecided;
-                        _context.Add(ScreenStatus);
+                        foreach (var s in CreatePageModel.Screens)
+                        {
+                            var ScreenStatus = new ScreenStatus();
+                            ScreenStatus.ScreenId = s.ScreenId;
+                            ScreenStatus.UserId = u.Id;
+                            ScreenStatus.Status = ScreenStatus.PossibleStatus.Undecided;
+                            _context.Add(ScreenStatus);
+                        }
                     }
                 }
 
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
+
             return View(CreatePageModel.Screens);
         }
-
-
-
-
 
 
 
