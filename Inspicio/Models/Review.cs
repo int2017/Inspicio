@@ -19,6 +19,8 @@ namespace Inspicio.Models
 
         public string Description { get; set; }
 
+        public string Thumbnail { get; set; }
+
         [EnumDataType(typeof(States))]
         public States ReviewState { get; set; }
         public enum States { Open, Closed };
