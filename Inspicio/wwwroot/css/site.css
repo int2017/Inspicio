@@ -75,6 +75,9 @@ body {
     padding-bottom: 0px;
     font-family: FontAwesome, 'Century Gothic' !important;
     padding-left: 0px;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 /* Wrapping element */
 /* Set some basic padding to keep content from hitting the edges */
@@ -236,22 +239,26 @@ a.delete-screen {
     color: white;
     background-color: rgba(0, 0, 0, 0.67);
 }
-.thumbnail-inner {
+#thumbnail-container .thumbnail-inner {
     border: 1px solid #8c8c8c;
+    height: 150px;
+    cursor: pointer;
+    -webkit-box-shadow: 0px 0px 19px 5px rgba(0, 0, 0, 0.08);
+    -moz-box-shadow: 0px 0px 19px 5px rgba(0, 0, 0, 0.08);
+    box-shadow: 0px 0px 19px 5px rgba(0, 0, 0, 0.08);
+}
+.thumbnail-inner {
+    
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 150px;
     background-color: #e0e0e0;
     border-radius: 4px;
-    cursor: pointer;
     padding: 0;
     position: relative;
     margin-bottom: 15px;
     overflow: hidden;
-    -webkit-box-shadow: 0px 0px 19px 5px rgba(0, 0, 0, 0.08);
-    -moz-box-shadow: 0px 0px 19px 5px rgba(0, 0, 0, 0.08);
-    box-shadow: 0px 0px 19px 5px rgba(0, 0, 0, 0.08);
+   
 }
 
     .thumbnail-inner img {
@@ -331,10 +338,27 @@ body .dropzone .dz-preview .dz-image {
 }
 #project-info{
     margin-top:150px;
+
+}
+[id^='reviewer-project-']{
+    font-size:16px;
+}
+.fa-pencil-square-o{
+    cursor:pointer;
 }
 
-div.next-button{
-    margin:50px 0;
+.next-button {
+    position: absolute;
+    margin: 10px auto;
+
+    left: 0;
+    right: 0;
+    width: 130px;
+}
+.next-cont {
+    margin: 20px 0;
+    padding: 10px 0;
+    overflow: auto;
 }
 .add-reviewers-overlay {
     margin: auto;
@@ -357,7 +381,7 @@ div.next-button{
     border: none;
     padding: 3px 5px;
     background: transparent;
-    border-bottom: 1px solid rgb(202, 202, 202);
+    border-bottom: 2px solid rgb(202, 202, 202);
 }
 
 .panel-body .row-eq-height {

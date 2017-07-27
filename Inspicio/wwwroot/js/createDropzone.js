@@ -54,7 +54,6 @@ the server when create new is pressed.
 
             this.on("addedfile", function (file) {
                 $("#uploaderThumb").css("width", "auto");
-                $("#add-img").addClass("ready");
                 encodeBase64(thumbDropzone.files[0],"uploaderThumb");
             });
         },

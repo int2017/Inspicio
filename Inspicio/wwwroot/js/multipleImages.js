@@ -4,26 +4,36 @@
     var listOfImages = [];
     var listOfUsers = [];
     var listOfDeleted = [];
+    var icon = $(document.createElement("i")).addClass("fa fa-pencil-square-o fa-2x edit-project").attr("aria-hidden", "true");
+
+    $(document).on("click", ".edit-project", function () {
+        alert("aa");
+        $(this).detach();
+        $(".add-reviewers-overlay").hide();
+        $(".image-upload-container").hide();
+        $("#project-info").show();
+    })
     //Creates an Image object that is added to the list of Images
-    $(document).on("click", "#add-img",function () {
+    $(document).on("click", "#add-img", function () {
         var title = $("#Image_Title").val();
         var description = $("#Image_Description_UserInput").val();
         var content = $("#b64uploader").val();
+        alert(content);
         if (title.length !== 0 &&  content.length !== 0) {
-        $(".dropzone").css("width", "100%");
-        $(this).removeClass("ready");
-        var contentCol = listOfImages.map(v => v.Content);
-        if ($.inArray(content, contentCol) > -1) {
-            alert("This image is already added");
-            myDropzone.removeAllFiles();
-            $(".dropzone").html("");
-        }
-        else {
-            var image = {
-                "Title": title,
-                "Description": description,
-                "Content": content
-            };
+            $(".dropzone").css("width", "100%");
+            $(this).removeClass("ready");
+            var contentCol = listOfImages.map(v => v.Content);
+            if ($.inArray(content, contentCol) > -1) {
+             alert("This image is already added");
+             myDropzone.removeAllFiles();
+             $(".dropzone").html("");
+            }
+             else {
+                 var image = {
+                    "Title": title,
+                    "Description": description,
+                    "Content": content
+             };
             listOfImages.push(image);
             
             $("#Image_Title").val("").html("");
@@ -40,12 +50,20 @@
         }
     })
     $("#create-screens").click(function () {
+        if ($("#project-title").val() === "") {
+            alert("Add a project title first!")
+        }
+        else{
+        $(this).attr("id", "create-screens");
         $("#project-info").hide();
-        var icon = $(document.createElement("i")).addClass("glyphicon glyphicon-edit");
+        $(icon).remove();
         $(icon).insertAfter("#review-title-header");
+        $("#reviewer-project-title").html($("#project-title").val());
+        $("#reviewer-project-description").html($("#project-description").val());
         $("#review-title-header").html($("#project-title").val());
 
         $(".image-upload-container").show();
+        }
     })
     function appendThumbnail(index, content) {
         
@@ -60,7 +78,6 @@
         $(containerMain).appendTo("#thumbnail-container");
         $(containerReview).appendTo("#review-thumbnail-container");
         $(mainInnerContainer).click(function () {
-            alert("lol");
             $("#edit-img").hide();
             $("#uploader").html("").append(dropzoneMainText);
             $("#Image_Title").html("").val(listOfImages[index].Title);
@@ -84,7 +101,7 @@
 
         $(deleteReview).click(function (e) {
             e.stopPropagation();
-            $(listOfDeleted).push(index);
+            listOfImages[index].Content = "";
             $("#image-" + index).detach();
             $("#image-rev-" + index).detach();
         })
@@ -98,7 +115,14 @@
         $(this).hide();
     })
     $("#create-reviewer").click(function () {
-        $(".add-reviewers-overlay").css("display","flex").hide().fadeIn(400);
+        if ($("#b64uploader").val() !== "") {
+            if ($("#Image_Title").val().length === 0) {
+                $("#Image_Title").val("Screen " + listOfImages.length + 1);
+            }
+            $("#add-img").click();
+        }
+        
+        $(".add-reviewers-overlay").css("display", "flex").hide().fadeIn(400);
     })
     $(".add-reviewers-overlay > div").click(function (e) {
         e.stopPropagation();
@@ -108,9 +132,13 @@
     })
     $("#submit-images").click(function () {
         $(this).prop("disabled", true);
-        $(listOfDeleted).each(function () {
-            listOfImages()
+        var finalScreenList = [];
+        $(listOfImages).each(function () {
+            if (this.Content !== "") {
+                finalScreenList.push(this);
+            }
         })
+        
         //Get the details of the users who were checked as reviewers NEEDS TO BE UPDATED
         $(".reviewer-info input[type='checkbox']").each(function (index) {
             if ($(this).is(":checked")) {
@@ -128,7 +156,7 @@
             
         })
         var CreatePageModel = {
-            Screens: listOfImages,
+            Screens: finalScreenList,
             Reviewers: listOfUsers,
             ReviewTitle: $("#project-title").val(),
             ReviewDescription: $("#project-description").val(),
