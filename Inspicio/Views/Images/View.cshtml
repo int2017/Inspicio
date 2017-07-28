@@ -2,7 +2,6 @@
 @using Inspicio.Extensions
 @inject UserManager<ApplicationUser> UserManager
 
-
 <div class="view-container">
     <h2>@Model.ScreensList[0].Screen.Title</h2>
     <input type="checkbox"
@@ -10,9 +9,9 @@
                {
                    @:checked="checked"
                 }
-             
-               
-             if (User.GetProfileId() != Model.Review.CreatorId)
+
+
+               if (User.GetProfileId() != Model.Review.CreatorId)
                {
                    @:disabled = "disabled";
 
@@ -20,8 +19,23 @@
             } 
      data-toggle="toggle" data-on="Open" data-off="Closed" data-onstyle="success" data-offstyle="danger" id="toggle" >
     <hr />
+
+
+
+    <div class="row">
+        <div class="col-lg-12 col-md-10 ">
+            <div class="cover-container">
+                @foreach (var s in Model.ScreenIds)
+                        {
+                            var data = GetScreenContentFor(s.Id);
+                    <div class="cover-item" style="background-image: url('s')"></div>   
+                }
+            </div>
+        </div>
+    </div>
+
     <input id="ReviewId" type="hidden" asp-for="@Model.Review.ReviewId" />
-    <input id="ScreenId" type="hidden" asp-for="@Model.ScreensList[0].Screen.ScreenId" />
+    <input id="ScreenId" type="hidden" asp-for="@Model.screenData.Screen.ScreenId" />
 
     
 
@@ -35,8 +49,6 @@
             <div id="imageMap"></div>
 
             <img src="@Url.Content(Model.ScreensList[0].Screen.Content)" title="@Model.ScreensList[0].Screen.Title" alt="@Model.ScreensList[0].Screen.Title" />
-
-
         </div>
         
 

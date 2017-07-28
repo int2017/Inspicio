@@ -19,7 +19,9 @@ namespace Inspicio.Models.ReviewViewModels
             public int Num_Rejections { get; set; }
             public int Num_NeedsWorks { get; set; }
         }
-        public List<ScreenData> ScreensList { get; set; }
+        public ScreenData screenData { get; set; }
+
+        public List<ScreenData> ScreenIds { get; set; }
 
         public List<Access> Reviewees = new List<Access>();
     }
