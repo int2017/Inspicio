@@ -97,6 +97,8 @@ namespace Inspicio.Controllers
             return View(CreatePageModel);
         }
 
+         
+
         // POST: Images/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -197,28 +199,33 @@ namespace Inspicio.Controllers
 
             ViewModel.Reviewees = _context.Access.Where(u => u.ReviewId == Id).ToList();
 
-            ViewModel.ScreenThumbnails = new List<string>();
+            ViewModel.ScreenIds = _context.Screens.Where( s => s.ReviewId == Id ).Select(s => s.ScreenId).ToList();
 
             return View(ViewModel);
         }
 
+        public JsonResult GetScreenContentFor(int? id)
+        {
+            var screen = _context.Screens.Where(s => s.ScreenId == id).Select( c => c.Content).SingleOrDefault();
+
+            return Json("screenContent:\"" +screen +"\"");
+        }
 
         // GET: Images/View/?/screen
         public async Task<IActionResult> GetScreenData(ViewModel viewModel)
         {
-            var s = (from screen in _context.Screens
-                     where screen.ScreenId == viewModel.ScreenId
-                     select new ScreenData()
-                              {
-                                  Screen = screen,
-                                  Comments = (from comment in _context.Comments
-                                              where comment.ScreenId == screen.ScreenId
-                                              select comment).ToList(),
+            var s = new ScreenData()
+            {
+                Screen = viewModel.Screen.Screen,
+                Comments = (from comment in _context.Comments
+                            where comment.ScreenId == viewModel.Screen.Screen.ScreenId
+                            select comment).ToList(),
 
-                                  Num_Approvals = _context.ScreenStatus.Count(x => (x.ScreenId == screen.ScreenId) && x.Status == ScreenStatus.PossibleStatus.Approved),
-                                  Num_NeedsWorks = _context.ScreenStatus.Count(x => (x.ScreenId == screen.ScreenId) && x.Status == ScreenStatus.PossibleStatus.NeedsWork),
-                                  Num_Rejections = _context.ScreenStatus.Count(x => (x.ScreenId == screen.ScreenId) && x.Status == ScreenStatus.PossibleStatus.Rejected)
-                              }).FirstOrDefault();
+                Num_Approvals = _context.ScreenStatus.Count(x => (x.ScreenId == viewModel.Screen.Screen.ScreenId) && x.Status == ScreenStatus.PossibleStatus.Approved),
+                Num_NeedsWorks = _context.ScreenStatus.Count(x => (x.ScreenId == viewModel.Screen.Screen.ScreenId) && x.Status == ScreenStatus.PossibleStatus.NeedsWork),
+                Num_Rejections = _context.ScreenStatus.Count(x => (x.ScreenId == viewModel.Screen.Screen.ScreenId) && x.Status == ScreenStatus.PossibleStatus.Rejected)
+            };
+
             viewModel.Screen = s;
 
             return View(viewModel);
