@@ -97,6 +97,8 @@ namespace Inspicio.Controllers
             return View(CreatePageModel);
         }
 
+         
+
         // POST: Images/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -176,15 +178,14 @@ namespace Inspicio.Controllers
                 return NotFound();
             }
 
-            // This will be passed into the view as the model.
             var ViewModel = new ViewModel();
 
-            // Added OwnerProfileName to be passed into the model.
             ViewModel.Review = Review;
 
-            var allScreens = (from screen in _context.Screens
+            // TODO: Does this work correctly, order may be off! :|
+            ViewModel.Screen = (from screen in _context.Screens
                               where screen.ReviewId == Id
-                              select new ViewModel.ScreenData()
+                              select new ScreenData()
                               {
                                   Screen = screen,
                                   Comments = (from comment in _context.Comments
@@ -194,15 +195,44 @@ namespace Inspicio.Controllers
                                   Num_Approvals = _context.ScreenStatus.Count(x => (x.ScreenId == screen.ScreenId) && x.Status == ScreenStatus.PossibleStatus.Approved),
                                   Num_NeedsWorks = _context.ScreenStatus.Count(x => (x.ScreenId == screen.ScreenId) && x.Status == ScreenStatus.PossibleStatus.NeedsWork),
                                   Num_Rejections = _context.ScreenStatus.Count(x => (x.ScreenId == screen.ScreenId) && x.Status == ScreenStatus.PossibleStatus.Rejected)
-                              });
-
-
-            ViewModel.ScreensList = allScreens.ToList();
+                              }).FirstOrDefault();
 
             ViewModel.Reviewees = _context.Access.Where(u => u.ReviewId == Id).ToList();
 
+            ViewModel.ScreenIds = _context.Screens.Where( s => s.ReviewId == Id ).Select(s => s.ScreenId).ToList();
+
             return View(ViewModel);
         }
+
+        public JsonResult GetScreenContentFor(int? id)
+        {
+            var screen = _context.Screens.Where(s => s.ScreenId == id).Select( c => c.Content).SingleOrDefault();
+
+            return Json("screenContent:\"" +screen +"\"");
+        }
+
+        // GET: Images/View/?/screen
+        public async Task<IActionResult> GetScreenData(ViewModel viewModel)
+        {
+            var s = new ScreenData()
+            {
+                Screen = viewModel.Screen.Screen,
+                Comments = (from comment in _context.Comments
+                            where comment.ScreenId == viewModel.Screen.Screen.ScreenId
+                            select comment).ToList(),
+
+                Num_Approvals = _context.ScreenStatus.Count(x => (x.ScreenId == viewModel.Screen.Screen.ScreenId) && x.Status == ScreenStatus.PossibleStatus.Approved),
+                Num_NeedsWorks = _context.ScreenStatus.Count(x => (x.ScreenId == viewModel.Screen.Screen.ScreenId) && x.Status == ScreenStatus.PossibleStatus.NeedsWork),
+                Num_Rejections = _context.ScreenStatus.Count(x => (x.ScreenId == viewModel.Screen.Screen.ScreenId) && x.Status == ScreenStatus.PossibleStatus.Rejected)
+            };
+
+            viewModel.Screen = s;
+
+            return View(viewModel);
+        }
+
+
+
 
         public JsonResult GetRating(int? id)
         {
