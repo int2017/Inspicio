@@ -183,7 +183,7 @@ namespace Inspicio.Controllers
             ViewModel.Review = Review;
 
             // TODO: Does this work correctly, order may be off! :|
-            ViewModel.Screen = (from screen in _context.Screens
+            ViewModel.screenData = (from screen in _context.Screens
                               where screen.ReviewId == Id
                               select new ScreenData()
                               {
@@ -208,7 +208,7 @@ namespace Inspicio.Controllers
         {
             var screen = _context.Screens.Where(s => s.ScreenId == id).Select( c => c.Content).SingleOrDefault();
 
-            return Json("screenContent:\"" +screen +"\"");
+            return Json(screen);
         }
 
         // GET: Images/View/?/screen
@@ -216,17 +216,17 @@ namespace Inspicio.Controllers
         {
             var s = new ScreenData()
             {
-                Screen = viewModel.Screen.Screen,
+                Screen = viewModel.screenData.Screen,
                 Comments = (from comment in _context.Comments
-                            where comment.ScreenId == viewModel.Screen.Screen.ScreenId
+                            where comment.ScreenId == viewModel.screenData.Screen.ScreenId
                             select comment).ToList(),
 
-                Num_Approvals = _context.ScreenStatus.Count(x => (x.ScreenId == viewModel.Screen.Screen.ScreenId) && x.Status == ScreenStatus.PossibleStatus.Approved),
-                Num_NeedsWorks = _context.ScreenStatus.Count(x => (x.ScreenId == viewModel.Screen.Screen.ScreenId) && x.Status == ScreenStatus.PossibleStatus.NeedsWork),
-                Num_Rejections = _context.ScreenStatus.Count(x => (x.ScreenId == viewModel.Screen.Screen.ScreenId) && x.Status == ScreenStatus.PossibleStatus.Rejected)
+                Num_Approvals = _context.ScreenStatus.Count(x => (x.ScreenId == viewModel.screenData.Screen.ScreenId) && x.Status == ScreenStatus.PossibleStatus.Approved),
+                Num_NeedsWorks = _context.ScreenStatus.Count(x => (x.ScreenId == viewModel.screenData.Screen.ScreenId) && x.Status == ScreenStatus.PossibleStatus.NeedsWork),
+                Num_Rejections = _context.ScreenStatus.Count(x => (x.ScreenId == viewModel.screenData.Screen.ScreenId) && x.Status == ScreenStatus.PossibleStatus.Rejected)
             };
 
-            viewModel.Screen = s;
+            viewModel.screenData = s;
 
             return View(viewModel);
         }

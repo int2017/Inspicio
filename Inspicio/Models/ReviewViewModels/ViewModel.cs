@@ -13,10 +13,7 @@ namespace Inspicio.Models.ReviewViewModels
 
         public List<Access> Reviewees = new List<Access>();
 
-        public ScreenData Screen { get; set; }
         public ScreenData screenData { get; set; }
-
-        public List<ScreenData> ScreenIds { get; set; }
 
         public int ScreenId { get; set; }
     }
