@@ -51,7 +51,6 @@ the server when create new is pressed.
         maxFiles: 1,
         autoProcessQueue: false,
         init: function () {
-
             this.on("addedfile", function (file) {
                 $("#uploaderThumb").css("width", "auto");
                 encodeBase64(thumbDropzone.files[0],"uploaderThumb");

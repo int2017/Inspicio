@@ -3,30 +3,21 @@
     //Creating the list of images and users to be passed into the controller
     var listOfImages = [];
     var listOfUsers = [];
-    var listOfDeleted = [];
-    var icon = $(document.createElement("i")).addClass("fa fa-pencil-square-o fa-2x edit-project").attr("aria-hidden", "true");
-
-    $(document).on("click", ".edit-project", function () {
-        alert("aa");
-        $(this).detach();
-        $(".add-reviewers-overlay").hide();
-        $(".image-upload-container").hide();
-        $("#project-info").show();
-    })
+    var listOfDeleted = []; 
     //Creates an Image object that is added to the list of Images
     $(document).on("click", "#add-img", function () {
         var title = $("#Image_Title").val();
         var description = $("#Image_Description_UserInput").val();
         var content = $("#b64uploader").val();
-        alert(content);
         if (title.length !== 0 &&  content.length !== 0) {
-            $(".dropzone").css("width", "100%");
+            $("#uploader").css("width", "100%");
             $(this).removeClass("ready");
             var contentCol = listOfImages.map(v => v.Content);
             if ($.inArray(content, contentCol) > -1) {
              alert("This image is already added");
              myDropzone.removeAllFiles();
-             $(".dropzone").html("");
+             $("#uploader").html("").append(dropzoneMainText);
+             $(dropzoneMainText).show();
             }
              else {
                  var image = {
@@ -40,7 +31,8 @@
             $("#Image_Description_UserInput").val("");
             $("#b64uploader").val("");
             myDropzone.removeAllFiles();
-            $(".dropzone").html("").append(dropzoneMainText);
+            $("#uploader").html("").append(dropzoneMainText);
+            $(dropzoneMainText).show();
             appendThumbnail(listOfImages.length - 1, content);
         }
         
@@ -54,53 +46,64 @@
             alert("Add a project title first!")
         }
         else{
-        $(this).attr("id", "create-screens");
-        $("#project-info").hide();
-        $(icon).remove();
-        $(icon).insertAfter("#review-title-header");
-        $("#reviewer-project-title").html($("#project-title").val());
-        $("#reviewer-project-description").html($("#project-description").val());
-        $("#review-title-header").html($("#project-title").val());
-
-        $(".image-upload-container").show();
+            $(this).attr("id", "create-screens");
+            $("#project-info").fadeOut(300);
+            $("#review-title-header").fadeOut(300);
+            setTimeout(function () {
+                $("#reviewer-project-title").html($("#project-title").val());
+                $("#reviewer-project-description").html($("#project-description").val());
+                $("#review-title-header").html($("#project-title").val());
+            }, 200)
+            
+            $("#review-title-header").fadeIn(300);
+            $(".main-edit").delay(300).fadeIn(300);
+            $(".image-upload-container").delay(300).fadeIn(300);
+            
         }
     })
     function appendThumbnail(index, content) {
         
         var containerMain = $(document.createElement('div')).addClass("col-xs-4 col-md-2").attr('id', "image-" + index);
         var containerReview = $(document.createElement('div')).addClass("col-xs-3 col-md-3").attr('id', "image-rev-" + index);
-        var deleteReview = $(document.createElement('a')).addClass("delete-screen").html("<i class='fa fa-trash-o' aria-hidden='true'></i>");  
+        var deleteScreen = $(document.createElement('a')).addClass("delete-screen").html("<i class='fa fa-trash-o' aria-hidden='true'></i>");  
         var image = $(document.createElement('img')).attr('src', content);
         var innerContainer = $(document.createElement('div')).addClass("col-xs-12 col-md-12 thumbnail-inner");
         $(image).appendTo(innerContainer);
         $(innerContainer).appendTo(containerReview);
-        var mainInnerContainer = $(innerContainer).clone().append(deleteReview).appendTo(containerMain);
+        var mainInnerContainer = $(innerContainer).clone().append(deleteScreen).appendTo(containerMain);
         $(containerMain).appendTo("#thumbnail-container");
         $(containerReview).appendTo("#review-thumbnail-container");
         $(mainInnerContainer).click(function () {
-            $("#edit-img").hide();
-            $("#uploader").html("").append(dropzoneMainText);
-            $("#Image_Title").html("").val(listOfImages[index].Title);
-            $("#Image_Description_UserInput").val(listOfImages[index].Description);
-            $("#b64uploader").val(listOfImages[index].Content);
-            var image = $(document.createElement("img")).addClass("img-responsive").attr('src', listOfImages[index].Content);
-            var myImage = {
-                name: listOfImages[index].Title
+            if (!$(event.target).closest('.delete-screen').length) {
+                $("#add-img").removeClass("ready");
+                $("#edit-img").slideUp();
+                $("#uploader").html("");
+                $("#Image_Title").html("").val(listOfImages[index].Title);
+                $("#Image_Description_UserInput").val(listOfImages[index].Description);
+                $("#b64uploader").val(listOfImages[index].Content);
+                var image = $(document.createElement("img")).addClass("img-responsive").attr('src', listOfImages[index].Content);
+                var myImage = {
+                    name: listOfImages[index].Title
+                }
+                $("#Image_Title").change(function () {
+                    currentImage = index;
+                    $("#edit-img").slideDown();
+                })
+                $("#Image_Description_UserInput").change(function () {
+                    currentImage = index;
+                    $("#edit-img").slideDown();
+                })
+                myDropzone.emit("addedfile", myImage);
+                myDropzone.emit("thumbnail", myImage, listOfImages[index].Content);
+                $("#add-img").removeClass("ready");
             }
-            $("#Image_Title").change(function () {
-                currentImage = index;
-                $("#edit-img").show();
-            })
-            $("#Image_Description_UserInput").change(function () {
-                currentImage = index;
-                $("#edit-img").show();
-            })
-            myDropzone.emit("addedfile", myImage);
-            myDropzone.emit("thumbnail", myImage, listOfImages[index].Content);
+           
         })
 
-        $(deleteReview).click(function (e) {
-            e.stopPropagation();
+        $(deleteScreen).click(function (e) {
+            if (listOfImages[index].Content === $("#b64uploader").val()) {
+                $("#add-img").addClass("ready");
+            }
             listOfImages[index].Content = "";
             $("#image-" + index).detach();
             $("#image-rev-" + index).detach();
@@ -112,28 +115,42 @@
         listOfImages[currentImage].Description = $("#Image_Description_UserInput").val();
         $("#Image_Title").off();
         $("#Image_Description_UserInput").off();
-        $(this).hide();
+        $(this).slideUp();
     })
     $("#create-reviewer").click(function () {
         if ($("#b64uploader").val() !== "") {
-            if ($("#Image_Title").val().length === 0) {
-                $("#Image_Title").val("Screen " + listOfImages.length + 1);
+            var contentCol = listOfImages.map(v => v.Content);
+            if ($.inArray($("#b64uploader").val(), contentCol) > -1) {
+                myDropzone.removeAllFiles();
+                $("#uploader").html(dropzoneMainText).css("width", "100%");
+                $("#Image_Title").val("");
+                $("#Image_Description_UserInput").val("");
+                $("#add-img").removeClass("ready");
             }
-            $("#add-img").click();
+            else {
+                if ($("#Image_Title").val().length === 0) {
+                    $("#Image_Title").val("Screen " + listOfImages.length + 1);
+                    
+
+                }
+                $("#add-img").click();
+            }
+            
         }
         
         $(".add-reviewers-overlay").css("display", "flex").hide().fadeIn(400);
     })
-    $(".add-reviewers-overlay > div").click(function (e) {
-        e.stopPropagation();
-    })
-    $(".add-reviewers-overlay").click(function () {
-        $(this).fadeOut(200);
+    //Subtitution for .stopPropogation() 
+    $(".add-reviewers-overlay").click(function (event) {
+        if (event.defaultPrevented) return;
+        if (!$(event.target).closest('.panel.panel-default').length) {
+            $(this).fadeOut(200);
+        }
     })
     $("#submit-images").click(function () {
         $(this).prop("disabled", true);
         var finalScreenList = [];
-        $(listOfImages).each(function () {
+        $(listOfImages).each(function (index) {
             if (this.Content !== "") {
                 finalScreenList.push(this);
             }
@@ -156,7 +173,7 @@
             
         })
         var CreatePageModel = {
-            Screens: finalScreenList,
+            Screens: listOfImages,
             Reviewers: listOfUsers,
             ReviewTitle: $("#project-title").val(),
             ReviewDescription: $("#project-description").val(),
@@ -177,5 +194,19 @@
             });
     })
     
-    
+    $(document).on("click", ".edit-project", function (e) {
+        $(".main-edit").fadeOut(200);
+        $(".add-reviewers-overlay").fadeOut(200);
+        $(".image-upload-container").fadeOut(200);
+        $("#project-info").delay(200).fadeIn(200);
+        
+    })  
+    $("#reset").click(function () {
+        $("#edit-img").hide();
+        myDropzone.removeAllFiles();
+        $("#Image_Title").val('');
+        $("#Image_Description_UserInput").val('');
+        $("#add-img").removeClass("ready");
+        $("#uploader").html(dropzoneMainText).animate({ width: "100%" }, 300)
+    })
 })

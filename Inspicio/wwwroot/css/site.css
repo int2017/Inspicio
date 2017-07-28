@@ -336,14 +336,21 @@ body .dropzone .dz-preview .dz-image {
 .image-upload-container{
     display:none;
 }
-#project-info{
-    margin-top:150px;
-
+#project-info {
+    margin: 50px 0;
+}
+#projectThumbDropzoneDiv .dropzone{
+    font-size:11px;
+}
+#projectThumbDropzoneDiv img{
+    max-width:100%;
 }
 [id^='reviewer-project-']{
     font-size:16px;
 }
-.fa-pencil-square-o{
+.edit-project{
+    padding:10px;
+    display:inline-block;
     cursor:pointer;
 }
 
@@ -360,17 +367,23 @@ body .dropzone .dz-preview .dz-image {
     padding: 10px 0;
     overflow: auto;
 }
+.reviewers-panel{
+    margin-top:80px;
+}
 .add-reviewers-overlay {
     margin: auto;
     display: none;
     position: fixed;
+    justify-content:center;
     height: 100%;
     left: 0;
     top: 0;
     width: 100%;
     background-color: rgba(0, 0, 0, 0.77);
 }
-
+.add-reviewers-overlay h3{
+    margin:10px 0;
+}
 .reviewer-info:nth-child(even) {
     background-color: #fff;
 }
@@ -858,7 +871,13 @@ body .dropzone .dz-preview.dz-image-preview {
 
 @media screen and (max-width: 767px) {
     /* Hide captions */
-
+    .reviewer-content{
+        max-height:350px;
+    }
+    #thumbnail-container .thumbnail-inner{
+        height:70px;
+        font-size:10px;
+    }
     .carousel-caption {
         display: none;
     }
@@ -882,7 +901,11 @@ body .dropzone .dz-preview.dz-image-preview {
         .flex-sidebar.side-hide {
             width: 50px;
         }
-
+    .navbar-nav {
+        display: inline;
+        float: right;
+        text-align: right;
+    }
     .view-container {
         width: 100%;
         padding: 20px 20px 20px 75px;
