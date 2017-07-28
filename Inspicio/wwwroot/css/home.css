@@ -65,6 +65,12 @@
 #section3 .success {
     background-color: #be9f4e;
 }
+#homeImageMap.leaflet-container {
+    overflow: visible;
+}
+#section3{
+    overflow:visible;
+}
 #section3 a:hover .success{
     
     opacity:1;

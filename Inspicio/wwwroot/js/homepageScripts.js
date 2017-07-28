@@ -166,7 +166,7 @@ var locations = [[]];
 function createMarker(latlng) {
     var uniqID = Math.round(new Date().getTime() + (Math.random() * 100));
     var marker = new L.marker(latlng, { icon: customPin }).addTo(markerGroup);
-    var popup = new L.Popup();
+    var popup = new L.responsivePopup({ offset: [10, 10], autoPanPadding: [10, 10] });
     //Removes marker if popup is empty
     marker.on('popupclose', function (e) {
         if (($("#popup" + uniqID).html().indexOf("popup-comment")) === -1) {
