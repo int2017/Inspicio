@@ -27,18 +27,21 @@
             border-color: #437888;
             box-shadow: none;
         }
+    .main-edit{
+        display:none;
+    }
 </style>
 <h2 id="review-title-header"> New Review</h2>
-
+<i class="fa fa-pencil-square-o edit-project fa-2x main-edit" aria-hidden="true"></i>
 
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div  id="project-info">
         <div id="project-info-row" class="row">
-            <div class="col-md-6">
+            <div class="col-md-8">
                 <div class="form-group">
 
-                    <input type="text" id="project-title" class="form-control" placeholder="Project Title">
-                    <span class="text-danger"></span>
+                    <input asp-for="@Model.ReviewTitle"  type="text" id="project-title" class="form-control" placeholder="Project Title">
+                    <span  class="text-danger"></span>
                 </div>
                 <div class="form-group">
 
@@ -48,12 +51,13 @@
                     <textarea id="Image_DescriptionHTML"></textarea>
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
                <div id="projectThumbDropzoneDiv">
                     <div class="dropzone needsclick dz-clickable" id="uploaderThumb">
                         <div class="dz-message needsclick">
                             <i class="fa fa-file-image-o fa-5x" aria-hidden="true"></i>
                             <h4>Drag and drop your thumbnail here or click to upload</h4>
+                            <p>If no thumbnail is selected, the first screen will be used as the thumbnail</p>
                         </div>
                     </div>
                 </div>
@@ -100,6 +104,9 @@
                 </div>
             </div>
         </div>
+        <div class="text-left">
+            <a id="reset">Reset all fields</a>
+        </div>
         <div class="text-center">
             <button type="button" class="btn btn-success" id="edit-img">Save changes</button>
         </div>
@@ -117,36 +124,35 @@
     </div>
     <div class="row-eq-height add-reviewers-overlay">
    
-            <div class="col-md-offset-3 col-md-6">
-                <div class="panel panel-default">
+            <div class=" col-xs-12 col-md-offset-3 col-md-6">
+                <div class="panel panel-default reviewers-panel">
                     <div class="panel-heading"><h4>Your review</h4></div>
                     <div class="reviewer-content">
                     <div class="panel-body">
                         <h3 id="overview">Overview</h3> 
-                        <i class="fa fa-pencil-square-o edit-project" aria-hidden="true" ></i>
-                        
+                        <i class="fa fa-pencil-square-o edit-project" aria-hidden="true"></i>
                         <div class="row-eq-height">
-                            <div class="col-md-2 text-right">
+                            <div class="col-xs-4 col-md-2 text-right">
                                 Title: 
                             </div>
-                            <div class="col-md-10">
+                            <div class="col-xs-8 col-md-10">
                                 <span id="reviewer-project-title"></span>
                             </div>
                         </div>
                         <div class="row-eq-height">
-                            <div class="col-md-2 text-right">
+                            <div class="col-xs-4 col-md-2 text-right">
                                 Description: 
                             </div>
-                            <div class="col-md-10">
+                            <div class="col-xs-8col-md-10">
                                 <span id="reviewer-project-description"></span>
                             </div>
                         </div>
                         <div class="row-eq-height">
-                            <div class="col-md-2">
+                            <div class="col-xs-4 col-md-2 text-right">
                                 Screens:
                                 
                             </div>
-                            <div class="col-md-10">
+                            <div class="col-xs-8 col-md-10">
                                 <div class="row-eq-height" id="review-thumbnail-container">
                                     
                                 </div>
@@ -159,19 +165,35 @@
 @{
     if (Model.Reviewers.Count > 0)
     {
+                        <div class="row-eq-height">
+                            <div class="col-xs-1 col-md-1 text-center">
+                                <input id="check-all" type="checkbox" />
+                            </div>
+                            <div class="col-xs-3 col-md-3 text-left">
+                                <label for="check-all">Check all</label>
+                            </div>
+                            <div  class="col-xs-4 col-md-4 text-left">
+                                <label> Profile name </label>
+                            </div>
+                            <div class="col-xs-4 col-md-4">
+                                <label > Email</label>
+                            </div>
+
+                        </div>
+                       
                         @for (var i = 0; i < Model.Reviewers.Count; i++)
                         {
                             <div class="row-eq-height reviewer-info">
-                                <div class="col-md-1 text-center">
+                                <div class="col-xs-1 col-md-1 text-center">
                                     <input id="reviewer-@i" type="checkbox"  />
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-xs-3 col-md-3">
                                     <img height="40" alt="@Model.Reviewers[i].ProfileName" src="@Model.Reviewers[i].ProfilePicture" />
                                 </div>
-                                <div id="profilename-@i" class="col-md-4 text-left">
+                                <div id="profilename-@i" class="col-xs-3 col-md-4 text-left">
                                     <label for="reviewer-@i"> @Model.Reviewers[i].ProfileName</label>
                                 </div>
-                                <div id="email-@i" class="col-md-4">
+                                <div id="email-@i" class="col-xs-3 col-md-4">
                                     <label for="reviewer-@i"> @Model.Reviewers[i].Email</label><input type="hidden" asp-for="@Model.Reviewers[i].Id" />
                                 </div>
 
