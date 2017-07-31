@@ -1,5 +1,6 @@
 @model Inspicio.Models.ReviewViewModels.ViewModel
 @using Inspicio.Extensions
+@inject IJsonHelper Json;
 @inject UserManager<ApplicationUser> UserManager
 
 
@@ -30,9 +31,9 @@
             <div class="cover-container">
                 @foreach (var id in Model.ScreenIds)
                 {                     
-                    <div class="cover-item" id="@id"></div>
+                    <div class="cover-item" id="@id" onclick="screenSelector(@Model.Review.ReviewId, @id)"></div>
                     <script>
-                        screenContent(@id);
+                        screenContent( @id);
                     </script>
                 }
             </div>
@@ -289,6 +290,27 @@
 <script type="text/javascript" src="~/js/background-selector.js"></script>
 
 <script>
+
+    function createViewModels(id) {
+
+       return {
+           "Review": {
+               "Title": "@Html.Raw(Model.Review.Title)",
+               "Description": "@Html.Raw(Model.Review.Description)",
+               "ReviewState": "@Html.Raw(Model.Review.ReviewState)",
+               "ReviewStatus": "@Html.Raw(Model.Review.ReviewStatus)"
+           },
+           "ScreenIds": "@Html.Raw(Model.ScreenIds)",
+           "Reviewees": "@Html.Raw(Model.Reviewees)",
+           "screenData": "@Html.Raw(Model.screenData)",
+           "ScreenId": id
+
+       }
+   }
+
+</script>
+
+<script>
     $(document).ready(function () {
         $("#imageMap").width($("#image-container >img").width());
         $("#imageMap").height($("#image-container >img").height());
@@ -300,6 +322,8 @@
         });
 
     });
+   
+
 </script>
 
 <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">

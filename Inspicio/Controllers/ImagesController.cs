@@ -212,23 +212,38 @@ namespace Inspicio.Controllers
         }
 
         // GET: Images/View/?/screen
-        public async Task<IActionResult> GetScreenData(ViewModel viewModel)
+        public async Task<IActionResult> GetScreenData(int RId,int SId)
         {
-            var s = new ScreenData()
+            var ViewModel = new ViewModel();
+
+            var Review = await _context.Review.SingleOrDefaultAsync(m => m.ReviewId == RId);
+            if (Review == null)
             {
-                Screen = viewModel.screenData.Screen,
-                Comments = (from comment in _context.Comments
-                            where comment.ScreenId == viewModel.screenData.Screen.ScreenId
-                            select comment).ToList(),
+                return NotFound();
+            }
 
-                Num_Approvals = _context.ScreenStatus.Count(x => (x.ScreenId == viewModel.screenData.Screen.ScreenId) && x.Status == ScreenStatus.PossibleStatus.Approved),
-                Num_NeedsWorks = _context.ScreenStatus.Count(x => (x.ScreenId == viewModel.screenData.Screen.ScreenId) && x.Status == ScreenStatus.PossibleStatus.NeedsWork),
-                Num_Rejections = _context.ScreenStatus.Count(x => (x.ScreenId == viewModel.screenData.Screen.ScreenId) && x.Status == ScreenStatus.PossibleStatus.Rejected)
-            };
+            ViewModel.Review = Review;
 
-            viewModel.screenData = s;
+            // TODO: Does this work correctly, order may be off! :|
+            ViewModel.screenData = (from screen in _context.Screens
+                                    where screen.ReviewId == RId
+                                    select new ScreenData()
+                                    {
+                                        Screen = screen,
+                                        Comments = (from comment in _context.Comments
+                                                    where comment.ScreenId == screen.ScreenId
+                                                    select comment).ToList(),
 
-            return View(viewModel);
+                                        Num_Approvals = _context.ScreenStatus.Count(x => (x.ScreenId == screen.ScreenId) && x.Status == ScreenStatus.PossibleStatus.Approved),
+                                        Num_NeedsWorks = _context.ScreenStatus.Count(x => (x.ScreenId == screen.ScreenId) && x.Status == ScreenStatus.PossibleStatus.NeedsWork),
+                                        Num_Rejections = _context.ScreenStatus.Count(x => (x.ScreenId == screen.ScreenId) && x.Status == ScreenStatus.PossibleStatus.Rejected)
+                                    }).Where(s => s.Screen.ScreenId == SId).Single();
+
+            ViewModel.Reviewees = _context.Access.Where(u => u.ReviewId == RId).ToList();
+
+            ViewModel.ScreenIds = _context.Screens.Where(s => s.ReviewId == RId).Select(s => s.ScreenId).ToList();
+
+            return View("View",ViewModel);
         }
 
 
