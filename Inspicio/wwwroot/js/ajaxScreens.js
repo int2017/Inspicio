@@ -28,7 +28,9 @@ function screenSelector( reviewid, id) {
                 SId: id
             },
             success: function (response) {
+                imageMap.remove();
                 $("#screen-container").html(response);
+                reloadMarkers();
             }
         });
 }

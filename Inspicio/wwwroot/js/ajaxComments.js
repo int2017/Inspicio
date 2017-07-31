@@ -3,7 +3,6 @@
     Urgent: 1
 };
 
-//Commenting from popups
 function commentClick(uniqID, chosenState) {
     var urgent = $(".urgency-popup").is(":checked");
     var urgency;

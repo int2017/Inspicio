@@ -267,8 +267,16 @@ namespace Inspicio.Controllers
         }
         public JsonResult GetComments(int? Id)
         {
-            var AllComments = _context.Comments.Where(c => c.ScreenId == Id);
-            return Json(AllComments);
+            List<ViewModel.CommentInfo> comments = new List<ViewModel.CommentInfo>();
+            var AllComments = _context.Comments.Where(c => c.ImageId == Id);
+            foreach (Comment SingleComment in AllComments)
+            {
+                var CommentInfo = new ViewModel.CommentInfo();
+                CommentInfo.comment = SingleComment;
+                CommentInfo.PosterProfileName = _context.Users.Where(u => u.Id == SingleComment.OwnerId).Select(u => u.ProfileName).Single();
+                comments.Add(CommentInfo);
+            }
+            return Json(comments);
         }
         // POST: Images/View/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
@@ -373,15 +381,11 @@ namespace Inspicio.Controllers
 
             if (ScreenStatus == null)
             {
-                var status = new ScreenStatus();
-                status.UserId = userId;
-                status.ScreenId = data.ScreenId;
-                status.Status = ScreenStatus.PossibleStatus.Undecided;
-                ScreenStatus = status;
-                _context.Add(ScreenStatus);
+                return NotFound();
             }
             int id = data.ScreenId;
             var image = await _context.Screens.SingleOrDefaultAsync(m => m.ScreenId == id);
+
             if (data.state == State.Approved)
             {
                 ScreenStatus.Status = ScreenStatus.PossibleStatus.Approved;
@@ -394,6 +398,7 @@ namespace Inspicio.Controllers
             {
                 ScreenStatus.Status = ScreenStatus.PossibleStatus.Rejected;
             }
+
             await _context.SaveChangesAsync();
             return Ok(1);
         }
