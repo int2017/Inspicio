@@ -20,7 +20,7 @@ function commentClick(uniqID, chosenState) {
         }
     });
     var DataFromBody = {
-        "ImageId": $("#ImageId").val(),
+        "ScreenId": $("#ScreenId").val(),
         "Message": $(".popup-textarea").val(),
         "Lat": locationLat,
         "Lng": locationLng,
@@ -64,7 +64,7 @@ function commentClick(uniqID, chosenState) {
         }
         else urgency = commentEnum.Default;
         var DataFromBody = {
-            "ImageId": $("#ImageId").val(),
+            "ScreenId": $("#ScreenId").val(),
             "Message": $("#comment-textarea").val(),
             "Lat": null,
             "Lng": null,
@@ -133,7 +133,7 @@ function commentClick(uniqID, chosenState) {
             loc = null;
         }
         var DataFromBody = {
-            "ImageId": $("#ImageId").val(),
+            "ScreenId": $("#ScreenId").val(),
             "Message": area.val(),
             "Lat": lat,
             "Lng": lng,
@@ -175,7 +175,7 @@ function commentClick(uniqID, chosenState) {
     //Get new comments for markers
     function reloadMarkers() {
         
-        var id = $("#ImageId").val();
+        var id = $("#ScreenId").val();
         $.ajax(
             {
                 type: "GET", //HTTP GET Method  
@@ -189,14 +189,14 @@ function commentClick(uniqID, chosenState) {
                     $(data).each(function () {
 
                         var parent;
-                        if (this.comment.parentId === undefined) {
-                            parent = this.comment.commentId;
+                        if (this.parentId === undefined) {
+                            parent = this.commentId;
                         }
 
                         else {
-                            parent = this.comment.parentId;
+                            parent = this.parentId;
                         }
-                        createMarkers(this.comment.message, this.posterProfileName, this.comment.lat, this.comment.lng, parent, this.comment.commentUrgency, true);
+                        createMarkers(this.message, this.posterProfileName, this.lat, this.lng, parent, this.commentUrgency, true);
 
                     });
                 }

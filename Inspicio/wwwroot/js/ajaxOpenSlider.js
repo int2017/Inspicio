@@ -9,7 +9,7 @@ $(function () {
     $('#toggle').change(function () {
         var DataFromToggle = {
 
-            "ImageId": $("#ImageId").val(),
+            "ReviewId": $("#ReviewId").val(),
             "Open": $("#toggle").prop('checked')
         };
 

@@ -1,4 +1,4 @@
-@model List<Inspicio.Controllers.ImagesController.IndexModel>
+@model List<Inspicio.Models.ReviewViewModels.IndexModel>
 @inject UserManager<ApplicationUser> UserManager
 
 
@@ -40,21 +40,21 @@
     <tbody id="tBody" style="border-bottom: solid; border-width: 3px;">
 
 @foreach (var item in Model)
-{
-        <tr title="@item.Image.Title" onclick="document.location = 'Images/View/@item.Image.ImageID'" style="cursor:pointer; border-bottom:solid;border-bottom-width:1px;" >
+{ 
+        <tr title="@item.Review.Title" onclick="document.location = 'Images/View/@item.Review.ReviewId'" style="cursor:pointer; border-bottom:solid;border-bottom-width:1px;" >
                 <td id="content">
-                    <img style="max-height: 100px; max-width: 100px; margin-top:15px;" src="@item.Image.Content" />
+                    <img style="max-height: 100px; max-width: 100px; margin-top:15px;" src="" />
                 </td>
                 <td id="title">
                     @{
-                        string defaultTitle = item.Image.Title;
+                        string defaultTitle = item.Review.Title;
                         string title = (defaultTitle.Length <= 100) ? defaultTitle : defaultTitle.Substring(0, 100) + "...";
                         @Html.DisplayFor(modelItem => title)
                     }
                 </td>
                 <td id="creator">
                     @{
-                        var user = await UserManager.FindByIdAsync(item.Image.OwnerId);
+                        var user = await UserManager.FindByIdAsync(item.Review.CreatorId);
                         @Html.DisplayFor(modelItem => user.ProfileName);
                      }
                 </td>
@@ -68,7 +68,7 @@
                     @Html.DisplayFor(modelItem => item.rejections)
                 </td>     
                 <td id="status">
-                    @Html.DisplayFor(modelItem => item.Image.ReviewStatus)
+                    @Html.DisplayFor(modelItem => item.Review.ReviewState)
                 </td>
             </tr>
         }

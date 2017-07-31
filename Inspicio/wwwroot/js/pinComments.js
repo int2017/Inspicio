@@ -90,7 +90,7 @@ function mapOnClick(e) {
 function createMarker(latlng, clickBool) {
     var uniqID = Math.round(new Date().getTime() +(Math.random() * 100));
     var marker = new L.marker(latlng, { icon: customPin }).addTo(markerGroup);
-    var popup = new L.Popup();
+    var popup = new L.responsivePopup();
     //Removes marker if popup is empty
     marker.on('popupclose', function (e) {
         if (($("#popup" + uniqID).html().indexOf("popup-comment")) === -1) {
@@ -231,7 +231,8 @@ $(document).ready(function () {
             markerX = markersArray[markersArray.findIndex(x => parseInt(x.myData.id) === parseInt(uniqID))];
             markerX.setIcon(hoverPin);
         }
-    }).on("mouseleave", ".open-pin", function () {
+
+        }).on("mouseleave", ".open-pin", function () {
         var loc = $(this).data("location").split(' ');
         var lat = loc[0];
         var lng = loc[2];
@@ -247,22 +248,41 @@ $(document).ready(function () {
             markerX.setIcon(customPin);
 
         }
-    }).on("click", ".open-pin", function () {
-        var loc = $(this).data("location").split(' ');
-        var lat = loc[0];
-        var lng = loc[2];
-        var latCollection = locations.map(function (value, index) { return value[1]; });
-        var lngCollection = locations.map(function (value, index) { return value[2]; });
+        }).on("click", ".open-pin", function () {
 
-        if ($.inArray(parseInt(lat), latCollection) !== -1 && $.inArray(parseInt(lng), lngCollection) !== -1) {
+            var clickedComment = $(this);
+            if (clickedComment.context.text === "Close pin") {
 
-            var latlng = L.latLng(lat, lng);
-            var idCollection = locations.map(function (value, index) { return value[0]; });
-            var uniqID = idCollection[$.inArray(parseInt(lat), latCollection)];
-            markerX = markersArray[markersArray.findIndex(x => parseInt(x.myData.id) === parseInt(uniqID))].openPopup();
-        }
+                $(".leaflet-popup-close-button")[0].click();
+                $(this).text("Open pin");
+            }
+            else {
+                $("#map-pane").removeClass("hidden");
+                $(this).text("Close pin");
 
-    });
+                var loc = $(this).data("location").split(' ');
+                var lat = loc[0];
+                var lng = loc[2];
+                var latCollection = locations.map(function (value, index) { return value[1]; });
+                var lngCollection = locations.map(function (value, index) { return value[2]; });
+
+                if ($.inArray(parseInt(lat), latCollection) !== -1 && $.inArray(parseInt(lng), lngCollection) !== -1) {
+
+                    var latlng = L.latLng(lat, lng);
+                    var idCollection = locations.map(function (value, index) { return value[0]; });
+                    var uniqID = idCollection[$.inArray(parseInt(lat), latCollection)];
+                    markerX = markersArray[markersArray.findIndex(x => parseInt(x.myData.id) === parseInt(uniqID))].openPopup();
+                }
+            }
+
+            $(".open-pin").each(function (index) {
+                if ($(clickedComment).attr("id") !== $(this).attr("id")) {
+                    $(this).text("Open pin");
+                }
+            });
+
+        });
+
     $(document).on("keypress", ".popup-textarea", function (e) {
         if (e.which === 13) {
             $('.leaflet-popup-content button').click();
@@ -270,6 +290,4 @@ $(document).ready(function () {
             return false;
         }
     });
-
-
 })

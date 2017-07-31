@@ -24,7 +24,7 @@ function updateThumbs(chosenState, button) {
     
     var text = "#" + button + " .rating";
     var image = {
-        "ImageID": $("#ImageId").val(),
+        "ScreenId": $("#ScreenId").val(),
         "state": chosenState
     };
     
@@ -54,7 +54,7 @@ function disableThumb(ifClick, chosenState) {
         changeState(chosenState);
     }
     else{
-    var id = $("#ImageId").val();
+    var id = $("#ScreenId").val();
     $.ajax(
         {
             type: "GET", //HTTP GET Method  
