@@ -6,7 +6,8 @@ $(function () {
     });
 });
 $(function () {
-    $('#toggle').change(function () {
+
+    $(document).on("change", "#toggle", function () {
         var DataFromToggle = {
 
             "ReviewId": $("#ReviewId").val(),
