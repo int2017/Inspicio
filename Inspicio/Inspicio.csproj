@@ -39,6 +39,7 @@
     <Content Include="wwwroot\images\thumbup.jpg" />
     <Content Include="wwwroot\js\ajaxComments.js" />
     <Content Include="wwwroot\js\background-selector.js" />
+    <Content Include="wwwroot\js\chatBot.js" />
     <Content Include="wwwroot\js\createDropzone.js" />
     <Content Include="wwwroot\js\filter.js" />
     <Content Include="wwwroot\js\jquery.initialize.js" />
