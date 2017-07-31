@@ -20,17 +20,15 @@ function screenSelector( reviewid, id) {
     $.ajax(
         {
             type: "GET", //HTTP GET Method
-            url: "../GetScreenData", // Controller/View
-            contentType: "application/json;",
-            dataType: "json",
+            url: "../_ScreenPartial", // Controller/View
+           
+            
             data: {
                 RId: reviewid,
                 SId: id
-            }
-            ,
+            },
             success: function (response) {
-
-                alert(response);
+                $("#screen-container").html(response);
             }
         });
 }

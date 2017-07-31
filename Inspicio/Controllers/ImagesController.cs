@@ -212,7 +212,7 @@ namespace Inspicio.Controllers
         }
 
         // GET: Images/View/?/screen
-        public async Task<IActionResult> GetScreenData(int RId,int SId)
+        public async Task<IActionResult> _ScreenPartial(int RId,int SId)
         {
             var ViewModel = new ViewModel();
 
@@ -243,7 +243,7 @@ namespace Inspicio.Controllers
 
             ViewModel.ScreenIds = _context.Screens.Where(s => s.ReviewId == RId).Select(s => s.ScreenId).ToList();
 
-            return View("View",ViewModel);
+            return PartialView(ViewModel);
         }
 
 
