@@ -370,13 +370,15 @@ namespace Inspicio.Controllers
 
             if (ScreenStatus == null)
             {
-                return NotFound();
+                var status = new ScreenStatus();
+                status.UserId = userId;
+                status.ScreenId = data.ScreenId;
+                status.Status = ScreenStatus.PossibleStatus.Undecided;
+                ScreenStatus = status;
+                _context.Add(ScreenStatus);
             }
-
-
             int id = data.ScreenId;
             var image = await _context.Screens.SingleOrDefaultAsync(m => m.ScreenId == id);
-
             if (data.state == State.Approved)
             {
                 ScreenStatus.Status = ScreenStatus.PossibleStatus.Approved;
@@ -389,7 +391,6 @@ namespace Inspicio.Controllers
             {
                 ScreenStatus.Status = ScreenStatus.PossibleStatus.Rejected;
             }
-
             await _context.SaveChangesAsync();
             return Ok(1);
         }
