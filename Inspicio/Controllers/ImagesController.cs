@@ -267,12 +267,12 @@ namespace Inspicio.Controllers
         }
         public JsonResult GetComments(int? Id)
         {
-            List<ViewModel.CommentInfo> comments = new List<ViewModel.CommentInfo>();
-            var AllComments = _context.Comments.Where(c => c.ImageId == Id);
+            List<CommentInfo> comments = new List<CommentInfo>();
+            var AllComments = _context.Comments.Where(c => c.ScreenId == Id);
             foreach (Comment SingleComment in AllComments)
             {
-                var CommentInfo = new ViewModel.CommentInfo();
-                CommentInfo.comment = SingleComment;
+                var CommentInfo = new CommentInfo();
+                CommentInfo.Comment = SingleComment;
                 CommentInfo.PosterProfileName = _context.Users.Where(u => u.Id == SingleComment.OwnerId).Select(u => u.ProfileName).Single();
                 comments.Add(CommentInfo);
             }

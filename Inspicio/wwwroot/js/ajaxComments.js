@@ -188,14 +188,14 @@ function commentClick(uniqID, chosenState) {
                     $(data).each(function () {
 
                         var parent;
-                        if (this.parentId === undefined) {
+                        if (this.comment.parentId === undefined) {
                             parent = this.commentId;
                         }
 
                         else {
-                            parent = this.parentId;
+                            parent = this.comment.parentId;
                         }
-                        createMarkers(this.message, this.posterProfileName, this.lat, this.lng, parent, this.commentUrgency, true);
+                        createMarkers(this.comment.message, this.posterProfileName, this.comment.lat, this.comment.lng, parent, this.comment.commentUrgency, true);
 
                     });
                 }
