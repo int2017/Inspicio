@@ -195,11 +195,14 @@ namespace Inspicio.Controllers
                                   Num_Approvals = _context.ScreenStatus.Count(x => (x.ScreenId == screen.ScreenId) && x.Status == ScreenStatus.PossibleStatus.Approved),
                                   Num_NeedsWorks = _context.ScreenStatus.Count(x => (x.ScreenId == screen.ScreenId) && x.Status == ScreenStatus.PossibleStatus.NeedsWork),
                                   Num_Rejections = _context.ScreenStatus.Count(x => (x.ScreenId == screen.ScreenId) && x.Status == ScreenStatus.PossibleStatus.Rejected)
-                              }).FirstOrDefault();
+                                   
+        }).FirstOrDefault();
 
             ViewModel.Reviewees = _context.Access.Where(u => u.ReviewId == Id).ToList();
 
             ViewModel.ScreenIds = _context.Screens.Where( s => s.ReviewId == Id ).Select(s => s.ScreenId).ToList();
+
+            ViewModel.screenData.UserVotes = _context.ScreenStatus.Where(s => s.ScreenId == ViewModel.screenData.Screen.ScreenId).ToList();
 
             return View(ViewModel);
         }
@@ -242,7 +245,7 @@ namespace Inspicio.Controllers
             ViewModel.Reviewees = _context.Access.Where(u => u.ReviewId == RId).ToList();
 
             ViewModel.ScreenIds = _context.Screens.Where(s => s.ReviewId == RId).Select(s => s.ScreenId).ToList();
-
+            ViewModel.screenData.UserVotes = _context.ScreenStatus.Where(s => s.ScreenId == ViewModel.screenData.Screen.ScreenId).ToList();
             return PartialView(ViewModel);
         }
 

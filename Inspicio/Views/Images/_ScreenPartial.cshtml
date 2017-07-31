@@ -63,10 +63,11 @@
                 </div>
 
                 <div class="row reviewer-row">
-                    @foreach (var r in Model.Reviewees)
+                    
+                    @foreach (var r in Model.screenData.UserVotes)
                     {
                         var replyOwner = await UserManager.FindByIdAsync(r.UserId);
-                        <div class="col-md-2 reviewers approved @r.">@replyOwner.ProfileName</div>
+                        <div class="col-md-2 reviewers @r.Status">@replyOwner.ProfileName</div>
                     }
                 </div>
                 <div id="showmarker" class="text-center">

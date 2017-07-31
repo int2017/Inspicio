@@ -14,5 +14,6 @@ namespace Inspicio.Models.ReviewViewModels
         public int Num_Approvals { get; set; }
         public int Num_Rejections { get; set; }
         public int Num_NeedsWorks { get; set; }
+        public List<ScreenStatus> UserVotes { get; set; }
     }
 }
