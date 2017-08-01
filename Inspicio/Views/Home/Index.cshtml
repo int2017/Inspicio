@@ -88,6 +88,7 @@
 
 <link rel="stylesheet" href="~/css/home.css">
 <script type="text/javascript" src="~/js/homepageScripts.js"></script>
+
 <script>
     Dropzone.autoDiscover = false;
     var myDropzone = new Dropzone(".dropzone", {
@@ -106,7 +107,7 @@
                         for (var i = 0; i < l; i++) {
                             images[0].parentNode.removeChild(images[0]);
                         }
-                        var image = new Image();
+                        var image = document.createElement("img");
                         $(image).addClass("img-responsive")
                         image.src = e.target.result;
                         $(image).appendTo(".dropzone#uploader > .dz-preview >.dz-image  ");

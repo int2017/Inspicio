@@ -8,9 +8,14 @@ using System.Threading.Tasks;
 
 namespace Inspicio.Models
 {
-    public class Image
+    public class Screen
     {
-        public int ImageID { get; set; }
+        public int ScreenId { get; set; }
+
+        public int ReviewId { get; set; }
+
+        public int NextScreenId { get; set; }
+        public int NextVersionId { get; set; }
 
         public string OwnerId { get; set; }
 
@@ -23,17 +28,14 @@ namespace Inspicio.Models
         public string Description { get; set; }
 
         [EnumDataType(typeof(Status))]
-        [DisplayName("Status")]
-        public Status ReviewStatus { get; set; }
+        public Status ScreenStatus { get; set; }
 
-        public enum Status
-        {
-           Open,
-           Closed
-        }
+        public enum Status { Approved, NeedsWork, Rejected, Undecided }
 
         public ICollection<Comment> Comments { get; set; }
-        public ICollection<Review> Reviews { get; set; }
+
+        [ForeignKey("ReviewId")]
+        public Review Review { get; set; }
 
         [ForeignKey("OwnerId")]
         public ApplicationUser ApplicationUsers { get; set; }

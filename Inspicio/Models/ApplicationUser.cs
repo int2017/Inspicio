@@ -22,8 +22,8 @@ namespace Inspicio.Models
         public string ProfilePicture { get; set; }
 
         public ICollection<Comment> Comments { get; set; }
-        public ICollection<Image> Images { get; set; }
-        public ICollection<Review> Reviews { get; set; }
+        public ICollection<Screen> Screens { get; set; }
+        public ICollection<Access> Access { get; set; }
     }
 }
 

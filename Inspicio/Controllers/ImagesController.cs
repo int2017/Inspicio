@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -12,10 +11,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
+
+using Inspicio.Models.ReviewViewModels;
+
 namespace Inspicio.Controllers
 {
     [Authorize]
-    public class ImagesController : Controller
+    public partial class ImagesController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IHostingEnvironment _environment;
@@ -31,41 +33,44 @@ namespace Inspicio.Controllers
         }
 
         // GET: Images
-        public class IndexModel
-        {
-            public Image Image { get; set; }
-            public int approvals { get; set; }
-            public int rejections { get; set; }
-            public int needsWorks { get; set; }
-        }
-
         public async Task<IActionResult> Index(string SearchString)
         {
 
             // Only images with the user id set as the owner should be passed into the view
             var UserId = _userManager.GetUserId(HttpContext.User);
 
-            var ImageIds = _context.Review.Where(r => r.OwnerId == UserId).Select(i => i.ImageId);
-            var AllImages = new List<Image>();
-            foreach (var Id in ImageIds)
+            var ReviewIds = _context.Access.Where(r => r.UserId == UserId).Select(i => i.ReviewId).ToList();
+            var allReviews = new List<Review>();
+
+            foreach (var Id in ReviewIds)
             {
-                AllImages.Add(_context.Images.Where(i => i.ImageID == Id).SingleOrDefault());
+                allReviews.Add(_context.Review.Where(i => i.ReviewId == Id).SingleOrDefault());
             }
 
-            var ImageEntries = new List<IndexModel>();
-            foreach (var a in AllImages)
+            var Reviews = new List<IndexModel>();
+            foreach (var a in allReviews)
             {
-                ImageEntries.Add(new IndexModel
+                var approvals = 0;
+                var needsWorks = 0;
+                var rejections = 0;
+
+                var screenIds = _context.Screens.Where(x => x.ReviewId == a.ReviewId).Select(s => s.ScreenId).ToList();
+                foreach( var i in screenIds )
                 {
-                    Image = a,
-                    approvals = _context.Review.Count(x => (x.ImageId == a.ImageID) && x.State == Review.States.Approved),
-                    needsWorks = _context.Review.Count(x => (x.ImageId == a.ImageID) && x.State == Review.States.NeedsWork),
-                    rejections = _context.Review.Count(x => (x.ImageId == a.ImageID) && x.State == Review.States.Rejected)
+                    approvals += _context.ScreenStatus.Count(x => (x.ScreenId == i) && x.Status == ScreenStatus.PossibleStatus.Approved);
+                    needsWorks += _context.ScreenStatus.Count(x => (x.ScreenId == i) && x.Status == ScreenStatus.PossibleStatus.NeedsWork);
+                    rejections += _context.ScreenStatus.Count(x => (x.ScreenId == i) && x.Status == ScreenStatus.PossibleStatus.Rejected);
+                }
+
+                Reviews.Add(new IndexModel
+                {
+                    Review = a,
+                    approvals = approvals,
+                    needsWorks = needsWorks,
+                    rejections = rejections
                 });
             }
-
-            await _context.SaveChangesAsync();
-            return View(ImageEntries);
+            return View(Reviews);
         }
 
         // GET: Images/Details/5
@@ -76,42 +81,23 @@ namespace Inspicio.Controllers
                 return NotFound();
             }
 
-            var Image = await _context.Images.SingleOrDefaultAsync(m => m.ImageID == Id);
-            if (Image == null)
+            var Screen = await _context.Screens.SingleOrDefaultAsync(m => m.ScreenId == Id);
+            if (Screen == null)
             {
                 return NotFound();
             }
 
-            return View(Image);
-        }
-
-
-
-        public class SelectableUser : ApplicationUser
-        {
-            public bool IsSelected { get; set; }
-        }
-        public class CreatePageModel
-        {
-
-            public List<SelectableUser> Users { get; set; }
-            public Image Image { get; set; }
+            return View(Screen);
         }
         // GET: Images/Create
         public IActionResult Create()
         {
             var CreatePageModel = new CreatePageModel();
-            CreatePageModel.Users = new List<SelectableUser>();
-
-            var users = _context.Users.Where(u => u.Id != _userManager.GetUserId(HttpContext.User)).ToList();
-            foreach (var u in users)
-            {
-                // Selectable user constructor
-                CreatePageModel.Users.Add(new SelectableUser { Id = u.Id, Email = u.Email, ProfileName = u.ProfileName, IsSelected = false });
-            }
-
+            CreatePageModel.Reviewers = _context.Users.Where(u => u.Id != _userManager.GetUserId(HttpContext.User)).ToList();
             return View(CreatePageModel);
         }
+
+         
 
         // POST: Images/Create
         [HttpPost]
@@ -120,59 +106,61 @@ namespace Inspicio.Controllers
         {
             if (ModelState.IsValid)
             {
-                CreatePageModel.Image.OwnerId = _userManager.GetUserId(HttpContext.User);
-                CreatePageModel.Image.ReviewStatus = Image.Status.Open;
-                _context.Add(CreatePageModel.Image);
+                    // Review creation
+                var Review = new Review();
+                //Review.ReviewId = ?
+                Review.CreatorId = _userManager.GetUserId(HttpContext.User);
+                Review.ReviewState = Review.States.Open;
+                Review.ReviewStatus = Review.Status.Undecided;
+                Review.Title = CreatePageModel.ReviewTitle;
+                Review.Description = CreatePageModel.ReviewDescription;
+                Review.Thumbnail = CreatePageModel.ReviewThumbnail;
+                _context.Add(Review);
 
-                var ReviewOwner = new Review();
-                ReviewOwner.ImageId = CreatePageModel.Image.ImageID;
-                ReviewOwner.OwnerId = CreatePageModel.Image.OwnerId;
-                ReviewOwner.State = Review.States.Undecided;
-                _context.Add(ReviewOwner);
 
-                CreatePageModel.Image.ReviewStatus = Image.Status.Open;
-                var Reviewees = new List<Review>();
-                if (CreatePageModel.Users != null)
+                foreach( var s in CreatePageModel.Screens )
                 {
-                    foreach (var u in CreatePageModel.Users.Where(m => m.IsSelected))
-                    {
-                        var reviewee = new Review();
-                        reviewee.State = Review.States.Undecided;
+                        // Screen creation
+                    s.OwnerId = _userManager.GetUserId(HttpContext.User);
+                    s.ScreenStatus = Screen.Status.Undecided;
+                    s.ReviewId = Review.ReviewId;
+                    _context.Add(s);
+                }
 
-                        reviewee.OwnerId = u.Id;
-                        reviewee.ImageId = CreatePageModel.Image.ImageID;
-                        _context.Add(reviewee);
+                // Access creation
+                var OwnerEntry = new Access();
+                OwnerEntry.ReviewId = Review.ReviewId;
+                OwnerEntry.UserId = _userManager.GetUserId(HttpContext.User);
+                _context.Add(OwnerEntry);
+
+                if (CreatePageModel.Reviewers != null)
+                {
+                    foreach (var u in CreatePageModel.Reviewers)
+                    {
+                        var ReviewerEntry = new Access();
+
+                        ReviewerEntry.UserId = u.Id;
+                        ReviewerEntry.ReviewId = Review.ReviewId;
+                        _context.Add(ReviewerEntry);
+
+                        foreach (var s in CreatePageModel.Screens)
+                        {
+                            var ScreenStatus = new ScreenStatus();
+                            ScreenStatus.ScreenId = s.ScreenId;
+                            ScreenStatus.UserId = u.Id;
+                            ScreenStatus.Status = ScreenStatus.PossibleStatus.Undecided;
+                            _context.Add(ScreenStatus);
+                        }
                     }
                 }
 
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            return View(CreatePageModel.Image);
+
+            return View(CreatePageModel.Screens);
         }
 
-
-        public class ViewModel
-        {
-            public string OwnerId { get; set; }
-
-            public class ImageData
-            {
-                public Image Image { get; set; }
-                public int approvals { get; set; }
-                public int rejections { get; set; }
-                public int needsWorks { get; set; }
-            }
-            public ImageData Info { get; set; }
-
-            public List<CommentInfo> Comments { get; set; }
-            public class CommentInfo
-            {
-                public String PosterProfileName { get; set; }
-                public Comment comment { get; set; }
-            }
-            public List<Review> Reviews = new List<Review>();
-        }
 
 
         // GET: Images/View/5
@@ -183,61 +171,109 @@ namespace Inspicio.Controllers
                 return NotFound();
             }
 
-            // Fetch the image by the id pass in '/5'
-            var Image = await _context.Images.SingleOrDefaultAsync(m => m.ImageID == Id);
-            if (Image == null)
+            // Fetch the review by the id pass in '/5'
+            var Review = await _context.Review.SingleOrDefaultAsync(m => m.ReviewId == Id);
+            if (Review == null)
             {
                 return NotFound();
             }
 
-            // Create a new FullReview object
-            // This will be passed into the view as the model.
-            var FullReviewData = new ViewModel();
-            FullReviewData.Comments = new List<ViewModel.CommentInfo>();
+            var ViewModel = new ViewModel();
 
-            // Added OwnerProfileName to be passed into the model.
-            ApplicationUser User = await _userManager.FindByIdAsync(Image.OwnerId);
+            ViewModel.Review = Review;
 
-            FullReviewData.OwnerId = User.Id;
+            // TODO: Does this work correctly, order may be off! :|
+            ViewModel.screenData = (from screen in _context.Screens
+                              where screen.ReviewId == Id
+                              select new ScreenData()
+                              {
+                                  Screen = screen,
+                                  Comments = (from comment in _context.Comments
+                                              where comment.ScreenId == screen.ScreenId
+                                              select comment).ToList(),
 
-            FullReviewData.Info = new ViewModel.ImageData();
-            FullReviewData.Info.Image = Image;
-            FullReviewData.Info.Image.ReviewStatus = Image.ReviewStatus;
-            FullReviewData.Info.approvals = _context.Review.Count(x => x.ImageId == Id && x.State == Review.States.Approved);
-            FullReviewData.Info.rejections = _context.Review.Count(x => x.ImageId == Id && x.State == Review.States.Rejected);
-            FullReviewData.Info.needsWorks = _context.Review.Count(x => x.ImageId == Id && x.State == Review.States.NeedsWork);
-            FullReviewData.Reviews = _context.Review.Where(u => u.ImageId == Id).ToList();
-            // Changed from getting all comments then working out which we want to only getting the ones we want.
-            var AllComments = _context.Comments.Where(c => c.ImageId == Id);
-            foreach (Comment SingleComment in AllComments)
-            {
-                // add it and query the user table for the profilename.
+                                  Num_Approvals = _context.ScreenStatus.Count(x => (x.ScreenId == screen.ScreenId) && x.Status == ScreenStatus.PossibleStatus.Approved),
+                                  Num_NeedsWorks = _context.ScreenStatus.Count(x => (x.ScreenId == screen.ScreenId) && x.Status == ScreenStatus.PossibleStatus.NeedsWork),
+                                  Num_Rejections = _context.ScreenStatus.Count(x => (x.ScreenId == screen.ScreenId) && x.Status == ScreenStatus.PossibleStatus.Rejected)
+                                   
+        }).FirstOrDefault();
 
-                // add it and query the user table for the profilename.
-                var CommentInfo = new ViewModel.CommentInfo();
-                CommentInfo.PosterProfileName = _context.Users.Where(u => u.Id == SingleComment.OwnerId).Select(u => u.ProfileName).SingleOrDefault();
-                CommentInfo.comment = SingleComment;
+            ViewModel.Reviewees = _context.Access.Where(u => u.ReviewId == Id).ToList();
 
-                FullReviewData.Comments.Add(CommentInfo);
-            }
+            ViewModel.ScreenIds = _context.Screens.Where( s => s.ReviewId == Id ).Select(s => s.ScreenId).ToList();
 
-            // FullReview model to the View.
-            return View(FullReviewData);
+            ViewModel.screenData.UserVotes = _context.ScreenStatus.Where(s => s.ScreenId == ViewModel.screenData.Screen.ScreenId).ToList();
+            
+            return View(ViewModel);
         }
 
-        public JsonResult GetRating(int? id) {
-            var userId = _userManager.GetUserId(HttpContext.User);
-            var review = _context.Review.Where(u => u.OwnerId == userId).Where(i => i.ImageId == id).SingleOrDefault();
-            return Json(review.State);
-    }
-    public JsonResult GetComments(int? Id)
+        public JsonResult GetScreenContentFor(int? id)
         {
-            List<ViewModel.CommentInfo> comments = new List<ViewModel.CommentInfo>();
-            var AllComments = _context.Comments.Where(c => c.ImageId == Id);
+            var screen = _context.Screens.Where(s => s.ScreenId == id).Select( c => c.Content).SingleOrDefault();
+
+            return Json(screen);
+        }
+
+        // GET: Images/View/?/screen
+        public async Task<IActionResult> _ScreenPartial(int RId,int SId)
+        {
+            var ViewModel = new ViewModel();
+
+            var Review = await _context.Review.SingleOrDefaultAsync(m => m.ReviewId == RId);
+            if (Review == null)
+            {
+                return NotFound();
+            }
+
+            ViewModel.Review = Review;
+
+            // TODO: Does this work correctly, order may be off! :|
+            ViewModel.screenData = (from screen in _context.Screens
+                                    where screen.ReviewId == RId
+                                    select new ScreenData()
+                                    {
+                                        Screen = screen,
+                                        Comments = (from comment in _context.Comments
+                                                    where comment.ScreenId == screen.ScreenId
+                                                    select comment).ToList(),
+
+                                        Num_Approvals = _context.ScreenStatus.Count(x => (x.ScreenId == screen.ScreenId) && x.Status == ScreenStatus.PossibleStatus.Approved),
+                                        Num_NeedsWorks = _context.ScreenStatus.Count(x => (x.ScreenId == screen.ScreenId) && x.Status == ScreenStatus.PossibleStatus.NeedsWork),
+                                        Num_Rejections = _context.ScreenStatus.Count(x => (x.ScreenId == screen.ScreenId) && x.Status == ScreenStatus.PossibleStatus.Rejected)
+                                    }).Where(s => s.Screen.ScreenId == SId).Single();
+
+            ViewModel.Reviewees = _context.Access.Where(u => u.ReviewId == RId).ToList();
+
+            ViewModel.ScreenIds = _context.Screens.Where(s => s.ReviewId == RId).Select(s => s.ScreenId).ToList();
+            ViewModel.screenData.UserVotes = _context.ScreenStatus.Where(s => s.ScreenId == ViewModel.screenData.Screen.ScreenId).ToList();
+            ViewModel.ScreenId = SId;
+            return PartialView(ViewModel);
+        }
+
+
+
+
+        public JsonResult GetRating(int? id)
+        {
+            var userId = _userManager.GetUserId(HttpContext.User);
+
+            //TODO stop this running/update the ui for the over
+            //TODO owner shouldn't be allowed to vote but needs the results
+            if( !(_context.Screens.Where(s => s.ScreenId == id ).Select( u => u.OwnerId).SingleOrDefault() == userId) )
+            {
+                var ScreenStatus = _context.ScreenStatus.Where(u => u.UserId == userId).Where(i => i.ScreenId == id).SingleOrDefault();
+                return Json(ScreenStatus.Status);
+            }
+            return Json("");
+        }
+        public JsonResult GetComments(int? Id)
+        {
+            List<CommentInfo> comments = new List<CommentInfo>();
+            var AllComments = _context.Comments.Where(c => c.ScreenId == Id);
             foreach (Comment SingleComment in AllComments)
             {
-                var CommentInfo = new ViewModel.CommentInfo();
-                CommentInfo.comment = SingleComment;
+                var CommentInfo = new CommentInfo();
+                CommentInfo.Comment = SingleComment;
                 CommentInfo.PosterProfileName = _context.Users.Where(u => u.Id == SingleComment.OwnerId).Select(u => u.ProfileName).Single();
                 comments.Add(CommentInfo);
             }
@@ -248,10 +284,10 @@ namespace Inspicio.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> View(int Id, [Bind("ImageID,Content,DownRating,UpRating,Description,Title")] Image Image)
+        public async Task<IActionResult> View(int Id, [Bind("ScreenId,Content,DownRating,UpRating,Description,Title")] Screen Screen)
         {
 
-            if (Id != Image.ImageID)
+            if (Id != Screen.ScreenId)
             {
                 return NotFound();
             }
@@ -260,12 +296,12 @@ namespace Inspicio.Controllers
             {
                 try
                 {
-                    _context.Update(Image);
+                    _context.Update(Screen);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ImageExists(Image.ImageID))
+                    if (!ImageExists(Screen.ScreenId))
                     {
                         return NotFound();
                     }
@@ -276,7 +312,7 @@ namespace Inspicio.Controllers
                 }
                 return RedirectToAction("Index");
             }
-            return View(Image);
+            return View(Screen);
         }
 
         // GET: Images/Delete/5
@@ -287,13 +323,13 @@ namespace Inspicio.Controllers
                 return NotFound();
             }
 
-            var Image = await _context.Images.SingleOrDefaultAsync(m => m.ImageID == Id);
-            if (Image == null)
+            var Screen = await _context.Screens.SingleOrDefaultAsync(m => m.ScreenId == Id);
+            if (Screen == null)
             {
                 return NotFound();
             }
 
-            return View(Image);
+            return View(Screen);
         }
 
         // POST: Images/Delete/5
@@ -301,32 +337,17 @@ namespace Inspicio.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int Id)
         {
-            var Image = await _context.Images.SingleOrDefaultAsync(m => m.ImageID == Id);
-            _context.Images.Remove(Image);
+            var Screen = await _context.Screens.SingleOrDefaultAsync(m => m.ScreenId == Id);
+            _context.Screens.Remove(Screen);
             await _context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
         private bool ImageExists(int Id)
         {
-            return _context.Images.Any(e => e.ImageID == Id);
+            return _context.Screens.Any(e => e.ScreenId == Id);
         }
-
-        public class DataFromBody
-        {
-            public String Message { get; set; }
-            public int ImageId { get; set; }
-            public float Lat { get; set; }
-            public float Lng { get; set; }
-            public String ParentId { get; set; }
-            public Urgency CommentUrgency { get; set; }
-        }
-        public enum Urgency
-        {
-            Default,
-            Urgent
-
-        }
+       
         [HttpPost]
         public async Task<IActionResult> Comment([FromBody] DataFromBody DataFromBody)
         {
@@ -334,7 +355,7 @@ namespace Inspicio.Controllers
 
             var userId = _userManager.GetUserId(HttpContext.User);
             comment.OwnerId = userId;
-            comment.ImageId = DataFromBody.ImageId;
+            comment.ScreenId = DataFromBody.ScreenId;
             comment.Message = DataFromBody.Message;
             comment.Timestamp = System.DateTime.Now;
             comment.Lat = DataFromBody.Lat;
@@ -352,90 +373,55 @@ namespace Inspicio.Controllers
         }
 
 
-        public enum State
-        {
-            Approved,
-            NeedsWork,
-            Rejected
-        };
-        public class RatingBody
-        {
-            // Integer determines which button has been pressed
-            public State state { get; set; }
-            public int ImageID { get; set; }
-
-        }
+       
         [HttpPost]
         public async Task<IActionResult> ChangeRating([FromBody] RatingBody data)
         {
             var userId = _userManager.GetUserId(HttpContext.User);
-            var review = _context.Review.Where(u => u.OwnerId == userId).Where(i => i.ImageId == data.ImageID).SingleOrDefault();
+            var ScreenStatus = _context.ScreenStatus.Where(u => u.UserId == userId).Where(i => i.ScreenId == data.ScreenId).SingleOrDefault();
 
-            if (review == null)
+            if (ScreenStatus == null)
             {
                 return NotFound();
             }
-
-
-            int id = data.ImageID;
-            var image = await _context.Images.SingleOrDefaultAsync(m => m.ImageID == id);
+            int id = data.ScreenId;
+            var image = await _context.Screens.SingleOrDefaultAsync(m => m.ScreenId == id);
 
             if (data.state == State.Approved)
             {
-                review.State = Review.States.Approved;
+                ScreenStatus.Status = ScreenStatus.PossibleStatus.Approved;
             }
             else if (data.state == State.NeedsWork)
             {
-                review.State = Review.States.NeedsWork;
+                ScreenStatus.Status = ScreenStatus.PossibleStatus.NeedsWork;
             }
             else if (data.state == State.Rejected)
             {
-                review.State = Review.States.Rejected;
+                ScreenStatus.Status = ScreenStatus.PossibleStatus.Rejected;
             }
 
             await _context.SaveChangesAsync();
             return Ok(1);
         }
 
-        
-    public class DataFromToggle
-    {
-        public int ImageID { get; set; }
-        public bool Open { get; set; }
-
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> CloseReview([FromBody] DataFromToggle data)
-    {
-        var userId = _userManager.GetUserId(HttpContext.User);
-
-        int id = data.ImageID;
-        var image = await _context.Images.SingleOrDefaultAsync(m => m.ImageID == id);
-
-        if (data.Open)
+        [HttpPost]
+        public async Task<IActionResult> CloseReview([FromBody] DataFromToggle data)
         {
-            image.ReviewStatus = Image.Status.Open;
+            var userId = _userManager.GetUserId(HttpContext.User);
+
+            int id = data.ReviewId;
+            var review = await _context.Review.SingleOrDefaultAsync(m => m.ReviewId == id);
+
+            if (data.Open)
+            {
+                review.ReviewState = Review.States.Open;
+            }
+            else
+            {
+                review.ReviewState = Review.States.Closed;
+            }
+            await _context.SaveChangesAsync();
+            return Ok(1);
         }
-        else
-        {
-            image.ReviewStatus = Image.Status.Closed;
-        }
-        await _context.SaveChangesAsync();
-        return Ok(1);
     }
 }
-}
-
-
-
-
-
-
-
-
-              
-
-              
-             
-             

@@ -3,7 +3,6 @@
     Urgent: 1
 };
 
-//Commenting from popups
 function commentClick(uniqID, chosenState) {
     var urgent = $(".urgency-popup").is(":checked");
     var urgency;
@@ -20,7 +19,7 @@ function commentClick(uniqID, chosenState) {
         }
     });
     var DataFromBody = {
-        "ImageId": $("#ImageId").val(),
+        "ScreenId": $("#ScreenId").val(),
         "Message": $(".popup-textarea").val(),
         "Lat": locationLat,
         "Lng": locationLng,
@@ -36,6 +35,7 @@ function commentClick(uniqID, chosenState) {
             data: JSON.stringify(DataFromBody),
 
             success: function () {
+                screenSelector($("#ReviewId").val(), $("#ScreenId").val())
                 $(".leaflet-popup-content").fadeOut();
                 markerX = markersArray[markersArray.findIndex(x => parseInt(x.myData.id) === parseInt(uniqID))];
                 markerX.closePopup();
@@ -64,7 +64,7 @@ function commentClick(uniqID, chosenState) {
         }
         else urgency = commentEnum.Default;
         var DataFromBody = {
-            "ImageId": $("#ImageId").val(),
+            "ScreenId": $("#ScreenId").val(),
             "Message": $("#comment-textarea").val(),
             "Lat": null,
             "Lng": null,
@@ -133,7 +133,7 @@ function commentClick(uniqID, chosenState) {
             loc = null;
         }
         var DataFromBody = {
-            "ImageId": $("#ImageId").val(),
+            "ScreenId": $("#ScreenId").val(),
             "Message": area.val(),
             "Lat": lat,
             "Lng": lng,
@@ -149,8 +149,8 @@ function commentClick(uniqID, chosenState) {
                 success: function () {
 
                     $(element).fadeOut();
-
-                    $("#comment-section #replies-" + parent + " .comment-container").load(window.location.href + " #comment-section #replies-" + parent + " .comment-container>*");
+                    screenSelector($("#ReviewId").val(), $("#ScreenId").val())
+                    
                     if (loc !== null) {
                         if ($(area).hasClass("popup-textarea")) {
                             var uniqID = $(area).attr("id").slice(9);
@@ -175,7 +175,7 @@ function commentClick(uniqID, chosenState) {
     //Get new comments for markers
     function reloadMarkers() {
         
-        var id = $("#ImageId").val();
+        var id = $("#ScreenId").val();
         $.ajax(
             {
                 type: "GET", //HTTP GET Method  

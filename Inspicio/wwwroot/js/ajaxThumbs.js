@@ -3,9 +3,9 @@
     NeedsWork: 1,
     Rejected: 2
 };
-function addThumbListener() {
+function addThumbListener(btn) {
     
-        var button = $(this).attr("id");
+    var button = $(btn).attr("id");
         
         if (button === "thumbs-up") {
             updateThumbs(thumbEnum.Approved, button);
@@ -24,7 +24,7 @@ function updateThumbs(chosenState, button) {
     
     var text = "#" + button + " .rating";
     var image = {
-        "ImageID": $("#ImageId").val(),
+        "ScreenId": $("#ScreenId").val(),
         "state": chosenState
     };
     
@@ -41,20 +41,24 @@ function updateThumbs(chosenState, button) {
                 $("#thumbs-down > span").load(window.location.href + " " + "#thumbs-down > span");
                 $(".reviewer-row").load(window.location.href + " .reviewer-row >*");
                 disableThumb(true, chosenState);
+            },
+            error : function (x, err) {
+                alert(err)
             }
         });
 }
 //On page load, it gets the last review of the user from the database, on thumb click,it uses front-end information to update the thumbs
 $(document).ready(function () {
     disableThumb(false);
-    $(".thumb").click(addThumbListener);
+    $(document).on("click", ".thumb", function () { addThumbListener($(this)) });
 })
+
 function disableThumb(ifClick, chosenState) {
     if (ifClick) {
         changeState(chosenState);
     }
     else{
-    var id = $("#ImageId").val();
+    var id = $("#ScreenId").val();
     $.ajax(
         {
             type: "GET", //HTTP GET Method  
@@ -73,21 +77,24 @@ function disableThumb(ifClick, chosenState) {
 function changeState(state) {
     $("#thumb-container button.btn").removeClass("disabled");
     $(".thumb").off();
-    $(".thumb").click(addThumbListener);
-    if (state === 0) {
-        $("#thumbs-up").addClass("disabled");
-        $("#thumbs-up").off();
-    }
-    else if (state === 1) {
-        $("#thumbs-middle").addClass("disabled");
-        $("#thumbs-middle").off();
-    }
-    if (state === 2) {
-        $("#thumbs-down").addClass("disabled");
-        $("#thumbs-down").off();
-    }
+
+    $(document).on("click", ".thumb", function (addThumbListener) {
+        if (state === 0) {
+            $("#thumbs-up").addClass("disabled");
+            $("#thumbs-up").off();
+        }
+        else if (state === 1) {
+            $("#thumbs-middle").addClass("disabled");
+            $("#thumbs-middle").off();
+        }
+        if (state === 2) {
+            $("#thumbs-down").addClass("disabled");
+            $("#thumbs-down").off();
+        }
         updateIcon();
-}
+    })
+        }
+
 
 function updateIcon() {
     $("#thumb-container button.btn i").each(function () {

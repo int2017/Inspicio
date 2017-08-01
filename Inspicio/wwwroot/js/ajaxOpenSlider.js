@@ -6,10 +6,11 @@ $(function () {
     });
 });
 $(function () {
-    $('#toggle').change(function () {
+
+    $(document).on("change", "#toggle", function () {
         var DataFromToggle = {
 
-            "ImageId": $("#ImageId").val(),
+            "ReviewId": $("#ReviewId").val(),
             "Open": $("#toggle").prop('checked')
         };
 

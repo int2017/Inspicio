@@ -17,6 +17,19 @@ namespace Inspicio.Migrations
                 .HasAnnotation("ProductVersion", "1.1.2")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("Inspicio.Models.Access", b =>
+                {
+                    b.Property<string>("UserId");
+
+                    b.Property<int>("ReviewId");
+
+                    b.HasKey("UserId", "ReviewId");
+
+                    b.HasAlternateKey("ReviewId", "UserId");
+
+                    b.ToTable("Access");
+                });
+
             modelBuilder.Entity("Inspicio.Models.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
@@ -81,8 +94,6 @@ namespace Inspicio.Migrations
 
                     b.Property<int>("CommentUrgency");
 
-                    b.Property<int>("ImageId");
-
                     b.Property<float>("Lat");
 
                     b.Property<float>("Lng");
@@ -93,56 +104,90 @@ namespace Inspicio.Migrations
 
                     b.Property<string>("ParentId");
 
+                    b.Property<int>("ScreenId");
+
                     b.Property<DateTime>("Timestamp");
 
                     b.HasKey("CommentId");
 
-                    b.HasIndex("ImageId");
-
                     b.HasIndex("OwnerId");
+
+                    b.HasIndex("ScreenId");
 
                     b.ToTable("Comments");
                 });
 
-            modelBuilder.Entity("Inspicio.Models.Image", b =>
+            modelBuilder.Entity("Inspicio.Models.Review", b =>
                 {
-                    b.Property<int>("ImageID")
+                    b.Property<int>("ReviewId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("CreatorId");
+
+                    b.Property<string>("Description");
+
+                    b.Property<int>("ReviewState");
+
+                    b.Property<int>("ReviewStatus");
+
+                    b.Property<string>("Thumbnail");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(150);
+
+                    b.HasKey("ReviewId");
+
+                    b.HasIndex("CreatorId");
+
+                    b.ToTable("Review");
+                });
+
+            modelBuilder.Entity("Inspicio.Models.Screen", b =>
+                {
+                    b.Property<int>("ScreenId")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("Content");
 
                     b.Property<string>("Description");
 
+                    b.Property<int>("NextScreenId");
+
+                    b.Property<int>("NextVersionId");
+
                     b.Property<string>("OwnerId");
 
-                    b.Property<int>("ReviewStatus");
+                    b.Property<int>("ReviewId");
+
+                    b.Property<int>("ScreenStatus");
 
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(150);
 
-                    b.HasKey("ImageID");
+                    b.HasKey("ScreenId");
 
                     b.HasIndex("OwnerId");
 
-                    b.ToTable("Images");
+                    b.HasIndex("ReviewId");
+
+                    b.ToTable("Screens");
                 });
 
-            modelBuilder.Entity("Inspicio.Models.Review", b =>
+            modelBuilder.Entity("Inspicio.Models.ScreenStatus", b =>
                 {
-                    b.Property<string>("OwnerId");
+                    b.Property<string>("UserId");
 
-                    b.Property<int>("ImageId");
+                    b.Property<int>("ScreenId");
 
-                    b.Property<bool>("NeedsWork");
+                    b.Property<int>("Status");
 
-                    b.Property<int>("State");
+                    b.HasKey("UserId", "ScreenId");
 
-                    b.HasKey("OwnerId", "ImageId");
+                    b.HasAlternateKey("ScreenId", "UserId");
 
-                    b.HasAlternateKey("ImageId", "OwnerId");
-
-                    b.ToTable("Review");
+                    b.ToTable("ScreenStatus");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRole", b =>
@@ -252,35 +297,60 @@ namespace Inspicio.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("Inspicio.Models.Comment", b =>
+            modelBuilder.Entity("Inspicio.Models.Access", b =>
                 {
-                    b.HasOne("Inspicio.Models.Image", "Images")
-                        .WithMany("Comments")
-                        .HasForeignKey("ImageId")
+                    b.HasOne("Inspicio.Models.Review", "Reviews")
+                        .WithMany("Access")
+                        .HasForeignKey("ReviewId")
                         .OnDelete(DeleteBehavior.Cascade);
 
+                    b.HasOne("Inspicio.Models.ApplicationUser", "ApplicationUsers")
+                        .WithMany("Access")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Inspicio.Models.Comment", b =>
+                {
                     b.HasOne("Inspicio.Models.ApplicationUser", "ApplicationUser")
                         .WithMany("Comments")
                         .HasForeignKey("OwnerId");
-                });
 
-            modelBuilder.Entity("Inspicio.Models.Image", b =>
-                {
-                    b.HasOne("Inspicio.Models.ApplicationUser", "ApplicationUsers")
-                        .WithMany("Images")
-                        .HasForeignKey("OwnerId");
+                    b.HasOne("Inspicio.Models.Screen", "Screens")
+                        .WithMany("Comments")
+                        .HasForeignKey("ScreenId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Inspicio.Models.Review", b =>
                 {
-                    b.HasOne("Inspicio.Models.Image", "Images")
-                        .WithMany("Reviews")
-                        .HasForeignKey("ImageId")
+                    b.HasOne("Inspicio.Models.ApplicationUser", "ApplicationUsers")
+                        .WithMany()
+                        .HasForeignKey("CreatorId");
+                });
+
+            modelBuilder.Entity("Inspicio.Models.Screen", b =>
+                {
+                    b.HasOne("Inspicio.Models.ApplicationUser", "ApplicationUsers")
+                        .WithMany("Screens")
+                        .HasForeignKey("OwnerId");
+
+                    b.HasOne("Inspicio.Models.Review", "Review")
+                        .WithMany()
+                        .HasForeignKey("ReviewId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Inspicio.Models.ScreenStatus", b =>
+                {
+                    b.HasOne("Inspicio.Models.Screen", "Screen")
+                        .WithMany()
+                        .HasForeignKey("ScreenId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Inspicio.Models.ApplicationUser", "ApplicationUsers")
-                        .WithMany("Reviews")
-                        .HasForeignKey("OwnerId")
+                        .WithMany()
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
