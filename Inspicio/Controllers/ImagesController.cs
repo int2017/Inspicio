@@ -203,7 +203,7 @@ namespace Inspicio.Controllers
             ViewModel.ScreenIds = _context.Screens.Where( s => s.ReviewId == Id ).Select(s => s.ScreenId).ToList();
 
             ViewModel.screenData.UserVotes = _context.ScreenStatus.Where(s => s.ScreenId == ViewModel.screenData.Screen.ScreenId).ToList();
-
+            
             return View(ViewModel);
         }
 
@@ -246,6 +246,7 @@ namespace Inspicio.Controllers
 
             ViewModel.ScreenIds = _context.Screens.Where(s => s.ReviewId == RId).Select(s => s.ScreenId).ToList();
             ViewModel.screenData.UserVotes = _context.ScreenStatus.Where(s => s.ScreenId == ViewModel.screenData.Screen.ScreenId).ToList();
+            ViewModel.ScreenId = SId;
             return PartialView(ViewModel);
         }
 

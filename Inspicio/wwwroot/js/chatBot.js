@@ -4,6 +4,6 @@
     var loc = new L.latLng(width * Math.random(), height * Math.random());
     setTimeout(function () {
         createMarker(loc);
-    })
+    },3000)
 
 }

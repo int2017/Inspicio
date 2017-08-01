@@ -97,7 +97,7 @@
         var popup = new L.Popup();
         //Removes marker if popup is empty
         marker.on('popupclose', function (e) {
-            if (($("#popup" + uniqID).html().indexOf("popup-comment")) === -1) {
+            if (($("#popup" + uniqID).html() != undefined && $("#popup" + uniqID).html().indexOf("popup-comment")) === -1) {
                 imageMap.removeLayer(marker);
             }
         });
@@ -250,7 +250,6 @@
 
             }
         }).on("click", ".open-pin", function () {
-
             var clickedComment = $(this);
             if (clickedComment.context.text === "Close pin") {
 
@@ -284,13 +283,7 @@
 
         });
 
-        $(document).on("keypress", ".popup-textarea", function (e) {
-            if (e.which === 13) {
-                $('.leaflet-popup-content button').click();
-                // prevent duplicate submission
-                return false;
-            }
-        });
+        
     })
 
 

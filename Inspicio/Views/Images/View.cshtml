@@ -32,7 +32,7 @@
             <div class="cover-container">
                 @foreach (var id in Model.ScreenIds)
             {
-                    <div class="cover-item" id="@id" onclick="screenSelector(@Model.Review.ReviewId, @id)"></div>
+                    <div class="cover-item" id="@id"  onclick="screenSelector(@Model.Review.ReviewId, @id)"></div>
                     <script>
                         screenContent( @id);
                     </script>

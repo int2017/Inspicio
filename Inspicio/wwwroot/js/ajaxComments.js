@@ -35,6 +35,7 @@ function commentClick(uniqID, chosenState) {
             data: JSON.stringify(DataFromBody),
 
             success: function () {
+                screenSelector($("#ReviewId").val(), $("#ScreenId").val())
                 $(".leaflet-popup-content").fadeOut();
                 markerX = markersArray[markersArray.findIndex(x => parseInt(x.myData.id) === parseInt(uniqID))];
                 markerX.closePopup();
@@ -148,8 +149,8 @@ function commentClick(uniqID, chosenState) {
                 success: function () {
 
                     $(element).fadeOut();
-
-                    $("#comment-section #replies-" + parent + " .comment-container").load(window.location.href + " #comment-section #replies-" + parent + " .comment-container>*");
+                    screenSelector($("#ReviewId").val(), $("#ScreenId").val())
+                    
                     if (loc !== null) {
                         if ($(area).hasClass("popup-textarea")) {
                             var uniqID = $(area).attr("id").slice(9);
@@ -189,7 +190,7 @@ function commentClick(uniqID, chosenState) {
 
                         var parent;
                         if (this.comment.parentId === undefined) {
-                            parent = this.commentId;
+                            parent = this.comment.commentId;
                         }
 
                         else {

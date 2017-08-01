@@ -467,7 +467,7 @@ body .dropzone .dz-preview .dz-image {
 
 #submit-comment {
     position: absolute;
-    right: 3px;
+    right: 0;
     top: 0;
     height: 100%;
     display: flex;
