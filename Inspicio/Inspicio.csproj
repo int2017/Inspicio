@@ -69,6 +69,7 @@
     <Content Include="wwwroot\js\Search.js" />
     <Content Include="wwwroot\js\sort-comments.js" />
     <Content Include="wwwroot\js\SortTable.js" />
+    <Content Include="wwwroot\js\widgetControl.js" />
     <Content Include="wwwroot\lib\bootstrap\dist\css\ostrich.jpg" />
     <Content Include="wwwroot\scss\Newcastle.jpg" />
   </ItemGroup>

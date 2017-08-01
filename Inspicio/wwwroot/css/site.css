@@ -66,7 +66,7 @@ div.colorpicker {
     height: 180px;
     width: 100%;
     white-space: nowrap;
-    overflow-x: scroll;
+    overflow-x: auto;
     overflow-y: hidden;
 }
 
@@ -430,12 +430,15 @@ body .dropzone .dz-preview .dz-image {
     max-width: 100%;
     margin: 10px auto;
     padding: 20px;
-    height: 100%;
     width: 100%;
+    height:100%;
 }
 
     #comment-section .row-eq-height {
         margin: 0px;
+    }
+    .container.project-container{
+        display:none;
     }
 
 .comment {
@@ -485,7 +488,7 @@ body .dropzone .dz-preview .dz-image {
     padding: 15px 0;
 }
 
-    #thumb-container i {
+    #thumb-container i,#view-project-info i {
         font-size: 24px;
         color: white;
         transition: all 0.3s;
@@ -635,14 +638,14 @@ input:focus {
     position: fixed;
     width: 28%;
     left: 0;
-    top: 71px;
+    top: 139px;
     background-color: rgb(195, 195, 195);
     bottom: 0;
     overflow-y: auto;
     overflow-x: hidden;
     transition: all 0.3s linear;
-    -moz-transition: all 0.3s linear;
-    -webkit-transition: all 0.3s linear;
+    -moz-transition: width 0.3s linear;
+    -webkit-transition: width 0.3s linear;
     z-index: 700;
 }
 
@@ -651,6 +654,7 @@ input:focus {
     width: 72%;
     right: 0;
     padding: 40px;
+    padding-top:71px;
     margin: auto;
 }
 
@@ -678,7 +682,7 @@ input:focus {
 .sidebar-menu {
     width: 100%;
     height: 50px;
-    background-color: rgb(62, 62, 62);
+    background-color: rgb(103, 103, 103);
     color: #fff;
     display: flex;
     justify-content: flex-end;
@@ -719,13 +723,13 @@ select#comment-date {
 .side-hide {
     overflow-y: hidden;
     width: 50px;
-    transition: all 0.3s linear;
-    -moz-transition: all 0.3s linear;
-    -webkit-transition: all 0.3s linear;
+    transition: width 0.3s linear;
+    -moz-transition: width 0.3s linear;
+    -webkit-transition: width 0.3s linear;
 }
 
 .view-container.wide {
-    padding: 40px 20px 40px 75px;
+    padding: 71px 20px 40px 75px;
     width: 100%;
     transition: all 0.3s linear;
     -moz-transition: all 0.3s linear;
@@ -815,13 +819,24 @@ select#comment-date {
 .reviewer-row.row {
     display: none;
 }
-
+#view-project-info {
+    position: absolute;
+    width: 100%;
+    left: 0;
+    z-index: 4000;
+    background-color: #3e3e3e;
+    color: white;
+    padding: 0 20px;
+}
+.show-project{
+    cursor:pointer;
+}
 .show-reviewers {
     display: inline-block;
     cursor: pointer;
 }
 
-    .show-reviewers h4 {
+    .show-reviewers h4,.show-project h4 {
         color: rgba(255, 255, 255, 0.43);
     }
 

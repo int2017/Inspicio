@@ -29,8 +29,11 @@ function screenSelector( reviewid, id) {
             },
             success: function (response) {
                 imageMap.remove();
+                $(".colorpicker").remove();
                 $("#screen-container").html(response);
                 reloadMarkers();
+                $(".view-container").removeClass("wide");
+                
             }
         });
 }

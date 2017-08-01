@@ -31,7 +31,7 @@ function updateThumbs(chosenState, button) {
     $.ajax(
         {
             type: "POST", //HTTP POST Method  
-            url: "../ChangeRating", // Controller/View  
+            url: "Images/ChangeRating", // Controller/View  
             contentType: "application/json;",
             dataType: "text",
             data: JSON.stringify(image),

@@ -27,9 +27,11 @@
 
 
 <div class="img-wrapper">
-    <button type="button" class="btn lightbox-button " id="hide-pop" onclick="popupState()"><i class="glyphicon glyphicon-map-marker"></i></button>
-    <button class="lightbox-button btn" href="@Url.Content(Model.screenData.Screen.Content)" data-lity data-lity-desc="@Model.screenData.Screen.Title"><i class="fa fa-expand" aria-hidden="true"></i></button>
-    <button class="lightbox-button btn" id="color-picker"><i class="fa fa-paint-brush" aria-hidden="true"></i></button>
+    <div id="img-btn-container">
+        <button type="button" class="btn lightbox-button " id="hide-pop" onclick="popupState()"><i class="glyphicon glyphicon-map-marker"></i></button>
+        <button class="lightbox-button btn" href="@Url.Content(Model.screenData.Screen.Content)" data-lity data-lity-desc="@Model.screenData.Screen.Title"><i class="fa fa-expand" aria-hidden="true"></i></button>
+        <button class="lightbox-button btn" id="color-picker"><i class="fa fa-paint-brush" aria-hidden="true"></i></button>
+    </div>
     <div id="image-container">
         <div id="background-selector"></div>
         <div id="imageMap"></div>
@@ -84,7 +86,7 @@
 </div>
 
 
-<div class="flex-sidebar" st>
+<div class="flex-sidebar">
     <div class="sidebar-menu">
         <select id="comment-date" class="form-control">
             <option value="all">All</option>
@@ -172,7 +174,10 @@
                                             <div class="row">
                                                 <div class='row-eq-height comment-user'>
                                                     <div class='col-md-6'>
-                                                        <h5 class='username'> @x.OwnerId</h5>
+                                                        @{
+                                                            var ReplyUserName = (await UserManager.FindByIdAsync(x.OwnerId)).ProfileName;
+                                                        }
+                                                        <h5 class='username'> @ReplyUserName</h5>
                                                     </div>
                                                     <div class="col-md-6">
                                                         @if (((DateTime.Now.Date - x.Timestamp.Date).TotalDays) <= 0)
@@ -244,5 +249,5 @@
     <a asp-action="Index">Back to List</a>
 <script type="text/javascript" src="~/js/pinComments.js"></script>
 
-
+<script type="text/javascript" src="~/js/background-selector.js"></script>
 <script type="text/javascript" src="~/js/ajaxOpenSlider.js"></script>
