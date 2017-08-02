@@ -171,7 +171,7 @@
             }
             
         })
-        alert(location.pathname)
+        
         var CreatePageModel = {
             Screens: listOfImages,
             Reviewers: listOfUsers,
