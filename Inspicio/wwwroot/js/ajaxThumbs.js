@@ -78,7 +78,7 @@ function changeState(state) {
     $("#thumb-container button.btn").removeClass("disabled");
     $(".thumb").off();
 
-    $(document).on("click", ".thumb", function (addThumbListener) {
+    
         if (state === 0) {
             $("#thumbs-up").addClass("disabled");
             $("#thumbs-up").off();
@@ -92,7 +92,7 @@ function changeState(state) {
             $("#thumbs-down").off();
         }
         updateIcon();
-    })
+    
         }
 
 
