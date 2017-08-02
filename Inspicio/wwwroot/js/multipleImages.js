@@ -188,8 +188,8 @@
                 type: "POST", //HTTP POST Method  
                 url: "/Images/Create", // Controller  
                 data: data,
-                success: function () {
-                    
+                success: function (url) {
+                    window.location.href = url;
                 }
             });
     })
