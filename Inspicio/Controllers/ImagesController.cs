@@ -157,7 +157,6 @@ namespace Inspicio.Controllers
                 await _context.SaveChangesAsync();
                 return Json(Url.Action("Index", "Images"));
             }
-
             return View(CreatePageModel.Screens);
         }
 
@@ -213,9 +212,14 @@ namespace Inspicio.Controllers
 
             return Json(screen);
         }
-
-        // GET: Images/View/?/screen
-        public async Task<IActionResult> _ScreenPartial(int RId,int SId)
+        public PartialViewResult _CreatePartial()
+        {
+            var CreatePageModel = new CreatePageModel();
+            CreatePageModel.Reviewers = _context.Users.Where(u => u.Id != _userManager.GetUserId(HttpContext.User)).ToList();
+            return PartialView("_CreatePartial", CreatePageModel);
+        }
+            // GET: Images/View/?/screen
+            public async Task<IActionResult> _ScreenPartial(int RId,int SId)
         {
             var ViewModel = new ViewModel();
 

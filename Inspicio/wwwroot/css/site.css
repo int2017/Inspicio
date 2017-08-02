@@ -393,7 +393,8 @@ body .dropzone .dz-preview .dz-image {
 .reviewers-panel{
     margin-top:80px;
 }
-.add-reviewers-overlay {
+
+.overlay {
     margin: auto;
     display: none;
     position: fixed;
@@ -567,7 +568,6 @@ nav.navbar.navbar-inverse.navbar-fixed-top {
 
 #image-description {
     margin: 20px 0;
-    border-right: 1px solid #d4d4d4;
 }
 
     #image-description p {

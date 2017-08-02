@@ -41,7 +41,6 @@ the server when create new is pressed.
         init: function () {
 
             this.on("addedfile", function (file) {
-                
                 $("#uploader").css("width", "auto");
                 $("#add-img").addClass("ready");
                 encodeBase64(myDropzone.files[0],"uploader");
