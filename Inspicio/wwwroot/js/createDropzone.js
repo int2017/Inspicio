@@ -10,10 +10,10 @@ the server when create new is pressed.
         if (file) {
             var FR = new FileReader();
             FR.addEventListener("load", function (e) {
-                var images = $(".dropzone#"+area+" > .dz-preview >.dz-image > img");
+                var images = $(".dropzone#"+area+" img");
                 var l = images.length;
                 for (var i = 0; i < l; i++) {
-                    images[0].parentNode.removeChild(images[0]);
+                    $(images[i]).remove();
                 }
                 document.getElementById("b64"+area).value = e.target.result;
                 var image = document.createElement("img");
@@ -22,6 +22,9 @@ the server when create new is pressed.
                 $(image).appendTo(".dropzone#" + area+" > .dz-preview >.dz-image");
                 
                 $(image).click(function () {
+                    
+                    myDropzone.removeAllFiles();
+                    $(area).html("");
                     $(".dropzone#" + area).click();
                 })
             });
@@ -38,6 +41,7 @@ the server when create new is pressed.
         init: function () {
 
             this.on("addedfile", function (file) {
+                
                 $("#uploader").css("width", "auto");
                 $("#add-img").addClass("ready");
                 encodeBase64(myDropzone.files[0],"uploader");
@@ -52,6 +56,7 @@ the server when create new is pressed.
         autoProcessQueue: false,
         init: function () {
             this.on("addedfile", function (file) {
+                $("#thumbUploader img").remove();
                 $("#uploaderThumb").css("width", "auto");
                 encodeBase64(thumbDropzone.files[0],"uploaderThumb");
             });
@@ -61,11 +66,13 @@ the server when create new is pressed.
         url: "doNothing"
     })
     thumbDropzone.on("maxfilesexceeded", function (file) {
-    this.removeAllFiles();
+        $("#thumbUploader img").remove();
+        thumbDropzone.removeAllFiles();
     this.addFile(file);
     });
     myDropzone.on("maxfilesexceeded", function (file) {
-        this.removeAllFiles();
+        $("#uploader img").remove();
+        myDropzone.removeAllFiles();
         this.addFile(file);
     });
 

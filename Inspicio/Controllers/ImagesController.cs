@@ -155,7 +155,7 @@ namespace Inspicio.Controllers
                 }
 
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Index");
+                return Json(Url.Action("Index", "Images"));
             }
 
             return View(CreatePageModel.Screens);

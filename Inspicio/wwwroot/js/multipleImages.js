@@ -9,13 +9,13 @@
         var title = $("#Image_Title").val();
         var description = $("#Image_Description_UserInput").val();
         var content = $("#b64uploader").val();
-        if (title.length !== 0 &&  content.length !== 0) {
+        if (title.length !== 0 && content.length !== 0) {
+
             $("#uploader").css("width", "100%");
             $(this).removeClass("ready");
             var contentCol = listOfImages.map(v => v.Content);
             if ($.inArray(content, contentCol) > -1) {
              alert("This image is already added");
-             myDropzone.removeAllFiles();
              $("#uploader").html("").append(dropzoneMainText);
              $(dropzoneMainText).show();
             }
@@ -75,6 +75,7 @@
         $(containerReview).appendTo("#review-thumbnail-container");
         $(mainInnerContainer).click(function () {
             if (!$(event.target).closest('.delete-screen').length) {
+                $("#uploader img").remove();
                 $("#add-img").removeClass("ready");
                 $("#edit-img").slideUp();
                 $("#uploader").html("");
@@ -128,10 +129,8 @@
                 $("#add-img").removeClass("ready");
             }
             else {
-                if ($("#Image_Title").val().length === 0) {
+                if ($("#Image_Title").val()=="") {
                     $("#Image_Title").val("Screen " + listOfImages.length + 1);
-                    
-
                 }
                 $("#add-img").click();
             }
@@ -172,6 +171,7 @@
             }
             
         })
+        
         var CreatePageModel = {
             Screens: listOfImages,
             Reviewers: listOfUsers,
@@ -186,10 +186,10 @@
         $.ajax(
             {
                 type: "POST", //HTTP POST Method  
-                url: "/Images/Create", // Controller  
+                url: location.pathname, // Controller  
                 data: data,
-                success: function () {
-                    
+                success: function (url) {
+                    window.location.href = url;
                 }
             });
     })
@@ -202,6 +202,7 @@
         
     })  
     $("#reset").click(function () {
+        currentImage = -1;
         $("#edit-img").hide();
         myDropzone.removeAllFiles();
         $("#Image_Title").val('');
