@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MailKit.Net.Smtp;
+using MimeKit;
+using MailKit.Security;
 
 namespace Inspicio.Services
 {
@@ -10,10 +13,47 @@ namespace Inspicio.Services
     // For more details see this link https://go.microsoft.com/fwlink/?LinkID=532713
     public class AuthMessageSender : IEmailSender, ISmsSender
     {
-        public Task SendEmailAsync(string email, string subject, string message)
+        public async Task SendEmailAsync(string email, string subject, string message)
         {
-            // Plug in your email service here to send an email.
-            return Task.FromResult(0);
+            try
+            {
+                //From Address    
+                string FromAddress = "nldinterns@gmail.com";
+                string FromAdressTitle = "Interns NLD";
+                //To Address    
+                string ToAddress = email;
+                string ToAdressTitle = "Microsoft ASP.NET Core";
+                string Subject = subject;
+                string BodyContent = message;
+
+                //Smtp Server    
+                string SmtpServer = "smtp.gmail.com";
+                //Smtp Port Number    
+                int SmtpPortNumber = 587;
+
+                var mimeMessage = new MimeMessage();
+            mimeMessage.From.Add(new MailboxAddress(FromAdressTitle,FromAddress));
+            mimeMessage.To.Add(new MailboxAddress(ToAdressTitle,ToAddress));
+            mimeMessage.Subject = Subject; //Subject  
+            mimeMessage.Body = new TextPart("plain")
+            {
+                Text = BodyContent
+            };
+
+            using (var client = new SmtpClient())
+            {
+                client.Connect(SmtpServer, SmtpPortNumber, false);
+                client.Authenticate("nldinterns@gmail.com","@Test123");
+                    await client.SendAsync(mimeMessage);
+                Console.WriteLine("The mail has been sent successfully !!");
+                Console.ReadLine();
+                await client.DisconnectAsync(true);
+            }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public Task SendSmsAsync(string number, string message)
