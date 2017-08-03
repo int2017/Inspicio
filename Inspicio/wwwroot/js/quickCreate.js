@@ -91,10 +91,13 @@
             __RequestVerificationToken: $('[name= "__RequestVerificationToken"]').val(),
             CreatePageModel: CreatePageModel
         }
+        var controllers = ["Images", "Account", "Images", "Manage"];
+        var path = location.pathname.split("/");
+        alert("http://" + location.host + path[1] + "/Images/Create");
         $.ajax(
             {
                 type: "POST", //HTTP POST Method  
-                url: "http://"+location.host+"/Images/Create", // Controller  
+                url: path[1]+"/Images/Create", // Controller  
                 data: data,
                 success: function (url) {
                     //Redirect to index
