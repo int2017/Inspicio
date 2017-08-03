@@ -48,12 +48,14 @@
         }
     })
 
+    //Sending the quick review data to the DB
     $(document).on("click", "#create-quick-review", function () {
         var title = $("#Quick_Image_Title").val();
         var description = $("#Quick_Image_Description_UserInput").val();
         var content = $("#b64quickUploader").val();
         var listOfUsers = [];
         var listOfImages = [];
+        //Getting the reviewers
         $(".quick-create-overlay .reviewer-info input[type='checkbox']").each(function (index) {
             if ($(this).is(":checked")) {
                 var userId = $("#Reviewers_" + index + "__Id").val();
@@ -67,6 +69,7 @@
                 listOfUsers.push(user);
             }
         })
+        //Screen object
         var image = {
             "Title": title,
             "Description": description,
@@ -90,9 +93,27 @@
                 url: "/Images/Create", // Controller  
                 data: data,
                 success: function (url) {
+                    //Redirect to index
                     window.location.href = url;
                 }
             });
     })
 })
 
+//filtering function
+function filterUsers() {
+        // Declare variables
+        filter = input.value.toLowerCase();
+        // Loop through all list items, and hide those who don't match the search query
+        $(".reviewer-info").each(function () {
+            if ($(this).find("label").html().toLowerCase().indexOf(filter) < 0) {
+                $(this).hide();
+            }
+            else $(this).show();
+        })
+}
+
+$("#quick-check-all").change(function () {
+    var checkBoxes = $(".quick-create-overlay .reviewer-info input[type='checkbox']");
+    checkBoxes.prop("checked", !checkBoxes.prop("checked"));
+})

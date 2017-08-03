@@ -18,7 +18,8 @@
                 $(this).removeClass("ready");
                 var contentCol = listOfImages.map(v => v.Content);
                 if ($.inArray(content, contentCol) > -1) {
-                 alert("This image is already added");
+                    alert("This image is already added");
+                    myDropzone.removeAllFiles();
                  $("#uploader").html("").append(dropzoneMainText);
                  $(dropzoneMainText).show();
                 }
@@ -86,7 +87,6 @@
                 $("#Image_Title").html("").val(listOfImages[index].Title);
                 $("#Image_Description_UserInput").val(listOfImages[index].Description);
                 $("#b64uploader").val(listOfImages[index].Content);
-                
                 var myImage = {
                     name: listOfImages[index].Title
                 }
@@ -100,6 +100,7 @@
                 })
                 myDropzone.emit("addedfile", myImage);
                 myDropzone.emit("thumbnail", myImage, listOfImages[index].Content);
+                myDropzone.files.push(myImage);
                 $("#add-img").removeClass("ready");
             }
            
@@ -209,9 +210,13 @@
         currentImage = -1;
         $("#edit-img").hide();
         myDropzone.removeAllFiles();
-        $("#Image_Title").val('');
-        $("#Image_Description_UserInput").val('');
+        $("#Image_Title").val('').off();
+        $("#Image_Description_UserInput").val('').off();
         $("#add-img").removeClass("ready");
         $("#uploader").html(dropzoneMainText).animate({ width: "100%" }, 300)
     })
+})
+$("#check-all").change(function () {
+    var checkBoxes = $(".add-reviewers-overlay .reviewer-info input[type='checkbox']");
+    checkBoxes.prop("checked", !checkBoxes.prop("checked"));
 })

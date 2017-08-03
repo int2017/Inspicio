@@ -40,6 +40,14 @@ the server when create new is pressed.
         autoProcessQueue: false,
         init: function () {
             this.on("addedfile", function (file) {
+                if (this.files[1] != null) {
+                    try {
+                        this.removeFile(this.files[0]);
+                    }
+                    catch (e) {
+
+                    }
+                }
                 $("#uploader").css("width", "auto");
                 $("#add-img").addClass("ready");
                 encodeBase64(myDropzone.files[0],"uploader");
@@ -54,7 +62,14 @@ the server when create new is pressed.
         autoProcessQueue: false,
         init: function () {
             this.on("addedfile", function (file) {
-                $("#thumbUploader img").remove();
+                if (this.files[1] != null) {
+                    try {
+                        this.removeFile(this.files[0]);
+                    }
+                    catch(e){
+                    
+                    }
+                }
                 $("#uploaderThumb").css("width", "auto");
                 encodeBase64(thumbDropzone.files[0],"uploaderThumb");
             });
@@ -66,13 +81,9 @@ the server when create new is pressed.
     thumbDropzone.on("maxfilesexceeded", function (file) {
         $("#thumbUploader img").remove();
         thumbDropzone.removeAllFiles();
-    this.addFile(file);
-    });
-    myDropzone.on("maxfilesexceeded", function (file) {
-        $("#uploader img").remove();
-        myDropzone.removeAllFiles();
         this.addFile(file);
     });
+
 
 
    
