@@ -6,7 +6,7 @@
         $("#comment-date").val(date).change();
     })
 
-    $("#comment-date").change(function () {
+    $(document).on("change", "#comment-date",function () {
         if ($(this).val() == "all") {
             $(".date-header").removeClass("active");
             $(".comment").slideDown(300);

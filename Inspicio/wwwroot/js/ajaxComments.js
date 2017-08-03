@@ -173,12 +173,21 @@ function commentClick(uniqID, chosenState) {
 
     //Get new comments for markers
     function reloadMarkers() {
-        
+        var controllers = ["Images", "Account", "Images", "Manage"];
+        var path = location.pathname.split("/");
+        var method;
+        if ($.inArray(path[1], controllers) > -1) {
+            method = "Images/GetComments";
+
+        }
+        else {
+            method = path[1] + "/Images/GetComments";
+        }
         var id = $("#ScreenId").val();
         $.ajax(
             {
                 type: "GET", //HTTP GET Method  
-                url: "../GetComments", // Controller/View  
+                url: "http://" + location.host + "/" + method, // Controller/View  
                 contentType: "application/json;",
                 dataType: "json",
                 data: {

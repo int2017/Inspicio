@@ -92,10 +92,19 @@ namespace Inspicio
             app.UseStaticFiles();
 
             app.UseIdentity();
+            app.Use((ctx, next) =>
+            {
+                if (!string.IsNullOrWhiteSpace(basePath) && string.IsNullOrEmpty(ctx.Request.PathBase.Value))
+                {
+                    throw new Exception();
+                }
+
+                return next();
+            });
 
             //app.Use((ctx, next) =>
             //{
-                
+
             //    return next();
             //});
 
