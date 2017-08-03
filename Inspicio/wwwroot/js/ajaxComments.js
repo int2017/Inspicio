@@ -187,7 +187,7 @@ function commentClick(uniqID, chosenState) {
         $.ajax(
             {
                 type: "GET", //HTTP GET Method  
-                url: "http://" + location.host + "/" + method, // Controller/View  
+                url: "/" + method, // Controller/View  
                 contentType: "application/json;",
                 dataType: "json",
                 data: {
