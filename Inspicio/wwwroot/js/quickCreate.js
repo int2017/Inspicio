@@ -90,7 +90,7 @@
         $.ajax(
             {
                 type: "POST", //HTTP POST Method  
-                url: "/Images/Create", // Controller  
+                url: location.pathname, // Controller  
                 data: data,
                 success: function (url) {
                     //Redirect to index
@@ -102,7 +102,8 @@
 
 //filtering function
 function filterUsers() {
-        // Declare variables
+    // Declare variables
+        input = document.getElementById("filter_reviewees_id");
         filter = input.value.toLowerCase();
         // Loop through all list items, and hide those who don't match the search query
         $(".reviewer-info").each(function () {
