@@ -44,9 +44,7 @@ namespace Inspicio.Services
             {
                 client.Connect(SmtpServer, SmtpPortNumber, false);
                 client.Authenticate("nldinterns@gmail.com","@Test123");
-                    await client.SendAsync(mimeMessage);
-                Console.WriteLine("The mail has been sent successfully !!");
-                Console.ReadLine();
+                await client.SendAsync(mimeMessage);
                 await client.DisconnectAsync(true);
             }
             }

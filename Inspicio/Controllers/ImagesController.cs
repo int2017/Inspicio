@@ -385,7 +385,20 @@ namespace Inspicio.Controllers
             _context.Add(comment);
 
             await _context.SaveChangesAsync();
+
+            var reviewId = _context.Screens.Where(s => s.ScreenId == comment.ScreenId).Select(r => r.ReviewId).Single();
+            var ReviewerIds = _context.Access.Where(r => r.ReviewId == reviewId).Select(u => u.UserId).ToList();
+
+            foreach (var rid in ReviewerIds)
+            {
+                var user = await _userManager.FindByIdAsync(rid);
+                var email = user.Email;
+                await _emailSender.SendEmailAsync(email, "New comments",
+                    "New comments have been added to the review!");
+            }
+
             return Ok(1);
+      
         }
 
 
