@@ -11,8 +11,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
-
 using Inspicio.Models.ReviewViewModels;
+using Inspicio.Services;
+using MailKit.Net.Smtp;
+using MimeKit;
+using MailKit.Security;
 
 namespace Inspicio.Controllers
 {
@@ -22,14 +25,20 @@ namespace Inspicio.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IHostingEnvironment _environment;
         private readonly ApplicationDbContext _context;
+        private readonly IEmailSender _emailSender;
+        private readonly ISmsSender _smsSender;
 
         public enum Status { Approved, NeedsWork, Rejected };
 
-        public ImagesController(ApplicationDbContext _context, IHostingEnvironment _environment, UserManager<ApplicationUser> _userManager)
+        public ImagesController(ApplicationDbContext _context, IHostingEnvironment _environment, UserManager<ApplicationUser> _userManager, IEmailSender _emailSender, ISmsSender _smsSender  )
+           
         {
             this._environment = _environment;
             this._context = _context;
             this._userManager = _userManager;
+            this._emailSender = _emailSender;
+            this._smsSender = _smsSender;
+
         }
 
         // GET: Images
@@ -142,6 +151,13 @@ namespace Inspicio.Controllers
                         ReviewerEntry.UserId = u.Id;
                         ReviewerEntry.ReviewId = Review.ReviewId;
                         _context.Add(ReviewerEntry);
+
+                        var user = await _userManager.FindByIdAsync(ReviewerEntry.UserId);
+                        var email = user.Email;
+
+                        await _emailSender.SendEmailAsync(email, "You've been added to a new Review",
+                            "You've been added to a new review!");
+
 
                         foreach (var s in CreatePageModel.Screens)
                         {
