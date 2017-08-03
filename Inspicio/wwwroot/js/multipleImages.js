@@ -82,7 +82,7 @@
                 $("#Image_Title").html("").val(listOfImages[index].Title);
                 $("#Image_Description_UserInput").val(listOfImages[index].Description);
                 $("#b64uploader").val(listOfImages[index].Content);
-                var image = $(document.createElement("img")).addClass("img-responsive").attr('src', listOfImages[index].Content);
+                
                 var myImage = {
                     name: listOfImages[index].Title
                 }

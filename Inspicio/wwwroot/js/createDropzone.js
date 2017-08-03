@@ -39,7 +39,6 @@ the server when create new is pressed.
         maxFiles: 1,
         autoProcessQueue: false,
         init: function () {
-
             this.on("addedfile", function (file) {
                 $("#uploader").css("width", "auto");
                 $("#add-img").addClass("ready");

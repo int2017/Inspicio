@@ -1,14 +1,9 @@
 ﻿$(document).ready(function () {
     function encodeBase64(file, area) {
-
         if (file) {
             var FR = new FileReader();
             FR.addEventListener("load", function (e) {
-                var images = $(".dropzone#" + area + " > .dz-preview >.dz-image > img");
-                var l = images.length;
-                for (var i = 0; i < l; i++) {
-                    images[0].parentNode.removeChild(images[0]);
-                }
+                var images = $(".dropzone#" + area + "  img").remove();
                 document.getElementById("b64" + area).value = e.target.result;
                 var image = document.createElement("img");
 
@@ -25,21 +20,33 @@
     }
 
     Dropzone.autoDiscover = false;
-    var myDropzone = new Dropzone("#quickUploader", {
+    var quickDropzone = new Dropzone("#quickUploader", {
 
         maxFiles: 1,
         autoProcessQueue: false,
         init: function () {
 
             this.on("addedfile", function (file) {
+                
                 $("#quickUploader").css("width", "auto");
-                encodeBase64(myDropzone.files[0], "quickUploader");
+                encodeBase64(quickDropzone.files[0], "quickUploader");
             });
         },
 
         // Function to be called on the server
         url: "doNothing"
     });
+    quickDropzone.on("maxfilesexceeded", function (file) {
+        $("#quickUploader img").remove();
+        quickDropzone.removeAllFiles();
+        this.addFile(file);
+    });
+    $(".overlay").click(function (event) {
+        if (event.defaultPrevented) return;
+        if (!($(event.target).closest('.panel').length) && !($(event.target).closest('.dropzone').length)) {
+             $(this).hide().remove();
+        }
+    })
 
     $(document).on("click", "#create-quick-review", function () {
         var title = $("#Quick_Image_Title").val();
@@ -82,8 +89,8 @@
                 type: "POST", //HTTP POST Method  
                 url: "/Images/Create", // Controller  
                 data: data,
-                success: function () {
-                    alert("success")
+                success: function (url) {
+                    window.location.href = url;
                 }
             });
     })

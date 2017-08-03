@@ -53,15 +53,24 @@ $(document).on("click", ".show-project", function () {
     }
 })
 
-$(window).on("scroll", function () {
-    var top = $('#view-project-info').offset().top - $(window).scrollTop()+68
-    if (top <= 71) {
-        $(".flex-sidebar").css("top", 71+ "px");
+
+if ($("#view-project-info").length) {
+    
+    $(window).on("scroll", function () {
+        $(".view-container").css("padding-top", "71px");
+        var top = $('#view-project-info').offset().top - $(window).scrollTop()+68
+        if (top <= 71) {
+            $(".flex-sidebar").css("top", 71+ "px");
         
+        }
+        else {
+            $(".flex-sidebar").css("top",  top + "px");
+        }
+    })
+    $(window).scroll();
     }
-    else {
-        
-        $(".flex-sidebar").css("top",  top + "px");
-    }
-})
+else {
+    $(".flex-sidebar").css("top", 71 + "px");
+}
+
 

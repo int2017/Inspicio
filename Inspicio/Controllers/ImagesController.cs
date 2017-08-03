@@ -112,11 +112,27 @@ namespace Inspicio.Controllers
                 Review.CreatorId = _userManager.GetUserId(HttpContext.User);
                 Review.ReviewState = Review.States.Open;
                 Review.ReviewStatus = Review.Status.Undecided;
-                Review.Title = CreatePageModel.ReviewTitle;
+                if (CreatePageModel.ReviewTitle != null)
+                {
+                    Review.Title = CreatePageModel.ReviewTitle;
+                    Review.ReviewType = Review.Type.Project;
+                }
+                else
+                {
+                    Review.Title = CreatePageModel.Screens[0].Title;
+                    Review.ReviewType = Review.Type.Quick;
+                }
                 Review.Description = CreatePageModel.ReviewDescription;
-                Review.Thumbnail = CreatePageModel.ReviewThumbnail;
+                if (CreatePageModel.ReviewThumbnail != null)
+                {
+                    Review.Thumbnail = CreatePageModel.ReviewThumbnail;
+                }
+                else
+                {
+                    Review.Thumbnail = CreatePageModel.Screens[0].Content;
+                }
+                
                 _context.Add(Review);
-
 
                 foreach( var s in CreatePageModel.Screens )
                 {
