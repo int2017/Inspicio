@@ -21,7 +21,6 @@
 
     Dropzone.autoDiscover = false;
     var quickDropzone = new Dropzone("#quickUploader", {
-
         maxFiles: 1,
         autoProcessQueue: false,
         init: function () {
@@ -47,7 +46,12 @@
              $(this).hide().remove();
         }
     })
-
+    $("#quick-reset").click(function () {
+        quickDropzone.removeAllFiles();
+        $("#Quick_Image_Title").val('').off();
+        $("#Quick_Image_Description_UserInput").val('').off();
+        $("#quickUploader").animate({ width: "100%" }, 300)
+    })
     //Sending the quick review data to the DB
     $(document).on("click", "#create-quick-review", function () {
         var title = $("#Quick_Image_Title").val();
@@ -90,7 +94,7 @@
         $.ajax(
             {
                 type: "POST", //HTTP POST Method  
-                url: location.pathname, // Controller  
+                url: "http://"+location.host+"/Images/Create", // Controller  
                 data: data,
                 success: function (url) {
                     //Redirect to index
@@ -118,3 +122,4 @@ $("#quick-check-all").change(function () {
     var checkBoxes = $(".quick-create-overlay .reviewer-info input[type='checkbox']");
     checkBoxes.prop("checked", !checkBoxes.prop("checked"));
 })
+
