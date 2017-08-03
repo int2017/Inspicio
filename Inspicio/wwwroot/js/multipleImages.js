@@ -10,30 +10,34 @@
         var description = $("#Image_Description_UserInput").val();
         var content = $("#b64uploader").val();
         if (title.length !== 0 && content.length !== 0) {
-
-            $("#uploader").css("width", "100%");
-            $(this).removeClass("ready");
-            var contentCol = listOfImages.map(v => v.Content);
-            if ($.inArray(content, contentCol) > -1) {
-             alert("This image is already added");
-             $("#uploader").html("").append(dropzoneMainText);
-             $(dropzoneMainText).show();
+            if (title.length < 5) {
+                alert("Screen title must have at least 5 characters!")
             }
-             else {
-                 var image = {
-                    "Title": title,
-                    "Description": description,
-                    "Content": content
-             };
-            listOfImages.push(image);
+            else{
+                $("#uploader").css("width", "100%");
+                $(this).removeClass("ready");
+                var contentCol = listOfImages.map(v => v.Content);
+                if ($.inArray(content, contentCol) > -1) {
+                 alert("This image is already added");
+                 $("#uploader").html("").append(dropzoneMainText);
+                 $(dropzoneMainText).show();
+                }
+                 else {
+                     var image = {
+                        "Title": title,
+                        "Description": description,
+                        "Content": content
+                 };
+                listOfImages.push(image);
             
-            $("#Image_Title").val("").html("");
-            $("#Image_Description_UserInput").val("");
-            $("#b64uploader").val("");
-            myDropzone.removeAllFiles();
-            $("#uploader").html("").append(dropzoneMainText);
-            $(dropzoneMainText).show();
-            appendThumbnail(listOfImages.length - 1, content);
+                $("#Image_Title").val("").html("");
+                $("#Image_Description_UserInput").val("");
+                $("#b64uploader").val("");
+                myDropzone.removeAllFiles();
+                $("#uploader").html("").append(dropzoneMainText);
+                $(dropzoneMainText).show();
+                appendThumbnail(listOfImages.length - 1, content);
+            }
         }
         
         }
