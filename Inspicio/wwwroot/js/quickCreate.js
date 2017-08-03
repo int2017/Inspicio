@@ -93,11 +93,17 @@
         }
         var controllers = ["Images", "Account", "Images", "Manage"];
         var path = location.pathname.split("/");
-        alert("http://" + location.host + path[1] + "/Images/Create");
+        var method;
+        if ($.inArray(path[1], controllers)) {
+            method = "/Images/Create";
+        }
+        else {
+            method = path[1] + "/Images/Create";
+        }
         $.ajax(
             {
                 type: "POST", //HTTP POST Method  
-                url: path[1]+"/Images/Create", // Controller  
+                url: method, // Controller  
                 data: data,
                 success: function (url) {
                     //Redirect to index
