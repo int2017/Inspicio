@@ -2,35 +2,7 @@
 
 <script type="text/javascript" src="https://cdn.rawgit.com/showdownjs/showdown/1.7.1/dist/showdown.min.js"></script>
 <script type="text/javascript" src="~/js/markdownConverter.js"></script>
-<style>
-    .btn {
-        min-width: 120px;
-        padding: 6px;
-        font-size: 1.3em;
-    }
-    input[type='text'], textarea.form-control {
-        border-radius: 2px;
-        border: none;
-        border-bottom: 2px solid #9d9d9d;
-        -webkit-transition: all 0.2s linear;
-        -moz-transition: all 0.2s linear;
-        -o-transition: all 0.2s linear;
-        transition: all 0.2s linear;
-    }
-        input[type='text']:focus, textarea.form-control:focus {
-            background-color: rgba(0, 0, 0, 0.1);
-            -webkit-transition: all 0.2s linear;
-            -moz-transition: all 0.2s linear;
-            -o-transition: all 0.2s linear;
-            transition: all 0.2s linear;
-            outline: none;
-            border-color: #437888;
-            box-shadow: none;
-        }
-    .main-edit{
-        display:none;
-    }
-</style>
+<link rel="stylesheet" href="~/css/create.css" />
 <h2 id="review-title-header"> New Review</h2>
 <i class="fa fa-pencil-square-o edit-project fa-2x main-edit" aria-hidden="true"></i>
 
@@ -70,6 +42,7 @@
     </div>
 
     <div class="image-upload-container">
+
         <h3>Add screens</h3>
         <div class="form-group">
             <!-- Review Title -->
@@ -122,7 +95,7 @@
             <button type="button" id="create-reviewer" class="btn btn-success next-button">Next</button>
         </div>
     </div>
-    <div class="row-eq-height add-reviewers-overlay">
+    <div class="row-eq-height add-reviewers-overlay overlay">
    
             <div class=" col-xs-12 col-md-6">
                 <div class="panel panel-default reviewers-panel">
@@ -250,15 +223,3 @@
 
 </script>
 <script type="text/javascript" src="~/js/multipleImages.js"></script>
-<style>
-
-    ul {
-        margin: 0;
-        list-style: none;
-        float: left;
-    }
-
-    #Image_DescriptionHTML{
-        display:none;
-    }
-</style>

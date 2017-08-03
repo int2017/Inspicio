@@ -147,8 +147,6 @@ function enablePins() {
             [0, 0],
             [height, width]
         ];
-
-        
         imageMap.fitBounds(bound);
         activateChatBot();
     }, 3000)
@@ -164,6 +162,7 @@ function enablePins() {
     $(".leaflet-map-pane").attr("id", "map-pane");
 
     function mapOnClick(e) {
+        alert(e.latlng);
         createMarker(e.latlng);
     }
     //Creating individual markers
@@ -242,8 +241,9 @@ function enablePins() {
         setTimeout(function () {
             var width = $("#homeImageMap").width();
             var height = $("#homeImageMap").height();
-            var loc = new L.latLng(width * Math.random(), height * Math.random());
+            var loc = new L.latLng(Math.random(),Math.random());
             var uniqID = createMarker(loc);
+            
             setTimeout(function () {
                 createCommentRowHome(lineGenerator("first"), uniqID, commentEnum.Default);
             },1000)

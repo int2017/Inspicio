@@ -45,8 +45,7 @@
             var user = await UserManager.FindByIdAsync(Model.Review.CreatorId);
             <h4> By :<img style="height:40px;width:40px" src="@user.ProfilePicture" /> @user.ProfileName</h4>
             <h3>Description</h3>
-            <hr />
-            <div id="description-section" style="width:95%;margin-top:-2em;">
+            <div id="description-section" >
                 @Html.Raw(Model.screenData.Screen.Description)
             </div>
             <hr />
@@ -248,9 +247,5 @@
 
     <a asp-action="Index">Back to List</a>
 <script type="text/javascript" src="~/js/pinComments.js"></script>
-
 <script type="text/javascript" src="~/js/background-selector.js"></script>
-<script>
-    $(window).scroll();
-</script>
 <script type="text/javascript" src="~/js/ajaxOpenSlider.js"></script>

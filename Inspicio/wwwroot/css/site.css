@@ -393,7 +393,8 @@ body .dropzone .dz-preview .dz-image {
 .reviewers-panel{
     margin-top:80px;
 }
-.add-reviewers-overlay {
+
+.overlay {
     margin: auto;
     display: none;
     position: fixed;
@@ -567,7 +568,6 @@ nav.navbar.navbar-inverse.navbar-fixed-top {
 
 #image-description {
     margin: 20px 0;
-    border-right: 1px solid #d4d4d4;
 }
 
     #image-description p {
@@ -638,7 +638,7 @@ input:focus {
     position: fixed;
     width: 28%;
     left: 0;
-    top: 139px;
+    top: 71px;
     background-color: rgb(195, 195, 195);
     bottom: 0;
     overflow-y: auto;
@@ -654,7 +654,6 @@ input:focus {
     width: 72%;
     right: 0;
     padding: 40px;
-    padding-top:71px;
     margin: auto;
 }
 
@@ -729,7 +728,7 @@ select#comment-date {
 }
 
 .view-container.wide {
-    padding: 71px 20px 40px 75px;
+    padding-left:75px;
     width: 100%;
     transition: all 0.3s linear;
     -moz-transition: all 0.3s linear;

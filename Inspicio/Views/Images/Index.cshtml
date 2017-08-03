@@ -42,14 +42,16 @@
 @foreach (var item in Model)
 { 
         <tr title="@item.Review.Title" onclick="document.location = 'Images/View/@item.Review.ReviewId'" style="cursor:pointer; border-bottom:solid;border-bottom-width:1px;" >
-                <td id="content">
-                    <img style="max-height: 100px; max-width: 100px; margin-top:15px;" src="" />
+                <td id="content" class="text-left">
+                    <img style="max-height: 60px; max-width: 60px; margin:5px;" src="@item.Review.Thumbnail" />
                 </td>
                 <td id="title">
                     @{
-                        string defaultTitle = item.Review.Title;
-                        string title = (defaultTitle.Length <= 100) ? defaultTitle : defaultTitle.Substring(0, 100) + "...";
-                        @Html.DisplayFor(modelItem => title)
+                        if(item.Review.Title!= null) {
+                         string defaultTitle = item.Review.Title;
+                         string title = (defaultTitle.Length <= 100) ? defaultTitle : defaultTitle.Substring(0, 100) + "...";
+                         @Html.DisplayFor(modelItem => title)
+                        }
                     }
                 </td>
                 <td id="creator">
