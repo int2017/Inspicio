@@ -293,7 +293,8 @@ namespace Inspicio.Controllers
             foreach (Comment SingleComment in AllComments)
             {
                 var CommentsViewModel = new CommentsViewModel();
-                CommentsViewModel.PosterProfileName = SingleComment.ApplicationUser.ProfileName;
+                var userName = _context.Users.Where(i => i.Id == SingleComment.OwnerId).SingleOrDefault();
+                CommentsViewModel.PosterProfileName = userName.ProfileName;
                 CommentsViewModel.CommentId = SingleComment.CommentId;
                 CommentsViewModel.CommentUrgency = (CommentsViewModel.Urgency)SingleComment.CommentUrgency;
                 CommentsViewModel.ScreenId = SingleComment.ScreenId;

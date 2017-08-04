@@ -36,13 +36,7 @@ function commentClick(uniqID, chosenState) {
 
             success: function () {
                 screenSelector($("#ReviewId").val(), $("#ScreenId").val())
-                $(".leaflet-popup-content").fadeOut();
-                markerX = markersArray[markersArray.findIndex(x => parseInt(x.myData.id) === parseInt(uniqID))];
-                markerX.closePopup();
-                $(markersArray).each(function () {
-                    this.getPopup().setContent("");
-                });
-                reloadMarkers();
+                $(".leaflet-popup-content").fadeOut(500);
                 $(".leaflet-popup-content").fadeIn();
                 $("#comment-textarea").val("");
 
