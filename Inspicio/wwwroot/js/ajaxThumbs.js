@@ -43,7 +43,7 @@ function updateThumbs(chosenState, button) {
                 disableThumb(true, chosenState);
             },
             error : function (x, err) {
-                alert(err)
+                alert("You can't rate your own work!")
             }
         });
 }

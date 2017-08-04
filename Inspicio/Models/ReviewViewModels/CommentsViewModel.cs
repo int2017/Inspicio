@@ -1,19 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 
-namespace Inspicio.Models
+namespace Inspicio.Models.ReviewViewModels
 {
-
-    public class Comment
+    public class CommentsViewModel
     {
+        public string PosterProfileName { get; set; }
         public int CommentId { get; set; }
-
-        public string OwnerId { get; set; }
 
         public Urgency CommentUrgency { get; set; }
         public enum Urgency { Default, Urgent }
@@ -29,12 +25,5 @@ namespace Inspicio.Models
         public DateTime Timestamp { get; set; }
 
         public string ParentId { get; set; }
-        public string ChildId { get; set; }
-
-        [ForeignKey("OwnerId")]
-        public ApplicationUser ApplicationUser { get; set; }
-
-        [ForeignKey("ScreenId")]
-        public Screen Screens { get; set; }
     }
 }

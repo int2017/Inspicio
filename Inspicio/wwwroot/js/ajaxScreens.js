@@ -21,8 +21,6 @@ function screenSelector( reviewid, id) {
         {
             type: "GET", //HTTP GET Method
             url: "../_ScreenPartial", // Controller/View
-           
-            
             data: {
                 RId: reviewid,
                 SId: id
