@@ -21,8 +21,6 @@ function screenSelector( reviewid, id) {
         {
             type: "GET", //HTTP GET Method
             url: "../_ScreenPartial", // Controller/View
-           
-            
             data: {
                 RId: reviewid,
                 SId: id
@@ -31,6 +29,7 @@ function screenSelector( reviewid, id) {
                 imageMap.remove();
                 $(".colorpicker").remove();
                 $("#screen-container").html(response);
+                disableThumb(false);
                 reloadMarkers();
                 $(".view-container").removeClass("wide");
                 

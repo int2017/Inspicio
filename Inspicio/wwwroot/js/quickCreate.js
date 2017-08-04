@@ -91,6 +91,7 @@
             __RequestVerificationToken: $('[name= "__RequestVerificationToken"]').val(),
             CreatePageModel: CreatePageModel
         }
+        //b28a41bc-7d12-4868-83e3-aa037d1879d7
         var controllers = ["Images", "Account", "Images", "Manage"];
         var path = location.pathname.split("/");
         var method;

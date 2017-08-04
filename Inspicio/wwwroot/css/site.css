@@ -532,7 +532,7 @@ body .dropzone .dz-preview .dz-image {
 }
 
 nav.navbar.navbar-inverse.navbar-fixed-top {
-    z-index: 5050;
+    z-index: 6050;
     background-color: #000;
 }
 
@@ -821,10 +821,13 @@ select#comment-date {
     position: absolute;
     width: 100%;
     left: 0;
-    z-index: 4000;
+    z-index: 6000;
     background-color: #3e3e3e;
     color: white;
     padding: 0 20px;
+}
+.dropdown-menu{
+    z-index:7002;
 }
 .show-project{
     cursor:pointer;
