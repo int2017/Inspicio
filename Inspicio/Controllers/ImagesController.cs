@@ -289,7 +289,7 @@ namespace Inspicio.Controllers
         public JsonResult GetComments(int? Id)
         {
             List<CommentsViewModel> comments = new List<CommentsViewModel>();
-            var AllComments = _context.Comments.Where(c => c.ScreenId == Id).Include(x => x.ApplicationUser).ThenInclude(y => y.Comments);
+            var AllComments = _context.Comments.Where(c => c.ScreenId == Id);
             foreach (Comment SingleComment in AllComments)
             {
                 var CommentsViewModel = new CommentsViewModel();
@@ -304,9 +304,6 @@ namespace Inspicio.Controllers
                 CommentsViewModel.ParentId = SingleComment.ParentId;
                 comments.Add(CommentsViewModel);
             }
-
-            var jsonText = Newtonsoft.Json.JsonConvert.SerializeObject(comments);
-
             return Json(comments);
         }
         // POST: Images/View/5
