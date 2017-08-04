@@ -289,7 +289,7 @@ namespace Inspicio.Controllers
         public JsonResult GetComments(int? Id)
         {
             List<CommentsViewModel> comments = new List<CommentsViewModel>();
-            var AllComments = _context.Comments.Where(c => c.ScreenId == Id);
+            var AllComments = _context.Comments.Where(c => c.ScreenId == Id).ToList(); 
             foreach (Comment SingleComment in AllComments)
             {
                 var CommentsViewModel = new CommentsViewModel();
