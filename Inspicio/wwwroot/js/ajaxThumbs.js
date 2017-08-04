@@ -36,10 +36,13 @@ function updateThumbs(chosenState, button) {
             dataType: "text",
             data: JSON.stringify(image),
             success: function () {
-                $("#thumbs-up > span").load(window.location.href + " " + "#thumbs-up > span");
-                $("#thumbs-middle > span").load(window.location.href + " " + "#thumbs-middle > span");
-                $("#thumbs-down > span").load(window.location.href + " " + "#thumbs-down > span");
-                $(".reviewer-row").load(window.location.href + " .reviewer-row >*");
+                setTimeout(function () {
+                    $("#thumbs-up > span").load(window.location.href + " " + "#thumbs-up > span");
+                    $("#thumbs-middle > span").load(window.location.href + " " + "#thumbs-middle > span");
+                    $("#thumbs-down > span").load(window.location.href + " " + "#thumbs-down > span");
+                    $(".reviewer-row").load(window.location.href + " .reviewer-row >*");
+                },1000)
+                
                 disableThumb(true, chosenState);
             },
             error : function (x, err) {

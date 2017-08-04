@@ -29,6 +29,7 @@ function screenSelector( reviewid, id) {
                 imageMap.remove();
                 $(".colorpicker").remove();
                 $("#screen-container").html(response);
+                disableThumb(false);
                 reloadMarkers();
                 $(".view-container").removeClass("wide");
                 
