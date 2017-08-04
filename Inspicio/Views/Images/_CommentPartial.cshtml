@@ -1,0 +1,40 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@inject UserManager<ApplicationUser> UserManager
+@model Inspicio.Models.Comment
+
+<div class="row ">
+    <div class="comment-user row-eq-height">
+        <div class="col-md-4">
+            @{
+                // var UserName = (await UserManager.FindByIdAsync(@Model.ApplicationUser.ProfileName)).ProfileName;
+                var UserName = "Name";
+            }
+            <h5 class="username">@UserName</h5>
+        </div>
+        <div class="col-md-4">
+            <p>@Model.Timestamp.ToString("h:mm tt")</p>
+        </div>
+        <div class="col-md-4 text-right">
+            @if (Model.Lat != 0 && Model.Lng != 0)
+            {
+                <p><a id="loc-@Model.CommentId" class="open-pin" data-location="@Model.Lat  @Model.Lng">Open pin</a></p>
+            }
+            <p><a class="reply" data-target="@Model.CommentId">Reply</a></p>
+        </div>
+    </div>
+    <div class="row-eq-height comment-msg">
+        <div class="col-xs-12 col-sm-12 col-md-12">
+            <p>@Model.Message</p>
+            @if (Model.CommentUrgency == Comment.Urgency.Urgent)
+            {
+                <div class='urgent text-right'>
+                    <span title="Urgent!" class="glyphicon glyphicon-star" aria-hidden="true"></span>
+                </div>
+            }
+        </div>
+    </div>
+</div>

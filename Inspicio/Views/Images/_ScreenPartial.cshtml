@@ -132,7 +132,7 @@
                     }
 
                     <div class="comment @dateClass.Replace(" ","-").ToLower()">
-                        <div class="row ">
+                        @*<div class="row ">
                             <div class="comment-user row-eq-height">
                                 <div class="col-md-4">
                                     @{
@@ -162,7 +162,8 @@
                                     }
                                 </div>
                             </div>
-                        </div>
+                        </div>*@
+                        @Html.Partial("_CommentPartial", c)
                         <div class="replied-section" id="replies-@c.CommentId">
                             <div class="comment-container">
                                 @foreach (var x in Model.screenData.Comments)
@@ -170,7 +171,8 @@
                                     if (x.ParentId != null && c.CommentId.ToString().Equals(x.ParentId))
                                     {
                                         <div class="comment">
-                                            <div class="row">
+                                            @Html.Partial("_CommentPartial", x)
+                                            @*<div class="row">
                                                 <div class='row-eq-height comment-user'>
                                                     <div class='col-md-6'>
                                                         @{
@@ -202,7 +204,7 @@
                                                         <p> @x.Message</p>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div>*@
                                         </div>
                                     }
                                 }
