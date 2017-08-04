@@ -397,9 +397,8 @@ namespace Inspicio.Controllers
             }
             else comment.CommentUrgency = Models.Comment.Urgency.Default;
             _context.Add(comment);
-
             await _context.SaveChangesAsync();
-            return Ok(1);
+            return PartialView("_CommentPartial",comment);
         }
 
 

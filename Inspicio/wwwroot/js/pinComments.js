@@ -156,17 +156,15 @@
         var openingTag = "<div id='popup" + uniqID + "' class='container-fluid popup-comment-container'>";
         var div = $(document.createElement('div'));
         div.addClass("container-fluid popup-comment-container").attr("id", "popup" + uniqID);
-        var inputBox = createInputRow(uniqID, parent);
+        var inputBox = createInputRow(uniqID,parent);
 
-        if (popupContent === undefined) {
-            $(row).appendTo(div);
-
+        if (popupContent !== undefined) {
+            var prevContent = popupContent.slice(openingTag.length, popupContent.length - 3 - inputBox.length);
+            if (prevContent.indexOf("popupinput") < 0) {
+                $(prevContent).appendTo(div);
+            }
         }
-        else {
-            $(popupContent.slice(openingTag.length, popupContent.length - 3 - inputBox.length)).appendTo(div);
-            $(row).appendTo(div);
-
-        }
+        $(row).appendTo(div);
         //A new input section has to be created each time to keep things consistent, otherwise it messes up the HTML
         return openingTag + div.html() + "</div>" + inputBox;
 

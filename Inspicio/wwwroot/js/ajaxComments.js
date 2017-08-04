@@ -34,15 +34,12 @@ function commentClick(uniqID, chosenState) {
             dataType: "text",
             data: JSON.stringify(DataFromBody),
 
-            success: function () {
-                screenSelector($("#ReviewId").val(), $("#ScreenId").val())
+            success: function (data) {
+                var container = document.createElement("div");
+                $(container).addClass("comment today").append(data).appendTo("#comment-section > .comment-container");
                 $(".leaflet-popup-content").fadeOut();
-                markerX = markersArray[markersArray.findIndex(x => parseInt(x.myData.id) === parseInt(uniqID))];
-                markerX.closePopup();
-                $(markersArray).each(function () {
-                    this.getPopup().setContent("");
-                });
-                reloadMarkers();
+                var parent = $(data).find(".reply").data("target");
+                createCommentRow($("span.main-user").html(), $(".popup-textarea").val(), uniqID, parent);
                 $(".leaflet-popup-content").fadeIn();
                 $("#comment-textarea").val("");
 
@@ -77,8 +74,9 @@ function commentClick(uniqID, chosenState) {
                 contentType: "application/json;",
                 dataType: "text",
                 data: JSON.stringify(DataFromBody),
-                success: function () {
-                    screenSelector($("#ReviewId").val(), $("#ScreenId").val());              
+                success: function (data) {
+                    var container = document.createElement("div");
+                    $(container).addClass("comment today").append(data).appendTo("#comment-section > .comment-container");
                     $("#comment-textarea").val("");
                 }
             });
@@ -145,11 +143,8 @@ function commentClick(uniqID, chosenState) {
                 contentType: "application/json;",
                 dataType: "text",
                 data: JSON.stringify(DataFromBody),
-                success: function () {
-
-                    $(element).fadeOut();
-                    screenSelector($("#ReviewId").val(), $("#ScreenId").val())
-                    
+                success: function (data) {
+                    $(element).fadeOut();       
                     if (loc !== null) {
                         if ($(area).hasClass("popup-textarea")) {
                             var uniqID = $(area).attr("id").slice(9);
@@ -160,11 +155,13 @@ function commentClick(uniqID, chosenState) {
                                 $(markersArray).each(function () {
                                     this.getPopup().setContent("");
                                 });
-                                reloadMarkers();
+                                
                             }
 
                         }
                     }
+                    var container = document.createElement("div");
+                    $(container).addClass("comment").append(data).appendTo("#replies-" + parent+" > .comment-container");
                     $(area).val("");
                     $(element).fadeIn();
                 }
