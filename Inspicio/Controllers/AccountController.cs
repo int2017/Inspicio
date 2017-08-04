@@ -462,7 +462,11 @@ namespace Inspicio.Controllers
         {
             return View();
         }
+        [HttpPost]
+        public IActionResult GetOnlineUsers()
+        {
 
+        }
         #region Helpers
 
         private void AddErrors(IdentityResult result)

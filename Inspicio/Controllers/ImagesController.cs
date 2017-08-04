@@ -266,9 +266,6 @@ namespace Inspicio.Controllers
             return PartialView(ViewModel);
         }
 
-
-
-
         public JsonResult GetRating(int? id)
         {
             var userId = _userManager.GetUserId(HttpContext.User);
@@ -282,6 +279,8 @@ namespace Inspicio.Controllers
             }
             return Json("");
         }
+
+        
         public JsonResult GetComments(int? Id)
         {
             List<CommentInfo> comments = new List<CommentInfo>();
@@ -452,5 +451,7 @@ namespace Inspicio.Controllers
             await _context.SaveChangesAsync();
             return Ok(1);
         }
+
+       
     }
 }
