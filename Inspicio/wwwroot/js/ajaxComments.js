@@ -41,9 +41,7 @@ function commentClick(uniqID, chosenState) {
                 var parent = $(data).find(".reply").data("target");
                 createCommentRow($("span.main-user").html(), $(".popup-textarea").val(), uniqID, parent, urgency);
                 $(".leaflet-popup-content").fadeIn(100);
-                $("#comment-textarea").val("");
 
-            }
 
         });
 }

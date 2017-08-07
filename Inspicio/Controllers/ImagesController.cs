@@ -289,11 +289,12 @@ namespace Inspicio.Controllers
         public JsonResult GetComments(int? Id)
         {
             List<CommentsViewModel> comments = new List<CommentsViewModel>();
-            var AllComments = _context.Comments.Where(c => c.ScreenId == Id).Include(x => x.ApplicationUser).ThenInclude(y => y.Comments);
+            var AllComments = _context.Comments.Where(c => c.ScreenId == Id).ToList(); 
             foreach (Comment SingleComment in AllComments)
             {
                 var CommentsViewModel = new CommentsViewModel();
-                CommentsViewModel.PosterProfileName = SingleComment.ApplicationUser.ProfileName;
+                var userName = _context.Users.Where(i => i.Id == SingleComment.OwnerId).SingleOrDefault();
+                CommentsViewModel.PosterProfileName = userName.ProfileName;
                 CommentsViewModel.CommentId = SingleComment.CommentId;
                 CommentsViewModel.CommentUrgency = (CommentsViewModel.Urgency)SingleComment.CommentUrgency;
                 CommentsViewModel.ScreenId = SingleComment.ScreenId;
@@ -304,9 +305,6 @@ namespace Inspicio.Controllers
                 CommentsViewModel.ParentId = SingleComment.ParentId;
                 comments.Add(CommentsViewModel);
             }
-
-            var jsonText = Newtonsoft.Json.JsonConvert.SerializeObject(comments);
-
             return Json(comments);
         }
         // POST: Images/View/5
