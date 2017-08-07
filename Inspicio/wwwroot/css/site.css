@@ -506,11 +506,11 @@ body .dropzone .dz-preview .dz-image {
     z-index: 5000
 }
 
-.leaflet-popup-content {
+.leaflet-rrose-content {
     min-width: 250px;
 }
 
-    .leaflet-popup-content .comment-status {
+    .leaflet-rrose-content .comment-status {
         border: 1px solid #cccccc;
         border-top: none;
         border-radius: 4px;

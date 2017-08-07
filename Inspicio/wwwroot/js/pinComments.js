@@ -95,7 +95,7 @@
         latlng = new L.latLng(Math.round(latlng.lat), Math.round( latlng.lng))
         var uniqID = Math.round(new Date().getTime() + (Math.random() * 100));
         var marker = new L.marker(latlng, { icon: customPin, draggable: true }).addTo(markerGroup);
-        var popup = new L.responsivePopup({ autoPanPadding: [10, 10]  });
+        var popup = new L.Rrose({ offset: new L.Point(-4, -10)}).setLatLng(latlng);
         //Removes marker if popup is empty
         marker.on('popupclose', function (e) {
             if (($("#popup" + uniqID).html() !== undefined && $("#popup" + uniqID).html().indexOf("popup-comment")) === -1) {
@@ -280,27 +280,20 @@
         }).on("click", ".open-pin", function () {
             var clickedComment = $(this);
             if (clickedComment.context.text === "Close pin") {
-
-                $(".leaflet-popup-close-button").click();
+                imageMap.closePopup();
                 $(this).text("Open pin");
             }
             else {
                 $("#map-pane").removeClass("hidden");
                 $(this).text("Close pin");
 
-                var loc = $(this).data("location").split(' ');
+                var loc = $(this).attr("data-location").split(' ');
                 var lat = loc[0];
                 var lng = loc[2];
-                var latCollection = locations.map(function (value, index) { return value[1]; });
-                var lngCollection = locations.map(function (value, index) { return value[2]; });
-
-                if ($.inArray(parseInt(lat), latCollection) !== -1 && $.inArray(parseInt(lng), lngCollection) !== -1) {
-
-                    var latlng = L.latLng(lat, lng);
-                    var idCollection = locations.map(function (value, index) { return value[0]; });
-                    var uniqID = idCollection[$.inArray(parseInt(lat), latCollection)];
-                    markerX = markersArray[markersArray.findIndex(x => parseInt(x.myData.id) === parseInt(uniqID))].openPopup();
-                }
+                var latlng = new L.LatLng(lat, lng);
+                var marker = markersArray[markersArray.findIndex(x => x.getLatLng().equals(latlng))];
+                uniqID = marker.myData.id;
+                marker.openPopup();
             }
 
             $(".open-pin").each(function (index) {
