@@ -935,6 +935,7 @@ body .dropzone .dz-preview.dz-image-preview {
 
     .flex-sidebar {
         width: 60%;
+        z-index: 5000;
     }
 
         .flex-sidebar.side-hide {

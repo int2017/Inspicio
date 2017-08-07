@@ -92,6 +92,7 @@
     //Creating individual markers. Needed because onClick event sends a different object than createMarkers()
     //clickBool determines wether the markers and popups are created by clicking on map or by fetching data from DB
     function createMarker(latlng, clickBool) {
+        latlng = new L.latLng(Math.round(latlng.lat), Math.round( latlng.lng))
         var uniqID = Math.round(new Date().getTime() + (Math.random() * 100));
         var marker = new L.marker(latlng, { icon: customPin }).addTo(markerGroup);
         var popup = new L.Popup();
@@ -251,7 +252,7 @@
             var clickedComment = $(this);
             if (clickedComment.context.text === "Close pin") {
 
-                $(".leaflet-popup-close-button")[0].click();
+                $(".leaflet-popup-close-button").click();
                 $(this).text("Open pin");
             }
             else {

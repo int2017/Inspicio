@@ -8,18 +8,18 @@
 
 <div class="row">
     <div class="comment-user row-eq-height">
-        <div class="col-md-4">
+        <div class="col-md-4 col-sm-4 col-xs-4">
             @{
                 // var UserName = (await UserManager.FindByIdAsync(@Model.ApplicationUser.ProfileName)).ProfileName;
                 var UserName = "Name";
             }
             <h5 class="username">@UserName</h5>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 col-sm-4 col-xs-4">
             <p>@Model.Timestamp.ToString("h:mm tt")</p>
         </div>
-        <div class="col-md-4 text-right">
-            @if (Model.Lat != 0 && Model.Lng != 0)
+        <div class="col-md-4 col-sm-4 col-xs-4 text-right">
+            @if (Model.Lat != 0 && Model.Lng != 0 && Model.ParentId==null)
             {
                 <p><a id="loc-@Model.CommentId" class="open-pin" data-location="@Model.Lat  @Model.Lng">Open pin</a></p>
             }

@@ -135,16 +135,16 @@
                         <div class="comment @dateClass.Replace(" ","-").ToLower()">
                             <div class="row ">
                                 <div class="comment-user row-eq-height">
-                                    <div class="col-md-4">
+                                    <div class="col-md-4 col-sm-4 col-xs-4">
                                         @{
                                             var UserName = (await UserManager.FindByIdAsync(c.OwnerId)).ProfileName;
                                         }
                                         <h5 class="username">@UserName</h5>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-4 col-sm-4 col-xs-4">
                                         <p>@c.Timestamp.ToString("h:mm tt")</p>
                                     </div>
-                                    <div class="col-md-4 text-right">
+                                    <div class="col-md-4 text-right col-sm-4 col-xs-4">
                                         @if (c.Lat != 0 && c.Lng != 0)
                                         {
                                             <p><a id="loc-@c.CommentId" class="open-pin" data-location="@c.Lat  @c.Lng">Open pin</a></p>
@@ -173,13 +173,13 @@
                                             <div class="comment">
                                                 <div class="row">
                                                     <div class='row-eq-height comment-user'>
-                                                        <div class='col-md-6'>
+                                                        <div class='col-md-6  col-sm-6 col-xs-6'>
                                                             @{
                                                                 var ReplyUserName = (await UserManager.FindByIdAsync(x.OwnerId)).ProfileName;
                                                             }
                                                             <h5 class='username'> @ReplyUserName</h5>
                                                         </div>
-                                                        <div class="col-md-6">
+                                                        <div class="col-md-6  col-sm-6 col-xs-6">
                                                             @if (((DateTime.Now.Date - x.Timestamp.Date).TotalDays) <= 0)
                                                             {
                                                                 <p>Today</p>
