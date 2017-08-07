@@ -81,8 +81,8 @@
         }
     }
     //Array of all the popups and markers
-    var markersArray = new Array();
-    var popupsArray = new Array();
+    var markersArray = [];
+    var popupsArray = [];
     var locations = [[]];
 
     //listener for clicks
@@ -94,14 +94,43 @@
     function createMarker(latlng, clickBool) {
         latlng = new L.latLng(Math.round(latlng.lat), Math.round( latlng.lng))
         var uniqID = Math.round(new Date().getTime() + (Math.random() * 100));
-        var marker = new L.marker(latlng, { icon: customPin }).addTo(markerGroup);
-        var popup = new L.Popup();
+        var marker = new L.marker(latlng, { icon: customPin, draggable: true }).addTo(markerGroup);
+        var popup = new L.responsivePopup({ autoPanPadding: [10, 10]  });
         //Removes marker if popup is empty
         marker.on('popupclose', function (e) {
-            if (($("#popup" + uniqID).html() != undefined && $("#popup" + uniqID).html().indexOf("popup-comment")) === -1) {
+            if (($("#popup" + uniqID).html() !== undefined && $("#popup" + uniqID).html().indexOf("popup-comment")) === -1) {
                 imageMap.removeLayer(marker);
             }
         });
+
+
+        //Updates the marker location after dragging
+        marker.on("dragend", function (e) {
+            
+            marker = e.target;
+            
+            popup = marker.getPopup().getContent();
+            //Updating the 'open pin' button
+            parent = $(popup).find(".reply-button").data("parent");
+            $("#loc-" + parent).attr("data-location", Math.round(marker.getLatLng().lat) + "  " + Math.round(marker.getLatLng().lng));
+            var CommentUpdateModel = {
+                "Message": null,
+                "Lat": Math.round(marker.getLatLng().lat),
+                "Lng": Math.round(marker.getLatLng().lng),
+                "ParentId": parent
+            }
+                $.ajax(
+                    {
+                        type: "POST", //HTTP POST Method  
+                        url: "../UpdateCommentLocation", // Controller/View  
+                        contentType: "application/json;",
+                        dataType: "text",
+                        data: JSON.stringify(CommentUpdateModel)
+                })
+                marker.setLatLng(new L.LatLng(Math.round(marker.getLatLng().lat), Math.round(marker.getLatLng().lng)));
+        })
+
+
         popup.options.autoPan = false;
         popup.options.closeOnClick = true;
         //Focusing the textarea of the popup

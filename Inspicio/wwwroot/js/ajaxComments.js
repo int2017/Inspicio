@@ -145,7 +145,7 @@ function commentClick(uniqID, chosenState) {
                 data: JSON.stringify(DataFromBody),
                 success: function (data) {
                     $(element).fadeOut(100);       
-                    if (loc !== null && loc!== undefined) {
+                    if (lat !== null && lat!== undefined) {
                         var uniqID;
                         if ($(area).hasClass("popup-textarea")) {
                             uniqID = $(area).attr("id").slice(9);
