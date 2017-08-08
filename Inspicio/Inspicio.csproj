@@ -37,6 +37,7 @@
     <Content Include="wwwroot\images\thumbdown.jpg" />
     <Content Include="wwwroot\images\thumbmid.jpg" />
     <Content Include="wwwroot\images\thumbup.jpg" />
+    <Content Include="wwwroot\js\ajaxCheckFocus.js" />
     <Content Include="wwwroot\js\ajaxComments.js" />
     <Content Include="wwwroot\js\ajaxScreens.js" />
     <Content Include="wwwroot\js\background-selector.js" />
