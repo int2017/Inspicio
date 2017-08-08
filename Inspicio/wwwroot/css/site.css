@@ -134,6 +134,7 @@ body {
 #table th {
     padding-bottom: 5px;
     border-collapse: collapse;
+    text-align: center;
 }
 
 loginsection {
@@ -147,14 +148,6 @@ loginsection {
     padding-right: 69px;
     padding-left: 70px;
     font-size: 30px;
-}
-
-td#content,
-td#status,
-th#status,
-td#creator,
-th#creator {
-    text-align: center;
 }
 
 #table th#up-col,
@@ -171,7 +164,6 @@ th#down-col {
     height: 48px;
     width: 100%;
     overflow: hidden;
-    float: left;
     margin-top: 1.5%;
 }
 
