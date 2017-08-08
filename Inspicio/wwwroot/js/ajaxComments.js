@@ -34,6 +34,7 @@ function commentClick(uniqID, chosenState) {
             dataType: "text",
             data: JSON.stringify(DataFromBody),
 
+
             success: function (data) {
                 var container = document.createElement("div");
                 $(container).addClass("comment today").append(data).appendTo("#comment-section > .comment-container");
