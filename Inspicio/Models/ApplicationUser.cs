@@ -21,6 +21,10 @@ namespace Inspicio.Models
         // ProfilePicture column in the user table [AspNetUsers]
         public string ProfilePicture { get; set; }
 
+        public bool NotificationFlag { get; set; }
+
+        public DateTime TimeOfLastNotification { get; set; }
+
         public ICollection<Comment> Comments { get; set; }
         public ICollection<Screen> Screens { get; set; }
         public ICollection<Access> Access { get; set; }

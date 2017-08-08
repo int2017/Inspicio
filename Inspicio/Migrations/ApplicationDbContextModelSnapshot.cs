@@ -55,6 +55,8 @@ namespace Inspicio.Migrations
                     b.Property<string>("NormalizedUserName")
                         .HasMaxLength(256);
 
+                    b.Property<bool>("NotificationFlag");
+
                     b.Property<string>("PasswordHash");
 
                     b.Property<string>("PhoneNumber");
@@ -67,6 +69,8 @@ namespace Inspicio.Migrations
                     b.Property<string>("ProfilePicture");
 
                     b.Property<string>("SecurityStamp");
+
+                    b.Property<DateTime>("TimeOfLastNotification");
 
                     b.Property<bool>("TwoFactorEnabled");
 
