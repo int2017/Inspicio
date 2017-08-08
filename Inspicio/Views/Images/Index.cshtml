@@ -20,6 +20,9 @@
             <th class="CreatorHeader" id="creator" style="cursor: pointer;" data-toggle="tooltip" title="Review Creator">
                 Creator
             </th>
+            <th class="ScreenCountHeader" id="screen-counter" style="cursor: pointer;" data-toggle="tooltip" title="Number of screens in the review">
+                No. of Screens
+            </th>
             <th id="up-col">
                 <img src="~/images/thumbup.jpg" style="height: 20px;" data-toggle="tooltip" title="Number of reviewers who have approved the review" />
             </th>
@@ -56,6 +59,9 @@
                         var user = await UserManager.FindByIdAsync(item.Review.CreatorId);
                         @Html.DisplayFor(modelItem => user.ProfileName);
                      }
+                </td>
+                <td id="screen-counter" data-toggle="tooltip" title="Number of screens in the review">
+                @Html.DisplayFor(modelItem => item.screenCount)
                 </td>
                 <td id="up-col" data-toggle="tooltip" title="Number of reviewers who have approved the review">
                    @Html.DisplayFor(modelItem => item.approvals)

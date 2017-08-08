@@ -53,6 +53,7 @@ namespace Inspicio.Controllers
                 var approvals = 0;
                 var needsWorks = 0;
                 var rejections = 0;
+                var screenCount = 0;
 
                 var screenIds = _context.Screens.Where(x => x.ReviewId == a.ReviewId).Select(s => s.ScreenId).ToList();
                 foreach( var i in screenIds )
@@ -60,6 +61,7 @@ namespace Inspicio.Controllers
                     approvals += _context.ScreenStatus.Count(x => (x.ScreenId == i) && x.Status == ScreenStatus.PossibleStatus.Approved);
                     needsWorks += _context.ScreenStatus.Count(x => (x.ScreenId == i) && x.Status == ScreenStatus.PossibleStatus.NeedsWork);
                     rejections += _context.ScreenStatus.Count(x => (x.ScreenId == i) && x.Status == ScreenStatus.PossibleStatus.Rejected);
+                    screenCount++;
                 }
 
                 Reviews.Add(new IndexModel
@@ -67,7 +69,8 @@ namespace Inspicio.Controllers
                     Review = a,
                     approvals = approvals,
                     needsWorks = needsWorks,
-                    rejections = rejections
+                    rejections = rejections,
+                    screenCount = screenCount
                 });
             }
             return View(Reviews);
