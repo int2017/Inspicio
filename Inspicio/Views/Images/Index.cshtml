@@ -11,25 +11,25 @@
 <table id="table">
     <thead>
         <tr class="header" style="border-bottom: solid; border-width: 3px;">
-            <th class="content">
+            <th class="content" data-toggle="tooltip" title="Review Image">
                 Content
             </th>
-            <th class="TitleHeader" style="cursor: pointer;">
+            <th class="TitleHeader" style="cursor: pointer;" data-toggle="tooltip" title="Review Title">
                 Title
             </th>
-            <th class="CreatorHeader" id="creator" style="cursor: pointer;">
+            <th class="CreatorHeader" id="creator" style="cursor: pointer;" data-toggle="tooltip" title="Review Creator">
                 Creator
             </th>
             <th id="up-col">
-                <img src="~/images/thumbup.jpg" style="height: 20px;" />
+                <img src="~/images/thumbup.jpg" style="height: 20px;" data-toggle="tooltip" title="Number of reviewers who have approved the review" />
             </th>
             <th id="mid-col">
-                <img src="~/images/thumbmid.jpg" style="height: 20px;" />
+                <img src="~/images/thumbmid.jpg" style="height: 20px;" data-toggle="tooltip" title="Number of reviewers requesting changes" />
             </th>
             <th id="down-col">
-                 <img src="~/images/thumbdown.jpg" style="height: 20px;" />
+                 <img src="~/images/thumbdown.jpg" style="height: 20px;" data-toggle="tooltip" title="Number of reviewers who have rejected the review"/>
             </th>
-            <th class="StatusHeader" id="status" style="cursor: pointer;">
+            <th class="StatusHeader" id="status" style="cursor: pointer;" data-toggle="tooltip" title="Whether the review is open or closed">
                 Status
             </th>
         </tr>
@@ -39,10 +39,10 @@
 @foreach (var item in Model)
 { 
         <tr title="@item.Review.Title" onclick="document.location = 'Images/View/@item.Review.ReviewId'" style="cursor:pointer; border-bottom:solid;border-bottom-width:1px;" >
-                <td id="content" class="text-left">
+                <td id="content" class="text-left"  data-toggle="tooltip" title="Review Image" >
                     <img style="max-height: 120px; max-width: 120px; margin-bottom: 5px; margin-top: 10px;" src="@item.Review.Thumbnail" />
                 </td>
-                <td id="title">
+                <td id="title" data-toggle="tooltip" title="Review Title">
                     @{
                         if(item.Review.Title!= null) {
                          string defaultTitle = item.Review.Title;
@@ -51,22 +51,22 @@
                         }
                     }
                 </td>
-                <td id="creator">
+                <td id="creator" data-toggle="tooltip" title="Review Creator">
                     @{
                         var user = await UserManager.FindByIdAsync(item.Review.CreatorId);
                         @Html.DisplayFor(modelItem => user.ProfileName);
                      }
                 </td>
-                <td id="up-col">
+                <td id="up-col" data-toggle="tooltip" title="Number of reviewers who have approved the review">
                    @Html.DisplayFor(modelItem => item.approvals)
                 </td>
-                <td id="mid-col">
+                <td id="mid-col" data-toggle="tooltip" title="Number of reviewers requesting changes" >
                     @Html.DisplayFor(modelItem => item.needsWorks)
                 </td>
-                <td id="down-col">
+                <td id="down-col"  data-toggle="tooltip" title="Number of reviewers who have rejected the review">
                     @Html.DisplayFor(modelItem => item.rejections)
                 </td>     
-                <td id="status">
+                <td id="status" data-toggle="tooltip" title="Whether the review is open or closed">
                     @Html.DisplayFor(modelItem => item.Review.ReviewState)
                 </td>
             </tr>
