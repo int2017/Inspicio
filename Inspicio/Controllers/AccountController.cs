@@ -14,6 +14,7 @@ using Inspicio.Models.AccountViewModels;
 using Inspicio.Services;
 
 using Inspicio.Classes;
+using Inspicio.Data;
 
 namespace Inspicio.Controllers
 {
@@ -26,6 +27,7 @@ namespace Inspicio.Controllers
         private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
         private readonly string _externalCookieScheme;
+        private readonly ApplicationDbContext _context;
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
@@ -33,7 +35,8 @@ namespace Inspicio.Controllers
             IOptions<IdentityCookieOptions> identityCookieOptions,
             IEmailSender emailSender,
             ISmsSender smsSender,
-            ILoggerFactory loggerFactory)
+            ILoggerFactory loggerFactory,
+            ApplicationDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -41,6 +44,7 @@ namespace Inspicio.Controllers
             _emailSender = emailSender;
             _smsSender = smsSender;
             _logger = loggerFactory.CreateLogger<AccountController>();
+            _context = context;
         }
 
         //
@@ -81,6 +85,7 @@ namespace Inspicio.Controllers
                 if (result.Succeeded)
                 {
                     _logger.LogInformation(1, "User logged in.");
+                    
                     return RedirectToLocal(returnUrl);
                 }
                 if (result.RequiresTwoFactor)
@@ -117,6 +122,9 @@ namespace Inspicio.Controllers
                 {
                     var user = new ApplicationUser { UserName = model.Register.Email, Email = model.Register.Email };
 
+                    user.NotificationFlag = true;
+                    user.TimeOfLastNotification = System.DateTime.Now;
+
                     // ApplicationUser does not take ProfileName in a construtor.
                     user.ProfileName = model.Register.ProfileName;
                     user.ProfilePicture = Gravatar.GetLink(model.Register.Email);
@@ -132,7 +140,7 @@ namespace Inspicio.Controllers
                         await _emailSender.SendEmailAsync(model.Register.Email, "Confirm your account",
                             $"Congratulations for registering with Inspicio! Please confirm your account by clicking this link: {callbackUrl}");
 
-                        await _signInManager.SignInAsync(user, isPersistent: false);
+                        // await _signInManager.SignInAsync(user, isPersistent: false);
                         _logger.LogInformation(3, "User created a new account with password.");
                         return RedirectToLocal(returnUrl);
                     }
@@ -462,11 +470,25 @@ namespace Inspicio.Controllers
         {
             return View();
         }
-        [HttpPost]
-        public IActionResult GetOnlineUsers()
-        {
 
-        }
+        [HttpPost]
+        public async Task<IActionResult> CompareTime(string id, bool flag)
+        {
+            DateTime currentTime = System.DateTime.Now;
+            var user = _context.Users.Where(u => u.Id == id).FirstOrDefault();
+            user.NotificationFlag = flag;
+
+            DateTime notificationTime = user.TimeOfLastNotification;
+            var difference = (currentTime.Subtract(notificationTime).TotalMinutes);
+            
+            if ((difference > 10) && (flag == true))
+            {
+                user.NotificationFlag = true;
+            }
+
+            await _context.SaveChangesAsync();
+            return Ok(1);
+}
         #region Helpers
 
         private void AddErrors(IdentityResult result)
