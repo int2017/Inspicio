@@ -392,8 +392,13 @@ namespace Inspicio.Controllers
             {
                 var user = await _userManager.FindByIdAsync(rid);
                 var email = user.Email;
-                await _emailSender.SendEmailAsync(email, "New comments",
-                    "New comments have been added to the review!");
+                if (user.NotificationFlag == true)
+                {
+                    await _emailSender.SendEmailAsync(email, "New comments",
+                        "New comments have been added to the review!");
+                }
+                user.TimeOfLastNotification = System.DateTime.Now;
+                user.NotificationFlag = false;
             }
 
             return Ok(1);
