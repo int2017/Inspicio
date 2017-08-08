@@ -7,29 +7,10 @@
 
 @if (SignInManager.IsSignedIn(User))
 {
-    <script>
-        $(document).ready(function () {
-    var url = '@Url.Action("_CreatePartial", "Images")'
-    $('#quick-review').on('click', function () {
-        var mainDiv = document.createElement("div");
-        $(mainDiv).addClass("quick-create-overlay overlay");
-        $(mainDiv).load(url);
-        $(mainDiv).appendTo(".body-content");
-
-    });
-
-        });
-    </script>
     <ul class="nav navbar-nav">
         <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
         <li><a asp-area="" asp-controller="Images" asp-action="Index">View All Reviews</a></li>
-        <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown">Create Review
-            <span class="caret"></span></a>
-            <ul class="dropdown-menu">
-                <li><a id="quick-review">Quick review</a></li>
-                <li><a a asp-area="" asp-controller="Images" asp-action="Create">Project review</a></li>
-            </ul>
-        </li>
+        <li><a a asp-area="" asp-controller="Images" asp-action="Create">Create review</a></li>
     </ul>
 
     <form asp-area="" asp-controller="Account" asp-action="Logout" method="post" id="logoutForm" class="navbar-right">
@@ -51,4 +32,3 @@ else
         <li><a asp-area="" asp-controller="Account" asp-action="LoginOrRegister">Log in / Register</a></li>
     </ul>
 }
-
