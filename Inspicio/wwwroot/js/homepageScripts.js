@@ -176,10 +176,7 @@ function enablePins() {
         var marker = new L.marker(latlng, {
             icon: customPin
         }).addTo(markerGroup);
-        var popup = new L.responsivePopup({
-            offset: [10, 10],
-            autoPanPadding: [10, 10]
-        });
+        var popup = new L.Rrose();
         //Removes marker if popup is empty
         marker.on('popupclose', function (e) {
             if (($("#popup" + uniqID).html().indexOf("popup-comment")) === -1) {
