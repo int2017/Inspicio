@@ -51,14 +51,6 @@
     imageMap.setView([0, 0]);
     if (imageMap.tap) imageMap.tap.disable();
 
-    //Test marker
-
-
-
-    //Setting the correct size for the map if the window is resized
-
-
-
     imageMap.on('click', function (e) {
         mapOnClick(e);
     });

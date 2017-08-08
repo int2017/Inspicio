@@ -44,6 +44,7 @@
     <Content Include="wwwroot\js\chatBot.js" />
     <Content Include="wwwroot\js\createDropzone.js" />
     <Content Include="wwwroot\js\filter.js" />
+    <Content Include="wwwroot\js\pinComments-NEW.js" />
     <Content Include="wwwroot\js\jquery.initialize.js" />
     <Content Include="wwwroot\js\less\animated.less" />
     <Content Include="wwwroot\js\less\bordered-pulled.less" />

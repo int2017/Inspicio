@@ -592,7 +592,9 @@ nav.navbar.navbar-inverse.navbar-fixed-top {
 .username {
     font-weight: 700;
 }
-
+.popup-comment > div{
+    margin:15px 0;
+}
 .btn-danger {
     background-color: #a96360;
     border-color: #8c5957;

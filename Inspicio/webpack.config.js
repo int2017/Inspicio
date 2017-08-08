@@ -12,3 +12,16 @@ module.exports = {
 		extensions: [".js"]
 	}
 };
+
+module.exports = {
+    entry: {
+        "ajaxComments": './Scripts/ajaxComments.js',
+    },
+    output: {
+        filename: "[name].bundle.js",
+        path: path.resolve(__dirname, 'wwwroot/dist/')
+    },
+    resolve: {
+        extensions: [".js"]
+    }
+};
