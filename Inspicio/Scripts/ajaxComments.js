@@ -35,7 +35,7 @@ function commentClick(id, chosenState) {
                 var container = document.createElement("div");
                 $(container).addClass("comment today").append(data).appendTo("#comment-section > .comment-container");
                 var parent = $(data).find(".reply").data("target");
-                map.markersArray[id].popupObject.addRow($("span.main-user").html(), $(".popup-textarea").val(),parent,true);
+                map.markersArray[id].popupObject.addRow($("span.main-user").html(), $(".popup-textarea").val(), parent, true, urgency);
                 $("#comment-textarea").val("");
 
             }
@@ -164,7 +164,7 @@ function commentClick(id, chosenState) {
                          alert($(area).val())
                     }
                     var container = document.createElement("div");
-                    $(".replied-section").slideIp();
+                    $(".replied-section").slideUp();
                     $(container).addClass("comment").append(data).appendTo("#replies-" + parent+" > .comment-container");
                     $(area).val("");
                     $(element).fadeIn(100);

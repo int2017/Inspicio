@@ -34,11 +34,11 @@ function inputContainerClass(id) {
         return inputRowContainer;
     }
 
-    //Initial container
+    //Initial container for initial comment
     this.container = this.init();
 
+    //Button is updated after the initial comment, so it becomes a reply button instead of an "initial comment (new thread)" button.
     this.updateButton = function (parent) {
-        self.id = parent;
         $(self.container).find(".initial-button").removeClass("initial-button").addClass("reply-button").attr("data-parent",parent);
         $(self.container).find(".comment-status").remove();
     }
@@ -71,6 +71,9 @@ function popupClass(location, id) {
         return self.popupLeaf.getContent();
     }
 
+    //Urgency element
+    this.urgencyElement = $(document.createElement("div")).addClass("urgent").append($(document.createElement("span")).addClass("glyphicon glyphicon-star").attr("aria-hidden", "true"));
+
     //Comment row definition
     this.row = $(document.createElement("div")).addClass("row-eq-height popup-comment");
     $(this.row).append($(document.createElement("div")).addClass("col-xs-4 col-sm-4 col-md-4 username"));
@@ -85,7 +88,7 @@ function popupClass(location, id) {
 
     //Add row
     //IsInitial - boolean to check wether it's a new thread or a reply
-    this.addRow = function (user, message, parent,isInitial) {
+    this.addRow = function (user, message, parent, isInitial, urgency) {
         
         var row = $(self.row).clone();
         $(row).find(".username").append(user);
@@ -95,6 +98,9 @@ function popupClass(location, id) {
             self.parentId = parent;
             self.inputContainerObject.updateButton(parent);
             wrapper = $(document.createElement("div")).append(self.commentContainer).append(self.inputContainerObject.container);
+            if (urgency === 1) {
+                $(row).append(self.urgencyElement);
+            }
         }
         else {
             wrapper = $(document.createElement("div")).append(self.popupLeaf.getContent());
