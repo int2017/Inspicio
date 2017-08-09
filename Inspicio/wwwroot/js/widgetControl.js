@@ -28,17 +28,6 @@ $(document).on("click", "#close-side", function () {
 
 
 });
-//Controlling reviewers box
-$(document).on("click", ".show-reviewers",function () {
-    if ($(".reviewer-row").is(":visible")){
-        $(".reviewer-row").slideUp();
-        $(".show-reviewers i").css("transform", "rotate(0deg)");
-    }
-    else {
-        $(".reviewer-row").slideDown();
-        $(".show-reviewers i").css("transform", "rotate(180deg)");
-    }
-});
 
 //Controlling project info tab
 $(document).on("click", ".show-project", function () {

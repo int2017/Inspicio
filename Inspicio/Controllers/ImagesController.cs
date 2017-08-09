@@ -216,7 +216,8 @@ namespace Inspicio.Controllers
             ViewModel.ScreenIds = _context.Screens.Where( s => s.ReviewId == Id ).Select(s => s.ScreenId).ToList();
 
             ViewModel.screenData.UserVotes = _context.ScreenStatus.Where(s => s.ScreenId == ViewModel.screenData.Screen.ScreenId).ToList();
-            
+
+            ViewModel.FullPage = true;
             return View(ViewModel);
         }
 
@@ -232,8 +233,9 @@ namespace Inspicio.Controllers
             CreatePageModel.Reviewers = _context.Users.Where(u => u.Id != _userManager.GetUserId(HttpContext.User)).ToList();
             return PartialView("_CreatePartial", CreatePageModel);
         }
-            // GET: Images/View/?/screen
-            public async Task<IActionResult> _ScreenPartial(int RId,int SId)
+        // GET: Images/View/?/screen
+
+        public async Task<IActionResult> _ScreenPartial(int RId, int SId, int CommentVisibiltyState)
         {
             var ViewModel = new ViewModel();
 
@@ -265,6 +267,8 @@ namespace Inspicio.Controllers
             ViewModel.ScreenIds = _context.Screens.Where(s => s.ReviewId == RId).Select(s => s.ScreenId).ToList();
             ViewModel.screenData.UserVotes = _context.ScreenStatus.Where(s => s.ScreenId == ViewModel.screenData.Screen.ScreenId).ToList();
             ViewModel.ScreenId = SId;
+
+            ViewModel.FullPage = (CommentVisibiltyState == 0) ? false : true;
             return PartialView(ViewModel);
         }
 

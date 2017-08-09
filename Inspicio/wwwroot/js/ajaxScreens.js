@@ -16,14 +16,19 @@
 
 }
 function screenSelector( reviewid, id) {
-    var Id = [reviewid, id];
+
+    var CommentsVisibiltyState = $(".flex-sidebar").hasClass("side-hide");
+
+    var Id = [reviewid, id, (CommentsVisibiltyState == true) ? 1 : 0 ];
+
     $.ajax(
         {
             type: "GET", //HTTP GET Method
             url: "../_ScreenPartial", // Controller/View
             data: {
                 RId: reviewid,
-                SId: id
+                SId: id,
+                CommentVisibiltyState: (CommentsVisibiltyState == true) ? 1 : 0
             },
             success: function (response) {
                 imageMap.remove();
@@ -31,8 +36,6 @@ function screenSelector( reviewid, id) {
                 $("#screen-container").html(response);
                 disableThumb(false);
                 reloadMarkers();
-                $(".view-container").removeClass("wide");
-                
             }
         });
 }
