@@ -40,6 +40,10 @@ function commentClick(id, chosenState) {
                 $(container).addClass("comment today").append(data).appendTo("#comment-section > .comment-container");
                 var parent = $(data).find(".reply").data("target");
                 self.map.markersArray[id].popupObject.addRow($("span.main-user").html(), $(".popup-textarea").val(), parent, true, urgency);
+
+                //Enabling dragging on the new marker
+                self.map.markersArray[id].markerLeaf.dragging.enable();
+
                 $("#comment-textarea").val("");
                 $("#loc-" + parent).attr("data-marker", self.map.markersArray.length);
 

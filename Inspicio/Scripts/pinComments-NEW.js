@@ -152,7 +152,7 @@ function markerClass(location,id) {
     this.location = location;
 
     //Creating Leaftlet marker and adding a dragging listener that updates it's location in the DB
-    this.markerLeaf = new L.marker(location, { icon: self.customPin, draggable: true });
+    this.markerLeaf = new L.marker(location, { icon: self.customPin });
     $(this.markerLeaf).on("dragend", function (e) {
         if (self.popupObject.commentList.length > 0) {
             parent = self.popupObject.parentId;
@@ -161,8 +161,7 @@ function markerClass(location,id) {
         }
         
     })
-   
-
+  
     //Assigning temporary ID for markers without a comment inside
     this.id = id;
 
@@ -195,6 +194,7 @@ function markerClass(location,id) {
                 data: JSON.stringify(CommentUpdateModel)
             })
     }
+
 }
 
 
@@ -249,18 +249,18 @@ function mapClass() {
         self.addMarkerToMap(markerObject);
         markerObject.openPopup();
     });
-  /*  //Adding invalidateSize() function on window resize
-    //Initial invalidateSize();
-    this.mapLeaf.invalidateSize();
-    $(window).resize(function () {;*/
-        setTimeout(
-            function () {
-                self.mapLeaf.invalidateSize();
-            }, 3000);
 
-   // })
+    //Required to fix the bounding of the map and stop the user from dragging the markers out of the map
+    setTimeout(
+       function () {
+          self.mapLeaf.invalidateSize();
+        }, 500);
+
     //Creating a separate function for adding markers to the map. ( To avoid duplicating code)
     this.addMarkerToMap = function (markerObject) {
+
+        //The drag listener, which checks if the marker is still inside the image.
+        //This had to be put here because access to the marker and the map is required
         var lastValidPosition;
         markerObject.markerLeaf.on("drag", function (event) {
             var latLng = markerObject.markerLeaf.getLatLng();
@@ -272,6 +272,7 @@ function mapClass() {
                 }
             }
         }, markerObject.markerLeaf);
+
         self.markersArray.push(markerObject);
         markerObject.markerLeaf.addTo(self.markerGroupLeaf);
         //Deleting popup and marker if popup has not been commented in
@@ -290,6 +291,9 @@ function mapClass() {
         if (isInitial) { 
             markerObject = new markerClass(latlng, self.markersArray.length);
             self.addMarkerToMap(markerObject);
+
+            //Enabling dragging, because this marker will naturally have a comment inside
+            markerObject.markerLeaf.dragging.enable();
         }
         else {
             $(self.markersArray).each(function (i) {
