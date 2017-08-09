@@ -669,7 +669,7 @@ input:focus {
     margin: 0 10px 10px 0;
 }
 
-    .lightbox-button:hover {
+    .lightbox-button:hover,.clicked {
         opacity: 1;
         transition: all 0.3s ease-in-out;
         -moz-transition: all 0.3s ease-in-out;

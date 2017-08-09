@@ -129,6 +129,10 @@ function commentClick(id, chosenState) {
             var id = $(this).data("marker");
             self.map.markersArray[id-1].openPopup();
         })
+        $(document).on("click", "#hide-pop", function () {
+            $(this).toggleClass("clicked");
+            self.map.popupState();
+        })
     });
 
     function replyComment(parent, area,id) {
@@ -170,7 +174,6 @@ function commentClick(id, chosenState) {
                     $(element).fadeOut(100);       
                     if (lat !== null && lat!== undefined) {                          
                         self.map.markersArray[id].popupObject.addRow($("span.main-user").html(), $(area).val(),parent,false);
-                         alert($(area).val())
                     }
                     var container = document.createElement("div");
                     $(".replied-section").slideUp();

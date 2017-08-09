@@ -290,14 +290,21 @@ function mapClass() {
     //Hide/show popups listener
     this.popupState = function () {
         if ($("#map-pane").hasClass("hidden")) {
+            $("#map-pane").fadeIn(300);
             $("#map-pane").removeClass("hidden");
-            this.mapLeaf.on('click', function (e) {
-                this.createMarker(e.latlng, true);
+            self.mapLeaf.on('click', function (e) {
+                var markerObject = new markerClass(e.latlng, self.markersArray.length);
+                self.addMarkerToMap(markerObject);
+                markerObject.openPopup();
             });
         }
         else {
-            $("#map-pane").addClass("hidden");
+            $("#map-pane").fadeOut(500);
             self.mapLeaf.off('click');
+            setTimeout(function () {
+                $("#map-pane").addClass("hidden");
+            },600)
+            
         }
     }
 
