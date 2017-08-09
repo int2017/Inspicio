@@ -57,6 +57,9 @@ function popupClass(location, id) {
     //Assign temp. id
     this.id = id;
 
+    //A collection for all the comments
+    this.commentList = [];
+
     //Parent id
     this.parentId;
 
@@ -89,7 +92,13 @@ function popupClass(location, id) {
     //Add row
     //IsInitial - boolean to check wether it's a new thread or a reply
     this.addRow = function (user, message, parent, isInitial, urgency) {
-        
+        //Pushing the new comment into the popup comment collection. For editing the comments later on.
+        var newComment = {
+            user: user,
+            message: message,
+            parent: parent
+        }
+        self.commentList.push(newComment);
         var row = $(self.row).clone();
         $(row).find(".username").append(user);
         $(row).find(".message").append(message);
@@ -140,8 +149,16 @@ function markerClass(location,id) {
     //Assing location
     this.location = location;
 
-    //Creating Leaftlet marker
+    //Creating Leaftlet marker and adding a dragging listener that updates it's location in the DB
     this.markerLeaf = new L.marker(location, { icon: self.customPin, draggable: true });
+    $(this.markerLeaf).on("dragend", function (e) {
+        if (self.popupObject.commentList.length > 0) {
+            parent = self.popupObject.parentId;
+            self.location = self.markerLeaf.getLatLng();
+            self.updateMarker(self.location,parent);
+        }
+        
+    })
 
     //Assigning temporary ID for markers without a comment inside
     this.id = id;
@@ -157,13 +174,23 @@ function markerClass(location,id) {
         }, 50)
     }
 
-    
-
-    //Function to assign a parent id once it's available
-    this.assignId = function (id) {
-        this.id = id;
-        this.popupObject.assignId(id);
-        this.popupObject.inputContainerObj.id = id;
+    //Updating marker and its content. Will need to be reworked for the edit comments feature
+    this.updateMarker = function (latlng, parent, message,id ) {
+        $("#loc-" + parent).attr("data-location", Math.round(self.location.lat) + "  " + Math.round(self.location.lng));
+        var CommentUpdateModel = {
+            "Message": message,
+            "Lat": Math.round(latlng.lat),
+            "Lng": Math.round(latlng.lng),
+            "ParentId": parent
+        }
+        $.ajax(
+            {
+                type: "POST", //HTTP POST Method  
+                url: "../UpdateCommentLocation", // Controller/View  
+                contentType: "application/json;",
+                dataType: "text",
+                data: JSON.stringify(CommentUpdateModel)
+            })
     }
 }
 
