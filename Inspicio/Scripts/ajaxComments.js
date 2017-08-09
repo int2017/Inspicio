@@ -4,17 +4,17 @@ var commentEnum = {
     Default: 0,
     Urgent: 1
 };
-
-function commentClick(uniqID, chosenState) {
+//Comments from popups
+function commentClick(id, chosenState) {
     var urgent = $(".urgency-popup").is(":checked");
     var urgency;
     if (urgent) {
         urgency = commentEnum.Urgent;
     }
     else urgency = commentEnum.Default;
-    var locationLat =0;
-    var locationLng = 5;
-   
+    var latlng = map.markersArray[id].location;
+    var locationLat = latlng.lat;
+    var locationLng = latlng.lng;
     var DataFromBody = {
         "ScreenId": $("#ScreenId").val(),
         "Message": $(".popup-textarea").val(),
@@ -35,7 +35,7 @@ function commentClick(uniqID, chosenState) {
                 var container = document.createElement("div");
                 $(container).addClass("comment today").append(data).appendTo("#comment-section > .comment-container");
                 var parent = $(data).find(".reply").data("target");
-                map.markersArray[uniqID].popupObject.addRow($("span.main-user").html(), $(".popup-textarea").val(),parent);
+                map.markersArray[id].popupObject.addRow($("span.main-user").html(), $(".popup-textarea").val(),parent,true);
                 $("#comment-textarea").val("");
 
             }
@@ -98,37 +98,51 @@ function commentClick(uniqID, chosenState) {
         });
         $(document).on("click", ".reply-button", function () {
             var area;
+            var id;
             var parent = $(this).data("parent");
             if ($(this).hasClass("popup-btn")) {
                 area = $(".popup-textarea");
+                id = $(area).attr("id").slice(9);
             }
             else {
                 area = $("#text-" + parent);
+                id = -1;
             }
-            replyComment(parent, area);
+            
+            replyComment(parent, area,id);
 
         });
         $(document).on("click", "#submit-comment", function () {
             commentClickMain();
         });
-        $(document).on("click", ".initial-btn", function () {
+        $(document).on("click", ".initial-button", function () {
             var id = $(this).attr("id").slice(4);
             var urgency = $("#popupinput" + id + " checkbox").is(":checked");
             commentClick(id, urgency);
         });
     });
 
-    function replyComment(parent, area) {
-        var loc;
+    function replyComment(parent, area,id) {
+        
         var element = " #replies-" + parent;
-        try {
-            loc = $("#loc-" + parent).data("location").split(" ");
-            var lat = loc[0];
-            var lng = loc[2];
+        
+        if (id > -1 ) {
+            var latlng = map.markersArray[id].location;
+            var lat = latlng.lat;
+            var lng = latlng.lng;
         }
-        catch (err) {
-            loc = null;
+        else if ($("#loc-" + parent).length) {
+            var latlng = $("#loc-" + parent).data("location").split(" ");
+            var lat = latlng[0];
+            var lng = latlng[1];
+            $(map.markersArray).each(function () {
+                if (this.popupObject.parentId == parent) {
+                    id = this.id;
+                    return false; 
+                }
+            })
         }
+       
         var DataFromBody = {
             "ScreenId": $("#ScreenId").val(),
             "Message": area.val(),
@@ -145,20 +159,12 @@ function commentClick(uniqID, chosenState) {
                 data: JSON.stringify(DataFromBody),
                 success: function (data) {
                     $(element).fadeOut(100);       
-                    if (lat !== null && lat!== undefined) {
-                        var uniqID;
-                        if ($(area).hasClass("popup-textarea")) {
-                            uniqID = $(area).attr("id").slice(9);
-                            
-                        }
-                        else {
-                            var loc = new L.LatLng(lat, lng);
-                            uniqID = markersArray[markersArray.findIndex(x => x.getLatLng().equals(loc))].myData.id;
-                        }
-                        createCommentRow($("span.main-user").html(), $(area).val(), uniqID, parent);
-                        }
-                    
+                    if (lat !== null && lat!== undefined) {                          
+                         map.markersArray[id].popupObject.addRow($("span.main-user").html(), $(area).val(),parent,false);
+                         alert($(area).val())
+                    }
                     var container = document.createElement("div");
+                    $(".replied-section").slideIp();
                     $(container).addClass("comment").append(data).appendTo("#replies-" + parent+" > .comment-container");
                     $(area).val("");
                     $(element).fadeIn(100);

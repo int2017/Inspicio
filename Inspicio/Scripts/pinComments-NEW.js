@@ -16,7 +16,7 @@ function inputContainerClass(id) {
     this.sendIcon = "<i class='glyphicon glyphicon-share-alt'></i></button>";
 
     //Initial button
-    this.sendButton = $(document.createElement("button")).addClass("btn btn-success popup-btn initial-btn").attr("id","btn-"+this.id).append(this.sendIcon);
+    this.sendButton = $(document.createElement("button")).addClass("btn btn-success popup-btn initial-button").attr("id","btn-"+this.id).append(this.sendIcon);
 
     //Text area
     this.textarea = $(document.createElement("textarea")).addClass("form-control popup-textarea").attr("rows", "2").attr("id","popuptext" + id);
@@ -39,9 +39,8 @@ function inputContainerClass(id) {
 
     this.updateButton = function (parent) {
         self.id = parent;
-        $(self.container).find(".initial-btn").removeClass("initial-btn").attr("id", "btn-"+parent).addClass("reply-btn");
+        $(self.container).find(".initial-button").removeClass("initial-button").addClass("reply-button").attr("data-parent",parent);
         $(self.container).find(".comment-status").remove();
-        alert($(self.container).html())
     }
 
 }
@@ -57,6 +56,9 @@ function popupClass(location, id) {
 
     //Assign temp. id
     this.id = id;
+
+    //Parent id
+    this.parentId;
 
     //Comment container
     this.commentContainer = $(document.createElement("div")).addClass("container-fluid popup-comment-container");
@@ -81,18 +83,17 @@ function popupClass(location, id) {
     }
     this.init();
 
-    //If it's the first comment,update the button
-    this.updated = false;
-
     //Add row
-    this.addRow = function (user, message,parent) {
+    //IsInitial - boolean to check wether it's a new thread or a reply
+    this.addRow = function (user, message, parent,isInitial) {
+        
         var row = $(self.row).clone();
         $(row).find(".username").append(user);
         $(row).find(".message").append(message);
         var wrapper;
-        if (!self.updated) {
-            self.updated=true;
-            self.inputContainerObject.updateButton(self.id);
+        if (isInitial) {
+            self.parentId = parent;
+            self.inputContainerObject.updateButton(parent);
             wrapper = $(document.createElement("div")).append(self.commentContainer).append(self.inputContainerObject.container);
         }
         else {
@@ -205,7 +206,8 @@ function mapClass() {
         var markerObject = new markerClass(e.latlng, self.markersArray.length);
         markerObject.markerLeaf.addTo(self.markerGroupLeaf);
         self.markersArray.push(markerObject);
-
+        self.popupsArray.push(markerObject.popupObject);
+   
         //Deleting popup and marker if popup has not been commented in
         markerObject.markerLeaf.on("popupclose", function (e) {
             if (markerObject.popupObject.popupLeaf.getContent().indexOf("row-eq-height popup-comment") === -1) {
