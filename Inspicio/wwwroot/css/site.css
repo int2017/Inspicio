@@ -1,22 +1,43 @@
+
+
+h4, .h4 {
+    font-size: 40px;
+    margin: 40px;
+    color:black;
+}
+
 #loginsection,
 #registersection {
     font-size: 30px;
     font-weight: bold;
     width: 270px;
     cursor: pointer;
-    border: 1px solid black;
-    border-bottom: none;
     text-align: center;
+    padding: 5px;
+    color:white;
+    border:3px solid;
+    border-color: white;
+}
+
+#loginsection {
+    background-color: black;
+}
+
+#registersection{
+    background-color: lightgray;
 }
 
     #loginsection:hover {
-        background-color: lightgrey;
+        background-color: black;
     }
 
-#loginsection {
-    color: black;
-    background-color: white;
-}
+    #registersection:hover {
+        background-color: black;
+    }
+
+    #reg-btn:hover, #login-btn:hover{
+        background-color:darkcyan;
+    }
 
 #background-selector {
     position: absolute;
@@ -31,16 +52,6 @@ div.colorpicker {
     z-index: 500000000000;
 }
 
-#registersection:hover {
-    background-color: grey;
-}
-
-#registersection {
-    color: lightgrey;
-    background-color: #404040;
-    padding: 5px;
-}
-
 .log-form {
     padding-left: 25px;
 }
@@ -51,15 +62,23 @@ div.colorpicker {
 }
 
 #loginformmain {
-    border: 1px solid black;
     display: block;
+    align-self: center;
 }
 
 #registerform {
     display: none;
-    background-color: #404040;
-    color: lightgrey;
-    border: 1px solid black;
+}
+
+#reg-btn, #login-btn {
+    font-size: 30px;
+    font-weight: bold;
+    width: 350px;
+    margin-top: 30px;
+    color: white;
+    border: 3px solid;
+    border-color: white;
+    background-color: black;
 }
 
 .cover-container {
@@ -116,6 +135,16 @@ body {
     font-size: 18px;
     align-content: center;
     table-layout: fixed;
+    border-collapse:collapse;
+}
+
+#loginformouter{
+    border: 1px solid;
+    border-color: black;
+    padding: 30px;
+    width: 550px;
+    margin-top: 40px;
+    background-color:white; 
 }
 
 #loginform {
