@@ -224,8 +224,8 @@ namespace Inspicio.Controllers
         public JsonResult GetScreenContentFor(int? id)
         {
             var screen = _context.Screens.Where(s => s.ScreenId == id).Select( c => c.Content).SingleOrDefault();
-
-            return Json(screen);
+            var screenTitle = _context.Screens.Where(s => s.ScreenId == id).Select(c => c.Title).SingleOrDefault();
+            return Json(new { content = screen, title = screenTitle });
         }
         public PartialViewResult _CreatePartial()
         {

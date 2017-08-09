@@ -24,6 +24,8 @@
      
     style="padding-top:20px">
     
+    <h2>@Model.Review.Title</h2>
+
     @if (Model.ScreenIds.Count > 1)
             {
     <div class="row">
@@ -31,7 +33,7 @@
             <div class="cover-container">
                 @foreach (var id in Model.ScreenIds)
                 {
-                    <div class="cover-item" id="@id" onclick="screenSelector(@Model.Review.ReviewId, @id)"></div>
+                    <div class="cover-item" id="@id" onclick="screenSelector(@Model.Review.ReviewId, @id)" style="cursor: pointer;"></div>
                                 <script>
                         screenContent( @id);
                                 </script>
@@ -40,6 +42,7 @@
         </div>
     </div>
 }
+    <hr />
 <div id="screen-container">
     @{
         Html.RenderPartial("_ScreenPartial.cshtml");

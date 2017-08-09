@@ -10,7 +10,8 @@
                 id: id
             },
             success: function (response) {
-                $('#' + id).css("background-image", "url('" + response + "')");
+                $('#' + id).css("background-image", "url('" + response.content + "')");
+                $('#' + id).attr("title", "'"+response.title+"'");
             }
         });
 

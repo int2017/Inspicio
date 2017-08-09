@@ -5,11 +5,19 @@
 @inject IJsonHelper Json;
 @inject UserManager<ApplicationUser> UserManager
 
-
-<h2>@Model.screenData.Screen.Title</h2>
-
 <input id="ReviewId" type="hidden" asp-for="@Model.Review.ReviewId" />
 <input id="ScreenId" type="hidden" asp-for="@Model.screenData.Screen.ScreenId" />
+
+
+
+<h3>@Model.screenData.Screen.Title</h3>
+
+<div id="image-description">
+    <div id="description-section">
+        @Html.Raw(Model.screenData.Screen.Description)
+    </div>
+    <hr />
+</div>
 
 <div class="img-wrapper">
     <div id="img-btn-container">
@@ -24,19 +32,6 @@
         <img src="@Url.Content(Model.screenData.Screen.Content)" title="@Model.screenData.Screen.Title" alt="@Model.screenData.Screen.Title" />
     </div>
 
-
-    <div id="image-description">
-        @{
-            var user = await UserManager.FindByIdAsync(Model.Review.CreatorId);
-            <h4> By :<img style="height:40px;width:40px" src="@user.ProfilePicture" /> @user.ProfileName</h4>
-            <h3>Description</h3>
-            <div id="description-section" >
-                @Html.Raw(Model.screenData.Screen.Description)
-            </div>
-            <hr />
-        }
-    </div>
-
     <div class="image-controls text-center">
         <div class="container-fluid reviewer-container">
             <div id="thumb-container">
@@ -48,7 +43,10 @@
                     <button type="button" id="thumbs-down" class="btn btn-danger thumb"><i class="fa fa-thumbs-o-down " aria-hidden="true"></i> : <span class="rating">@Model.screenData.Num_Rejections</span></button>
                 </div>
 
-            
+                @{ 
+                    var user = await UserManager.FindByIdAsync(Model.Review.CreatorId);
+                    <h4> By :<img style="height:40px;width:40px" src="@user.ProfilePicture" /> @user.ProfileName</h4>
+                 }
             </div>
 
         </div>
