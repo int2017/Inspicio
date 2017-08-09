@@ -92,6 +92,7 @@
     //Creating individual markers. Needed because onClick event sends a different object than createMarkers()
     //clickBool determines wether the markers and popups are created by clicking on map or by fetching data from DB
     function createMarker(latlng, clickBool) {
+        latlng = new L.latLng(Math.round(latlng.lat), Math.round( latlng.lng))
         var uniqID = Math.round(new Date().getTime() + (Math.random() * 100));
         var marker = new L.marker(latlng, { icon: customPin }).addTo(markerGroup);
         var popup = new L.Popup();
@@ -156,17 +157,15 @@
         var openingTag = "<div id='popup" + uniqID + "' class='container-fluid popup-comment-container'>";
         var div = $(document.createElement('div'));
         div.addClass("container-fluid popup-comment-container").attr("id", "popup" + uniqID);
-        var inputBox = createInputRow(uniqID, parent);
+        var inputBox = createInputRow(uniqID,parent);
 
-        if (popupContent === undefined) {
-            $(row).appendTo(div);
-
+        if (popupContent !== undefined) {
+            var prevContent = popupContent.slice(openingTag.length, popupContent.length - 3 - inputBox.length);
+            if (prevContent.indexOf("popupinput") < 0) {
+                $(prevContent).appendTo(div);
+            }
         }
-        else {
-            $(popupContent.slice(openingTag.length, popupContent.length - 3 - inputBox.length)).appendTo(div);
-            $(row).appendTo(div);
-
-        }
+        $(row).appendTo(div);
         //A new input section has to be created each time to keep things consistent, otherwise it messes up the HTML
         return openingTag + div.html() + "</div>" + inputBox;
 
@@ -253,7 +252,7 @@
             var clickedComment = $(this);
             if (clickedComment.context.text === "Close pin") {
 
-                $(".leaflet-popup-close-button")[0].click();
+                $(".leaflet-popup-close-button").click();
                 $(this).text("Open pin");
             }
             else {

@@ -34,12 +34,13 @@ function commentClick(uniqID, chosenState) {
             dataType: "text",
             data: JSON.stringify(DataFromBody),
 
-            success: function () {
-                screenSelector($("#ReviewId").val(), $("#ScreenId").val())
-                $(".leaflet-popup-content").fadeOut(500);
-                $(".leaflet-popup-content").fadeIn();
-                $("#comment-textarea").val("");
-
+            success: function (data) {
+                var container = document.createElement("div");
+                $(container).addClass("comment today").append(data).appendTo("#comment-section > .comment-container");
+                $(".leaflet-popup-content").fadeOut(100);
+                var parent = $(data).find(".reply").data("target");
+                createCommentRow($("span.main-user").html(), $(".popup-textarea").val(), uniqID, parent, urgency);
+                $(".leaflet-popup-content").fadeIn(100);
             }
 
         });
@@ -71,8 +72,9 @@ function commentClick(uniqID, chosenState) {
                 contentType: "application/json;",
                 dataType: "text",
                 data: JSON.stringify(DataFromBody),
-                success: function () {
-                    screenSelector($("#ReviewId").val(), $("#ScreenId").val());              
+                success: function (data) {
+                    var container = document.createElement("div");
+                    $(container).addClass("comment today").append(data).appendTo("#comment-section > .comment-container");
                     $("#comment-textarea").val("");
                 }
             });
@@ -139,29 +141,27 @@ function commentClick(uniqID, chosenState) {
                 contentType: "application/json;",
                 dataType: "text",
                 data: JSON.stringify(DataFromBody),
-                success: function () {
-
-                    $(element).fadeOut();
-                    screenSelector($("#ReviewId").val(), $("#ScreenId").val())
-                    
-                    if (loc !== null) {
+                success: function (data) {
+                    $(element).fadeOut(100);       
+                    if (loc !== null && loc!== undefined) {
+                        var uniqID;
                         if ($(area).hasClass("popup-textarea")) {
-                            var uniqID = $(area).attr("id").slice(9);
-                            createCommentRow($("span.main-user").html(), $(".popup-textarea").val(), uniqID, parent);
+                            uniqID = $(area).attr("id").slice(9);
+                            
                         }
                         else {
-                            {
-                                $(markersArray).each(function () {
-                                    this.getPopup().setContent("");
-                                });
-                                reloadMarkers();
-                            }
-
+                            var loc = new L.LatLng(lat, lng);
+                            uniqID = markersArray[markersArray.findIndex(x => x.getLatLng().equals(loc))].myData.id;
                         }
-                    }
+                        createCommentRow($("span.main-user").html(), $(area).val(), uniqID, parent);
+                        }
+                    
+                    var container = document.createElement("div");
+                    $(container).addClass("comment").append(data).appendTo("#replies-" + parent+" > .comment-container");
                     $(area).val("");
-                    $(element).fadeIn();
+                    $(element).fadeIn(100);
                 }
+                
             });
     }
 

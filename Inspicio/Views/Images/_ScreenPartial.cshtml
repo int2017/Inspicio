@@ -99,133 +99,135 @@
 
         <!-- comments go here -->
         <h3 class="text-center">Comment section</h3>
-        @{
+        <div class="comment-container">
+            @{
 
-            String previousDate = ("Jan 1, 0000");
-            var dateClass = "date-comment";
-            foreach (var c in Model.screenData.Comments)
-            {
-                String currentDate = @c.Timestamp.ToString("MMM d");
-
-                if (c.ParentId == null)
+                String previousDate = ("Jan 1, 0000");
+                var dateClass = "date-comment";
+                foreach (var c in Model.screenData.Comments)
                 {
-                    @if (currentDate != previousDate)
+                    String currentDate = @c.Timestamp.ToString("MMM d");
+
+                    if (c.ParentId == null)
                     {
-                        <div class="date-header">
-                            @if (currentDate == DateTime.Today.ToString("MMM d"))
+                        @if (currentDate != previousDate)
+                    {
+                            <div class="date-header">
+                                @if (currentDate == DateTime.Today.ToString("MMM d"))
                         {
-                                <p data-value="Today">Today </p>
-                                dateClass = "today";
+                                    <p data-value="Today">Today </p>
+                                    dateClass = "today";
 
-                            }
-                            else if (currentDate == DateTime.Today.AddDays(-1).ToString("MMM d"))
-                            {
-                                <p data-value="Yesterday">Yesterday </p>
-                                dateClass = "yesterday";
-                            }
-                            else
-                            {
-                                <p data-value="@c.Timestamp.ToString("MMM d").Replace(" ","-")"> @c.Timestamp.ToString("MMM d")</p>
-                                dateClass = c.Timestamp.ToString("MMM d");
-                            }
-                        </div>
-                    }
-
-                    <div class="comment @dateClass.Replace(" ","-").ToLower()">
-                        <div class="row ">
-                            <div class="comment-user row-eq-height">
-                                <div class="col-md-4">
-                                    @{
-                                        var UserName = (await UserManager.FindByIdAsync(c.OwnerId)).ProfileName;
-                                    }
-                                    <h5 class="username">@UserName</h5>
-                                </div>
-                                <div class="col-md-4">
-                                    <p>@c.Timestamp.ToString("h:mm tt")</p>
-                                </div>
-                                <div class="col-md-4 text-right">
-                                    @if (c.Lat != 0 && c.Lng != 0)
-                                    {
-                                        <p><a id="loc-@c.CommentId" class="open-pin" data-location="@c.Lat  @c.Lng">Open pin</a></p>
-                                    }
-                                    <p><a class="reply" data-target="@c.CommentId">Reply</a></p>
-                                </div>
-                            </div>
-                            <div class="row-eq-height comment-msg">
-                                <div class="col-xs-12 col-sm-12 col-md-12">
-                                    <p>@c.Message</p>
-                                    @if (c.CommentUrgency == Comment.Urgency.Urgent)
-                                    {
-                                        <div class='urgent text-right'>
-                                            <span title="Urgent!" class="glyphicon glyphicon-star" aria-hidden="true"></span>
-                                        </div>
-                                    }
-                                </div>
-                            </div>
-                        </div>
-                        <div class="replied-section" id="replies-@c.CommentId">
-                            <div class="comment-container">
-                                @foreach (var x in Model.screenData.Comments)
+                                }
+                                else if (currentDate == DateTime.Today.AddDays(-1).ToString("MMM d"))
                                 {
-                                    if (x.ParentId != null && c.CommentId.ToString().Equals(x.ParentId))
-                                    {
-                                        <div class="comment">
-                                            <div class="row">
-                                                <div class='row-eq-height comment-user'>
-                                                    <div class='col-md-6'>
-                                                        @{
-                                                            var ReplyUserName = (await UserManager.FindByIdAsync(x.OwnerId)).ProfileName;
-                                                        }
-                                                        <h5 class='username'> @ReplyUserName</h5>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        @if (((DateTime.Now.Date - x.Timestamp.Date).TotalDays) <= 0)
-                                                        {
-                                                            <p>Today</p>
-
-                                                        }
-                                                        else if (((DateTime.Now.Date - x.Timestamp.Date).TotalDays) <= 1)
-                                                        {
-                                                            <p>Yesterday</p>
-
-                                                        }
-                                                        else
-                                                        {
-                                                            <p> @((DateTime.Now.Date - x.Timestamp.Date).TotalDays) days ago</p>
-
-                                                        }
-                                                        <p>@x.Timestamp.ToString("h:mm tt")</p>
-                                                    </div>
-                                                </div>
-                                                <div class='row-eq-height comment-msg'>
-                                                    <div class='col-xs-8 col-sm-8 col-md-8'>
-                                                        <p> @x.Message</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    }
+                                    <p data-value="Yesterday">Yesterday </p>
+                                    dateClass = "yesterday";
+                                }
+                                else
+                                {
+                                    <p data-value="@c.Timestamp.ToString("MMM d").Replace(" ","-")"> @c.Timestamp.ToString("MMM d")</p>
+                                    dateClass = c.Timestamp.ToString("MMM d");
                                 }
                             </div>
-                            <div class="row-eq-height reply-comment" id="replycomm-@c.CommentId">
-                                <div class="col-xs-12 col-sm-12 col-md-12 input-group">
-                                    <textarea class="form-control reply-textarea" id="text-@c.CommentId" rows="5" placeholder="Reply..."></textarea>
-                                    <span class="input-group-btn">
-                                        <button class="btn btn-success reply-button" type="submit" id="button-@c.CommentId" data-parent="@c.CommentId">
-                                            <i class="glyphicon glyphicon-share-alt"></i>
-                                        </button>
-                                    </span>
+                        }
+
+                        <div class="comment @dateClass.Replace(" ","-").ToLower()">
+                            <div class="row ">
+                                <div class="comment-user row-eq-height">
+                                    <div class="col-md-4 col-sm-4 col-xs-4">
+                                        @{
+                                            var UserName = (await UserManager.FindByIdAsync(c.OwnerId)).ProfileName;
+                                        }
+                                        <h5 class="username">@UserName</h5>
+                                    </div>
+                                    <div class="col-md-4 col-sm-4 col-xs-4">
+                                        <p>@c.Timestamp.ToString("h:mm tt")</p>
+                                    </div>
+                                    <div class="col-md-4 text-right col-sm-4 col-xs-4">
+                                        @if (c.Lat != 0 && c.Lng != 0)
+                                        {
+                                            <p><a id="loc-@c.CommentId" class="open-pin" data-location="@c.Lat  @c.Lng">Open pin</a></p>
+                                        }
+                                        <p><a class="reply" data-target="@c.CommentId">Reply</a></p>
+                                    </div>
+                                </div>
+                                <div class="row-eq-height comment-msg">
+                                    <div class="col-xs-12 col-sm-12 col-md-12">
+                                        <p>@c.Message</p>
+                                        @if (c.CommentUrgency == Comment.Urgency.Urgent)
+                                        {
+                                            <div class='urgent text-right'>
+                                                <span title="Urgent!" class="glyphicon glyphicon-star" aria-hidden="true"></span>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="replied-section" id="replies-@c.CommentId">
+                                <div class="comment-container">
+                                    @foreach (var x in Model.screenData.Comments)
+                                    {
+                                        if (x.ParentId != null && c.CommentId.ToString().Equals(x.ParentId))
+                                        {
+                                            <div class="comment">
+                                                <div class="row">
+                                                    <div class='row-eq-height comment-user'>
+                                                        <div class='col-md-6  col-sm-6 col-xs-6'>
+                                                            @{
+                                                                var ReplyUserName = (await UserManager.FindByIdAsync(x.OwnerId)).ProfileName;
+                                                            }
+                                                            <h5 class='username'> @ReplyUserName</h5>
+                                                        </div>
+                                                        <div class="col-md-6  col-sm-6 col-xs-6">
+                                                            @if (((DateTime.Now.Date - x.Timestamp.Date).TotalDays) <= 0)
+                                                            {
+                                                                <p>Today</p>
+
+                                                            }
+                                                            else if (((DateTime.Now.Date - x.Timestamp.Date).TotalDays) <= 1)
+                                                            {
+                                                                <p>Yesterday</p>
+
+                                                            }
+                                                            else
+                                                            {
+                                                                <p> @((DateTime.Now.Date - x.Timestamp.Date).TotalDays) days ago</p>
+
+                                                            }
+                                                            <p>@x.Timestamp.ToString("h:mm tt")</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class='row-eq-height comment-msg'>
+                                                        <div class='col-xs-8 col-sm-8 col-md-8'>
+                                                            <p> @x.Message</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                                                    }
+                                                                }
+                                </div>
+                                <div class="row-eq-height reply-comment" id="replycomm-@c.CommentId">
+                                    <div class="col-xs-12 col-sm-12 col-md-12 input-group">
+                                        <textarea class="form-control reply-textarea" id="text-@c.CommentId" rows="5" placeholder="Reply..."></textarea>
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-success reply-button" type="submit" id="button-@c.CommentId" data-parent="@c.CommentId">
+                                                <i class="glyphicon glyphicon-share-alt"></i>
+                                            </button>
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                                            }
+                                                                    }
 
-                                            previousDate = currentDate;
-                                        }
-        }
-
+                                                                    previousDate = currentDate;
+                                                                }
+            }
+        </div>
         <div class="row-eq-height" id="new-comment">
             <div class="col-xs-12 col-sm-12 col-md-12 input-group">
                 <textarea class="form-control" id="comment-textarea" rows="5" placeholder="Comment..."></textarea>
