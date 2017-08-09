@@ -99,6 +99,8 @@ function popupClass(location, id) {
             parent: parent
         }
         self.commentList.push(newComment);
+        
+        //Cloning the comment row
         var row = $(self.row).clone();
         $(row).find(".username").append(user);
         $(row).find(".message").append(message);
@@ -167,7 +169,7 @@ function markerClass(location,id) {
     this.popupObject = new popupClass(this.location, this.id);
     this.markerLeaf.bindPopup(this.popupObject.popupLeaf);
 
-    //Open popup function, only called by clicks on map
+    //Open popup function, only called by clicks on map and the open pink link
     this.openPopup = function(){
     setTimeout(function () {
         self.markerLeaf.openPopup();
@@ -253,6 +255,7 @@ function mapClass() {
     });
     //Creating a separate function for adding markers to the map. ( To avoid duplicating code)
     this.addMarkerToMap = function (markerObject) {
+
         self.markersArray.push(markerObject);
         markerObject.markerLeaf.addTo(self.markerGroupLeaf);
         //Deleting popup and marker if popup has not been commented in
@@ -299,7 +302,6 @@ function mapClass() {
     }
 
 }
-
 
 //Resizing the map according to the image and exporting map
 var newMap = function(){

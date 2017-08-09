@@ -41,6 +41,7 @@ function commentClick(id, chosenState) {
                 var parent = $(data).find(".reply").data("target");
                 self.map.markersArray[id].popupObject.addRow($("span.main-user").html(), $(".popup-textarea").val(), parent, true, urgency);
                 $("#comment-textarea").val("");
+                $("#loc-" + parent).attr("data-marker", self.map.markersArray.length);
 
             }
 
@@ -124,6 +125,10 @@ function commentClick(id, chosenState) {
             var urgency = $("#popupinput" + id + " checkbox").is(":checked");
             commentClick(id, urgency);
         });
+        $(document).on("click", ".open-pin", function () {
+            var id = $(this).data("marker");
+            self.map.markersArray[id-1].openPopup();
+        })
     });
 
     function replyComment(parent, area,id) {
@@ -216,8 +221,9 @@ function commentClick(id, chosenState) {
                                 parent = this.parentId;
                                 isInitial = false;
                             }
-
-                            self.map.createMarker(this.message, this.posterProfileName, this.lat, this.lng, parent, isInitial, this.commentUrgency)
+                            self.map.createMarker(this.message, this.posterProfileName, this.lat, this.lng, parent, isInitial, this.commentUrgency);
+                            //Adding a data attribute to the open pin link
+                            $("#loc-" + parent).attr("data-marker", self.map.markersArray.length);
                          }
                     });
 
