@@ -15,7 +15,7 @@ module.exports = {
 
 module.exports = {
     entry: {
-        "ajaxComments": './Scripts/ajaxComments.js',
+        "ajaxScreens": './Scripts/ajaxScreens.js',
     },
     output: {
         filename: "[name].bundle.js",

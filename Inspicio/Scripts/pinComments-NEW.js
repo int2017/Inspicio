@@ -150,10 +150,13 @@ function markerClass(location,id) {
     this.popupObject = new popupClass(this.location, this.id);
     this.markerLeaf.bindPopup(this.popupObject.popupLeaf);
 
-    //Open popup after marker has been created
+    //Open popup function, only called by clicks on map
+    this.openPopup = function(){
     setTimeout(function () {
         self.markerLeaf.openPopup();
-    }, 50)
+        }, 50)
+    }
+
     
 
     //Function to assign a parent id once it's available
@@ -210,17 +213,8 @@ function mapClass() {
     //Map on click listener
     this.mapLeaf.on('click', function (e) {
         var markerObject = new markerClass(e.latlng, self.markersArray.length);
-        markerObject.markerLeaf.addTo(self.markerGroupLeaf);
-        self.markersArray.push(markerObject);
-        self.popupsArray.push(markerObject.popupObject);
-   
-        //Deleting popup and marker if popup has not been commented in
-        markerObject.markerLeaf.on("popupclose", function (e) {
-            if (markerObject.popupObject.popupLeaf.getContent().indexOf("row-eq-height popup-comment") === -1) {
-                self.mapLeaf.removeLayer(markerObject.markerLeaf);
-                $(self.markersArray).slice(self.markersArray.indexOf(markerObject),1)
-            }
-        })
+        self.addMarkerToMap(markerObject);
+        markerObject.openPopup();
     });
     //Adding invalidateSize() function on window resize
     $(window).resize(function () {
@@ -230,6 +224,38 @@ function mapClass() {
             }, 1000);
 
     });
+    //Creating a separate function for adding markers to the map. ( To avoid duplicating code)
+    this.addMarkerToMap = function (markerObject) {
+        self.markersArray.push(markerObject);
+        markerObject.markerLeaf.addTo(self.markerGroupLeaf);
+        //Deleting popup and marker if popup has not been commented in
+        markerObject.markerLeaf.on("popupclose", function (e) {
+            if (markerObject.popupObject.popupLeaf.getContent().indexOf("row-eq-height popup-comment") === -1) {
+                self.mapLeaf.removeLayer(markerObject.markerLeaf);
+                $(self.markersArray).slice(self.markersArray.indexOf(markerObject), 1)
+            }
+        })
+    }
+    //Create markers programmaticaly
+    this.createMarker = function (message, username, lat, lng, parent,isInitial ,urgency) {
+        var latlng = new L.latLng(lat, lng);
+        var markerObject;
+        //Checks if the message is an initial comment in the popup, if it is = new marker, else, get the existing marker
+        if (isInitial) { 
+            markerObject = new markerClass(latlng, self.markersArray.length);
+            self.addMarkerToMap(markerObject);
+        }
+        else {
+            $(self.markersArray).each(function (i) {
+                if (self.markersArray[i].popupObject.parentId == parent) {
+                    markerObject = self.markersArray[i];
+                    return false;
+                }
+            })
+        }
+        //Adding the comment row to the popup
+        markerObject.popupObject.addRow(username, message, parent, isInitial, urgency);
+    }
 
     //Hide/show popups listener
     this.popupState = function () {
@@ -247,12 +273,12 @@ function mapClass() {
 
 }
 
-//Exporting map
-var map = new mapClass();
-module.exports = map;
 
-//Resizing the map according to the image
-$(window).ready(function () {
+//Resizing the map according to the image and exporting map
+var newMap = function(){
+    var map = new mapClass();
     $("#imageMap").width($("#image-container >img").width());
     $("#imageMap").height($("#image-container >img").height());
-})
+    return map;
+}
+module.exports.newMap = newMap;

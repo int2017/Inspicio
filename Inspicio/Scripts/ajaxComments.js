@@ -1,9 +1,13 @@
-﻿var map = require("./pinComments-NEW.js");
+﻿var pins = require("./pinComments-NEW.js");
 
 var commentEnum = {
     Default: 0,
     Urgent: 1
 };
+
+var self = this;
+var map;
+
 //Comments from popups
 function commentClick(id, chosenState) {
     var urgent = $(".urgency-popup").is(":checked");
@@ -12,7 +16,7 @@ function commentClick(id, chosenState) {
         urgency = commentEnum.Urgent;
     }
     else urgency = commentEnum.Default;
-    var latlng = map.markersArray[id].location;
+    var latlng = self.map.markersArray[id].location;
     var locationLat = latlng.lat;
     var locationLng = latlng.lng;
     var DataFromBody = {
@@ -35,7 +39,7 @@ function commentClick(id, chosenState) {
                 var container = document.createElement("div");
                 $(container).addClass("comment today").append(data).appendTo("#comment-section > .comment-container");
                 var parent = $(data).find(".reply").data("target");
-                map.markersArray[id].popupObject.addRow($("span.main-user").html(), $(".popup-textarea").val(), parent, true, urgency);
+                self.map.markersArray[id].popupObject.addRow($("span.main-user").html(), $(".popup-textarea").val(), parent, true, urgency);
                 $("#comment-textarea").val("");
 
             }
@@ -127,7 +131,7 @@ function commentClick(id, chosenState) {
         var element = " #replies-" + parent;
         
         if (id > -1 ) {
-            var latlng = map.markersArray[id].location;
+            var latlng = self.map.markersArray[id].location;
             var lat = latlng.lat;
             var lng = latlng.lng;
         }
@@ -135,7 +139,7 @@ function commentClick(id, chosenState) {
             var latlng = $("#loc-" + parent).data("location").split(" ");
             var lat = latlng[0];
             var lng = latlng[1];
-            $(map.markersArray).each(function () {
+            $(self.map.markersArray).each(function () {
                 if (this.popupObject.parentId == parent) {
                     id = this.id;
                     return false; 
@@ -160,7 +164,7 @@ function commentClick(id, chosenState) {
                 success: function (data) {
                     $(element).fadeOut(100);       
                     if (lat !== null && lat!== undefined) {                          
-                         map.markersArray[id].popupObject.addRow($("span.main-user").html(), $(area).val(),parent,false);
+                        self.map.markersArray[id].popupObject.addRow($("span.main-user").html(), $(area).val(),parent,false);
                          alert($(area).val())
                     }
                     var container = document.createElement("div");
@@ -174,7 +178,7 @@ function commentClick(id, chosenState) {
     }
 
     //Get new comments for markers
-    function reloadMarkers() {
+    var reloadMarkers = function () {
         //b28a41bc-7d12-4868-83e3-aa037d1879d7
         var controllers = ["Images", "Account", "Images", "Manage"];
         var path = location.pathname.split("/");
@@ -197,21 +201,29 @@ function commentClick(id, chosenState) {
                     id: id
                 },
                 success: function (data) {
+                    self.map = pins.newMap();
                     $(data).each(function () {
+                        //Check if the comment has a pin or not. (Impossible to put a comment at coords 0,0 because the map bounds start at 1,1)
+                        if(this.lat!==0 && this.lng!==0){
+                            var parent;
+                            var isInitial;
+                            if (this.parentId === undefined) {
+                                parent = this.commentId;
+                                isInitial = true;
+                            }
 
-                        var parent;
-                        if (this.parentId === undefined) {
-                            parent = this.commentId;
-                        }
+                            else {
+                                parent = this.parentId;
+                                isInitial = false;
+                            }
 
-                        else {
-                            parent = this.parentId;
-                        }
-                        //createMarkers(this.message, this.posterProfileName, this.lat, this.lng, parent, this.commentUrgency, true);
-
+                            self.map.createMarker(this.message, this.posterProfileName, this.lat, this.lng, parent, isInitial, this.commentUrgency)
+                         }
                     });
+
                 }
             });
     }
 
 
+    module.exports.reloadMarkers = reloadMarkers;
