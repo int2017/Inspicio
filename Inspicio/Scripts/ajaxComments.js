@@ -1,4 +1,4 @@
-﻿var pins = require("./pinComments-NEW.js");
+﻿var pins = require("./pinComments.js");
 
 var commentEnum = {
     Default: 0,

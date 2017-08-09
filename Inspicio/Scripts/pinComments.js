@@ -259,7 +259,7 @@ function mapClass() {
     //Creating a separate function for adding markers to the map. ( To avoid duplicating code)
     this.addMarkerToMap = function (markerObject) {
 
-        //The drag listener, which checks if the marker is still inside the image.
+        //Drag listener checks if the marker is still inside the image.
         //This had to be put here because access to the marker and the map is required
         var lastValidPosition;
         markerObject.markerLeaf.on("drag", function (event) {
