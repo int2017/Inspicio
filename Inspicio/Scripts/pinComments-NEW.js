@@ -157,10 +157,11 @@ function markerClass(location,id) {
         if (self.popupObject.commentList.length > 0) {
             parent = self.popupObject.parentId;
             self.location = self.markerLeaf.getLatLng();
-            self.updateMarker(self.location,parent);
+            self.updateMarker(self.location, parent);
         }
         
     })
+   
 
     //Assigning temporary ID for markers without a comment inside
     this.id = id;
@@ -203,11 +204,17 @@ function mapClass() {
     //Separate variable to be used in functions
     var self = this;
 
+    var h = $("#image-container img").height();
+    var w = $("#image-container img").width();
+
     //Creating the map
     this.mapLeaf = L.map("imageMap", {
         crs: L.CRS.Simple,
         zoomControl: false,
-        unitsPer1000px: 1000
+        maxBounds: [
+            [w, 0],
+            [0,h]
+        ]
     });
 
     //Additional variables
@@ -222,14 +229,7 @@ function mapClass() {
     //Adding custom id attribute to the map layer element
     $(".leaflet-map-pane").attr("id", "map-pane");
 
-    //Setting map bounds
-    var h = $("#image-container img").height();
-    var w = $("#image-container img").width();
-    var bound = [[1, 1], [h, w]];
-    this.mapLeaf.fitBounds(bound);
-
     //Setting additional map settings
-    this.mapLeaf.fitBounds(bound);
     this.mapLeaf.dragging.disable();
     this.mapLeaf.touchZoom.disable();
     this.mapLeaf.doubleClickZoom.disable();
@@ -239,23 +239,39 @@ function mapClass() {
     this.mapLeaf.setView([0, 0]);
     if (this.mapLeaf.tap) this.mapLeaf.tap.disable();
 
+
+
+   
+
     //Map on click listener
     this.mapLeaf.on('click', function (e) {
         var markerObject = new markerClass(e.latlng, self.markersArray.length);
         self.addMarkerToMap(markerObject);
         markerObject.openPopup();
     });
-    //Adding invalidateSize() function on window resize
-    $(window).resize(function () {
+  /*  //Adding invalidateSize() function on window resize
+    //Initial invalidateSize();
+    this.mapLeaf.invalidateSize();
+    $(window).resize(function () {;*/
         setTimeout(
             function () {
                 self.mapLeaf.invalidateSize();
-            }, 1000);
+            }, 3000);
 
-    });
+   // })
     //Creating a separate function for adding markers to the map. ( To avoid duplicating code)
     this.addMarkerToMap = function (markerObject) {
-
+        var lastValidPosition;
+        markerObject.markerLeaf.on("drag", function (event) {
+            var latLng = markerObject.markerLeaf.getLatLng();
+            if (self.mapLeaf.getBounds().contains(latLng)) {
+                lastValidPosition = latLng;
+            } else {
+                if (lastValidPosition) {
+                    markerObject.markerLeaf.setLatLng(lastValidPosition);
+                }
+            }
+        }, markerObject.markerLeaf);
         self.markersArray.push(markerObject);
         markerObject.markerLeaf.addTo(self.markerGroupLeaf);
         //Deleting popup and marker if popup has not been commented in
