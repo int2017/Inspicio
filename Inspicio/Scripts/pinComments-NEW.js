@@ -263,6 +263,7 @@ function mapClass() {
         //This had to be put here because access to the marker and the map is required
         var lastValidPosition;
         markerObject.markerLeaf.on("drag", function (event) {
+            self.mapLeaf.closePopup();
             var latLng = markerObject.markerLeaf.getLatLng();
             if (self.mapLeaf.getBounds().contains(latLng)) {
                 lastValidPosition = latLng;
@@ -277,6 +278,7 @@ function mapClass() {
         markerObject.markerLeaf.addTo(self.markerGroupLeaf);
         //Deleting popup and marker if popup has not been commented in
         markerObject.markerLeaf.on("popupclose", function (e) {
+            $(".open-pin").html("Open pin").removeClass("close-pin");
             if (markerObject.popupObject.popupLeaf.getContent().indexOf("row-eq-height popup-comment") === -1) {
                 self.mapLeaf.removeLayer(markerObject.markerLeaf);
                 $(self.markersArray).slice(self.markersArray.indexOf(markerObject), 1)

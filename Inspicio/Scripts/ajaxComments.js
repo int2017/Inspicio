@@ -130,8 +130,20 @@ function commentClick(id, chosenState) {
             commentClick(id, urgency);
         });
         $(document).on("click", ".open-pin", function () {
-            var id = $(this).data("marker");
-            self.map.markersArray[id-1].openPopup();
+            //Checks if the popup is already open and does the appropriate changes
+            if ($(this).hasClass("close-pin")){
+                var id = $(this).data("marker");
+                self.map.markersArray[id - 1].markerLeaf.closePopup();
+                $(this).html("Open pin");
+                $(this).removeClass("close-pin")
+            }
+            else {
+                var id = $(this).data("marker");
+                self.map.markersArray[id - 1].openPopup();
+                $(this).addClass("close-pin");
+                $(this).html("Close pin");
+            }
+            
         })
         $(document).on("click", "#hide-pop", function () {
             $(this).toggleClass("clicked");
