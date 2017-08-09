@@ -160,7 +160,7 @@ namespace Inspicio.Migrations
 
                     b.Property<int>("ReviewId");
 
-                    b.Property<int>("ScreenStatus");
+                    b.Property<int>("ScreenState");
 
                     b.Property<string>("Title")
                         .IsRequired()

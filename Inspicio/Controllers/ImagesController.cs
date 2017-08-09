@@ -136,7 +136,7 @@ namespace Inspicio.Controllers
                 {
                         // Screen creation
                     s.OwnerId = _userManager.GetUserId(HttpContext.User);
-                    s.ScreenStatus = Screen.Status.Undecided;
+                    s.ScreenState = Screen.States.Open;
                     s.ReviewId = Review.ReviewId;
                     _context.Add(s);
                 }
