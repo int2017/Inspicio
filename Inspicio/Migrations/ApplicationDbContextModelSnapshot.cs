@@ -130,8 +130,6 @@ namespace Inspicio.Migrations
 
                     b.Property<int>("ReviewStatus");
 
-                    b.Property<int>("ReviewType");
-
                     b.Property<string>("Thumbnail");
 
                     b.Property<string>("Title")

@@ -8,13 +8,28 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/2.5.1/css/bootstrap-colorpicker.min.css" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/2.5.1/js/bootstrap-colorpicker.min.js"></script>
 <script type="text/javascript" src="~/js/background-selector.js"></script>
-@if(Model.Review.ReviewType == Review.Type.Project){
 <div id="view-project-info">
     <div class="container project-container">
-        <h1 class="col-md-offset-1">@Model.Review.Title</h1>
+        <h1 class="col-md-offset-1">@{ 
+            if (Model.Review.Title == null) {
+                @:'No review title provided'
+            }
+            else
+            {
+                @:@Model.Review.Title
+            }
+        }
+        </h1>
         <div class="row">
-            <div class="col-md-6 col-md-offset-1">
-                @Model.Review.Description
+            <div class="col-md-6 col-md-offset-1">@{ 
+                if (Model.Review.Description == null) {
+                    @:"No review description provided"
+                }
+                else
+                {
+                    @:@Model.Review.Description
+                }
+            }
             </div>
             <div class="col-md-4">
                 <img class="img-responsive" alt="@Model.Review.Title" src="@Model.Review.Thumbnail" />
@@ -26,7 +41,6 @@
             <i class="glyphicon glyphicon-chevron-down" id="dropdown"></i>
     </div>
 </div>
-}
 <div class="view-container">
    @if (Model.ScreenIds.Count > 1) { 
     <div class="row">

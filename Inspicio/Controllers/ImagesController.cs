@@ -115,12 +115,10 @@ namespace Inspicio.Controllers
                 if (CreatePageModel.ReviewTitle != null)
                 {
                     Review.Title = CreatePageModel.ReviewTitle;
-                    Review.ReviewType = Review.Type.Project;
                 }
                 else
                 {
                     Review.Title = CreatePageModel.Screens[0].Title;
-                    Review.ReviewType = Review.Type.Quick;
                 }
                 Review.Description = CreatePageModel.ReviewDescription;
                 if (CreatePageModel.ReviewThumbnail != null)
