@@ -15,7 +15,10 @@ the server when create new is pressed.
                 for (var i = 0; i < l; i++) {
                     $(images[i]).remove();
                 }
-                document.getElementById("b64"+area).value = e.target.result;
+                document.getElementById("b64" + area).value = e.target.result;
+                if ($("#Image_Title").val() == "") {
+                    $("#Image_Title").val((file.name).replace(/\.[^/.]+$/, ""));
+                }
                 var image = document.createElement("img");
                 
                 image.src = e.target.result;

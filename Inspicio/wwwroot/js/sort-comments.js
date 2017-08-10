@@ -7,8 +7,9 @@
     })
 
     $(document).on("change", "#comment-date",function () {
+        $(".date-header").removeClass("active");
+
         if ($(this).val() == "all") {
-            $(".date-header").removeClass("active");
             $(".comment").slideDown(300);
         }
         else {
@@ -30,8 +31,9 @@
 });
 
 function addComDates() {
-    $("#comment-date").html("<option value='all'>All</option>");
-    var dates = [];
+    $("#comment-date").html("<option value=\"\" disabled selected>Filter by Date</option>");
+    $("#comment-date").html($("#comment-date").html() + "<option value= \"all\">Enternity</option>");
+        var dates = [];
     $(".date-header").each(function () {
         var dateVal = $(this).children().data("value");
         if ($.inArray(dateVal, dates)) {

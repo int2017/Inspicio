@@ -10,7 +10,7 @@
 
 
 
-<h3>@Model.screenData.Screen.Title</h3>
+<h4><u>@Model.screenData.Screen.Title</u></h4>
 
 <div id="image-description">
     <div id="description-section">
@@ -31,22 +31,22 @@
 
         <img src="@Url.Content(Model.screenData.Screen.Content)" title="@Model.screenData.Screen.Title" alt="@Model.screenData.Screen.Title" />
     </div>
-
+    @{
+        var user = await UserManager.FindByIdAsync(Model.Review.CreatorId);
+        <h4> By :<img style="height:40px;width:40px" src="@user.ProfilePicture" /> @user.ProfileName</h4>
+    }
     <div class="image-controls text-center">
         <div class="container-fluid reviewer-container">
             <div id="thumb-container">
 
                 <!--If the user has already voted either thumbs up or down,change the fill to black-->
                 <div class="row">
-                    <button type="button" id="thumbs-up" class="btn btn-success thumb"> <i class="fa fa-thumbs-o-up " aria-hidden="true"></i> : <span class="rating">@Model.screenData.Num_Approvals</span></button>
-                    <button type="button" id="thumbs-middle" class="btn btn-warning thumb"> <i class="fa fa-thumbs-o-up fa-rotate-90" aria-hidden="true"></i> : <span class="rating">@Model.screenData.Num_NeedsWorks</span></button>
-                    <button type="button" id="thumbs-down" class="btn btn-danger thumb"><i class="fa fa-thumbs-o-down " aria-hidden="true"></i> : <span class="rating">@Model.screenData.Num_Rejections</span></button>
+                    <button type="button" id="thumbs-up" class="btn btn-success thumb"> <i class="fa fa-thumbs-o-up " aria-hidden="true"></i> : <span class="rating">@Model.screenData.Num_Approvals</span><br />Approve</button>
+                    <button type="button" id="thumbs-middle" class="btn btn-warning thumb"> <i class="fa fa-thumbs-o-up fa-rotate-90" aria-hidden="true"></i> : <span class="rating">@Model.screenData.Num_NeedsWorks</span><br />Request Changes</button>
+                    <button type="button" id="thumbs-down" class="btn btn-danger thumb"><i class="fa fa-thumbs-o-down " aria-hidden="true"></i> : <span class="rating">@Model.screenData.Num_Rejections</span><br />Reject</button>
                 </div>
 
-                @{ 
-                    var user = await UserManager.FindByIdAsync(Model.Review.CreatorId);
-                    <h4> By :<img style="height:40px;width:40px" src="@user.ProfilePicture" /> @user.ProfileName</h4>
-                 }
+
             </div>
 
         </div>
@@ -68,15 +68,25 @@
      } >
 
     <div class="sidebar-menu">
-        <select id="comment-date" class="form-control">
-            <option value="all">All</option>
+        <select id="comment-date" class="form-control" style="display:none;">
+            <option value="" disabled selected>Filter by Date</option>
+            <option value="all">All Dates</option>
         </select>
         <ul>
             <li id="close-side"><i class="glyphicon glyphicon-menu-left"></i></li>
         </ul>
 
     </div>
-    <div id="comment-section">
+    <div id="comment-section"  style=" @{ 
+         if(Model.FullPage)
+         {
+             @:display:none"
+         }
+         else
+         {
+             @:display:block"
+         }
+     }>
 
         <!-- comments go here -->
         <h3 class="text-center">Comment section</h3>

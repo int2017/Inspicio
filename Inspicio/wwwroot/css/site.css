@@ -484,7 +484,9 @@ body .dropzone .dz-preview .dz-image {
 }
 
 #thumb-container {
-    padding: 15px 0;
+    padding: 10px;
+    margin-left: -5%;
+    margin-right: -5%;
 }
 
     #thumb-container i,#view-project-info i {
@@ -615,7 +617,7 @@ nav.navbar.navbar-inverse.navbar-fixed-top {
 .image-controls .btn {
     margin: 5px auto;
     width: 30%;
-    height: 40px;
+    height: 55px;
     -webkit-box-shadow: 0px 0px 41px -6px rgba(0, 0, 0, 0.5);
     -moz-box-shadow: 0px 0px 41px -6px rgba(0, 0, 0, 0.5);
     box-shadow: 0px 0px 41px -6px rgba(0, 0, 0, 0.5);
@@ -687,7 +689,8 @@ input:focus {
 }
 
 select#comment-date {
-    max-width: 150px;
+    max-width: 75%;
+    align-content:center;
     display: inline;
 }
 
@@ -707,10 +710,6 @@ select#comment-date {
         -webkit-transition: all 0.3s linear;
         transform: rotate(0deg);
     }
-
-.side-hide #comment-section {
-    display: none;
-}
 
 .side-hide li#close-side i {
     transform: rotate(180deg);
@@ -778,10 +777,6 @@ select#comment-date {
 
 .comment-msg {
     min-height: 60px;
-}
-
-.container-fluid.reviewer-container .row {
-    padding: 10px;
 }
 
 .lity-close {
