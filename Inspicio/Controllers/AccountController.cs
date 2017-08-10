@@ -478,6 +478,21 @@ namespace Inspicio.Controllers
 
             return Json(data: true);
         }
+
+        [AllowAnonymous]
+        [AcceptVerbs("Get", "Post")]
+        public IActionResult VerifyUsername([Bind(Prefix = "Register.ProfileName")]string ProfileName)
+        {
+            if (_userManager.Users.Any(x => x.ProfileName == ProfileName))
+            {
+                return Json(data: $"ProfileName {ProfileName} is already in use.");
+            }
+
+            return Json(data: true);
+        }
+
+
+
         #region Helpers
 
         private void AddErrors(IdentityResult result)

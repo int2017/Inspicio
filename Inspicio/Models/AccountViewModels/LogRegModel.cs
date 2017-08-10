@@ -32,6 +32,7 @@ namespace Inspicio.Models.AccountViewModels
             // Error message is needed!
             [Required]
             [StringLength(30, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 5)]
+            [Remote(action: "VerifyUsername", controller: "Account", AdditionalFields = "ProfileName")]
             [Display(Name = "username")]
             public string ProfileName { get; set; }
 
