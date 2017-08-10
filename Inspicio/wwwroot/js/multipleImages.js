@@ -47,24 +47,25 @@
         }
     })
     $("#create-screens").click(function () {
+
         if ($("#project-title").val() === "") {
-            alert("Add a project title first!")
+            alert("Review title is empty! Defaulting to 'No Title'.");
+            $("#project-title").val('No Title');
         }
-        else{
-            $(this).attr("id", "create-screens");
-            $("#project-info").fadeOut(300);
-            $("#review-title-header").fadeOut(300);
-            setTimeout(function () {
-                $("#reviewer-project-title").html($("#project-title").val());
-                $("#reviewer-project-description").html($("#project-description").val());
-                $("#review-title-header").html($("#project-title").val());
-            }, 200)
+
+        $(this).attr("id", "create-screens");
+        $("#project-info").fadeOut(300);
+        $("#review-title-header").fadeOut(300);
+        setTimeout(function () {
+            $("#reviewer-project-title").html($("#project-title").val());
+            $("#reviewer-project-description").html($("#project-description").val());
+            $("#review-title-header").html($("#project-title").val());
+        }, 200)
             
-            $("#review-title-header").fadeIn(300);
-            $(".main-edit").delay(300).fadeIn(300);
-            $(".image-upload-container").delay(300).fadeIn(300);
-            
-        }
+        $("#review-title-header").fadeIn(300);
+        $(".main-edit").delay(300).fadeIn(300);
+        $(".image-upload-container").delay(300).fadeIn(300);
+
     })
     function appendThumbnail(index, content) {
         
