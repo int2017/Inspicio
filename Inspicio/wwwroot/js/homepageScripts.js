@@ -1,5 +1,9 @@
 ﻿var section = 2;
+$(document).on("click", "#choice-feature", function () {
+    $("#action-choice").fadeOut(300);
+    $("#feature-demo").delay(300).fadeIn(300);
 
+})
 function switchSection() {
 
     $("#section" + (section - 1) + " .success").slideDown(500);
