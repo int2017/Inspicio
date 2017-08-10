@@ -225,7 +225,8 @@ namespace Inspicio.Controllers
         {
             var screen = _context.Screens.Where(s => s.ScreenId == id).Select( c => c.Content).SingleOrDefault();
             var screenTitle = _context.Screens.Where(s => s.ScreenId == id).Select(c => c.Title).SingleOrDefault();
-            return Json(new { content = screen, title = screenTitle });
+            var screenState = _context.Screens.Where(s => s.ScreenId == id).Select(c => c.ScreenState).SingleOrDefault();
+            return Json(new { content = screen, title = screenTitle, state = screenState });
         }
         public PartialViewResult _CreatePartial()
         {
@@ -440,7 +441,7 @@ namespace Inspicio.Controllers
             var userId = _userManager.GetUserId(HttpContext.User);
 
             int id = data.ReviewId;
-            var review = await _context.Review.SingleOrDefaultAsync(m => m.ReviewId == id);
+            var review = _context.Review.SingleOrDefault(m => m.ReviewId == id);
 
             if (data.Open)
             {
@@ -452,6 +453,16 @@ namespace Inspicio.Controllers
             }
             await _context.SaveChangesAsync();
             return Ok(1);
+        }
+
+        [HttpPost]
+        public JsonResult Toggle_ScreenState(int? id)
+        {
+            var screen = _context.Screens.SingleOrDefault(s => s.ScreenId == id);
+            screen.ScreenState = (screen.ScreenState == Screen.States.Open) ? Screen.States.Closed : Screen.States.Open;
+
+            _context.SaveChangesAsync();
+            return Json( screen.ScreenState );
         }
     }
 }

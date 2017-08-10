@@ -1,5 +1,6 @@
 ﻿
 @model Inspicio.Models.ReviewViewModels.ViewModel
+@using Microsoft.AspNetCore.Identity
 @using Inspicio.Extensions
 
 @inject IJsonHelper Json;
@@ -10,7 +11,7 @@
 
 
 
-<h4><u>@Model.screenData.Screen.Title</u></h4>
+<h3><u>@Model.screenData.Screen.Title</u></h3>
 
 <div id="image-description">
     <div id="description-section">
@@ -21,9 +22,30 @@
 
 <div class="img-wrapper">
     <div id="img-btn-container">
+        <h4>Screen Controls</h4>
         <button title="Show/Hide Pins" type="button" class="btn lightbox-button " id="hide-pop" onclick="popupState()"><i class="glyphicon glyphicon-map-marker"></i></button>
         <button title="Fullscreen View" class="lightbox-button btn" href="@Url.Content(Model.screenData.Screen.Content)" data-lity data-lity-desc="@Model.screenData.Screen.Title"><i class="fa fa-expand" aria-hidden="true"></i></button>
         <button title="Change Background Colour" class="lightbox-button btn" id="color-picker"><i class="fa fa-paint-brush" aria-hidden="true"></i></button>
+        @{ 
+            if (Model.Review.CreatorId == User.GetProfileId())
+            {
+                <button class="lightbox-button btn" id="screen-state-toggle"><span id="screen-state-icon"></span></button>
+                <script>
+                    @if (Model.screenData.Screen.ScreenState == Screen.States.Closed)
+                    {
+                       @:$("#screen-state-toggle").attr("title", "Re-open Screen");
+                       @:$("#screen-state-icon").addClass("class=fa fa-toggle-on");
+                       @:$("#screen-state-icon").removeClass("class=fa fa-toggle-off");
+                    }
+                    else
+                    {
+                        @:$("#screen-state-toggle").attr("title", "Close Screen");
+                        @:$("#screen-state-icon").addClass("class=fa fa-toggle-off");
+                        @:$("#screen-state-icon").removeClass("class=fa fa-toggle-on");
+                    }
+                </script>
+            }
+        }
     </div>
     <div id="image-container">
         <div id="background-selector"></div>

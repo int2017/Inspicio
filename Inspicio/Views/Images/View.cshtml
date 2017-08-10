@@ -5,10 +5,10 @@
 
 
 <script type="text/javascript" src="~/js/ajaxScreens.js"></script>
+<link rel="stylesheet" href="~/css/octicons.css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/2.5.1/css/bootstrap-colorpicker.min.css" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/2.5.1/js/bootstrap-colorpicker.min.js"></script>
 <script type="text/javascript" src="~/js/background-selector.js"></script>
-
 <div class="view-container
      
      @{ 
@@ -33,10 +33,12 @@
             <div class="cover-container">
                 @foreach (var id in Model.ScreenIds)
                 {
-                    <div class="cover-item" id="@id" onclick="screenSelector(@Model.Review.ReviewId, @id)" style="cursor: pointer;"></div>
-                                <script>
+                    <div class="cover-item" id="@id" onclick="screenSelector(@Model.Review.ReviewId, @id)" style="cursor: pointer;">
+                        <span id="@id" class="state"></span>    
+                    </div>
+                    <script>
                         screenContent( @id);
-                                </script>
+                    </script>
                 }
             </div>
         </div>
