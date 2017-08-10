@@ -1,4 +1,14 @@
 
+#ostrich-head{
+    position: absolute;
+    z-index: 1;
+    height: 200px;
+    transform: rotate(18deg);
+    margin-left: 840px;
+    margin-top: 200px;
+}
+
+
 
 h4, .h4 {
     font-size: 40px;
@@ -145,6 +155,8 @@ body {
     width: 550px;
     margin-top: 40px;
     background-color:white; 
+    position: absolute;
+    z-index: 3;
 }
 
 #loginform {
