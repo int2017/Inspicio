@@ -14,6 +14,8 @@ using Inspicio.Models.AccountViewModels;
 using Inspicio.Services;
 
 using Inspicio.Classes;
+using Inspicio.Data;
+using Microsoft.CodeAnalysis;
 
 namespace Inspicio.Controllers
 {
@@ -26,6 +28,7 @@ namespace Inspicio.Controllers
         private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
         private readonly string _externalCookieScheme;
+        private readonly ApplicationDbContext _context;
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
@@ -33,7 +36,8 @@ namespace Inspicio.Controllers
             IOptions<IdentityCookieOptions> identityCookieOptions,
             IEmailSender emailSender,
             ISmsSender smsSender,
-            ILoggerFactory loggerFactory)
+            ILoggerFactory loggerFactory,
+            ApplicationDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -41,6 +45,7 @@ namespace Inspicio.Controllers
             _emailSender = emailSender;
             _smsSender = smsSender;
             _logger = loggerFactory.CreateLogger<AccountController>();
+            _context = context;
         }
 
         //
@@ -463,6 +468,16 @@ namespace Inspicio.Controllers
             return View();
         }
 
+        [AllowAnonymous]
+        [AcceptVerbs("Get", "Post")]
+        public IActionResult VerifyEmail([Bind(Prefix = "Register.Email")]string Email){
+            if (_userManager.Users.Any(x => x.Email == Email))
+            {
+                return Json(data: $"Email {Email} is already in use.");
+            }
+
+            return Json(data: true);
+        }
         #region Helpers
 
         private void AddErrors(IdentityResult result)
