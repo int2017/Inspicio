@@ -10,6 +10,22 @@
 <input id="ScreenId" type="hidden" asp-for="@Model.screenData.Screen.ScreenId" />
 
 
+<div class="image-controls text-center">
+    <div class="container-fluid reviewer-container">
+        <div id="thumb-container">
+
+            <!--If the user has already voted either thumbs up or down,change the fill to black-->
+            <div class="row">
+                <button type="button" id="thumbs-up" class="btn btn-success thumb"> <i class="fa fa-thumbs-o-up " aria-hidden="true"></i> : <span class="rating">@Model.screenData.Num_Approvals</span><br />Approve</button>
+                <button type="button" id="thumbs-middle" class="btn btn-warning thumb"> <i class="fa fa-thumbs-o-up fa-rotate-90" aria-hidden="true"></i> : <span class="rating">@Model.screenData.Num_NeedsWorks</span><br />Request Changes</button>
+                <button type="button" id="thumbs-down" class="btn btn-danger thumb"><i class="fa fa-thumbs-o-down " aria-hidden="true"></i> : <span class="rating">@Model.screenData.Num_Rejections</span><br />Reject</button>
+            </div>
+
+
+        </div>
+
+    </div>
+</div>
 
 <h3><u>@Model.screenData.Screen.Title</u></h3>
 
@@ -34,14 +50,14 @@
                     @if (Model.screenData.Screen.ScreenState == Screen.States.Closed)
                     {
                        @:$("#screen-state-toggle").attr("title", "Re-open Screen");
-                       @:$("#screen-state-icon").addClass("class=fa fa-toggle-on");
-                       @:$("#screen-state-icon").removeClass("class=fa fa-toggle-off");
+                       @:$("#screen-state-icon").addClass("fa fa-toggle-on");
+                       @:$("#screen-state-icon").removeClass("fa fa-toggle-off");
                     }
                     else
                     {
                         @:$("#screen-state-toggle").attr("title", "Close Screen");
-                        @:$("#screen-state-icon").addClass("class=fa fa-toggle-off");
-                        @:$("#screen-state-icon").removeClass("class=fa fa-toggle-on");
+                        @:$("#screen-state-icon").addClass("fa fa-toggle-off");
+                        @:$("#screen-state-icon").removeClass("fa fa-toggle-on");
                     }
                 </script>
             }
@@ -51,27 +67,7 @@
         <div id="background-selector"></div>
         <div id="imageMap"></div>
 
-        <img src="@Url.Content(Model.screenData.Screen.Content)" title="@Model.screenData.Screen.Title" alt="@Model.screenData.Screen.Title" />
-    </div>
-    @{
-        var user = await UserManager.FindByIdAsync(Model.Review.CreatorId);
-        <h4> By :<img style="height:40px;width:40px" src="@user.ProfilePicture" /> @user.ProfileName</h4>
-    }
-    <div class="image-controls text-center">
-        <div class="container-fluid reviewer-container">
-            <div id="thumb-container">
-
-                <!--If the user has already voted either thumbs up or down,change the fill to black-->
-                <div class="row">
-                    <button type="button" id="thumbs-up" class="btn btn-success thumb"> <i class="fa fa-thumbs-o-up " aria-hidden="true"></i> : <span class="rating">@Model.screenData.Num_Approvals</span><br />Approve</button>
-                    <button type="button" id="thumbs-middle" class="btn btn-warning thumb"> <i class="fa fa-thumbs-o-up fa-rotate-90" aria-hidden="true"></i> : <span class="rating">@Model.screenData.Num_NeedsWorks</span><br />Request Changes</button>
-                    <button type="button" id="thumbs-down" class="btn btn-danger thumb"><i class="fa fa-thumbs-o-down " aria-hidden="true"></i> : <span class="rating">@Model.screenData.Num_Rejections</span><br />Reject</button>
-                </div>
-
-
-            </div>
-
-        </div>
+        <img src="@Url.Content(Model.screenData.Screen.Content)" style="max-width: 100%;" title="@Model.screenData.Screen.Title" alt="@Model.screenData.Screen.Title" />
     </div>
 </div>
 
@@ -258,7 +254,6 @@
 
 <br />
 
-    <a asp-action="Index">Back to List</a>
 <script type="text/javascript" src="~/js/pinComments.js"></script>
 <script type="text/javascript" src="~/js/background-selector.js"></script>
 <script type="text/javascript" src="~/js/ajaxOpenSlider.js"></script>

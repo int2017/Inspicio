@@ -436,23 +436,13 @@ namespace Inspicio.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CloseReview([FromBody] DataFromToggle data)
+        public JsonResult CloseReview([FromBody] DataFromToggle data)
         {
-            var userId = _userManager.GetUserId(HttpContext.User);
+            var review = _context.Review.SingleOrDefault(s => s.ReviewId == data.ReviewId );
+            review.ReviewState = (review.ReviewState == Review.States.Open) ? Review.States.Closed : Review.States.Open;
 
-            int id = data.ReviewId;
-            var review = _context.Review.SingleOrDefault(m => m.ReviewId == id);
-
-            if (data.Open)
-            {
-                review.ReviewState = Review.States.Open;
-            }
-            else
-            {
-                review.ReviewState = Review.States.Closed;
-            }
-            await _context.SaveChangesAsync();
-            return Ok(1);
+            _context.SaveChangesAsync();
+            return Json(review.ReviewState);
         }
 
         [HttpPost]

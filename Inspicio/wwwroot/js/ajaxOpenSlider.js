@@ -1,13 +1,6 @@
 ﻿$(document).ready(function () {
 
     $(function () {
-        $('#toggle').bootstrapToggle({
-            on: 'Open',
-            off: 'Closed'
-        });
-    });
-
-    $(function () {
 
         $(document).on("click", '#screen-state-toggle', function () {
 
@@ -46,25 +39,37 @@
         });
     });
 
-    $(function () {
 
-        $(document).on("change", "#toggle", function () {
-            var DataFromToggle = {
+    $("#review-state-toggle").on('click', function () {
 
-                "ReviewId": $("#ReviewId").val(),
-                "Open": $("#toggle").prop('checked')
-            };
+        var reviewData = {
 
-            $.ajax(
-                {
-                    type: "POST", //HTTP POST Method  
-                    url: "../CloseReview", // Controller/View  
-                    contentType: "application/json;",
-                    dataType: "text",
-                    data: JSON.stringify(DataFromToggle),
-                    success: function () {
+            "ReviewId": $("#ReviewId").val(),
+            "Open": $("#review-state").hasClass('review_closed') ? true : false
+        };
+
+        $.ajax(
+            {
+                type: "POST", //HTTP POST Method  
+                url: "../CloseReview", // Controller/View  
+                contentType: "application/json;",
+                dataType: "text",
+                data: JSON.stringify(reviewData),
+                success: function (response) {
+
+                    if (response == 1) {
+                        $("#review-state-toggle").attr("title", "Re-open Review");
+                        $("#review-state-icon").addClass("fa fa-toggle-on");
+                        $("#review-state-icon").removeClass("fa fa-toggle-off");
+                        $("#review-state").html("Review :Closed");
                     }
-                });
-        });
-    });
+                    else {
+                        $("#review-state-toggle").attr("title", "Close Review");
+                        $("#review-state-icon").addClass("fa fa-toggle-off");
+                        $("#review-state-icon").removeClass("fa fa-toggle-on");
+                        $("#review-state").html("Review :Open");
+                    }
+                }
+            });
+    })
 })

@@ -33,6 +33,7 @@
 #background-selector {
     position: absolute;
     height: 100%;
+    width:100%;
     top: 0;
     left: 0;
     z-index: -1;
@@ -97,6 +98,9 @@ div.colorpicker {
     background-size: cover;
 }
 
+.reviewers-item {
+
+}
 
 hr {
     border-color: #e6e6e6;
@@ -498,9 +502,7 @@ body .dropzone .dz-preview .dz-image {
 }
 
 #thumb-container {
-    padding: 10px;
-    margin-left: -5%;
-    margin-right: -5%;
+
 }
 
     #thumb-container i,#view-project-info i {
@@ -593,7 +595,6 @@ nav.navbar.navbar-inverse.navbar-fixed-top {
     }
 
 .image-controls {
-    background-color: rgb(62, 62, 62);
     z-index: 5000;
     margin: 0 auto;
     border-radius: 3px;
@@ -630,8 +631,9 @@ nav.navbar.navbar-inverse.navbar-fixed-top {
 
 .image-controls .btn {
     margin: 5px auto;
-    width: 30%;
-    height: 55px;
+    margin-left:-17%;
+    width: 100%;
+    display:block;
     -webkit-box-shadow: 0px 0px 41px -6px rgba(0, 0, 0, 0.5);
     -moz-box-shadow: 0px 0px 41px -6px rgba(0, 0, 0, 0.5);
     box-shadow: 0px 0px 41px -6px rgba(0, 0, 0, 0.5);
@@ -667,7 +669,7 @@ input:focus {
     position: absolute;
     width: 72%;
     right: 0;
-    padding: 40px;
+    padding: 15%;
     margin: auto;
 }
 
@@ -738,19 +740,58 @@ select#comment-date {
     -webkit-transition: width 0.3s linear;
 }
 
-.view-container.wide {
-    padding-left:75px;
-    width: 100%;
-    transition: all 0.3s linear;
-    -moz-transition: all 0.3s linear;
-    -webkit-transition: all 0.3s linear;
+.image-controls {
+    position: fixed;
+    right: 0;
+    margin-top: 20%;
 }
 
-    .view-container.wide .img-wrapper {
-        width: 100%;
-    }
+
+
+.reviewers-section {
+    right: 0;
+    position: fixed;
+    width: 12%;
+    margin-right: 1.8%;
+    margin-top: 12%;
+}
+
+#reviewees-section {
+    overflow-y: auto;
+    height: 175px;
+}
+
+.reviewers-section-row {
+    margin: 1px;
+   
+}
+
+#reviewers-name {
+    display: inline-table;
+    margin: 0 0 5px 0;
+    width: 66%;
+}
+#reviewers-avatar {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+    
+.view-container.wide {
+padding-left: 75px;
+width: 100%;
+height: 100%;
+transition: all 0.3s linear;
+-moz-transition: all 0.3s linear;
+-webkit-transition: all 0.3s linear;
+}
+
+.view-container.wide .img-wrapper {
+    width: 100%;
+}
 
 .view-container {
+    width: 85%;
+    height:100%;
     transition: all 0.3s linear;
     -moz-transition: all 0.3s linear;
     -webkit-transition: all 0.3s linear;

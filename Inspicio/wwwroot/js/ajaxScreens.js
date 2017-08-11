@@ -30,6 +30,7 @@
             }
         });
 }
+
 function screenSelector( reviewid, id) {
 
     var CommentsVisibiltyState = $(".flex-sidebar").hasClass("side-hide");
