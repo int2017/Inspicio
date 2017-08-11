@@ -90,24 +90,36 @@
                 </div>
 
                 <div id="new-reviewees-section">
-                    <i title="Add new reviewer to this review." class="fa fa-user-plus" aria-hidden="true"style="padding-left: 4%;font-size: 24px;padding-top: 4%;"></i>
+                    <i title="Add new reviewer to this review." class="fa fa-user-plus" aria-hidden="true" style="cursor:pointer;font-size: 24px;padding-top: 4%;"></i>
                 </div>
 
-                @foreach (var u in Model.Reviewees)
+                <!-- modal -->
+                <div id="add-reviewees-modal" class="add-reviewees-modal">
+
+                    <!-- Modal content -->
+                    <div class="add-reviewees-modal-content">
+
+                        <p> Select non selected reivewees to add here!</p>
+
+                    </div>
+
+                </div>
+
+                        @foreach (var u in Model.Reviewees)
                 {
 
                     if (u.UserId == Model.Review.CreatorId)
                     {
                         var user = await UserManager.FindByIdAsync(u.UserId);
-                        <script>
+                                <script>
                             $("#authour-section").html('<img id="reviewers-avatar" src="@user.ProfilePicture" style="width:20px;height:20px;" /><p id="reviewers-name">@user.ProfileName</p><hr style="margin:5px;"/>');
-                        </script>
-                    }
+                                </script>
+                            }
 
-                    else
-                    {
-                        var user = await UserManager.FindByIdAsync(u.UserId);
-                        <script>
+                            else
+                            {
+                                var user = await UserManager.FindByIdAsync(u.UserId);
+                                <script>
                             $('<img />', {
                                 id: 'reviewers-avatar',
                                 src: '@user.ProfilePicture',
@@ -123,27 +135,12 @@
                                 class: 'fa fa-thumbs-o-up',
                             }).appendTo("#reviewees-section");
 
-                            $('<img />', {
-                                id: 'reviewers-avatar',
-                                src: '@user.ProfilePicture',
-                                style: 'width:20px;height:20px;'
-                            }).appendTo("#reviewees-section");
-
-                            $('<p />', {
-                                id: 'reviewers-name',
-                                text: '@user.ProfileName',
-                            }).appendTo("#reviewees-section");
-
-                            $('<i />', {
-                                class: 'fa fa-thumbs-o-up',
-                            }).appendTo("#reviewees-section");
-
-                        </script>
-                    }
-                }
+                                </script>
+                            }
+                        }
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
     }
 
     <hr />
