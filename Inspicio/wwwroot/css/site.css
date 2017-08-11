@@ -7,13 +7,14 @@
     margin-left: 840px;
     margin-top: 200px;
 }
-
-
+li{
+    list-style: none;
+}
 
 h4, .h4 {
     font-size: 40px;
     margin: 40px;
-    color:black;
+    color: black;
 }
 
 #loginsection,

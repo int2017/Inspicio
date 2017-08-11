@@ -30,24 +30,25 @@ namespace Inspicio.Models.AccountViewModels
         public class RegisterViewModel
         {
             // Error message is needed!
-            [Required]
+            [Required(ErrorMessage = "* Required")]
             [StringLength(30, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 5)]
             [Remote(action: "VerifyUsername", controller: "Account", AdditionalFields = "ProfileName")]
             [Display(Name = "username")]
             public string ProfileName { get; set; }
 
-            [Required (ErrorMessage = "The email address is required")]
+            [Required(ErrorMessage = "* Required")]
             [EmailAddress(ErrorMessage = "The email address is invalid")]
             [Remote(action: "VerifyEmail",controller: "Account", AdditionalFields = "Email")]
             [Display(Name = "email address")]
             public string Email { get; set; }
 
-            [Required]
+            [Required(ErrorMessage = "* Required")]
             [StringLength(16, ErrorMessage = "The {0} must be at least {2} characters long", MinimumLength = 8)]
             [DataType(DataType.Password)]
             [Display(Name = "password")]
             public string Password { get; set; }
 
+            [Required(ErrorMessage = "* Required")]
             [DataType(DataType.Password)]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }

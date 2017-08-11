@@ -99,7 +99,7 @@ namespace Inspicio.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    ModelState.AddModelError("invalid_login", "Invalid login attempt.");
                     return View("LoginOrRegister", model);
                 }
             }
