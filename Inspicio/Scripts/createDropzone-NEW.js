@@ -39,6 +39,8 @@ function dropzoneClass(area,addImageButton) {
     this.dropzoneDrop = new Dropzone("#"+area, {
         maxFiles: 1,
         autoProcessQueue: false,
+        thumbnailWidth: null,
+        thumbnailHeight: null,
         init: function () {
             this.on("addedfile", function (file) {
                 if (this.files[1]) {

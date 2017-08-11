@@ -336,6 +336,8 @@ body .dropzone .dz-preview .dz-image {
 .dropzone {
     border-radius: 2px !important;
     padding: 0;
+    max-width:100%;
+    position:relative;
     width: 100%;
     background-color: rgba(193, 193, 193, 0.49) !important;
     display: inline-block;
@@ -888,12 +890,16 @@ select#comment-date {
 
 .dz-image {
     border-radius: 0 !important;
+
 }
 
     .dz-image img:hover {
         cursor: pointer;
+        
     }
-
+    .dz-image img {
+        max-width: 100%;
+    }
 body .dropzone .dz-preview.dz-image-preview {
     margin: 0px;
 }
