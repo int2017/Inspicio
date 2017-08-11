@@ -7,8 +7,9 @@
 </script>
 <link rel="stylesheet" href="~/css/create.css" />
 <h2 id="review-title-header"> New Review</h2>
-<i class="fa fa-pencil-square-o edit-project fa-2x main-edit" aria-hidden="true"></i>
-
+<div class="btn edit-project  main-edit">
+    <i class="fa fa-pencil-square-o " aria-hidden="true"></i>Edit project details
+</div>
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div  id="project-info">
         <div id="project-info-row" class="row">
@@ -103,37 +104,39 @@
                     <div class="reviewer-content">
                     <div class="panel-body">
                         <h3 id="overview">Overview</h3> 
-                        <i class="fa fa-pencil-square-o edit-project" aria-hidden="true"></i>
-                        <div class="row-eq-height">
-                            <div class="col-xs-4 col-md-2 text-right">
-                                Title: 
+                        <div class="btn edit-project">
+                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit project details
                             </div>
-                            <div class="col-xs-8 col-md-10">
-                                <span id="reviewer-project-title"></span>
+                            <div class="row-eq-height">
+                                <div class="col-xs-4 col-md-2 text-right">
+                                    Title:
+                                </div>
+                                <div class="col-xs-8 col-md-10">
+                                    <span id="reviewer-project-title"></span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row-eq-height">
-                            <div class="col-xs-4 col-md-2 text-right">
-                                Description: 
+                            <div class="row-eq-height">
+                                <div class="col-xs-4 col-md-2 text-right">
+                                    Description:
+                                </div>
+                                <div class="col-xs-8col-md-10">
+                                    <span id="reviewer-project-description"></span>
+                                </div>
                             </div>
-                            <div class="col-xs-8col-md-10">
-                                <span id="reviewer-project-description"></span>
-                            </div>
-                        </div>
-                        <div class="row-eq-height">
-                            <div class="col-xs-4 col-md-2 text-right">
-                                Screens:
-                                
-                            </div>
-                            <div class="col-xs-8 col-md-10">
-                                <div class="row-eq-height" id="review-thumbnail-container">
-                                    
+                            <div class="row-eq-height">
+                                <div class="col-xs-4 col-md-2 text-right">
+                                    Screens:
+
+                                </div>
+                                <div class="col-xs-8 col-md-10">
+                                    <div class="row-eq-height" id="review-thumbnail-container">
+
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
                     <div class="panel-body add-reviewers">
-                        <h3>Add reviewers</h3>
+                        <h3>Select reviewers</h3>
                         <input id="filter_reviewees_id" name="filter_reviewees" onkeyup="filterUsers()" type="text" placeholder="&#xf002; " />
 @{
     if (Model.Reviewers.Count > 0)

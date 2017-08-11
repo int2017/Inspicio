@@ -1,7 +1,7 @@
 ﻿var dropzone = require("./createDropzone-NEW.js")
 
 //Thumbnail class
-function thumbnailClass(title, content,id) {
+function thumbnailClass(title, content,id,deleteScreen) {
 
     var self = this;
 
@@ -11,21 +11,28 @@ function thumbnailClass(title, content,id) {
 
     //Creating element vars
     this.overviewContainer = $(document.createElement('div')).addClass("col-xs-3 col-md-3").attr('id', "image-rev-" + this.id);
-    this.deleteScreen = $(document.createElement('a')).addClass("delete-screen").html("<i class='fa fa-trash-o' aria-hidden='true'></i>");
+    this.deleteScreen = deleteScreen;
     this.innerContainer = $(document.createElement('div')).addClass("col-xs-12 col-md-12 thumbnail-inner "+this.id).appendTo(this.overviewContainer).prop("title", this.title);
     this.img = $(document.createElement('img')).attr('src', this.content).appendTo(self.innerContainer);
     this.outerContainer = $(document.createElement("div")).addClass("col-xs-4 col-md-2").attr("id", "image-" + this.id).append($(this.innerContainer).clone().append(this.deleteScreen));
 
+    //Adding thumbnails in the thumbnail
     this.init = function () {
         $(self.outerContainer).appendTo("#thumbnail-container");
         $(self.overviewContainer).appendTo("#review-thumbnail-container");
     }
     this.init();
-    
+
+    this.remove = function () {
+        $(self.outerContainer).remove();
+        $(self.overviewContainer).remove();
+    }
 }
 
 //Screen class
 function screenClass(id,title,description,content) {
+
+    var self = this;
 
     //ID to identify the place in projectScreens array
     this.id = id;
@@ -34,9 +41,16 @@ function screenClass(id,title,description,content) {
     this.screenContent=content;
     this.screenTitle=title;
     this.screenDescription = description;
+    this.deleteScreen = $(document.createElement('a')).addClass("delete-screen").html("<i class='fa fa-trash-o' aria-hidden='true'></i>");
 
     //Creating a thumbnail
-    this.thumbnail = new thumbnailClass(this.screenTitle, this.screenContent, this.id);
+    this.thumbnail = new thumbnailClass(this.screenTitle, this.screenContent, this.id, this.deleteScreen);
+
+    //Deleting screen and setting it's id to -1, in the end only screens with ids>-1 will be added into the final list
+    this.remove = function () {
+        self.thumbnail.remove();
+        self.id = -1;
+    }
 
 }
 
@@ -54,16 +68,33 @@ function reviewClass() {
 
     //Buttons for controlling sections and screens
     this.addScreenButton = $("#add-img");
-    this.editProjectInfoButtons = $(".edit-project");
     this.saveChangesButton = $("#edit-img");
+
+    //Adding listeners to buttons
+    this.editProjectInfoButtons = $(".edit-project").click(function () {
+        $(this).hide();
+        $(".add-reviewers-overlay").hide();
+        $(".image-upload-container").hide();
+        $("#project-info").show();
+    });
+
+    this.resetButton = $("#reset").click(function () {
+        self.clearScreenFields();
+    });
 
     //Variables for controlling the fields
     this.thumbnailDropzone = dropzone.createDropzone("projectThumbnailDropzone");
     this.screenDropzone = dropzone.createDropzone("screenDropzone", this.addScreenButton);
-    this.projectTitleField = $("#project-title");
-    this.projectDescriptionField = $("#project-description");
+    this.projectTitleField = $("#project-title").on("blur", function () {
+        self.projectTitle = this.value;
+    });
+    this.projectDescriptionField = $("#project-description").on("blur", function () {
+        self.projectDescription = this.value;
+    });;
     this.screenTitleField = $("#Image_Title");
     this.screenDescriptionField = $("#Image_Description_UserInput");
+
+    
 
     this.clearScreenFields = function () {
         self.screenDropzone.clearDropzone();
@@ -79,6 +110,12 @@ function reviewClass() {
             self.projectScreens.push(newScreen);
             self.clearScreenFields();
             self.addThumbnailListeners(newScreen);
+            newScreen.deleteScreen.click(function () {
+                newScreen.remove();
+                if (self.currentScreen === newScreen.id) {
+                    self.clearScreenFields();
+                }
+            })
         }
 
     })
@@ -97,6 +134,8 @@ function reviewClass() {
        
         $(self.saveChangesButton).off();
         $(".thumbnail-inner." + screen.id).on("click", function () {
+            $(".add-reviewers-overlay").fadeOut(300);
+            self.currentScreen = screen.id;
             $(self.screenTitleField).unbind("keydown");
             $(self.screenDescriptionField).unbind("keydown");
             self.changeValues(screen);
@@ -125,11 +164,19 @@ function reviewClass() {
 $(document).ready(function () {
     var review = new reviewClass();
     $(document).on("click", "#create-screens", function () {
+        $(".edit-project").css("display", "initial").hide().delay(250).fadeIn(300);
         $("#project-info").fadeOut(300);
         $(".image-upload-container").delay(250).fadeIn(300);
+        $("#review-title-header").html(review.projectTitle);
     })
     $(document).on("click", "#create-reviewer", function () {
         $(".add-reviewers-overlay").delay(250).fadeIn(300);
+    })
+    $(".add-reviewers-overlay").click(function (event) {
+        if (event.defaultPrevented) return;
+        if (!$(event.target).closest('.panel.panel-default').length) {
+            $(this).fadeOut(200);
+        }
     })
 
 })

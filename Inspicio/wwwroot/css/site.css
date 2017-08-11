@@ -370,10 +370,14 @@ body .dropzone .dz-preview .dz-image {
 [id^='reviewer-project-']{
     font-size:16px;
 }
-.edit-project{
-    padding:10px;
-    display:inline-block;
-    cursor:pointer;
+.edit-project {
+    color: rgba(0, 0, 0, 0.66);
+    background-color: #abc5e0;
+    border: 1px solid rgba(130, 130, 130, 0.52);
+    font-size: 14px !important;
+    padding: 10px;
+    display: inline-block;
+    cursor: pointer;
 }
 
 .next-button {
