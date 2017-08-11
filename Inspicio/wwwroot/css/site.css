@@ -295,6 +295,15 @@ a.delete-screen {
 #add-img .thumbnail-inner{
     cursor:default;
 }
+.dropzone .dz-preview:hover .dz-image img {
+    -webkit-transform: none !important;
+    -moz-transform: none !important;
+    -ms-transform: none !important;
+    -o-transform: none !important;
+    transform: none !important;
+    -webkit-filter: none !important;
+    filter: none !important;
+}
 .ready-text {
     width: 100%;
     position: absolute;

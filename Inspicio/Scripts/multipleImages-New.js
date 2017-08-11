@@ -54,7 +54,7 @@ function screenClass(id,title,description,content) {
     this.updateScreen = function (title, description) {
         self.screenTitle = title;
         self.screenDescription = description;
-        self.thumbnail.innerContainer.prop("title", title);
+        $(".thumbnail-inner." + self.thumbnail.id).prop("title", title);
     }
 }
 
