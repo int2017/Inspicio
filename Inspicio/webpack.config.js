@@ -10,5 +10,18 @@ module.exports = {
 	},
 	resolve: {
 		extensions: [".js"]
-	}
+    }
+  
+};
+module.exports = {
+    entry: {
+        "multipleImages": './Scripts/multipleImages.js'
+    },
+    output: {
+        filename: "[name].bundle.js",
+        path: path.resolve(__dirname, 'wwwroot/dist/')
+    },
+    resolve: {
+        extensions: [".js"]
+    }
 };
