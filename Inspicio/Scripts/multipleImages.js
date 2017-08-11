@@ -1,4 +1,6 @@
-﻿$(document).ready(function () {
+﻿var createDropzone = require("./createDropzone-NEW.js")
+
+$(document).ready(function () {
     var dropzoneMainText = $("#uploader .dz-message.needsclick");
     //Creating the list of images and users to be passed into the controller
     var listOfImages = [];

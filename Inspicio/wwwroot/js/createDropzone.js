@@ -5,6 +5,8 @@ converts it to base64encoding.This is then used to
 set a temp input tag value.This is then sent to 
 the server when create new is pressed.
 */
+
+
     function encodeBase64(file,area) {
 
         if (file) {

@@ -2,7 +2,8 @@
 
 module.exports = {
 	entry: {
-		"images_view": './Scripts/images_view.js'	
+        "images_view": './Scripts/images_view.js',
+        "multipleImages-New": './Scripts/multipleImages-New.js'
 	},
 	output: {
 		filename: "[name].bundle.js",
