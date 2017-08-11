@@ -56,6 +56,8 @@ function dropzoneClass(area,addImageButton) {
                     //Add the ready class to the button if it is passed into the constructor
                     if (self.addImageButton) {
                         $(self.addImageButton).toggleClass("ready");
+                        $(".ready-text").fadeIn(400);
+
                     }
                 }
                 catch (e) {

@@ -51,7 +51,11 @@ function screenClass(id,title,description,content) {
         self.thumbnail.remove();
         self.id = -1;
     }
-
+    this.updateScreen = function (title, description) {
+        self.screenTitle = title;
+        self.screenDescription = description;
+        self.thumbnail.innerContainer.prop("title", title);
+    }
 }
 
 //Review class
@@ -152,8 +156,7 @@ function reviewClass() {
             $(self.saveChangesButton).slideDown();
         }
        $(self.saveChangesButton).click(function () {
-           self.projectScreens[screen.id].screenTitle = $(self.screenTitleField).val();
-           self.projectScreens[screen.id].screenDescription = $(self.screenDescriptionField).val();
+           self.projectScreens[screen.id].updateScreen($(self.screenTitleField).val(), $(self.screenDescriptionField).val());
             $(self.saveChangesButton).slideUp();
             $(this).unbind("click");
         })
