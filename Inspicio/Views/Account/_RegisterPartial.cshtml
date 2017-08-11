@@ -2,6 +2,7 @@
 @model Inspicio.Models.AccountViewModels.LogRegModel
 
 <script type="text/javascript" src="~/js/login_register.js"></script>
+<script type="text/javascript" src="~/js/popover.js"></script>
 
 <!-- ▼▼ Register Form ▼▼ -->
 <form id="registerform"  align="center" asp-controller="Account" asp-action="Register" method="post" class="form-horizontal">
@@ -20,7 +21,7 @@
     </div>
     <div align="center" class="log-form form-group">
         <div class="col-md-8 col-md-offset-2">
-            <input asp-for="Register.Password" class="form-control" placeholder="Password"/>
+            <input asp-for="Register.Password" class="form-control" placeholder="Password" name="password" id="password" required data-toggle="popover" title="Password Strength"  data-content="Enter Password..."/>
             <span asp-validation-for="Register.Password" class="text-danger" style="color: black;"></span>
         </div>
     </div>
