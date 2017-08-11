@@ -1,13 +1,16 @@
 ﻿//Dropzone class
 
-function dropzoneClass(area,addImageButton) {
+function dropzoneClass(area, addImageButton , titleField) {
     
     //Additional variable to be used in functions
     var self = this;
 
     //Assigning the appropriate area
     this.area = area;
-    
+
+    //Title field, update when file is added
+    this.screenTitleField = titleField;
+
     //Add button, to change classes
     this.addImageButton = addImageButton;
 
@@ -43,6 +46,7 @@ function dropzoneClass(area,addImageButton) {
         thumbnailHeight: null,
         init: function () {
             this.on("addedfile", function (file) {
+                
                 if (this.files[1]) {
                     this.removeFile(this.files[0]);
                 }
@@ -50,7 +54,6 @@ function dropzoneClass(area,addImageButton) {
                     $("#"+self.area).click();
                 });
                 $("#" + area).css("width", "auto");
-
                 //If the type is string (b64),the try will fail,  do not convert it and just change the value of b64 input, otherwise convert it and add ready class to the button
                 try {
                     self.encodeBase64(file);
@@ -58,6 +61,9 @@ function dropzoneClass(area,addImageButton) {
                     //Add the ready class to the button if it is passed into the constructor
                     if (self.addImageButton) {
                         $(self.addImageButton).toggleClass("ready");
+                    }
+                    if (self.screenTitleField && self.screenTitleField.value!== undefined ) {
+                        $(self.screenTitleField).val(file.name.split(".")[0] );
                     }
                 }
                 catch (e) {
@@ -94,8 +100,8 @@ function dropzoneClass(area,addImageButton) {
     }
 }
 
-var createDropzone = function (area,button) {
-    var dropzoneObject = new dropzoneClass(area,button);
+var createDropzone = function (area,button,title) {
+    var dropzoneObject = new dropzoneClass(area,button,title);
     return dropzoneObject;
 }
 

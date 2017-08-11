@@ -430,12 +430,13 @@ body .dropzone .dz-preview .dz-image {
     margin: auto;
     display: none;
     position: fixed;
-    justify-content:center;
+    justify-content: center;
     height: 100%;
     left: 0;
     top: 0;
     width: 100%;
     background-color: rgba(0, 0, 0, 0.77);
+    z-index: 2000;
 }
 .add-reviewers-overlay h3{
     margin:10px 0;

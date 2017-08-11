@@ -87,19 +87,18 @@ function reviewClass() {
     });
 
     //Variables for controlling the fields
+    this.screenTitleField = $("#Image_Title");
+    this.screenDescriptionField = $("#Image_Description_UserInput");
+    this.screenDropzone = dropzone.createDropzone("screenDropzone", this.addScreenButton, this.screenTitleField);
     this.thumbnailDropzone = dropzone.createDropzone("projectThumbnailDropzone");
-    this.screenDropzone = dropzone.createDropzone("screenDropzone", this.addScreenButton);
+    
     this.projectTitleField = $("#project-title").on("blur", function () {
         self.projectTitle = this.value;
     });
     this.projectDescriptionField = $("#project-description").on("blur", function () {
         self.projectDescription = this.value;
-    });;
-    this.screenTitleField = $("#Image_Title");
-    this.screenDescriptionField = $("#Image_Description_UserInput");
-
-    
-
+    });
+   
     this.clearScreenFields = function () {
         self.screenDropzone.clearDropzone();
         this.screenTitleField.val("");
