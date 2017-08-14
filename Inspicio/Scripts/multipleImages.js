@@ -1,4 +1,8 @@
-﻿$(document).ready(function () {
+﻿
+var toMarkdown = require('./to-markdown.js');
+
+$(document).ready(function () {
+
     var dropzoneMainText = $("#uploader .dz-message.needsclick");
     //Creating the list of images and users to be passed into the controller
     var listOfImages = [];
@@ -7,7 +11,9 @@
     //Creates an Image object that is added to the list of Images
     $(document).on("click", "#add-img", function () {
         var title = $("#Image_Title").val();
-        var description = $("#Image_Description_UserInput").val();
+
+        var el = $("#Image_DescriptionHTML");
+        var description = el.val();
         var content = $("#b64uploader").val();
         if (title.length !== 0 && content.length !== 0) {
             if (title.length < 5) {
@@ -56,7 +62,7 @@
             $("#review-title-header").fadeOut(300);
             setTimeout(function () {
                 $("#reviewer-project-title").html($("#project-title").val());
-                $("#reviewer-project-description").html($("#project-description").val());
+                $("#reviewer-project-description").html(toMarkdown($("#Project_DescriptionHTML").val()));
                 $("#review-title-header").html($("#project-title").val());
             }, 200)
             
@@ -85,7 +91,7 @@
                 $("#edit-img").slideUp();
                 $("#uploader").html("");
                 $("#Image_Title").html("").val(listOfImages[index].Title);
-                $("#Image_Description_UserInput").val(listOfImages[index].Description);
+                $("#Image_Description_UserInput").val(toMarkdown(listOfImages[index].Description));
                 $("#b64uploader").val(listOfImages[index].Content);
                 var myImage = {
                     name: listOfImages[index].Title
@@ -118,7 +124,7 @@
     
     $("#edit-img").click(function () {
         listOfImages[currentImage].Title = $("#Image_Title").val();
-        listOfImages[currentImage].Description = $("#Image_Description_UserInput").val();
+        listOfImages[currentImage].Description = $("#Image_DescriptionHTML").val();
         $("#Image_Title").off();
         $("#Image_Description_UserInput").off();
         $(this).slideUp();
@@ -181,7 +187,7 @@
             Screens: listOfImages,
             Reviewers: listOfUsers,
             ReviewTitle: $("#project-title").val(),
-            ReviewDescription: $("#project-description").val(),
+            ReviewDescription: $("#Project_DescriptionHTML").val(),
             ReviewThumbnail : $("#b64uploaderThumb").val()
         }
         var data={

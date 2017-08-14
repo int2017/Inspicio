@@ -20,7 +20,7 @@
                     <textarea class="form-control" id="project-description" rows="4" placeholder="Project Description &lt;markdown supported&gt;"></textarea>
                     <span class="text-danger"></span>
 
-                    <textarea id="Image_DescriptionHTML"></textarea>
+                    <textarea  id="Project_DescriptionHTML"></textarea>
                 </div>
             </div>
             <div class="col-md-4">
@@ -221,5 +221,18 @@
         $("#Image_DescriptionHTML").html(convertToHTML($("#Image_Description_UserInput").val()));
     });
 
+    $('#project-description').on('blur', function (e) {
+
+        $("#Project_DescriptionHTML").html(convertToHTML($("#project-description").val()));
+    });
+
 </script>
-<script type="text/javascript" src="~/js/multipleImages.js"></script>
+<script type="text/javascript" src="~/dist/multipleImages.bundle.js"></script>
+
+<style>
+
+    #Project_DescriptionHTML, #Image_DescriptionHTML {
+        display:none;
+    }
+
+</style>

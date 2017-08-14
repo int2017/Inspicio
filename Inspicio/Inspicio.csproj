@@ -25,6 +25,8 @@
 
   <ItemGroup>
     <Content Include="Scripts\ajaxScreens.js" />
+    <Content Include="Scripts\multipleImages.js" />
+    <Content Include="Scripts\to-markdown.js" />
     <Content Include="wwwroot\css\create.css" />
     <Content Include="wwwroot\css\home.css" />
     <Content Include="wwwroot\css\site.css" />
