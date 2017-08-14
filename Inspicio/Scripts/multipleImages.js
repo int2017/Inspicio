@@ -10,11 +10,11 @@ function thumbnailClass(title, content,id,deleteScreen) {
     this.content = content;
 
     //Creating element vars
-    this.overviewContainer = $(document.createElement('div')).addClass("col-xs-3 col-md-3").attr('id', "image-rev-" + this.id);
+    this.overviewContainer = $(document.createElement('div')).addClass("col-xs-4 col-md-4").attr('id', "image-rev-" + this.id);
     this.deleteScreen = deleteScreen;
     this.innerContainer = $(document.createElement('div')).addClass("col-xs-12 col-md-12 thumbnail-inner "+this.id).appendTo(this.overviewContainer).prop("title", this.title);
     this.img = $(document.createElement('img')).attr('src', this.content).appendTo(self.innerContainer);
-    this.outerContainer = $(document.createElement("div")).addClass("col-xs-4 col-md-2").attr("id", "image-" + this.id).append($(this.innerContainer).clone().append(this.deleteScreen));
+    this.outerContainer = $(document.createElement("div")).addClass("col-xs-4 col-md-3").attr("id", "image-" + this.id).append($(this.innerContainer).clone().append(this.deleteScreen));
 
     //Adding thumbnails in the thumbnail
     this.init = function () {
@@ -74,14 +74,6 @@ function reviewClass() {
     this.addScreenButton = $("#add-img");
     this.saveChangesButton = $("#edit-img");
 
-    //Adding listeners to buttons
-    this.editProjectInfoButtons = $(".edit-project").click(function () {
-        $(this).hide();
-        $(".add-reviewers-overlay").hide();
-        $(".image-upload-container").hide();
-        $("#project-info").show();
-    });
-
     this.resetButton = $("#reset").click(function () {
         self.clearScreenFields();
     });
@@ -139,7 +131,7 @@ function reviewClass() {
        
         $(self.saveChangesButton).off();
         $(".thumbnail-inner." + screen.id).on("click", function () {
-            $(".add-reviewers-overlay").fadeOut(300);
+            $(".screen").click();
             self.currentScreen = screen.id;
             $(self.screenTitleField).unbind("keydown");
             $(self.screenDescriptionField).unbind("keydown");
@@ -222,22 +214,45 @@ function reviewClass() {
 
 $(document).ready(function () {
     var review = new reviewClass();
-    $(document).on("click", "#create-screens", function () {
-        $(".edit-project").css("display", "initial").hide().delay(250).fadeIn(300);
-        $("#project-info").fadeOut(300);
-        $(".image-upload-container").delay(250).fadeIn(300);
+    $(document).on("click", ".create-a", function () {
         if (review.projectTitle !== undefined && review.projectTitle !== undefined && review.projectTitle.value !== "") {
             $("#review-title-header").html(review.projectTitle);
+            $("#reviewer-project-title").html(review.projectTitle);
         }
-       
+        if (review.projectDescription !== undefined && review.projectDescription !== undefined && review.projectDescription.value !== "") {
+            $("#reviewer-project-description").html(review.projectDescription);
+        }
     })
-    $(document).on("click", "#create-reviewer", function () {
+    $(document).on("click", ".screen", function () {
+        $(".create-a").removeClass("active");
+        $(".create-a.screen").addClass("active");
+        $("#project-info").fadeOut(300);
+        $(".add-reviewers-overlay").fadeOut(300);
+        $(".image-upload-container").delay(250).fadeIn(300);
+    })
+    $(document).on("click", ".project", function () {
+        $(".create-a").removeClass("active");
+        $(".create-a.project").addClass("active");
+        $(".add-reviewers-overlay").fadeOut(250);
+        $(".image-upload-container").hide();
+        $("#project-info").delay(250).fadeIn(250);
+    });
+    $(document).on("click", ".overview", function () {
+        $(".create-a").removeClass("active");
+        $(".create-a.overview").addClass("active");
         $(".add-reviewers-overlay").delay(250).fadeIn(300);
     })
     $(".add-reviewers-overlay").click(function (event) {
         if (event.defaultPrevented) return;
         if (!$(event.target).closest('.panel.panel-default').length) {
             $(this).fadeOut(200);
+            $(".create-a").removeClass("active");
+            if ($(".image-upload-container").is(":visible")) {
+                $(".create-a.screen").addClass("active");
+            }
+            else {
+                $(".create-a.project").addClass("active");
+            }
         }
     })
     $(document).on("click", "#submit-images", function () {

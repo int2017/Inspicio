@@ -6,107 +6,116 @@
     Dropzone.autoDiscover = false;
 </script>
 <link rel="stylesheet" href="~/css/create.css" />
-<h2 id="review-title-header"> New Review</h2>
-<div class="btn edit-project  main-edit">
-    <i class="fa fa-pencil-square-o " aria-hidden="true"></i> Edit project details
-</div>
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <div  id="project-info">
-        <div id="project-info-row" class="row">
-            <div class="col-md-8">
-                <div class="form-group">
+<div class="row">
+    <div class="col-md-2 col-lg-2 col-xs-12 col-sm-12">
 
-                    <input asp-for="@Model.ReviewTitle"  type="text" id="project-title" class="form-control" placeholder="Project Title">
-                    <span  class="text-danger"></span>
+        <div class="create-menu">
+            <ul>
+                <li><a class="create-a project active">Project details</a></li>
+                <li><a class="create-a screen">Screen details</a></li>
+                <li><a class="create-a overview">Overview</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-md-10 col-lg-10 col-sm-12 col-xs-12 review-container">
+        <h2 id="review-title-header"> New Review</h2>
+        <div class="btn edit-project  main-edit">
+            <i class="fa fa-pencil-square-o " aria-hidden="true"></i> Edit project details
+        </div>
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div id="project-info">
+            <div id="project-info-row" class="row">
+                <div class="col-md-8">
+                    <div class="form-group">
+
+                        <input asp-for="@Model.ReviewTitle" type="text" id="project-title" class="form-control" placeholder="Project Title">
+                        <span class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+
+                        <textarea class="form-control" id="project-description" rows="7" placeholder="Project Description &lt;markdown supported&gt;"></textarea>
+                        <span class="text-danger"></span>
+
+
+                    </div>
                 </div>
-                <div class="form-group">
-
-                    <textarea class="form-control" id="project-description" rows="7" placeholder="Project Description &lt;markdown supported&gt;"></textarea>
-                    <span class="text-danger"></span>
-
-                   
-                </div>
-            </div>
-            <div class="col-md-4">
-               <div id="projectThumbDropzoneDiv">
-                    <div class="dropzone needsclick dz-clickable" id="projectThumbnailDropzone">
-                        <div class="dz-message needsclick">
-                            <i class="fa fa-file-image-o fa-5x" aria-hidden="true"></i>
-                            <h4>Drag and drop your thumbnail here or click to upload</h4>
-                            <p>If no thumbnail is selected, the first screen will be used as the thumbnail</p>
+                <div class="col-md-4">
+                    <div id="projectThumbDropzoneDiv">
+                        <div class="dropzone needsclick dz-clickable" id="projectThumbnailDropzone">
+                            <div class="dz-message needsclick">
+                                <i class="fa fa-file-image-o fa-5x" aria-hidden="true"></i>
+                                <h4>Drag and drop your thumbnail here or click to upload</h4>
+                                <p>If no thumbnail is selected, the first screen will be used as the thumbnail</p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <div class="form-group text-center next-cont">
+                <button type="button" id="create-screens" class="btn btn-info next-button screen">Next</button>
+            </div>
         </div>
 
-        <div class="form-group text-center next-cont">
-            <button type="button" id="create-screens" class="btn btn-info next-button">Next</button>
-        </div>
-    </div>
+        <div class="image-upload-container">
 
-    <div class="image-upload-container">
+            <h3>Add screens</h3>
+            <div class="form-group">
+                <!-- Review Title -->
+                <input type="text" id="Image_Title" class="form-control" placeholder="Screen Title">
 
-        <h3>Add screens</h3>
-        <div class="form-group">
-            <!-- Review Title -->
-            <input  type="text" id="Image_Title" class="form-control" placeholder="Screen Title">
-        
-        <span class="text-danger"></span>
-        </div>
+                <span class="text-danger"></span>
+            </div>
 
-        <div class="form-group">
-            <!-- Review Description -->
-            <textarea class="form-control" id="Image_Description_UserInput" rows="7" placeholder="Screen Description &lt;markdown supported&gt;"></textarea>
-            <span  class="text-danger"></span>
-        <span class="text-danger"></span>
+            <div class="form-group">
+                <!-- Review Description -->
+                <textarea class="form-control" id="Image_Description_UserInput" rows="7" placeholder="Screen Description &lt;markdown supported&gt;"></textarea>
+                <span class="text-danger"></span>
+                <span class="text-danger"></span>
 
-        </div>
+            </div>
 
 
 
-        <div class="form-group">
+            <div class="form-group">
 
-            <!-- Dropzone Image Upload-->
-            <div id="dropzoneDiv">
-                <div class="dropzone needsclick dz-clickable" id="screenDropzone">
-                    <div class="dz-message needsclick">
-                        <i class="fa fa-upload fa-5x" aria-hidden="true"></i>
-                       <h4 >Drag and drop your screens here or click to upload</h4> 
+                <!-- Dropzone Image Upload-->
+                <div id="dropzoneDiv">
+                    <div class="dropzone needsclick dz-clickable" id="screenDropzone">
+                        <div class="dz-message needsclick">
+                            <i class="fa fa-upload fa-5x" aria-hidden="true"></i>
+                            <h4>Drag and drop your screens here or click to upload</h4>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="text-right">
-            <a id="reset">Start a new screen</a>
-        </div>
-        <div class="text-center">
-            <button type="button" class="btn btn-success" id="edit-img">Save changes</button>
-        </div>
-        <div id="thumbnail-container" class="row-eq-height">
-            <div class="col-xs-4 col-md-2" id="add-img">
-                <div class="col-xs-12 col-md-12 thumbnail-inner">
-                    <i class="fa fa-plus fa-5x" aria-hidden="true"></i>
-                    <h4 class="ready-text">Add screen</h4>
+            <div class="text-right">
+                <a id="reset">Start a new screen</a>
+            </div>
+            <div class="text-center">
+                <button type="button" class="btn btn-success" id="edit-img">Save changes</button>
+            </div>
+            <div id="thumbnail-container" class="row-eq-height">
+                <div class="col-xs-4 col-md-3" id="add-img">
+                    <div class="col-xs-12 col-md-12 thumbnail-inner">
+                        <i class="fa fa-plus fa-5x" aria-hidden="true"></i>
+                        <h4 class="ready-text">Add screen</h4>
+                    </div>
                 </div>
             </div>
+            <div class="form-group text-center next-cont">
+                <!-- Submit Button -->
+                <button type="button" id="create-reviewer" class="btn btn-success next-button overview">Next</button>
+            </div>
         </div>
-        <div class="form-group text-center next-cont">
-            <!-- Submit Button -->
-            <button type="button" id="create-reviewer" class="btn btn-success next-button">Next</button>
-        </div>
-    </div>
-    <div class="row-eq-height add-reviewers-overlay overlay">
-   
+        <div class="row-eq-height add-reviewers-overlay overlay">
+
             <div class="col-xs-12 col-md-6 col-md-offset-3">
                 <div class="panel panel-default reviewers-panel">
                     <div class="panel-heading"><h4>Your review</h4></div>
                     <div class="reviewer-content">
-                    <div class="panel-body">
-                        <h3 id="overview">Overview</h3> 
-                        <div class="btn edit-project">
-                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit project details
-                            </div>
+                        <div class="panel-body">
+                            <h3 id="overview">Overview</h3>
                             <div class="row-eq-height">
                                 <div class="col-xs-4 col-md-2 text-right">
                                     Title:
@@ -119,7 +128,7 @@
                                 <div class="col-xs-4 col-md-2 text-right">
                                     Description:
                                 </div>
-                                <div class="col-xs-8col-md-10">
+                                <div class="col-xs-8 col-md-10">
                                     <span id="reviewer-project-description"></span>
                                 </div>
                             </div>
@@ -135,59 +144,59 @@
                                 </div>
                             </div>
                         </div>
-                    <div class="panel-body add-reviewers">
-                        <h3>Select reviewers</h3>
-                        <input id="filter_reviewees_id" name="filter_reviewees" onkeyup="filterUsers()" type="text" placeholder="&#xf002; " />
-@{
-    if (Model.Reviewers.Count > 0)
-    {
-                        <div class="row-eq-height">
-                            <div class="col-xs-1 col-md-1 text-center">
-                                <input id="check-all" type="checkbox" />
-                            </div>
-                            <div class="col-xs-3 col-md-3 text-left">
-                                <label for="check-all">Check all</label>
-                            </div>
-                            <div  class="col-xs-4 col-md-4 text-left">
-                                <label> Profile name </label>
-                            </div>
-                            <div class="col-xs-4 col-md-4">
-                                <label > Email</label>
-                            </div>
+                        <div class="panel-body add-reviewers">
+                            <h3>Select reviewers</h3>
+                            <input id="filter_reviewees_id" name="filter_reviewees" onkeyup="filterUsers()" type="text" placeholder="&#xf002; " />
+                            @{
+                                if (Model.Reviewers.Count > 0)
+                                {
+                                    <div class="row-eq-height">
+                                        <div class="col-xs-1 col-md-1 text-center">
+                                            <input id="check-all" type="checkbox" />
+                                        </div>
+                                        <div class="col-xs-3 col-md-3 text-left">
+                                            <label for="check-all">Check all</label>
+                                        </div>
+                                        <div class="col-xs-4 col-md-4 text-left">
+                                            <label> Profile name </label>
+                                        </div>
+                                        <div class="col-xs-4 col-md-4">
+                                            <label> Email</label>
+                                        </div>
 
+                                    </div>
+
+                                    @for (var i = 0; i < Model.Reviewers.Count; i++)
+                                    {
+                                        <div class="row-eq-height reviewer-info">
+                                            <div class="col-xs-1 col-md-1 text-center">
+                                                <input id="reviewer-@i" type="checkbox" />
+                                            </div>
+                                            <div class="col-xs-3 col-md-3">
+                                                <img height="40" alt="@Model.Reviewers[i].ProfileName" src="@Model.Reviewers[i].ProfilePicture" />
+                                            </div>
+                                            <div id="profilename-@i" class="col-xs-3 col-md-4 text-left">
+                                                <label for="reviewer-@i"> @Model.Reviewers[i].ProfileName</label>
+                                            </div>
+                                            <div id="email-@i" class="col-xs-3 col-md-4">
+                                                <label for="reviewer-@i"> @Model.Reviewers[i].Email</label><input type="hidden" asp-for="@Model.Reviewers[i].Id" />
+                                            </div>
+
+                                        </div>
+                                    }
+                                }
+                            }
                         </div>
-                       
-                        @for (var i = 0; i < Model.Reviewers.Count; i++)
-                        {
-                            <div class="row-eq-height reviewer-info">
-                                <div class="col-xs-1 col-md-1 text-center">
-                                    <input id="reviewer-@i" type="checkbox"  />
-                                </div>
-                                <div class="col-xs-3 col-md-3">
-                                    <img height="40" alt="@Model.Reviewers[i].ProfileName" src="@Model.Reviewers[i].ProfilePicture" />
-                                </div>
-                                <div id="profilename-@i" class="col-xs-3 col-md-4 text-left">
-                                    <label for="reviewer-@i"> @Model.Reviewers[i].ProfileName</label>
-                                </div>
-                                <div id="email-@i" class="col-xs-3 col-md-4">
-                                    <label for="reviewer-@i"> @Model.Reviewers[i].Email</label><input type="hidden" asp-for="@Model.Reviewers[i].Id" />
-                                </div>
-
-                            </div>
-                        }
-    }
-}
-                    </div>
                     </div>
                     <div class="panel-footer text-center">
-                            <!-- Submit Button -->
-                            <button type="button" id="submit-images" class="btn btn-success">Create Review</button>
-                        </div>
+                        <!-- Submit Button -->
+                        <button type="button" id="submit-images" class="btn btn-success">Create Review</button>
                     </div>
                 </div>
             </div>
-           
-            
+        </div>
+    </div>
+</div>    
         
       
     
