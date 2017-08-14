@@ -24,8 +24,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Scripts\multipleImages.js" />
-    <Content Include="Scripts\multipleImages.js.orig" />
     <Content Include="wwwroot\css\create.css" />
     <Content Include="wwwroot\css\home.css" />
     <Content Include="wwwroot\css\JavaScript.js" />

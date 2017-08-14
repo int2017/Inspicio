@@ -3,7 +3,7 @@
 module.exports = {
 	entry: {
         "images_view": './Scripts/images_view.js',
-        "multipleImages-New": './Scripts/multipleImages-New.js'
+        "multipleImages": './Scripts/multipleImages.js'
 	},
 	output: {
 		filename: "[name].bundle.js",

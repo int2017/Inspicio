@@ -1,192 +1,207 @@
-﻿var createDropzone = require("./createDropzone-NEW.js")
+﻿var dropzone = require("./createDropzone.js")
 
-$(document).ready(function () {
-    var dropzoneMainText = $("#uploader .dz-message.needsclick");
-    //Creating the list of images and users to be passed into the controller
-    var listOfImages = [];
-    var listOfUsers = [];
-    var listOfDeleted = []; 
-    //Creates an Image object that is added to the list of Images
-    $(document).on("click", "#add-img", function () {
-        var title = $("#Image_Title").val();
-        var description = $("#Image_Description_UserInput").val();
-        var content = $("#b64uploader").val();
-        if (title.length !== 0 && content.length !== 0) {
-            if (title.length < 5) {
-                alert("Screen title must have at least 5 characters!")
-            }
-            else{
-                $("#uploader").css("width", "100%");
-                $(this).removeClass("ready");
-                var contentCol = listOfImages.map(v => v.Content);
-                if ($.inArray(content, contentCol) > -1) {
-                    alert("This image is already added");
-                    myDropzone.removeAllFiles();
-                 $("#uploader").html("").append(dropzoneMainText);
-                 $(dropzoneMainText).show();
-                }
-                 else {
-                     var image = {
-                        "Title": title,
-                        "Description": description,
-                        "Content": content
-                 };
-                listOfImages.push(image);
-            
-                $("#Image_Title").val("").html("");
-                $("#Image_Description_UserInput").val("");
-                $("#b64uploader").val("");
-                myDropzone.removeAllFiles();
-                $("#uploader").html("").append(dropzoneMainText);
-                $(dropzoneMainText).show();
-                appendThumbnail(listOfImages.length - 1, content);
-            }
-        }
-        
-        }
-        else {
-            alert("You must add a screen and a title!")
-        }
-    })
-    $("#create-screens").click(function () {
-        if ($("#project-title").val() === "") {
-            alert("Add a project title first!")
-        }
-        else{
-            $(this).attr("id", "create-screens");
-            $("#project-info").fadeOut(300);
-            $("#review-title-header").fadeOut(300);
-            setTimeout(function () {
-                $("#reviewer-project-title").html($("#project-title").val());
-                $("#reviewer-project-description").html($("#project-description").val());
-                $("#review-title-header").html($("#project-title").val());
-            }, 200)
-            
-            $("#review-title-header").fadeIn(300);
-            $(".main-edit").delay(300).fadeIn(300);
-            $(".image-upload-container").delay(300).fadeIn(300);
-            
-        }
-    })
-    function appendThumbnail(index, content) {
-        
-        var containerMain = $(document.createElement('div')).addClass("col-xs-4 col-md-2").attr('id', "image-" + index);
-        var containerReview = $(document.createElement('div')).addClass("col-xs-3 col-md-3").attr('id', "image-rev-" + index);
-        var deleteScreen = $(document.createElement('a')).addClass("delete-screen").html("<i class='fa fa-trash-o' aria-hidden='true'></i>");  
-        var image = $(document.createElement('img')).attr('src', content);
-        var innerContainer = $(document.createElement('div')).addClass("col-xs-12 col-md-12 thumbnail-inner");
-        $(image).appendTo(innerContainer);
-        $(innerContainer).appendTo(containerReview);
-        var mainInnerContainer = $(innerContainer).clone().append(deleteScreen).appendTo(containerMain);
-        $(containerMain).appendTo("#thumbnail-container");
-        $(containerReview).appendTo("#review-thumbnail-container");
-        $(mainInnerContainer).click(function () {
-            if (!$(event.target).closest('.delete-screen').length) {
-                $("#uploader img").remove();
-                $("#add-img").removeClass("ready");
-                $("#edit-img").slideUp();
-                $("#uploader").html("");
-                $("#Image_Title").html("").val(listOfImages[index].Title);
-                $("#Image_Description_UserInput").val(listOfImages[index].Description);
-                $("#b64uploader").val(listOfImages[index].Content);
-                var myImage = {
-                    name: listOfImages[index].Title
-                }
-                $("#Image_Title").change(function () {
-                    currentImage = index;
-                    $("#edit-img").slideDown();
-                })
-                $("#Image_Description_UserInput").change(function () {
-                    currentImage = index;
-                    $("#edit-img").slideDown();
-                })
-                myDropzone.emit("addedfile", myImage);
-                myDropzone.emit("thumbnail", myImage, listOfImages[index].Content);
-                myDropzone.files.push(myImage);
-                $("#add-img").removeClass("ready");
-            }
-           
-        })
+//Thumbnail class
+function thumbnailClass(title, content,id,deleteScreen) {
 
-        $(deleteScreen).click(function (e) {
-            if (listOfImages[index].Content === $("#b64uploader").val()) {
-                $("#add-img").addClass("ready");
-            }
-            listOfImages[index].Content = "";
-            $("#image-" + index).detach();
-            $("#image-rev-" + index).detach();
+    var self = this;
+
+    this.id = id;
+    this.title = title;
+    this.content = content;
+
+    //Creating element vars
+    this.overviewContainer = $(document.createElement('div')).addClass("col-xs-3 col-md-3").attr('id', "image-rev-" + this.id);
+    this.deleteScreen = deleteScreen;
+    this.innerContainer = $(document.createElement('div')).addClass("col-xs-12 col-md-12 thumbnail-inner "+this.id).appendTo(this.overviewContainer).prop("title", this.title);
+    this.img = $(document.createElement('img')).attr('src', this.content).appendTo(self.innerContainer);
+    this.outerContainer = $(document.createElement("div")).addClass("col-xs-4 col-md-2").attr("id", "image-" + this.id).append($(this.innerContainer).clone().append(this.deleteScreen));
+
+    //Adding thumbnails in the thumbnail
+    this.init = function () {
+        $(self.outerContainer).appendTo("#thumbnail-container");
+        $(self.overviewContainer).appendTo("#review-thumbnail-container");
+    }
+    this.init();
+
+    this.remove = function () {
+        $(self.outerContainer).remove();
+        $(self.overviewContainer).remove();
+    }
+}
+
+//Screen class
+function screenClass(id,title,description,content) {
+
+    var self = this;
+
+    //ID to identify the place in projectScreens array
+    this.id = id;
+
+    //Variables required for a screen
+    this.screenContent=content;
+    this.screenTitle=title;
+    this.screenDescription = description;
+    this.deleteScreen = $(document.createElement('a')).addClass("delete-screen").html("<i class='fa fa-trash-o' aria-hidden='true'></i>");
+
+    //Creating a thumbnail
+    this.thumbnail = new thumbnailClass(this.screenTitle, this.screenContent, this.id, this.deleteScreen);
+
+    //Deleting screen and setting it's id to -1, in the end only screens with ids>-1 will be added into the final list
+    this.remove = function () {
+        self.thumbnail.remove();
+        self.id = -1;
+    }
+    this.updateScreen = function (title, description) {
+        self.screenTitle = title;
+        self.screenDescription = description;
+        $(".thumbnail-inner." + self.thumbnail.id).prop("title", title);
+    }
+}
+
+//Review class
+function reviewClass() {
+
+    //Addition variable to be used in functions
+    var self = this;
+
+    //Creating the variables needed for a review;
+    this.projectTitle;
+    this.projectDescription;
+    this.projectThumbnail;
+    this.projectScreens = [];
+
+    //Buttons for controlling sections and screens
+    this.addScreenButton = $("#add-img");
+    this.saveChangesButton = $("#edit-img");
+
+    //Adding listeners to buttons
+    this.editProjectInfoButtons = $(".edit-project").click(function () {
+        $(this).hide();
+        $(".add-reviewers-overlay").hide();
+        $(".image-upload-container").hide();
+        $("#project-info").show();
+    });
+
+    this.resetButton = $("#reset").click(function () {
+        self.clearScreenFields();
+    });
+
+    //Variables for controlling the fields
+    this.screenTitleField = $("#Image_Title");
+    this.screenDescriptionField = $("#Image_Description_UserInput");
+    this.screenDropzone = dropzone.createDropzone("screenDropzone", this.addScreenButton, this.screenTitleField);
+    this.thumbnailDropzone = dropzone.createDropzone("projectThumbnailDropzone");
+    
+    this.projectTitleField = $("#project-title").on("blur", function () {
+        self.projectTitle = this.value;
+    });
+    this.projectDescriptionField = $("#project-description").on("blur", function () {
+        self.projectDescription = this.value;
+    });
+   
+    this.clearScreenFields = function () {
+        self.screenDropzone.clearDropzone();
+        this.screenTitleField.val("");
+        this.screenDescriptionField.val("");
+    }
+
+    $(this.addScreenButton).click(function () {
+        if ($(this).hasClass("ready")) {
+            $(self.screenTitleField).off();
+            $(self.screenDescriptionField).off();
+            var newScreen = new screenClass(self.projectScreens.length, $(self.screenTitleField).val(), $(self.screenDescriptionField).val(), $(self.screenDropzone.b64input).val());
+            self.projectScreens.push(newScreen);
+            self.clearScreenFields();
+            self.addThumbnailListeners(newScreen);
+            newScreen.deleteScreen.click(function () {
+                newScreen.remove();
+                if (self.currentScreen === newScreen.id) {
+                    self.clearScreenFields();
+                }
+            })
+        }
+
+    })
+
+    //Function to change the values of fields 
+    this.changeValues = function (screen) {
+        $(self.addScreenButton).removeClass("ready");
+        $(self.screenTitleField).val(screen.screenTitle);
+        $(self.screenDescriptionField).val(screen.screenDescription);
+        self.screenDropzone.addFile(screen.screenContent, screen.screenTitle);
+        
+    }
+
+    //Adding listeners to the thumbnail of a screen. Had to be put here because access to the fields is neccessary.
+    this.addThumbnailListeners = function (screen) {
+       
+        $(self.saveChangesButton).off();
+        $(".thumbnail-inner." + screen.id).on("click", function () {
+            $(".add-reviewers-overlay").fadeOut(300);
+            self.currentScreen = screen.id;
+            $(self.screenTitleField).unbind("keydown");
+            $(self.screenDescriptionField).unbind("keydown");
+            self.changeValues(screen);
+            $(self.screenTitleField).on("keydown", function () {
+                self.fieldListeners(screen)
+            })
+            $(self.screenDescriptionField).on("keydown", function () {
+                self.fieldListeners(screen)
+            })
         })
     }
-    
-    $("#edit-img").click(function () {
-        listOfImages[currentImage].Title = $("#Image_Title").val();
-        listOfImages[currentImage].Description = $("#Image_Description_UserInput").val();
-        $("#Image_Title").off();
-        $("#Image_Description_UserInput").off();
-        $(this).slideUp();
-    })
-    $("#create-reviewer").click(function () {
-        if ($("#b64uploader").val() !== "") {
-            var contentCol = listOfImages.map(v => v.Content);
-            if ($.inArray($("#b64uploader").val(), contentCol) > -1) {
-                myDropzone.removeAllFiles();
-                $("#uploader").html(dropzoneMainText).css("width", "100%");
-                $("#Image_Title").val("");
-                $("#Image_Description_UserInput").val("");
-                $("#add-img").removeClass("ready");
-            }
-            else {
-                if ($("#Image_Title").val()=="") {
-                    $("#Image_Title").val("Screen " + listOfImages.length + 1);
+    this.fieldListeners = function (screen) {
+       if ($(self.saveChangesButton).slideDown().is(":hidden") && (!screen.screenDescription.equals($(self.screenDescriptionField).val()) || !screen.screenTitle.equals($(self.screenTitleField).val()))) {
+            $(self.saveChangesButton).slideDown();
+        }
+       $(self.saveChangesButton).click(function () {
+           self.projectScreens[screen.id].updateScreen($(self.screenTitleField).val(), $(self.screenDescriptionField).val());
+            $(self.saveChangesButton).slideUp();
+            $(this).unbind("click");
+        })
+       
+    }
+
+    //Submit review function
+    this.submit = function () {
+
+        //Removing deleted screens
+        var finalScreenList =[];
+        $(self.projectScreens).each(function () {
+            if (this.id > -1) {
+                var finalScreen = {
+                    Title: this.screenTitle,
+                    Description: this.screenDescription,
+                    Content: this.screenContent
                 }
-                $("#add-img").click();
-            }
-            
-        }
-        
-        $(".add-reviewers-overlay").css("display", "flex").hide().fadeIn(400);
-    })
-    //Subtitution for .stopPropogation() 
-    $(".add-reviewers-overlay").click(function (event) {
-        if (event.defaultPrevented) return;
-        if (!$(event.target).closest('.panel.panel-default').length) {
-            $(this).fadeOut(200);
-        }
-    })
-    $("#submit-images").click(function () {
-        $(this).prop("disabled", true);
-        var finalScreenList = [];
-        $(listOfImages).each(function (index) {
-            if (this.Content !== "") {
-                finalScreenList.push(this);
+                finalScreenList.push(finalScreen);
             }
         })
-        
-        //Get the details of the users who were checked as reviewers NEEDS TO BE UPDATED
+        //Adding all selected reviewers to the list
+        var reviewers =[];
         $(".reviewer-info input[type='checkbox']").each(function (index) {
             if ($(this).is(":checked")) {
-                
+
                 var userId = $("#Reviewers_" + index + "__Id").val();
                 var profileName = $("#profilename-" + index + " label").html();
-                var email = $("#email-" + index +" label").html();
+                var email = $("#email-" + index + " label").html();
                 var user = {
                     "Id": userId,
                     "ProfileName": profileName,
                     "Email": email
                 };
-                listOfUsers.push(user);
+                reviewers.push(user);
             }
-            
+
         })
-        
         var CreatePageModel = {
-            Screens: listOfImages,
-            Reviewers: listOfUsers,
-            ReviewTitle: $("#project-title").val(),
-            ReviewDescription: $("#project-description").val(),
-            ReviewThumbnail : $("#b64uploaderThumb").val()
+            Screens: finalScreenList,
+            Reviewers: reviewers,
+            ReviewTitle: self.projectTitle,
+            ReviewDescription: self.projectDescription,
+            ReviewThumbnail: $("#b64projectThumbnailDropzone").val()
         }
-        var data={
+        var data = {
             __RequestVerificationToken: $('[name= "__RequestVerificationToken"]').val(),
             CreatePageModel: CreatePageModel
         }
@@ -199,26 +214,31 @@ $(document).ready(function () {
                     window.location.href = url;
                 }
             });
+    }
+}
+
+$(document).ready(function () {
+    var review = new reviewClass();
+    $(document).on("click", "#create-screens", function () {
+        $(".edit-project").css("display", "initial").hide().delay(250).fadeIn(300);
+        $("#project-info").fadeOut(300);
+        $(".image-upload-container").delay(250).fadeIn(300);
+        if (review.projectTitle !== undefined && review.projectTitle !== undefined && review.projectTitle.value !== "") {
+            $("#review-title-header").html(review.projectTitle);
+        }
+       
     })
-    
-    $(document).on("click", ".edit-project", function (e) {
-        $(".main-edit").fadeOut(200);
-        $(".add-reviewers-overlay").fadeOut(200);
-        $(".image-upload-container").fadeOut(200);
-        $("#project-info").delay(200).fadeIn(200);
-        
-    })  
-    $("#reset").click(function () {
-        currentImage = -1;
-        $("#edit-img").hide();
-        myDropzone.removeAllFiles();
-        $("#Image_Title").val('').off();
-        $("#Image_Description_UserInput").val('').off();
-        $("#add-img").removeClass("ready");
-        $("#uploader").html(dropzoneMainText).animate({ width: "100%" }, 300)
+    $(document).on("click", "#create-reviewer", function () {
+        $(".add-reviewers-overlay").delay(250).fadeIn(300);
     })
-})
-$("#check-all").change(function () {
-    var checkBoxes = $(".add-reviewers-overlay .reviewer-info input[type='checkbox']");
-    checkBoxes.prop("checked", !checkBoxes.prop("checked"));
+    $(".add-reviewers-overlay").click(function (event) {
+        if (event.defaultPrevented) return;
+        if (!$(event.target).closest('.panel.panel-default').length) {
+            $(this).fadeOut(200);
+        }
+    })
+    $(document).on("click", "#submit-images", function () {
+        review.submit();
+    })
+
 })
