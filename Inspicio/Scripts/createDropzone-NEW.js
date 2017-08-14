@@ -59,8 +59,8 @@ function dropzoneClass(area, addImageButton , titleField) {
                     self.encodeBase64(file);
 
                     //Add the ready class to the button if it is passed into the constructor
-                    if (self.addImageButton) {
-                        $(self.addImageButton).toggleClass("ready");
+                    if (self.addImageButton && (!$(self.addImageButton).hasClass("ready"))) {
+                        $(self.addImageButton).addClass("ready");
                     }
                     if (self.screenTitleField) {
                         $(self.screenTitleField).val(file.name.split(".")[0] );
