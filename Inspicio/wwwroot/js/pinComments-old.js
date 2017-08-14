@@ -51,14 +51,6 @@
     imageMap.setView([0, 0]);
     if (imageMap.tap) imageMap.tap.disable();
 
-    //Test marker
-
-
-
-    //Setting the correct size for the map if the window is resized
-
-
-
     imageMap.on('click', function (e) {
         mapOnClick(e);
     });
@@ -81,8 +73,8 @@
         }
     }
     //Array of all the popups and markers
-    var markersArray = new Array();
-    var popupsArray = new Array();
+    var markersArray = [];
+    var popupsArray = [];
     var locations = [[]];
 
     //listener for clicks
@@ -94,14 +86,43 @@
     function createMarker(latlng, clickBool) {
         latlng = new L.latLng(Math.round(latlng.lat), Math.round( latlng.lng))
         var uniqID = Math.round(new Date().getTime() + (Math.random() * 100));
-        var marker = new L.marker(latlng, { icon: customPin }).addTo(markerGroup);
-        var popup = new L.Popup();
+        var marker = new L.marker(latlng, { icon: customPin, draggable: true }).addTo(markerGroup);
+        var popup = new L.Rrose({ offset: new L.Point(-4, -10)}).setLatLng(latlng);
         //Removes marker if popup is empty
         marker.on('popupclose', function (e) {
-            if (($("#popup" + uniqID).html() != undefined && $("#popup" + uniqID).html().indexOf("popup-comment")) === -1) {
+            if (($("#popup" + uniqID).html() !== undefined && $("#popup" + uniqID).html().indexOf("popup-comment")) === -1) {
                 imageMap.removeLayer(marker);
             }
         });
+
+
+        //Updates the marker location after dragging
+        marker.on("dragend", function (e) {
+            
+            marker = e.target;
+            
+            popup = marker.getPopup().getContent();
+            //Updating the 'open pin' button
+            parent = $(popup).find(".reply-button").data("parent");
+            $("#loc-" + parent).attr("data-location", Math.round(marker.getLatLng().lat) + "  " + Math.round(marker.getLatLng().lng));
+            var CommentUpdateModel = {
+                "Message": null,
+                "Lat": Math.round(marker.getLatLng().lat),
+                "Lng": Math.round(marker.getLatLng().lng),
+                "ParentId": parent
+            }
+                $.ajax(
+                    {
+                        type: "POST", //HTTP POST Method  
+                        url: "../UpdateCommentLocation", // Controller/View  
+                        contentType: "application/json;",
+                        dataType: "text",
+                        data: JSON.stringify(CommentUpdateModel)
+                })
+                marker.setLatLng(new L.LatLng(Math.round(marker.getLatLng().lat), Math.round(marker.getLatLng().lng)));
+        })
+
+
         popup.options.autoPan = false;
         popup.options.closeOnClick = true;
         //Focusing the textarea of the popup
@@ -251,27 +272,20 @@
         }).on("click", ".open-pin", function () {
             var clickedComment = $(this);
             if (clickedComment.context.text === "Close pin") {
-
-                $(".leaflet-popup-close-button").click();
+                imageMap.closePopup();
                 $(this).text("Open pin");
             }
             else {
                 $("#map-pane").removeClass("hidden");
                 $(this).text("Close pin");
 
-                var loc = $(this).data("location").split(' ');
+                var loc = $(this).attr("data-location").split(' ');
                 var lat = loc[0];
                 var lng = loc[2];
-                var latCollection = locations.map(function (value, index) { return value[1]; });
-                var lngCollection = locations.map(function (value, index) { return value[2]; });
-
-                if ($.inArray(parseInt(lat), latCollection) !== -1 && $.inArray(parseInt(lng), lngCollection) !== -1) {
-
-                    var latlng = L.latLng(lat, lng);
-                    var idCollection = locations.map(function (value, index) { return value[0]; });
-                    var uniqID = idCollection[$.inArray(parseInt(lat), latCollection)];
-                    markerX = markersArray[markersArray.findIndex(x => parseInt(x.myData.id) === parseInt(uniqID))].openPopup();
-                }
+                var latlng = new L.LatLng(lat, lng);
+                var marker = markersArray[markersArray.findIndex(x => x.getLatLng().equals(latlng))];
+                uniqID = marker.myData.id;
+                marker.openPopup();
             }
 
             $(".open-pin").each(function (index) {

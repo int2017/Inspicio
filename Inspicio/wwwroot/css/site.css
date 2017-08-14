@@ -542,11 +542,11 @@ body .dropzone .dz-preview .dz-image {
     z-index: 5000
 }
 
-.leaflet-popup-content {
+.leaflet-rrose-content {
     min-width: 250px;
 }
 
-    .leaflet-popup-content .comment-status {
+    .leaflet-rrose-content .comment-status {
         border: 1px solid #cccccc;
         border-top: none;
         border-radius: 4px;
@@ -628,7 +628,9 @@ nav.navbar.navbar-inverse.navbar-fixed-top {
 .username {
     font-weight: 700;
 }
-
+.popup-comment > div{
+    margin:15px 0;
+}
 .btn-danger {
     background-color: #a96360;
     border-color: #8c5957;
@@ -703,7 +705,7 @@ input:focus {
     margin: 0 10px 10px 0;
 }
 
-    .lightbox-button:hover {
+    .lightbox-button:hover,.clicked {
         opacity: 1;
         transition: all 0.3s ease-in-out;
         -moz-transition: all 0.3s ease-in-out;

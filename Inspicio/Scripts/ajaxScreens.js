@@ -1,4 +1,6 @@
-﻿function screenContent(id) {
+﻿var ajaxComments = require("./ajaxComments");
+
+function screenContent(id) {
 
     $.ajax(
         {
@@ -30,9 +32,18 @@ function screenSelector( reviewid, id) {
                 $(".colorpicker").remove();
                 $("#screen-container").html(response);
                 disableThumb(false);
-                reloadMarkers();
+                ajaxComments.reloadMarkers();
                 $(".view-container").removeClass("wide");
                 
             }
         });
 }
+
+$(document).ready(function () {
+    $(".cover-item").each(function () {
+        screenContent($(this).attr("id"));
+        $(this).click(function () {
+            screenSelector($("#ReviewId").val(), $(this).attr("id"));
+        })
+    })
+})

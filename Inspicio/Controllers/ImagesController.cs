@@ -398,9 +398,29 @@ namespace Inspicio.Controllers
             await _context.SaveChangesAsync();
             return PartialView("_CommentPartial",comment);
         }
+        [HttpPost]
+        public async Task<IActionResult> UpdateCommentLocation([FromBody] CommentUpdateModel CommentUpdateModel)
+        {
+            var parentComment = _context.Comments.Where(c => c.CommentId.ToString().Equals(CommentUpdateModel.ParentId)).SingleOrDefault();
+            if (CommentUpdateModel.Message != null)
+            {
+                parentComment.Message = CommentUpdateModel.Message;
+            }
+            else if (CommentUpdateModel.Lat != 0) { 
+                var childComments = _context.Comments.Where(c => c.ParentId == CommentUpdateModel.ParentId).ToList();
+                parentComment.Lat = CommentUpdateModel.Lat;
+                parentComment.Lng = CommentUpdateModel.Lng;
+                foreach(var c in childComments)
+                {
+                    c.Lat= CommentUpdateModel.Lat;
+                    c.Lng= CommentUpdateModel.Lng;
+                }
+            }
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
 
 
-       
         [HttpPost]
         public async Task<IActionResult> ChangeRating([FromBody] RatingBody data)
         {

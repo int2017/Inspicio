@@ -42,7 +42,7 @@ the server when create new is pressed.
         autoProcessQueue: false,
         init: function () {
             this.on("addedfile", function (file) {
-                if (this.files[1] != null) {
+                if (this.files[1] ) {
                     try {
                         this.removeFile(this.files[0]);
                     }
@@ -64,7 +64,7 @@ the server when create new is pressed.
         autoProcessQueue: false,
         init: function () {
             this.on("addedfile", function (file) {
-                if (this.files[1] != null) {
+                if (this.files[1]) {
                     try {
                         this.removeFile(this.files[0]);
                     }
