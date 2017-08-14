@@ -1,6 +1,8 @@
-﻿//Dropzone class
+﻿var pins = require("./pinComments.js");
 
-function dropzoneClass(area, addImageButton , titleField) {
+//Dropzone class
+//mapRequired (bool) - determines if the dropzone will implement a map for pinning comments
+function dropzoneClass(area, mapRequired, mapArea, addImageButton , titleField) {
     
     //Additional variable to be used in functions
     var self = this;
@@ -10,6 +12,10 @@ function dropzoneClass(area, addImageButton , titleField) {
 
     //Title field, update when file is added
     this.screenTitleField = titleField;
+
+    //A bool for determining if a map is required and a string for it's location
+    this.mapRequired = mapRequired;
+    this.mapArea = mapArea;
 
     //Add button, to change classes
     this.addImageButton = addImageButton;
@@ -54,6 +60,12 @@ function dropzoneClass(area, addImageButton , titleField) {
                     $("#"+self.area).click();
                 });
                 $("#" + area).css("width", "auto");
+
+                //If map is required, initialize it
+                if (self.mapRequired) {
+                    self.initMap();
+                }
+
                 //If the type is string (b64),the try will fail,  do not convert it and just change the value of b64 input, otherwise convert it and add ready class to the button
                 try {
                     self.encodeBase64(file);
@@ -98,10 +110,18 @@ function dropzoneClass(area, addImageButton , titleField) {
         $(self.b64input).val("");
         $("#" + area).css("width", "100%");
     }
+
+    //--- METHODS RELATED TO PINNED COMMENTS BELOW
+    this.initMap = function () {
+        if (self.map) {
+            self.map.mapLeaf.remove();
+        }
+        self.map = pins.newMap(self.mapArea);
+    }
 }
 
-var createDropzone = function (area,button,title) {
-    var dropzoneObject = new dropzoneClass(area,button,title);
+var createDropzone = function (area,mapRequired,mapArea,button,title) {
+    var dropzoneObject = new dropzoneClass(area, mapRequired, mapArea, button, title);
     return dropzoneObject;
 }
 

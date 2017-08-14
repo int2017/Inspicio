@@ -1,5 +1,6 @@
 ﻿var dropzone = require("./createDropzone.js")
 
+
 //Thumbnail class
 function thumbnailClass(title, content,id,deleteScreen) {
 
@@ -89,7 +90,8 @@ function reviewClass() {
     //Variables for controlling the fields
     this.screenTitleField = $("#Image_Title");
     this.screenDescriptionField = $("#Image_Description_UserInput");
-    this.screenDropzone = dropzone.createDropzone("screenDropzone", this.addScreenButton, this.screenTitleField);
+    // "True" - mapRequired
+    this.screenDropzone = dropzone.createDropzone("screenDropzone", true,"screenMap",this.addScreenButton, this.screenTitleField);
     this.thumbnailDropzone = dropzone.createDropzone("projectThumbnailDropzone");
     
     this.projectTitleField = $("#project-title").on("blur", function () {

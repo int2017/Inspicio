@@ -535,7 +535,7 @@ body .dropzone .dz-preview .dz-image {
     position: relative;
 }
 
-#imageMap {
+body div.mapContainer {
     position: absolute;
     background: transparent;
     overflow: visible;

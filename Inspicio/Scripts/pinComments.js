@@ -199,7 +199,7 @@ function markerClass(location,id) {
 
 
 //Map class
-function mapClass() {
+function mapClass(mapArea) {
 
     //Separate variable to be used in functions
     var self = this;
@@ -208,7 +208,7 @@ function mapClass() {
     var w = $("#image-container img").width();
 
     //Creating the map
-    this.mapLeaf = L.map("imageMap", {
+    this.mapLeaf = L.map(mapArea, {
         crs: L.CRS.Simple,
         zoomControl: false,
         maxBounds: [
@@ -333,10 +333,19 @@ function mapClass() {
 }
 
 //Resizing the map according to the image and exporting map
-var newMap = function(){
-    var map = new mapClass();
-    $("#imageMap").width($("#image-container >img").width());
-    $("#imageMap").height($("#image-container >img").height());
+var newMap = function(mapArea){
+    var map = new mapClass(mapArea);
+    //If image has not yet loaded, wait 1.5 sec and try again
+    if ($("#" + mapArea).parent().find(".dz-image").width() != 0) {
+        $("#" + mapArea).width($("#" + mapArea).parent().find("img").width());
+        $("#" + mapArea).height($("#" + mapArea).parent().find("img").height());
+    }
+    else {
+        setTimeout(function () {
+            $("#" + mapArea).width($("#" + mapArea).parent().find("img").width());
+            $("#" + mapArea).height($("#" + mapArea).parent().find("img").height());
+        },1500)
+    }
     return map;
 }
 module.exports.newMap = newMap;

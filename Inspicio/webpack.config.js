@@ -2,8 +2,8 @@
 
 module.exports = {
 	entry: {
-        "multipleImages": './Scripts/multipleImages.js'
-		"ajaxScreens": './Scripts/ajaxScreens.js',
+        "multipleImages": './Scripts/multipleImages.js',
+		"ajaxScreens": './Scripts/ajaxScreens.js'
 	},
 	output: {
 		filename: "[name].bundle.js",
