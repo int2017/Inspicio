@@ -100,6 +100,8 @@ function reviewClass() {
     });
    
     this.clearScreenFields = function () {
+        $(self.screenDescriptionField).off();
+        $(self.screenTitleField).off();
         self.screenDropzone.clearDropzone();
         this.screenTitleField.val("");
         this.screenDescriptionField.val("");
@@ -142,10 +144,10 @@ function reviewClass() {
             $(self.screenTitleField).unbind("keydown");
             $(self.screenDescriptionField).unbind("keydown");
             self.changeValues(screen);
-            $(self.screenTitleField).on("keydown", function () {
+            $(self.screenTitleField).on("change", function () {
                 self.fieldListeners(screen)
             })
-            $(self.screenDescriptionField).on("keydown", function () {
+            $(self.screenDescriptionField).on("change", function () {
                 self.fieldListeners(screen)
             })
         })
@@ -158,6 +160,7 @@ function reviewClass() {
            self.projectScreens[screen.id].updateScreen($(self.screenTitleField).val(), $(self.screenDescriptionField).val());
             $(self.saveChangesButton).slideUp();
             $(this).unbind("click");
+            self.clearScreenFields();
         })
        
     }
