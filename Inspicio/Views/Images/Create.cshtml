@@ -24,7 +24,7 @@
                     <textarea class="form-control" id="project-description" rows="7" placeholder="Project Description &lt;markdown supported&gt;"></textarea>
                     <span class="text-danger"></span>
 
-                    <textarea id="Image_DescriptionHTML"></textarea>
+                    <textarea  id="Project_DescriptionHTML"></textarea>
                 </div>
             </div>
             <div class="col-md-4">
@@ -222,6 +222,11 @@
     $('#Image_Description_UserInput').on('blur', function (e) {
 
         $("#Image_DescriptionHTML").html(convertToHTML($("#Image_Description_UserInput").val()));
+    });
+
+    $('#project-description').on('blur', function (e) {
+
+        $("#Project_DescriptionHTML").html(convertToHTML($("#project-description").val()));
     });
 
 </script>
