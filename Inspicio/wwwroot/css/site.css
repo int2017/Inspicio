@@ -116,6 +116,8 @@ body {
     font-size: 18px;
     align-content: center;
     table-layout: fixed;
+    margin-top:50px;
+    margin-bottom: 50px;
 }
 
 #loginform {
