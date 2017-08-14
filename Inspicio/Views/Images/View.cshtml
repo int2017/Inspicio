@@ -4,7 +4,7 @@
 @inject UserManager<ApplicationUser> UserManager
 
 
-<script type="text/javascript" src="~/js/ajaxScreens.js"></script>
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/2.5.1/css/bootstrap-colorpicker.min.css" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/2.5.1/js/bootstrap-colorpicker.min.js"></script>
 <script type="text/javascript" src="~/js/background-selector.js"></script>
@@ -34,10 +34,7 @@
             <div class="cover-container">
                 @foreach (var id in Model.ScreenIds)
             {
-                    <div class="cover-item" id="@id"  onclick="screenSelector(@Model.Review.ReviewId, @id)"></div>
-                    <script>
-                        screenContent( @id);
-                    </script>
+                    <div class="cover-item" id="@id"></div>
                 }
             </div>
         </div>
@@ -70,8 +67,7 @@
 <script type="text/javascript" src="~/js/ajaxThumbs.js"></script>
 <script type="text/javascript" src="~/js/widgetControl.js"></script>
 <script type="text/javascript" src="~/js/sort-comments.js"></script>
-<script type="text/javascript" src="~/js/ajaxComments.js"></script>
-<script type="text/javascript" src="~/dist/images_view.bundle.js"></script>
+<script type="text/javascript" src="~/dist/ajaxScreens.bundle.js"></script>
 
 
 
@@ -101,7 +97,7 @@
         });
 
     });
-   
+
 
 </script>
 <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
