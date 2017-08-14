@@ -62,7 +62,8 @@ function dropzoneClass(area, addImageButton , titleField) {
                     if (self.addImageButton) {
                         $(self.addImageButton).toggleClass("ready");
                     }
-                    if (self.screenTitleField && self.screenTitleField.value!== undefined ) {
+                    alert(self.screenTitleField.val().length)
+                    if (self.screenTitleField) {
                         $(self.screenTitleField).val(file.name.split(".")[0] );
                     }
                 }

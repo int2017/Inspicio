@@ -169,7 +169,10 @@ $(document).ready(function () {
         $(".edit-project").css("display", "initial").hide().delay(250).fadeIn(300);
         $("#project-info").fadeOut(300);
         $(".image-upload-container").delay(250).fadeIn(300);
-        $("#review-title-header").html(review.projectTitle);
+        if (review.projectTitle !== undefined && review.projectTitle !== undefined && review.projectTitle.value !== "") {
+            $("#review-title-header").html(review.projectTitle);
+        }
+       
     })
     $(document).on("click", "#create-reviewer", function () {
         $(".add-reviewers-overlay").delay(250).fadeIn(300);
