@@ -161,6 +161,60 @@ function reviewClass() {
         })
        
     }
+
+    //Submit review function
+    this.submit = function () {
+
+        //Removing deleted screens
+        var finalScreenList =[];
+        $(self.projectScreens).each(function () {
+            if (this.id > -1) {
+                var finalScreen = {
+                    Title: this.screenTitle,
+                    Description: this.screenDescription,
+                    Content: this.screenContent
+                }
+                finalScreenList.push(finalScreen);
+            }
+        })
+        //Adding all selected reviewers to the list
+        var reviewers =[];
+        $(".reviewer-info input[type='checkbox']").each(function (index) {
+            if ($(this).is(":checked")) {
+
+                var userId = $("#Reviewers_" + index + "__Id").val();
+                var profileName = $("#profilename-" + index + " label").html();
+                var email = $("#email-" + index + " label").html();
+                var user = {
+                    "Id": userId,
+                    "ProfileName": profileName,
+                    "Email": email
+                };
+                reviewers.push(user);
+            }
+
+        })
+        var CreatePageModel = {
+            Screens: finalScreenList,
+            Reviewers: reviewers,
+            ReviewTitle: self.projectTitle,
+            ReviewDescription: self.projectDescription,
+            ReviewThumbnail: $("#b64projectThumbnailDropzone").val()
+        }
+        var data = {
+            __RequestVerificationToken: $('[name= "__RequestVerificationToken"]').val(),
+            CreatePageModel: CreatePageModel
+        }
+        $.ajax(
+            {
+                type: "POST", //HTTP POST Method  
+                url: location.pathname, // Controller  
+                data: data,
+                success: function (url) {
+                    window.location.href = url;
+                }
+            });
+    }
 }
 
 $(document).ready(function () {
@@ -182,6 +236,9 @@ $(document).ready(function () {
         if (!$(event.target).closest('.panel.panel-default').length) {
             $(this).fadeOut(200);
         }
+    })
+    $(document).on("click", "#submit-images", function () {
+        review.submit();
     })
 
 })
