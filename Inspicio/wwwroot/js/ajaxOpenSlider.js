@@ -121,23 +121,27 @@
                 objCount = Object.keys(obj).length;
 
                 $("#reviewees-section").html("");
+                var author = $("#authour-section > #reviewers-name")[0];
                 for (i = 0; i < objCount; i++)
                 {
-                    $('<img />', {
-                        id: 'reviewers-avatar',
-                        src: obj[i].avatar,
-                        style: 'width:20px;height:20px;'
-                    }).appendTo("#reviewees-section");
+                    if (obj[i].profileName != author.textContent)
+                    {
+                        $('<img />', {
+                            id: 'reviewers-avatar',
+                            src: obj[i].avatar,
+                            style: 'width:20px;height:20px;'
+                        }).appendTo("#reviewees-section");
 
-                    $('<p />', {
-                        id: 'reviewers-name-'+i,
-                        class: 'reviewers-section-names',
-                        text: obj[i].profileName
-                    }).appendTo("#reviewees-section");
+                        $('<p />', {
+                            id: 'reviewers-name-' + i,
+                            class: 'reviewers-section-names',
+                            text: obj[i].profileName
+                        }).appendTo("#reviewees-section");
 
-                    $('<i />', {
-                        class: 'fa fa-thumbs-o-up',
-                    }).appendTo("#reviewees-section");
+                        $('<i />', {
+                            class: 'fa fa-thumbs-o-up',
+                        }).appendTo("#reviewees-section");
+                    }
                 }
             }
         })
