@@ -56,7 +56,7 @@
 .add-reviewees-modal {
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
-    z-index: 10000; /* Sit on top */
+    z-index: 10001; /* Sit on top */
     left: 0;
     top: 0;
     width: 100%; /* Full width */
@@ -68,12 +68,25 @@
 
 /* Modal Content/Box */
 .add-reviewees-modal-content {
-    height: 100%;
     max-height: 355px;
     background-color: #fefefe;
-    margin: 15% auto; /* 15% from the top and centered */
+    margin: 22% 0% 0% 45%;
     padding-left: 20px;
     padding-right: 20px;
     border: 1px solid #888;
-    width: 80%; /* Could be more or less, depending on screen size */
+    width: 40%;
+    height: 35%;
+    overflow-y:auto;
+}
+
+/*#all-users{
+    overflow-y:auto;
+}*/
+
+#delete {
+    float: right;
+    background-color: red;
+}
+#new_version {
+    float: right
 }

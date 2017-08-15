@@ -766,7 +766,7 @@ select#comment-date {
    
 }
 
-#reviewers-name {
+.reviewers-section-names {
     display: inline-table;
     margin: 0 0 5px 0;
     width: 66%;
@@ -998,4 +998,8 @@ body .dropzone .dz-preview.dz-image-preview {
         width: 100%;
         padding: 20px 20px 20px 75px;
     }
+}
+
+.modal-open {
+    overflow: hidden;
 }

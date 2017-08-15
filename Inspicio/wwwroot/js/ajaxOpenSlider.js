@@ -48,28 +48,98 @@
             "Open": $("#review-state").hasClass('review_closed') ? true : false
         };
 
-        $.ajax(
-            {
-                type: "POST", //HTTP POST Method  
-                url: "../CloseReview", // Controller/View  
-                contentType: "application/json;",
-                dataType: "text",
-                data: JSON.stringify(reviewData),
-                success: function (response) {
+        $.ajax({
 
-                    if (response == 1) {
-                        $("#review-state-toggle").attr("title", "Re-open Review");
-                        $("#review-state-icon").addClass("fa fa-toggle-on");
-                        $("#review-state-icon").removeClass("fa fa-toggle-off");
-                        $("#review-state").html("Review :Closed");
-                    }
-                    else {
-                        $("#review-state-toggle").attr("title", "Close Review");
-                        $("#review-state-icon").addClass("fa fa-toggle-off");
-                        $("#review-state-icon").removeClass("fa fa-toggle-on");
-                        $("#review-state").html("Review :Open");
-                    }
+            type: "POST", //HTTP POST Method  
+            url: "../CloseReview", // Controller/View  
+            contentType: "application/json;",
+            dataType: "text",
+            data: JSON.stringify(reviewData),
+            success: function (response) {
+
+                if (response == 1) {
+                    $("#review-state-toggle").attr("title", "Re-open Review");
+                    $("#review-state-icon").addClass("fa fa-toggle-on");
+                    $("#review-state-icon").removeClass("fa fa-toggle-off");
+                    $("#review-state").html("Review :Closed");
                 }
-            });
-    })
+                else {
+                    $("#review-state-toggle").attr("title", "Close Review");
+                    $("#review-state-icon").addClass("fa fa-toggle-off");
+                    $("#review-state-icon").removeClass("fa fa-toggle-on");
+                    $("#review-state").html("Review :Open");
+                }
+            }
+        });
+    });
+
+    $('#update-reviewers').on('click', function () {
+
+        var UpdatingUser = {
+
+            "ReviewId": $("#ReviewId").val(),
+            "ScreenId": $("ScreenId").val(),
+            "ToRemove": [],
+            "ToAdd": []
+        };
+
+        var checkedStates = $('input[id ^= "reviewer-"]');
+        var profileNames = $('label[id ^= "profilename-"]');
+        var Ids = $('input[id ^= "id-"]');
+
+        var currentReviewers = $('p[id ^= "reviewers-name-"]');
+        var currentProfileNames = [];
+        for (i = 0; i < currentReviewers.length; i++)
+        {
+            currentProfileNames.push(currentReviewers[i].innerText);
+        }
+
+        for (i = 0; i < checkedStates.length; i++)
+        {
+            var match = ($.inArray(profileNames[i].innerText, currentProfileNames));
+            if (checkedStates[i].checked && match === -1)
+            {
+                UpdatingUser.ToAdd.push(Ids[i].value)
+            }
+
+            if (!checkedStates[i].checked && match > -1) {
+
+                UpdatingUser.ToRemove.push(Ids[i].value)
+            }
+        }
+
+        $.ajax({
+
+            type: "POST",
+            url: "../Update_Reviewers",
+            contentType: "application/json",
+            dataType: "text",
+            data: JSON.stringify(UpdatingUser),
+            success: function (response) {
+
+                obj = JSON.parse(response);
+                objCount = Object.keys(obj).length;
+
+                $("#reviewees-section").html("");
+                for (i = 0; i < objCount; i++)
+                {
+                    $('<img />', {
+                        id: 'reviewers-avatar',
+                        src: obj[i].avatar,
+                        style: 'width:20px;height:20px;'
+                    }).appendTo("#reviewees-section");
+
+                    $('<p />', {
+                        id: 'reviewers-name-'+i,
+                        class: 'reviewers-section-names',
+                        text: obj[i].profileName
+                    }).appendTo("#reviewees-section");
+
+                    $('<i />', {
+                        class: 'fa fa-thumbs-o-up',
+                    }).appendTo("#reviewees-section");
+                }
+            }
+        })
+    });
 })

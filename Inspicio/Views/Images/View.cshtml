@@ -99,18 +99,75 @@
                     <!-- Modal content -->
                     <div class="add-reviewees-modal-content">
 
-                        <p> Select non selected reivewees to add here!</p>
+                        <h4>Select Reviewers </h4>
+                        
+                        <div id="all-users">
+                            @{
+                                var userList = UserManager.Users.ToList();
+                                if (userList != null)
+                                {
+                                    <div class="row-eq-height">
+                                        <div class="col-xs-1 col-md-1 text-center">
+                                            
+                                        </div>
+                                        <div class="col-xs-2 col-md-2 text-left">
+                                           
+                                        </div>
+                                        <div class="col-xs-4 col-md-4 text-left">
+                                            <label> Profile name </label>
+                                        </div>
+                                        <div class="col-xs-4 col-md-4">
+                                            <label> Email</label>
+                                        </div>
+                                    </div>
+
+                                    @for (var i = 0; i < userList.Count; i++)
+                                    {
+                                        if (userList[i].Id != User.GetProfileId())
+                                        {
+                                            <div class="row-eq-height reviewer-info" style="padding-bottom: 5px;">
+                                                <div class="col-xs-1 col-md-1 text-center">
+                                                    <input id="reviewer-@i" type="checkbox" 
+                                                        @{
+                                                            var match = Model.Reviewees.Select(u => u.UserId).ToList().FirstOrDefault(uList => uList.Contains(userList[i].Id));
+                                                            if (match != null)
+                                                            {
+                                                                @:checked
+                                                            }
+                                                        }
+                                                    />
+                                                </div>
+
+                                                <div class="col-xs-2 col-md-2">
+                                                    <img width="40" height="40" alt="@userList[i].ProfileName" src="@userList[i].ProfilePicture" />
+                                                </div>
+                                                <div id="profilename-@i" class="col-xs-4 col-md-4 text-left">
+                                                    <label id="profilename-@i" for="reviewer-@i"> @userList[i].ProfileName</label>
+                                                </div>
+                                                <div id="email-@i" class="col-xs-4 col-md-4">
+                                                    <label id="email-@i" for="reviewer-@i"> @userList[i].Email</label><input type="hidden" id="id-@i"  value="@userList[i].Id" />
+                                                </div>
+
+                                            </div>
+                                        }
+                                    }
+                                }
+                            }
+                        </div>
+
+                        <div>
+                            <button title="Save the current user selection" type="button" id="update-reviewers" class="lightbox-button btn" style="width: 100%;">Update Reviewers</button>
+                        </div>
 
                     </div>
-
                 </div>
-
-                        @foreach (var u in Model.Reviewees)
+                
+                @for( var u = 0; u < Model.Reviewees.Count; u++ )
                 {
 
-                    if (u.UserId == Model.Review.CreatorId)
+                    if (Model.Reviewees[u].UserId == Model.Review.CreatorId)
                     {
-                        var user = await UserManager.FindByIdAsync(u.UserId);
+                        var user = await UserManager.FindByIdAsync(Model.Reviewees[u].UserId);
                                 <script>
                             $("#authour-section").html('<img id="reviewers-avatar" src="@user.ProfilePicture" style="width:20px;height:20px;" /><p id="reviewers-name">@user.ProfileName</p><hr style="margin:5px;"/>');
                                 </script>
@@ -118,7 +175,7 @@
 
                             else
                             {
-                                var user = await UserManager.FindByIdAsync(u.UserId);
+                                var user = await UserManager.FindByIdAsync(Model.Reviewees[u].UserId);
                                 <script>
                             $('<img />', {
                                 id: 'reviewers-avatar',
@@ -127,7 +184,8 @@
                             }).appendTo("#reviewees-section");
 
                             $('<p />', {
-                                id: 'reviewers-name',
+                                id: 'reviewers-name-'+@u,
+                                class: 'reviewers-section-names',
                                 text: '@user.ProfileName',
                             }).appendTo("#reviewees-section");
 

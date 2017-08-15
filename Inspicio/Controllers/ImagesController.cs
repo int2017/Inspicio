@@ -346,31 +346,14 @@ namespace Inspicio.Controllers
             return View(Screen);
         }
 
-        // GET: Images/Delete/5
-        public async Task<IActionResult> Delete(int? Id)
-        {
-            if (Id == null)
-            {
-                return NotFound();
-            }
-
-            var Screen = await _context.Screens.SingleOrDefaultAsync(m => m.ScreenId == Id);
-            if (Screen == null)
-            {
-                return NotFound();
-            }
-
-            return View(Screen);
-        }
-
         // POST: Images/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int Id)
+        [HttpPost]
+        public async Task<IActionResult> Delete(int Id)
         {
             var Screen = await _context.Screens.SingleOrDefaultAsync(m => m.ScreenId == Id);
             _context.Screens.Remove(Screen);
             await _context.SaveChangesAsync();
+
             return RedirectToAction("Index");
         }
 
@@ -454,5 +437,53 @@ namespace Inspicio.Controllers
             _context.SaveChangesAsync();
             return Json( screen.ScreenState );
         }
+
+
+
+        public class UpdatingUser
+        {
+            public int ScreenId { get; set; }
+            public int ReviewId { get; set; }
+            public string[] ToRemove { get; set; }
+            public string[] ToAdd { get; set; }
+        }
+        [HttpPost]
+        public async Task<JsonResult> Update_Reviewers([FromBody] UpdatingUser users)
+        {
+            var accessList = _context.Access.Where(r => r.ReviewId == users.ReviewId).ToList();
+
+            foreach (var uId in users.ToRemove)
+            {
+                var user = accessList.Find(r => r.UserId == uId);
+                _context.Access.Remove(user);
+            }
+
+            foreach (var uId in users.ToAdd)
+            {
+                var ReviewerEntry = new Access();
+
+                ReviewerEntry.UserId = uId;
+                ReviewerEntry.ReviewId = users.ReviewId;
+                _context.Access.Add(ReviewerEntry);
+            }
+
+            await _context.SaveChangesAsync();
+
+            accessList = _context.Access.Where(r => r.ReviewId == users.ReviewId).ToList();
+            var reviewers = new List<object>();
+            foreach (var u in accessList)
+            {
+                var user = (await _userManager.FindByIdAsync(u.UserId));
+                reviewers.Add(new
+                {
+                    profileName = user.ProfileName,
+                    avatar = user.ProfilePicture,
+                    rating = _context.ScreenStatus.Where(s => s.ScreenId == users.ScreenId && s.UserId == u.UserId).FirstOrDefault()
+                });
+            }
+
+            return Json(reviewers);
+        }
+
     }
 }
