@@ -9,6 +9,17 @@
     text-align: center;
 }
 
+#view-dropdown{
+    margin-left: 970px;
+    position:absolute;
+    padding: 5px;
+    margin: 10px, 10px,10px,10px;
+}
+
+.hidden{
+    display: none; 
+}
+
     #loginsection:hover {
         background-color: lightgrey;
     }

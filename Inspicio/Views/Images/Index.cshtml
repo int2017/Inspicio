@@ -6,6 +6,11 @@
 
 <p>
     <input type="text" id="myInput" placeholder="Search for reviews..">
+    <select class="dropdown" id="view-dropdown">
+    <option value="0">All Reviews</option>
+    <option value="1">Open Reviews</option>
+    <option value="2">Closed Reviews</option>
+    </select>
 </p>
 
 <table id="table">
@@ -39,48 +44,50 @@
     </thead>
     <tbody id="tBody" style="border-bottom: solid; border-width: 3px;">
 
-@foreach (var item in Model)
-{ 
-        <tr title="@item.Review.Title" onclick="document.location = 'Images/View/@item.Review.ReviewId'" style="cursor:pointer; border-bottom:solid;border-bottom-width:1px;" >
-                <td id="content" class="text-left"  data-toggle="tooltip" title="Review Image" >
-                    <img style="max-height: 120px; max-width: 120px; margin-bottom: 5px; margin-top: 10px;" src="@item.Review.Thumbnail" />
-                </td>
-                <td id="title" data-toggle="tooltip" title="Review Title">
-                    @{
-                        if(item.Review.Title!= null) {
-                         string defaultTitle = item.Review.Title;
-                         string title = (defaultTitle.Length <= 100) ? defaultTitle : defaultTitle.Substring(0, 100) + "...";
-                         @Html.DisplayFor(modelItem => title)
-                        }
+    @foreach (var item in Model)
+    {
+        <tr class="@item.Review.ReviewState" title="@item.Review.Title" onclick="document.location = 'Images/View/@item.Review.ReviewId'" style="cursor:pointer; border-bottom:solid;border-bottom-width:1px;">
+            <td id="content" class="text-left"  data-toggle="tooltip" title="Review Image" >
+                <img style="max-height: 120px; max-width: 120px; margin-bottom: 5px; margin-top: 10px;" src="@item.Review.Thumbnail" />
+            </td>
+            <td id="title" data-toggle="tooltip" title="Review Title">
+                @{
+                    if(item.Review.Title!= null)
+                    {
+                        string defaultTitle = item.Review.Title;
+                        string title = (defaultTitle.Length <= 100) ? defaultTitle : defaultTitle.Substring(0, 100) + "...";
+                        @Html.DisplayFor(modelItem => title)
                     }
-                </td>
-                <td id="creator" data-toggle="tooltip" title="Review Creator">
-                    @{
-                        var user = await UserManager.FindByIdAsync(item.Review.CreatorId);
-                        @Html.DisplayFor(modelItem => user.ProfileName);
-                     }
-                </td>
-                <td id="screen-counter" data-toggle="tooltip" title="Number of screens in the review">
+                }
+            </td>
+            <td id="creator" data-toggle="tooltip" title="Review Creator">
+                @{
+                    var user = await UserManager.FindByIdAsync(item.Review.CreatorId);
+                    @Html.DisplayFor(modelItem => user.ProfileName);
+                }
+            </td>
+            <td id="screen-counter" data-toggle="tooltip" title="Number of screens in the review">
                 @Html.DisplayFor(modelItem => item.screenCount)
-                </td>
-                <td id="up-col" data-toggle="tooltip" title="Number of reviewers who have approved the review">
-                   @Html.DisplayFor(modelItem => item.approvals)
-                </td>
-                <td id="mid-col" data-toggle="tooltip" title="Number of reviewers requesting changes" >
-                    @Html.DisplayFor(modelItem => item.needsWorks)
-                </td>
-                <td id="down-col"  data-toggle="tooltip" title="Number of reviewers who have rejected the review">
-                    @Html.DisplayFor(modelItem => item.rejections)
-                </td>     
-                <td id="status" data-toggle="tooltip" title="Whether the review is open or closed">
-                    @Html.DisplayFor(modelItem => item.Review.ReviewState)
-                </td>
-            </tr>
-        }
+            </td>
+            <td id="up-col" data-toggle="tooltip" title="Number of reviewers who have approved the review">
+                @Html.DisplayFor(modelItem => item.approvals)
+            </td>
+            <td id="mid-col" data-toggle="tooltip" title="Number of reviewers requesting changes" >
+                @Html.DisplayFor(modelItem => item.needsWorks)
+            </td>
+            <td id="down-col"  data-toggle="tooltip" title="Number of reviewers who have rejected the review">
+                @Html.DisplayFor(modelItem => item.rejections)
+            </td>     
+            <td id="status" data-toggle="tooltip" title="Whether the review is open or closed">
+                @Html.DisplayFor(modelItem => item.Review.ReviewState)
+            </td>
+        </tr>
+    }
 
 
     </tbody>
 </table>
 
+<script type="text/javascript" src="~/js/less/dropdown.js"></script>
 <script type="text/javascript" src="~/js/SortTable.js"></script>
 <script type="text/javascript" src="~/js/Search.js"></script>
