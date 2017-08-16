@@ -1,7 +1,5 @@
 ﻿
 
-    var width = $("#image-container > img").width()+20;
-    $("#background-selector").width(width);
     var picker = $("#color-picker").colorpicker();
     $(document).on("click", "#color-picker", function () {
         if ($(".colorpicker-visible").is(":visible")) {

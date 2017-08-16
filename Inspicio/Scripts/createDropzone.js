@@ -71,7 +71,10 @@ function dropzoneClass(area, mapRequired, mapArea, addImageButton , titleField,h
 
                 //If map is required, initialize it
                 if (self.mapRequired) {
-                    self.initMap();
+                    setTimeout(function () {
+                        self.initMap(file.width,file.height);
+                    }, 1000)
+                    
                 }
 
                 //If the type is string (b64),the try will fail,  do not convert it and just change the value of b64 input, otherwise convert it and add ready class to the button
@@ -140,7 +143,7 @@ function dropzoneClass(area, mapRequired, mapArea, addImageButton , titleField,h
     }
 
     //Initializing map
-    this.initMap = function () {
+    this.initMap = function (width,height) {
         $(document).off("click", ".popup-btn");
         $(self.pinsEnabler).off();
         $(self.pinsEnabler).removeClass("disabled");
@@ -150,7 +153,7 @@ function dropzoneClass(area, mapRequired, mapArea, addImageButton , titleField,h
 
         //Boolean value to determine if updates to the map are being sent to the database
         //isLocal - true
-        self.map = pins.newMap(self.mapArea,true);
+        self.map = pins.newMap(self.mapArea, width,height,true);
         $(self.pinsEnabler).on("click", function () {
             self.map.popupState(this);
         })

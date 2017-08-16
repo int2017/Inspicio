@@ -249,14 +249,16 @@ function markerClass(location,id,isLocal) {
 
 
 //Map class
-function mapClass(mapArea,isLocal) {
+function mapClass(mapArea, width,height,isLocal) {
 
     //Separate variable to be used in functions
     var self = this;
 
-    var h = $("#image-container img").height();
-    var w = $("#image-container img").width();
+    this.mapArea = mapArea
 
+        var h = $("#" + mapArea).parent().find("img").height();
+        var w = $("#" + mapArea).parent().find("img").width();
+ 
     //Creating the map
     this.mapLeaf = L.map(mapArea, {
         crs: L.CRS.Simple,
@@ -266,9 +268,18 @@ function mapClass(mapArea,isLocal) {
             [0,h]
         ]
     });
-
-
-    this.mapArea = mapArea
+    this.mapLeaf.invalidateSize(true);
+    $(window).resize(function () {
+        $("#" + mapArea).height($("#" + mapArea).parent().children("img").height());
+        $("#" + mapArea).width($("#" + mapArea).parent().children("img").width());
+        self.mapLeaf.maxBounds = [[$("#" + mapArea).width(), 0], [$("#" + mapArea).height(), 0]]
+        setTimeout(function () {
+            
+            self.mapLeaf.invalidateSize(true);
+        }, 1000)
+        
+    })
+    
 
     this.isLocal = isLocal;
 
@@ -391,8 +402,8 @@ function mapClass(mapArea,isLocal) {
 }
 
 //Resizing the map according to the image and exporting map
-var newMap = function(mapArea,isLocal){
-    var map = new mapClass(mapArea, isLocal);
+var newMap = function(mapArea,width,height,isLocal){
+    var map = new mapClass(mapArea, width, height, isLocal);
     //If image has not yet loaded, wait 1.5 sec and try again
     if ($("#" + mapArea).parent().find(".dz-image").width() != 0) {
         $("#" + mapArea).width($("#" + mapArea).parent().find("img").width());

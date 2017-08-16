@@ -21,6 +21,7 @@
 #background-selector {
     position: absolute;
     height: 100%;
+    width:100%;
     top: 0;
     left: 0;
     z-index: -1;
@@ -539,9 +540,15 @@ body div.mapContainer {
     position: absolute;
     background: transparent;
     overflow: visible;
-    z-index: 5000
+    z-index: 5000;
+    left: 0;
+    top: 0;
+    padding: 10px;
 }
 
+#image-container >img {
+    max-width: 100%;
+}
 .leaflet-rrose-content {
     min-width: 250px;
 }
