@@ -217,6 +217,9 @@ function mapClass(mapArea) {
         ]
     });
 
+
+    this.mapArea = mapArea
+
     //Additional variables
     this.markersArray = [];
     this.popupsArray = [];
@@ -309,24 +312,30 @@ function mapClass(mapArea) {
         markerObject.popupObject.addRow(username, message, parent, isInitial, urgency);
     }
 
-    //Hide/show popups listener
-    this.popupState = function () {
-        if ($("#map-pane").hasClass("hidden")) {
-            $("#map-pane").fadeIn(300);
-            $("#map-pane").removeClass("hidden");
+    //Hide/show popups function
+    //hideButton - optional button object. If passed in, the method will add / remove the appropriate classes and change it's text
+    this.popupState = function (hideButton) {
+        if ($("#" +self.mapArea).hasClass("hidden")) {
+            $("#" + self.mapArea).fadeIn(300);
+            $("#" + self.mapArea).removeClass("hidden");
             self.mapLeaf.on('click', function (e) {
                 var markerObject = new markerClass(e.latlng, self.markersArray.length);
                 self.addMarkerToMap(markerObject);
                 markerObject.openPopup();
             });
+            if (hideButton) {
+                $(hideButton).removeClass("disabled");
+            }
         }
         else {
-            $("#map-pane").fadeOut(500);
+            $("#" + self.mapArea).fadeOut(500);
             self.mapLeaf.off('click');
             setTimeout(function () {
-                $("#map-pane").addClass("hidden");
+                $("#" +mapArea).addClass("hidden");
             },600)
-            
+            if (hideButton) {
+                $(hideButton).addClass("disabled");
+            }
         }
     }
 

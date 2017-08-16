@@ -19,11 +19,11 @@ function thumbnailClass(title, content,id,deleteScreen) {
 
     //Adding thumbnails in the thumbnail
     this.init = function () {
+        //Add a #thumbnail-container div where you want for the big thumbnails, #review-thumbnail-container for the small ones. 
         $(self.outerContainer).appendTo("#thumbnail-container");
         $(self.overviewContainer).appendTo("#review-thumbnail-container");
     }
     this.init();
-
     this.remove = function () {
         $(self.outerContainer).remove();
         $(self.overviewContainer).remove();
@@ -57,6 +57,9 @@ function screenClass(id,title,description,content) {
         self.screenDescription = description;
         $(".thumbnail-inner." + self.thumbnail.id).prop("title", title);
     }
+
+    //Comment list belonging to that screen
+    this.commentList =[]
 }
 
 //Review class
@@ -85,13 +88,14 @@ function reviewClass() {
 
     this.resetButton = $("#reset").click(function () {
         self.clearScreenFields();
+        
     });
 
     //Variables for controlling the fields
     this.screenTitleField = $("#Image_Title");
     this.screenDescriptionField = $("#Image_Description_UserInput");
     // "True" - mapRequired
-    this.screenDropzone = dropzone.createDropzone("screenDropzone", true,"screenMap",this.addScreenButton, this.screenTitleField);
+    this.screenDropzone = dropzone.createDropzone("screenDropzone", true, "screenMap", this.addScreenButton, this.screenTitleField, $("#hide-pop"));
     this.thumbnailDropzone = dropzone.createDropzone("projectThumbnailDropzone");
     
     this.projectTitleField = $("#project-title").on("blur", function () {
@@ -102,6 +106,8 @@ function reviewClass() {
     });
    
     this.clearScreenFields = function () {
+        $("#hide-pop").addClass("disabled");
+        $("#hide-pop").off();
         self.screenDropzone.clearDropzone();
         this.screenTitleField.val("");
         this.screenDescriptionField.val("");
@@ -109,9 +115,19 @@ function reviewClass() {
 
     $(this.addScreenButton).click(function () {
         if ($(this).hasClass("ready")) {
+            $("#hide-pop").addClass("disabled");
+            $("#hide-pop").off();
             $(self.screenTitleField).off();
             $(self.screenDescriptionField).off();
             var newScreen = new screenClass(self.projectScreens.length, $(self.screenTitleField).val(), $(self.screenDescriptionField).val(), $(self.screenDropzone.b64input).val());
+            var screenCommentList = [];
+            $(self.screenDropzone.map.markersArray).each(function () {
+                $(this.popupObject.commentList).each(function(){
+                    screenCommentList.push(this);
+                } )
+            })
+            self.screenDropzone.destroyMap();
+            newScreen.commentList = screenCommentList;
             self.projectScreens.push(newScreen);
             self.clearScreenFields();
             self.addThumbnailListeners(newScreen);
@@ -168,15 +184,22 @@ function reviewClass() {
     this.submit = function () {
 
         //Removing deleted screens
-        var finalScreenList =[];
+        var finalScreenList = [];
+        
         $(self.projectScreens).each(function () {
             if (this.id > -1) {
+                
                 var finalScreen = {
                     Title: this.screenTitle,
                     Description: convertToHTML(this.screenDescription),
                     Content: this.screenContent
                 }
-                finalScreenList.push(finalScreen);
+                var finalCommentList = this.commentList;
+                var screenWithComments = {
+                    CommentList: finalCommentList,
+                    Screen: finalScreen
+                }
+                finalScreenList.push(screenWithComments);
             }
         })
         //Adding all selected reviewers to the list
@@ -242,5 +265,6 @@ $(document).ready(function () {
     $(document).on("click", "#submit-images", function () {
         review.submit();
     })
+
 
 })

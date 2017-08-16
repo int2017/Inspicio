@@ -1,8 +1,13 @@
 ﻿var pins = require("./pinComments.js");
 
+//A class for creating comments without sending them to the database ( only for maps within dropzones )
+function dropzoneComments() {
+
+}
+
 //Dropzone class
 //mapRequired (bool) - determines if the dropzone will implement a map for pinning comments
-function dropzoneClass(area, mapRequired, mapArea, addImageButton , titleField) {
+function dropzoneClass(area, mapRequired, mapArea, addImageButton , titleField,hidePopupsButton) {
     
     //Additional variable to be used in functions
     var self = this;
@@ -26,6 +31,9 @@ function dropzoneClass(area, mapRequired, mapArea, addImageButton , titleField) 
     //Creating the b64 input element and adding it to the document
     this.b64input = $(document.createElement("input")).attr("type", "hidden").attr("id", "b64" + this.area);
     $("body").append(this.b64input);
+
+    //Button for hiding the pins.
+    this.pinsEnabler = hidePopupsButton;
 
     /*
     encodeBase64
@@ -111,17 +119,58 @@ function dropzoneClass(area, mapRequired, mapArea, addImageButton , titleField) 
         $("#" + area).css("width", "100%");
     }
 
-    //--- METHODS RELATED TO PINNED COMMENTS BELOW
+    //--- METHODS RELATED TO PINNED COMMENTS AND MAPS BELOW
+
+    //Function for destroying the map
+    this.destroyMap = function () {
+        //If map exists, destroy it and all elements associated with it
+        if (self.map.mapLeaf) {
+            try {
+                self.map.mapLeaf.remove();
+            }
+            catch (e) {
+
+            }
+            
+            var clone = $("#" + self.mapArea).clone();
+            var parent = $("#" + self.mapArea).parent();
+            $("#" + self.mapArea).remove();
+            $(clone).removeClass("leaflet-container leaflet-touch leaflet-fade-anim").prependTo(parent).css("height",0).css("width","0");     
+        }
+    }
+
+    //Initializing map
     this.initMap = function () {
+        $(document).off("click", ".popup-btn");
+        $(self.pinsEnabler).off();
+        $(self.pinsEnabler).removeClass("disabled");
         if (self.map) {
-            self.map.mapLeaf.remove();
+            self.destroyMap();
         }
         self.map = pins.newMap(self.mapArea);
+        $(self.pinsEnabler).on("click", function () {
+            self.map.popupState(this);
+        })
+        $(document).on("click",".popup-btn",function () {
+            var id = $(this).attr("id").slice(4);
+            var parent;
+            var isInitial = false;
+            if ($(this).hasClass("initial-button")) {
+                isInitial = true;
+                parent = id;
+            }
+            else {
+                isInitial = false;
+                parent = $(this).data("parent");
+            }
+            self.map.markersArray[id].popupObject.addRow($(".main-user").html(), $(".popup-textarea").val(), parent, isInitial, false);
+        })
+        
     }
 }
 
-var createDropzone = function (area,mapRequired,mapArea,button,title) {
-    var dropzoneObject = new dropzoneClass(area, mapRequired, mapArea, button, title);
+var createDropzone = function (area, mapRequired, mapArea, button, title, hidePopupsButton) {
+    var dropzoneObject = new dropzoneClass(area, mapRequired, mapArea, button, title, hidePopupsButton);
     return dropzoneObject;
 }
 

@@ -47,177 +47,185 @@
 
     <div class="image-upload-container">
 
-        <h3>Add screens</h3>
-        <div class="form-group">
-            <!-- Review Title -->
-            <input  type="text" id="Image_Title" class="form-control" placeholder="Screen Title">
-        
+    <h3>Add screens</h3>
+    <div class="form-group">
+        <!-- Review Title -->
+        <input type="text" id="Image_Title" class="form-control" placeholder="Screen Title">
+
         <span class="text-danger"></span>
-        </div>
+    </div>
 
-        <div class="form-group">
-            <!-- Review Description -->
-            <textarea class="form-control" id="Image_Description_UserInput" rows="7" placeholder="Screen Description &lt;markdown supported&gt;"></textarea>
-            <span  class="text-danger"></span>
+    <div class="form-group">
+        <!-- Review Description -->
+        <textarea class="form-control" id="Image_Description_UserInput" rows="7" placeholder="Screen Description &lt;markdown supported&gt;"></textarea>
+        <span class="text-danger"></span>
         <span class="text-danger"></span>
 
+    </div>
+
+
+
+    <div class="form-group">
+
+        <!-- Dropzone Image Upload-->
+        <div id="dropzoneDiv">
+            <div class="dropzone needsclick dz-clickable" id="screenDropzone">
+                <div id="screenMap" class="mapContainer"></div>
+                <div class="dz-message needsclick">
+                    <i class="fa fa-upload fa-5x" aria-hidden="true"></i>
+                    <h4>Drag and drop your screens here or click to upload</h4>
+                </div>
+            </div>
         </div>
-
-
-
-        <div class="form-group">
-
-            <!-- Dropzone Image Upload-->
-            <div id="dropzoneDiv">
-                <div class="dropzone needsclick dz-clickable" id="screenDropzone">
-                    <div id="screenMap" class="mapContainer"></div>
-                    <div class="dz-message needsclick">
-                        <i class="fa fa-upload fa-5x" aria-hidden="true"></i>
-                       <h4 >Drag and drop your screens here or click to upload</h4> 
+    </div>
+        <div class="row">
+            <div class="col-md-6 col-xs-6 text-left" id="img-btn-container">
+                <button type="button" class="btn lightbox-button disabled" id="hide-pop"><i class="fa fa-map-pin" aria-hidden="true"></i> Hide pins</button>
+                @*<button class="lightbox-button btn" href="@Url.Content(Model.screenData.Screen.Content)" data-lity data-lity-desc="@Model.screenData.Screen.Title"><i class="fa fa-expand" aria-hidden="true"></i></button>*@
+            </div>
+            <div class="col-md-6 col-xs-6t text-right">
+                <a id="reset">Start a new screen</a>
+            </div>
+           
+            </div>
+            <div class="text-center">
+                <button type="button" class="btn btn-success" id="edit-img">Save changes</button>
+            </div>
+           
+            <div id="thumbnail-container" class="row-eq-height">
+                <div class="col-xs-4 col-md-2" id="add-img">
+                    <div class="col-xs-12 col-md-12 thumbnail-inner">
+                        <i class="fa fa-plus fa-5x" aria-hidden="true"></i>
+                        <h4 class="ready-text">Add screen</h4>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="text-right">
-            <a id="reset">Start a new screen</a>
-        </div>
-        <div class="text-center">
-            <button type="button" class="btn btn-success" id="edit-img">Save changes</button>
-        </div>
-        <div id="thumbnail-container" class="row-eq-height">
-            <div class="col-xs-4 col-md-2" id="add-img">
-                <div class="col-xs-12 col-md-12 thumbnail-inner">
-                    <i class="fa fa-plus fa-5x" aria-hidden="true"></i>
-                    <h4 class="ready-text">Add screen</h4>
-                </div>
+            <div class="form-group text-center next-cont">
+                <!-- Submit Button -->
+                <button type="button" id="create-reviewer" class="btn btn-success next-button">Next</button>
             </div>
         </div>
-        <div class="form-group text-center next-cont">
-            <!-- Submit Button -->
-            <button type="button" id="create-reviewer" class="btn btn-success next-button">Next</button>
-        </div>
-    </div>
     <div class="row-eq-height add-reviewers-overlay overlay">
-   
-            <div class="col-xs-12 col-md-6 col-md-offset-3">
-                <div class="panel panel-default reviewers-panel">
-                    <div class="panel-heading"><h4>Your review</h4></div>
-                    <div class="reviewer-content">
+
+        <div class="col-xs-12 col-md-6 col-md-offset-3">
+            <div class="panel panel-default reviewers-panel">
+                <div class="panel-heading"><h4>Your review</h4></div>
+                <div class="reviewer-content">
                     <div class="panel-body">
-                        <h3 id="overview">Overview</h3> 
+                        <h3 id="overview">Overview</h3>
                         <div class="btn edit-project">
                             <i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit project details
+                        </div>
+                        <div class="row-eq-height">
+                            <div class="col-xs-4 col-md-2 text-right">
+                                Title:
                             </div>
-                            <div class="row-eq-height">
-                                <div class="col-xs-4 col-md-2 text-right">
-                                    Title:
-                                </div>
-                                <div class="col-xs-8 col-md-10">
-                                    <span id="reviewer-project-title"></span>
-                                </div>
+                            <div class="col-xs-8 col-md-10">
+                                <span id="reviewer-project-title"></span>
                             </div>
-                            <div class="row-eq-height">
-                                <div class="col-xs-4 col-md-2 text-right">
-                                    Description:
-                                </div>
-                                <div class="col-xs-8col-md-10">
-                                    <span id="reviewer-project-description"></span>
-                                </div>
+                        </div>
+                        <div class="row-eq-height">
+                            <div class="col-xs-4 col-md-2 text-right">
+                                Description:
                             </div>
-                            <div class="row-eq-height">
-                                <div class="col-xs-4 col-md-2 text-right">
-                                    Screens:
+                            <div class="col-xs-8col-md-10">
+                                <span id="reviewer-project-description"></span>
+                            </div>
+                        </div>
+                        <div class="row-eq-height">
+                            <div class="col-xs-4 col-md-2 text-right">
+                                Screens:
 
-                                </div>
-                                <div class="col-xs-8 col-md-10">
-                                    <div class="row-eq-height" id="review-thumbnail-container">
+                            </div>
+                            <div class="col-xs-8 col-md-10">
+                                <div class="row-eq-height" id="review-thumbnail-container">
 
-                                    </div>
                                 </div>
                             </div>
                         </div>
+                    </div>
                     <div class="panel-body add-reviewers">
                         <h3>Select reviewers</h3>
                         <input id="filter_reviewees_id" name="filter_reviewees" onkeyup="filterUsers()" type="text" placeholder="&#xf002; " />
-@{
-    if (Model.Reviewers.Count > 0)
-    {
-                        <div class="row-eq-height">
-                            <div class="col-xs-1 col-md-1 text-center">
-                                <input id="check-all" type="checkbox" />
-                            </div>
-                            <div class="col-xs-3 col-md-3 text-left">
-                                <label for="check-all">Check all</label>
-                            </div>
-                            <div  class="col-xs-4 col-md-4 text-left">
-                                <label> Profile name </label>
-                            </div>
-                            <div class="col-xs-4 col-md-4">
-                                <label > Email</label>
-                            </div>
+                        @{
+                            if (Model.Reviewers.Count > 0)
+                            {
+                                <div class="row-eq-height">
+                                    <div class="col-xs-1 col-md-1 text-center">
+                                        <input id="check-all" type="checkbox" />
+                                    </div>
+                                    <div class="col-xs-3 col-md-3 text-left">
+                                        <label for="check-all">Check all</label>
+                                    </div>
+                                    <div class="col-xs-4 col-md-4 text-left">
+                                        <label> Profile name </label>
+                                    </div>
+                                    <div class="col-xs-4 col-md-4">
+                                        <label> Email</label>
+                                    </div>
 
-                        </div>
-                       
-                        @for (var i = 0; i < Model.Reviewers.Count; i++)
-                        {
-                            <div class="row-eq-height reviewer-info">
-                                <div class="col-xs-1 col-md-1 text-center">
-                                    <input id="reviewer-@i" type="checkbox"  />
-                                </div>
-                                <div class="col-xs-3 col-md-3">
-                                    <img height="40" alt="@Model.Reviewers[i].ProfileName" src="@Model.Reviewers[i].ProfilePicture" />
-                                </div>
-                                <div id="profilename-@i" class="col-xs-3 col-md-4 text-left">
-                                    <label for="reviewer-@i"> @Model.Reviewers[i].ProfileName</label>
-                                </div>
-                                <div id="email-@i" class="col-xs-3 col-md-4">
-                                    <label for="reviewer-@i"> @Model.Reviewers[i].Email</label><input type="hidden" asp-for="@Model.Reviewers[i].Id" />
                                 </div>
 
-                            </div>
+                                @for (var i = 0; i < Model.Reviewers.Count; i++)
+                                {
+                                    <div class="row-eq-height reviewer-info">
+                                        <div class="col-xs-1 col-md-1 text-center">
+                                            <input id="reviewer-@i" type="checkbox" />
+                                        </div>
+                                        <div class="col-xs-3 col-md-3">
+                                            <img height="40" alt="@Model.Reviewers[i].ProfileName" src="@Model.Reviewers[i].ProfilePicture" />
+                                        </div>
+                                        <div id="profilename-@i" class="col-xs-3 col-md-4 text-left">
+                                            <label for="reviewer-@i"> @Model.Reviewers[i].ProfileName</label>
+                                        </div>
+                                        <div id="email-@i" class="col-xs-3 col-md-4">
+                                            <label for="reviewer-@i"> @Model.Reviewers[i].Email</label><input type="hidden" asp-for="@Model.Reviewers[i].Id" />
+                                        </div>
+
+                                    </div>
+                                }
+                            }
                         }
-    }
-}
-                    </div>
-                    </div>
-                    <div class="panel-footer text-center">
-                            <!-- Submit Button -->
-                            <button type="button" id="submit-images" class="btn btn-success">Create Review</button>
-                        </div>
                     </div>
                 </div>
+                <div class="panel-footer text-center">
+                    <!-- Submit Button -->
+                    <button type="button" id="submit-images" class="btn btn-success">Create Review</button>
+                </div>
             </div>
-           
-            
-        
-      
-    
+        </div>
+    </div>
 
 
 
 
 
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
 
 
-<script>
-   
-    function filterUsers() {
-        // Declare variables
-        var input, filter, ul, li, a, i;
-        input = document.getElementById('filter_reviewees_id');
-        filter = input.value.toLowerCase();
-        // Loop through all list items, and hide those who don't match the search query
-        $(".reviewer-info").each(function () {
-            if ($(this).find("label").html().toLowerCase().indexOf(filter) < 0) {
-                $(this).hide();
-            }
-            else $(this).show();
-        })
+
+
+
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     }
 
-</script>
-<script type="text/javascript" src="~/dist/multipleImages.bundle.js"></script>
+
+    <script>
+
+        function filterUsers() {
+            // Declare variables
+            var input, filter, ul, li, a, i;
+            input = document.getElementById('filter_reviewees_id');
+            filter = input.value.toLowerCase();
+            // Loop through all list items, and hide those who don't match the search query
+            $(".reviewer-info").each(function () {
+                if ($(this).find("label").html().toLowerCase().indexOf(filter) < 0) {
+                    $(this).hide();
+                }
+                else $(this).show();
+            })
+        }
+
+    </script>
+    <script type="text/javascript" src="~/dist/multipleImages.bundle.js"></script>

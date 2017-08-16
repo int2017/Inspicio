@@ -119,7 +119,7 @@ namespace Inspicio.Controllers
                 }
                 else
                 {
-                    Review.Title = CreatePageModel.Screens[0].Title;
+                    Review.Title = CreatePageModel.CommentsAndScreens[0].Screen.Title;
                     Review.ReviewType = Review.Type.Quick;
                 }
                 Review.Description = CreatePageModel.ReviewDescription;
@@ -129,17 +129,17 @@ namespace Inspicio.Controllers
                 }
                 else
                 {
-                    Review.Thumbnail = CreatePageModel.Screens[0].Content;
+                    Review.Thumbnail = CreatePageModel.CommentsAndScreens[0].Screen.Content;
                 }
                 
                 _context.Add(Review);
 
-                foreach( var s in CreatePageModel.Screens )
+                foreach( var s in CreatePageModel.CommentsAndScreens)
                 {
                         // Screen creation
-                    s.OwnerId = _userManager.GetUserId(HttpContext.User);
-                    s.ScreenStatus = Screen.Status.Undecided;
-                    s.ReviewId = Review.ReviewId;
+                    s.Screen.OwnerId = _userManager.GetUserId(HttpContext.User);
+                    s.Screen.ScreenStatus = Screen.Status.Undecided;
+                    s.Screen.ReviewId = Review.ReviewId;
                     _context.Add(s);
                 }
 
@@ -159,10 +159,10 @@ namespace Inspicio.Controllers
                         ReviewerEntry.ReviewId = Review.ReviewId;
                         _context.Add(ReviewerEntry);
 
-                        foreach (var s in CreatePageModel.Screens)
+                        foreach (var s in CreatePageModel.CommentsAndScreens)
                         {
                             var ScreenStatus = new ScreenStatus();
-                            ScreenStatus.ScreenId = s.ScreenId;
+                            ScreenStatus.ScreenId = s.Screen.ScreenId;
                             ScreenStatus.UserId = u.Id;
                             ScreenStatus.Status = ScreenStatus.PossibleStatus.Undecided;
                             _context.Add(ScreenStatus);
@@ -173,7 +173,7 @@ namespace Inspicio.Controllers
                 await _context.SaveChangesAsync();
                 return Json(Url.Action("Index", "Images"));
             }
-            return View(CreatePageModel.Screens);
+            return View(CreatePageModel.CommentsAndScreens);
         }
 
 
