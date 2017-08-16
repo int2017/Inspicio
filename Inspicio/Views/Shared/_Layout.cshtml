@@ -34,6 +34,27 @@
     <script src="~/js/lity.js"></script>
 </head>
 <body>
+
+    <script>
+        /*
+         * The following is intentional, to force Chrome to run 
+         * this JS snippet after a history invoked back/forward navigation.
+         * Fixing the issue with Chrome using the BFCache, and displaying out-of-date content.
+         * https://stackoverflow.com/questions/9071838/force-reload-refresh-when-pressing-the-back-button
+         */
+        if (window.history.state != null && window.history.state.hasOwnProperty('historic')) {
+            if (window.history.state.historic == true) {
+                document.body.style.display = 'none';
+                window.history.replaceState({ historic: false }, '');
+                window.location.reload();
+            } else {
+                window.history.replaceState({ historic: true }, '');
+            }
+        } else {
+            window.history.replaceState({ historic: true }, '');
+        }
+    </script>
+
     <nav class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
