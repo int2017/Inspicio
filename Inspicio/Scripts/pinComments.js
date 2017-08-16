@@ -60,6 +60,8 @@ function popupClass(location, id) {
     //A collection for all the comments
     this.commentList = [];
 
+    this.location = location;
+
     //Parent id
     this.parentId;
 
@@ -98,7 +100,8 @@ function popupClass(location, id) {
             message: message,
             parent: parent,
             isInitial: isInitial,
-            urgency:urgency
+            urgency: urgency,
+            location:self.location
         }
         self.commentList.push(newComment);
         
@@ -120,6 +123,21 @@ function popupClass(location, id) {
         }
         $(row).appendTo($(wrapper).find(".popup-comment-container"));
         self.popupLeaf.setContent($(wrapper).html());
+
+        //Custom event for adding a comment
+        var addedComment = new CustomEvent(
+            "commentAdded",
+            {
+                detail: {
+                    comment: newComment
+                },
+                bubbles: true,
+                cancelable: true
+            }
+        );
+
+        //dispatching added comment event
+        document.dispatchEvent(addedComment);
     }
 }
 
@@ -244,10 +262,6 @@ function mapClass(mapArea) {
     this.mapLeaf.setView([0, 0]);
     if (this.mapLeaf.tap) this.mapLeaf.tap.disable();
 
-
-
-   
-
     //Map on click listener
     this.mapLeaf.on('click', function (e) {
         var markerObject = new markerClass(e.latlng, self.markersArray.length);
@@ -356,7 +370,7 @@ var newMap = function(mapArea){
         setTimeout(function () {
             $("#" + mapArea).width($("#" + mapArea).parent().find("img").width());
             $("#" + mapArea).height($("#" + mapArea).parent().find("img").height());
-        },1500)
+        },900)
     }
     return map;
 }

@@ -106,19 +106,27 @@ function reviewClass() {
     });
    
     this.clearScreenFields = function () {
+        $(self.screenTitleField).off();
+        $(self.screenDescriptionField).off();
+        $(self.saveChangesButton).slideUp();
+        $(document).unbind("commentAdded");
+        $(document).off("commentAdded");
         $("#hide-pop").addClass("disabled");
         $("#hide-pop").off();
+        $(self.screenTitleField).unbind("keydown");
+        $(self.screenDescriptionField).unbind("keydown");
         self.screenDropzone.clearDropzone();
+        self.screenDropzone.destroyMap();
         this.screenTitleField.val("");
         this.screenDescriptionField.val("");
+        $(self.addScreenButton).removeClass("ready");
     }
 
     $(this.addScreenButton).click(function () {
 
         if ($(this).hasClass("ready")) {
             //Removing "Edit" listeners
-            $(self.screenTitleField).off();
-            $(self.screenDescriptionField).off();
+           
 
             //New screen object
             var newScreen = new screenClass(self.projectScreens.length, $(self.screenTitleField).val(), $(self.screenDescriptionField).val(), $(self.screenDropzone.b64input).val());
@@ -126,9 +134,7 @@ function reviewClass() {
 
             //Adding comments
             $(self.screenDropzone.map.markersArray).each(function () {
-                var loc = this.location;
                 $(this.popupObject.commentList).each(function (i) {
-                    this.location = loc;
                     screenCommentList.push(this);
                 } )
             })
@@ -151,16 +157,15 @@ function reviewClass() {
 
     //Function to change the values of fields 
     this.changeValues = function (screen) {
-        
-        $(self.addScreenButton).removeClass("ready");
+        self.clearScreenFields();
         $(self.screenTitleField).val(screen.screenTitle);
         $(self.screenDescriptionField).val(screen.screenDescription);
         self.screenDropzone.addFile(screen.screenContent, screen.screenTitle);
         setTimeout(function () {
             $(screen.commentList).each(function () {
-                self.screenDropzone.map.createMarker(this.message, this.user, this.location.lat, this.location.lng, this.parent, this.isInitial, this.urgency)
+              self.screenDropzone.map.createMarker(this.message, this.user, this.location.lat, this.location.lng, this.parent, this.isInitial, this.urgency);  
             })
-        },1700)
+        }, 1000)
         
     }
 
@@ -171,25 +176,39 @@ function reviewClass() {
         $(".thumbnail-inner." + screen.id).on("click", function () {
             $(".add-reviewers-overlay").fadeOut(300);
             self.currentScreen = screen.id;
-            $(self.screenTitleField).unbind("keydown");
-            $(self.screenDescriptionField).unbind("keydown");
+
+            var newComments = [];
             self.changeValues(screen);
             $(self.screenTitleField).on("keydown", function () {
-                self.fieldListeners(screen)
+                self.fieldListeners(screen, newComments)
             })
             $(self.screenDescriptionField).on("keydown", function () {
-                self.fieldListeners(screen)
+                self.fieldListeners(screen, newComments)
             })
+            setTimeout(function () {
+                $(document).on("commentAdded", function (e) {
+                    newComments.push(e.detail.comment)
+                    self.fieldListeners(screen, newComments)
+                })
+            },1200)
+            
+            
         })
     }
-    this.fieldListeners = function (screen) {
+    this.fieldListeners = function (screen ,newComments) {
        if ($(self.saveChangesButton).slideDown().is(":hidden") && (!screen.screenDescription.equals($(self.screenDescriptionField).val()) || !screen.screenTitle.equals($(self.screenTitleField).val()))) {
             $(self.saveChangesButton).slideDown();
         }
        $(self.saveChangesButton).click(function () {
-           self.projectScreens[screen.id].updateScreen($(self.screenTitleField).val(), $(self.screenDescriptionField).val());
-            $(self.saveChangesButton).slideUp();
-            $(this).unbind("click");
+           //If there are any new comments, push them into the screen comment list if clicked "Save"
+           if (newComments.length > 0) {
+               $(newComments).each(function () {
+                   screen.commentList.push(this);
+               })
+           }
+           self.projectScreens[screen.id].updateScreen($(self.screenTitleField).val(), $(self.screenDescriptionField).val());        
+           $(this).unbind("click");
+           $(this).slideUp(); 
         })
        
     }
