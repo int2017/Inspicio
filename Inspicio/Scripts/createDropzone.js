@@ -165,7 +165,9 @@ function dropzoneClass(area, mapRequired, mapArea, addImageButton , titleField,h
             else {
                 isInitial = false;
                 parent = $(this).data("parent");
+               
             }
+            self.map.markersArray[id].markerLeaf.dragging.enable();
             self.map.markersArray[id].popupObject.addRow($(".main-user").html(), $(".popup-textarea").val(), parent, isInitial, false);
         })
         

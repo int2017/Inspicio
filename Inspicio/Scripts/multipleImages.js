@@ -229,9 +229,17 @@ function reviewClass() {
                     Description: convertToHTML(this.screenDescription),
                     Content: this.screenContent
                 }
-                var finalCommentList = this.commentList;
+                $(this.commentList).each(function () {
+                    this.lat = this.location.lat;
+                    this.lng = this.location.lng;
+                    this.location = null;
+                    if (this.isInitial) {
+                        this.commentId = this.parent;
+                        this.parent = null;
+                    }
+                });
                 var screenWithComments = {
-                    CommentList: finalCommentList,
+                    CommentList: this.commentList,
                     Screen: finalScreen
                 }
                 finalScreenList.push(screenWithComments);
@@ -255,7 +263,7 @@ function reviewClass() {
 
         })
         var CreatePageModel = {
-            Screens: finalScreenList,
+            CommentsAndScreens: finalScreenList,
             Reviewers: reviewers,
             ReviewTitle: self.projectTitle,
             ReviewDescription: convertToHTML(self.projectDescription),

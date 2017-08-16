@@ -136,11 +136,31 @@ namespace Inspicio.Controllers
 
                 foreach( var s in CreatePageModel.CommentsAndScreens)
                 {
-                        // Screen creation
+                    // Screen creation
                     s.Screen.OwnerId = _userManager.GetUserId(HttpContext.User);
                     s.Screen.ScreenStatus = Screen.Status.Undecided;
                     s.Screen.ReviewId = Review.ReviewId;
-                    _context.Add(s);
+                    _context.Add(s.Screen);
+                    foreach(var c in s.CommentList)
+                    {
+                        var comment = new Comment();
+                        comment.ParentId = c.ParentId;
+                        comment.Message = c.Message;
+                        var userId = _userManager.GetUserId(HttpContext.User);
+                        comment.OwnerId = userId;
+
+                        comment.ScreenId = s.Screen.ScreenId;
+                        comment.Timestamp = System.DateTime.Now;
+                        comment.Lat = c.Lat;
+                        comment.Lng = c.Lng;
+                        /* if (DataFromBody.CommentUrgency == Urgency.Urgent)
+                         {
+                             comment.CommentUrgency = Models.Comment.Urgency.Urgent;
+                         }
+                         else*/
+                        comment.CommentUrgency = Models.Comment.Urgency.Default;
+                        _context.Add(comment);
+                    }
                 }
 
                 // Access creation
