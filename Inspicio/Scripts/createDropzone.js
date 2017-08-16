@@ -147,7 +147,10 @@ function dropzoneClass(area, mapRequired, mapArea, addImageButton , titleField,h
         if (self.map) {
             self.destroyMap();
         }
-        self.map = pins.newMap(self.mapArea);
+
+        //Boolean value to determine if updates to the map are being sent to the database
+        //isLocal - true
+        self.map = pins.newMap(self.mapArea,true);
         $(self.pinsEnabler).on("click", function () {
             self.map.popupState(this);
         })

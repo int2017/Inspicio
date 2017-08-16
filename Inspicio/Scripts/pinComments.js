@@ -142,10 +142,13 @@ function popupClass(location, id) {
 }
 
 //Marker class
-function markerClass(location,id) {
+//isLocal - boolean to check if the current container must be updated in the database
+function markerClass(location,id,isLocal) {
 
     //Separate variable to be used in functions
     var self = this;
+
+    this.isLocal = isLocal;
 
     //Creates custom pin icons
     this.customPin = L.icon({
@@ -177,7 +180,34 @@ function markerClass(location,id) {
         if (self.popupObject.commentList.length > 0) {
             parent = self.popupObject.parentId;
             self.location = self.markerLeaf.getLatLng();
-            self.updateMarker(self.location, parent);
+
+            //If map is required to be updated to the database, call updateMarker(), which contains the ajax call
+            if (self.isLocal === false || self.isLocal === undefined) {
+                self.updateMarker(self.location, parent);
+            }
+            else {
+                self.popupObject.location = self.location;
+                $(self.popupObject.commentList).each(function () {
+                    this.location = self.location;
+
+                })
+            }
+
+            //Custom event for the document that indicates that a (any)  marker is being dragged
+            var draggedMarker = new CustomEvent(
+                "draggedMarker",
+                {
+                    detail: {
+                        marker: this
+                    },
+                    bubbles: true,
+                    cancelable: true
+                }
+            );
+
+            //dispatching added comment event
+            document.dispatchEvent(draggedMarker);
+           
         }
         
     })
@@ -219,7 +249,7 @@ function markerClass(location,id) {
 
 
 //Map class
-function mapClass(mapArea) {
+function mapClass(mapArea,isLocal) {
 
     //Separate variable to be used in functions
     var self = this;
@@ -239,6 +269,8 @@ function mapClass(mapArea) {
 
 
     this.mapArea = mapArea
+
+    this.isLocal = isLocal;
 
     //Additional variables
     this.markersArray = [];
@@ -264,7 +296,7 @@ function mapClass(mapArea) {
 
     //Map on click listener
     this.mapLeaf.on('click', function (e) {
-        var markerObject = new markerClass(e.latlng, self.markersArray.length);
+        var markerObject = new markerClass(e.latlng, self.markersArray.length,self.isLocal);
         self.addMarkerToMap(markerObject);
         markerObject.openPopup();
     });
@@ -306,12 +338,12 @@ function mapClass(mapArea) {
     }
 
     //Create markers programmaticaly
-    this.createMarker = function (message, username, lat, lng, parent,isInitial ,urgency) {
+    this.createMarker = function (message, username, lat, lng, parent,isInitial ,urgency,isLocal) {
         var latlng = new L.latLng(lat, lng);
         var markerObject;
         //Checks if the message is an initial comment in the popup, if it is = new marker, else, get the existing marker
         if (isInitial) { 
-            markerObject = new markerClass(latlng, self.markersArray.length);
+            markerObject = new markerClass(latlng, self.markersArray.length, isLocal);
             self.addMarkerToMap(markerObject);
 
             //Enabling dragging, because this marker will naturally have a comment inside
@@ -359,8 +391,8 @@ function mapClass(mapArea) {
 }
 
 //Resizing the map according to the image and exporting map
-var newMap = function(mapArea){
-    var map = new mapClass(mapArea);
+var newMap = function(mapArea,isLocal){
+    var map = new mapClass(mapArea, isLocal);
     //If image has not yet loaded, wait 1.5 sec and try again
     if ($("#" + mapArea).parent().find(".dz-image").width() != 0) {
         $("#" + mapArea).width($("#" + mapArea).parent().find("img").width());

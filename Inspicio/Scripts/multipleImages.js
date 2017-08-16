@@ -109,7 +109,7 @@ function reviewClass() {
         $(self.screenTitleField).off();
         $(self.screenDescriptionField).off();
         $(self.saveChangesButton).slideUp();
-        $(document).unbind("commentAdded");
+        $(document).off("draggedMarker");
         $(document).off("commentAdded");
         $("#hide-pop").addClass("disabled");
         $("#hide-pop").off();
@@ -163,7 +163,9 @@ function reviewClass() {
         self.screenDropzone.addFile(screen.screenContent, screen.screenTitle);
         setTimeout(function () {
             $(screen.commentList).each(function () {
-              self.screenDropzone.map.createMarker(this.message, this.user, this.location.lat, this.location.lng, this.parent, this.isInitial, this.urgency);  
+                //isLocal - true
+                self.screenDropzone.map.createMarker(this.message, this.user, this.location.lat, this.location.lng, this.parent, this.isInitial, this.urgency, true);  
+
             })
         }, 1000)
         
@@ -177,21 +179,21 @@ function reviewClass() {
             $(".add-reviewers-overlay").fadeOut(300);
             self.currentScreen = screen.id;
 
-            var newComments = [];
             self.changeValues(screen);
             $(self.screenTitleField).on("keydown", function () {
-                self.fieldListeners(screen, newComments)
+                self.fieldListeners(screen)
             })
             $(self.screenDescriptionField).on("keydown", function () {
-                self.fieldListeners(screen, newComments)
+                self.fieldListeners(screen)
             })
             setTimeout(function () {
                 $(document).on("commentAdded", function (e) {
-                    newComments.push(e.detail.comment)
-                    self.fieldListeners(screen, newComments)
+                    self.fieldListeners(screen)
                 })
             },1200)
-            
+            $(document).on("draggedMarker", function (e) {
+                self.fieldListeners(screen)
+            })
             
         })
     }
@@ -200,12 +202,12 @@ function reviewClass() {
             $(self.saveChangesButton).slideDown();
         }
        $(self.saveChangesButton).click(function () {
-           //If there are any new comments, push them into the screen comment list if clicked "Save"
-           if (newComments.length > 0) {
-               $(newComments).each(function () {
+           screen.commentList = [];
+           $(self.screenDropzone.map.markersArray).each(function () {
+               $(this.popupObject.commentList).each(function () {
                    screen.commentList.push(this);
                })
-           }
+           })
            self.projectScreens[screen.id].updateScreen($(self.screenTitleField).val(), $(self.screenDescriptionField).val());        
            $(this).unbind("click");
            $(this).slideUp(); 
