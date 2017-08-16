@@ -9,7 +9,7 @@
     //Must contain at least one upper case letter, one lower case letter and (one number AND one special char).
     var best = /^(?=\S*?[A-Z])(?=\S*?[a-z])(?=\S*?[0-9])(?=\S*?[^\w\*])\S{8,}$/;
 
-    $('#password').on('keyup', function () {
+    $('#Register_Password').on('keyup', function () {
         var password = $(this);
         var pass = password.val();
         var passLabel = $('[for="password"]');
