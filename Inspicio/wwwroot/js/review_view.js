@@ -132,6 +132,10 @@
                         }).appendTo("#reviewees-section");
                     }
                 }
+
+
+                modal1.style.display = "none";
+                $('body').removeClass('modal-open')
             }
         })
     });

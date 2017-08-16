@@ -28,7 +28,7 @@
     <input id="ReviewId" type="hidden" asp-for="@Model.Review.ReviewId" />
 
     <!-- Trigger/Open The Modal -->
-    <h2>@Model.Review.Title <span id="toggle_review_info" class="fa fa-info-circle" aria-hidden="true" title="See Review information" style="cursor:pointer;"></span></h2>
+    <h2 id="review-title">@Model.Review.Title <span id="toggle_review_info" class="fa fa-info-circle" aria-hidden="true" title="See Review information" style="cursor:pointer;"></span></h2>
 
     <!-- The Modal -->
     <div id="myModal" class="modal">
@@ -86,7 +86,7 @@
         <div class="reviewers-section">
             <div>
                 <div id="new-reviewees-section">
-                    <button title="Select review reviewers." type="button" id="select_reviewers" class="lightbox-button btn" style="width:100%;">Select Reviewers</button>
+                    <button  onclick="window.location.href='#review-title'" title="Select review reviewers." type="button" id="select_reviewers" class="lightbox-button btn" style="width:100%;">Select Reviewers</button>
                 </div>
 
                 <div class="reviewers-section-row" id="authour-section" style="display:inline-flex;">

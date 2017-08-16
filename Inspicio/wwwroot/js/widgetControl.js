@@ -37,4 +37,10 @@ $(".view-container").bind("transitionend webkitTransitionEnd oTransitionEnd MSTr
         $("#comment-section").css("display", "");
         $("#comment-date").css("display", "");
     }
+
+    var imagemapping = $("#imageMap");
+    var screencontent = $("#screenContent");
+
+    imagemapping.width(screencontent.width());
+    imagemapping.height(screencontent.height());
 });
