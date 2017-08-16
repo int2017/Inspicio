@@ -26,11 +26,15 @@
 
     // Get the button that opens the modal
     var btn1 = document.getElementById("new-reviewees-section");
+    if (btn1 != null) {
+        // When the user clicks on the button, open the modal 
+        btn1.onclick = function () {
 
-    // When the user clicks on the button, open the modal 
-    btn1.onclick = function () {
-        modal1.style.display = "block";
-        $('body').addClass('modal-open');
+            $(window).scrollTop(0);
+
+            modal1.style.display = "block";
+            $('body').addClass('modal-open');
+        }
     }
 
     // When the user clicks anywhere outside of the modal, close it
@@ -50,7 +54,7 @@
         var UpdatingUser = {
 
             "ReviewId": $("#ReviewId").val(),
-            "ScreenId": $("ScreenId").val(),
+            "ScreenId": $("#ScreenId").val(),
             "ToRemove": [],
             "ToAdd": []
         };

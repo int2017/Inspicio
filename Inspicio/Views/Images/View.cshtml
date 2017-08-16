@@ -45,21 +45,25 @@
             <hr />
             <div id="review-state-section-modal">
                 <h3 id="review-state">Review :@Model.Review.ReviewState</h3>
-                <button class="lightbox-button btn" id="review-state-toggle"><span id="review-state-icon"></span></button>
-                <script>
-                        @if (Model.Review.ReviewState == Review.States.Closed)
-                        {
-                           @:$("#review-state-toggle").attr("title", "Re-open Review");
-                           @:$("#review-state-icon").addClass("fa fa-toggle-on");
-                           @:$("#review-state-icon").removeClass("fa fa-toggle-off");
-                        }
-                        else
-                        {
-                            @:$("#review-state-toggle").attr("title", "Close Review");
-                            @:$("#review-state-icon").addClass("fa fa-toggle-off");
-                            @:$("#review-state-icon").removeClass("fa fa-toggle-on");
-                        }
-                </script>
+                @if (Model.Review.CreatorId == User.GetProfileId())
+                {
+                    <button class="lightbox-button btn" id="review-state-toggle"><span id="review-state-icon"></span></button>
+                    <script>
+                            @if (Model.Review.ReviewState == Review.States.Closed)
+                            {
+                               @:$("#review-state-toggle").attr("title", "Re-open Review");
+                               @:$("#review-state-icon").addClass("fa fa-toggle-on");
+                               @:$("#review-state-icon").removeClass("fa fa-toggle-off");
+                            }
+                            else
+                            {
+                                @:$("#review-state-toggle").attr("title", "Close Review");
+                                @:$("#review-state-icon").addClass("fa fa-toggle-off");
+                                @:$("#review-state-icon").removeClass("fa fa-toggle-on");
+                            }
+                    </script>
+                    <button title="Delete review." type="button" id="delete-review" class="lightbox-button btn"><i class="fa fa-trash"></i></button>
+                }
             </div>
         </div>
     </div>
@@ -85,9 +89,12 @@
     }
         <div class="reviewers-section">
             <div>
-                <div id="new-reviewees-section">
-                    <button  onclick="window.location.href='#review-title'" title="Select review reviewers." type="button" id="select_reviewers" class="lightbox-button btn" style="width:100%;">Select Reviewers</button>
-                </div>
+                @if (Model.Review.CreatorId == User.GetProfileId())
+                { 
+                    <div id="new-reviewees-section">
+                        <button title="Select review reviewers." type="button" id="select_reviewers" class="lightbox-button btn" style="width:100%;">Select Reviewers</button>
+                    </div>
+                }
 
                 <div class="reviewers-section-row" id="authour-section" style="display:inline-flex;">
                 </div>
@@ -190,9 +197,9 @@
                             }).appendTo("#reviewees-section");
 
                             $('<i />', {
-                                class: 'fa fa-thumbs-o-up',
+                                id: 'reviewers-section-rating'+@u,
+                                class: "",
                             }).appendTo("#reviewees-section");
-
                         </script>
                     }
                 }

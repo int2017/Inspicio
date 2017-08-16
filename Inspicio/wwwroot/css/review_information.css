@@ -41,6 +41,7 @@
 
 
 #review-state-section-modal {
+    width: -webkit-fill-available;
     float: left;
     margin-top: -3%;
 }
@@ -83,7 +84,7 @@
     overflow-y:auto;
 }*/
 
-#delete {
+#delete, #delete-review {
     float: right;
     background-color: red;
 }

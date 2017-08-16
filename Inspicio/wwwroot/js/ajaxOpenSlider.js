@@ -87,4 +87,19 @@
             }
         })
     })
+
+    $('#delete-review').on('click', function () {
+
+        var id = $("#ReviewId").val();
+        $.ajax({
+
+            type: "POST",
+            url: "../DeleteReview?id=" + id,
+            dataType: "json",
+            success: function (url) {
+
+                window.location.href = url;
+            }
+        })
+    })
 })

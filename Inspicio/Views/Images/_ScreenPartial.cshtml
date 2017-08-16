@@ -45,10 +45,11 @@
             if (Model.Review.CreatorId == User.GetProfileId())
             {
                 <button class="lightbox-button btn" id="screen-state-toggle"><span id="screen-state-icon"></span></button>
-                @if (Model.ScreenIds.Count > 1) {
+                @if (Model.ScreenIds.Count > 1)
+                {
                     <button title="Delete this screen from the review." type="button" id="delete" class="lightbox-button btn"><i class="fa fa-trash"></i></button>
                 }
-                <button title="Upload a new verison of this screen." type="button" id="new_version" class="lightbox-button btn"><i class="fa fa-plus-square"></i></button>
+                <button title="TODO!! Upload a new verison of this screen." type="button" id="new_version" class="lightbox-button btn"><i class="fa fa-plus-square"></i></button>
                 <script>
                     @if (Model.screenData.Screen.ScreenState == Screen.States.Closed)
                     {
@@ -79,7 +80,7 @@
 <div class="flex-sidebar  
      
      @{ 
-         if(Model.FullPage)
+         if (Model.FullPage)
          {
              @: side-hide"
          }
@@ -100,12 +101,12 @@
 
     </div>
     <div id="comment-section"  style=" @{ 
-         if(Model.FullPage)
-         {
+        if (Model.FullPage)
+        {
              @:display:none"
          }
-         else
-         {
+        else
+        {
              @:display:block"
          }
      }>
@@ -126,7 +127,7 @@
                     {
                         <div class="date-header">
                             @if (currentDate == DateTime.Today.ToString("MMM d"))
-                        {
+                            {
                                 <p data-value="Today">Today </p>
                                 dateClass = "today";
 
@@ -138,13 +139,13 @@
                             }
                             else
                             {
-                                <p data-value="@c.Timestamp.ToString("MMM d").Replace(" ","-")"> @c.Timestamp.ToString("MMM d")</p>
+                                <p data-value="@c.Timestamp.ToString("MMM d").Replace(" ", "-")"> @c.Timestamp.ToString("MMM d")</p>
                                 dateClass = c.Timestamp.ToString("MMM d");
                             }
                         </div>
                     }
 
-                    <div class="comment @dateClass.Replace(" ","-").ToLower()">
+                    <div class="comment @dateClass.Replace(" ", "-").ToLower()">
                         <div class="row ">
                             <div class="comment-user row-eq-height">
                                 <div class="col-md-4">
@@ -217,8 +218,8 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    }
-                                }
+                                                                }
+                                                            }
                             </div>
                             <div class="row-eq-height reply-comment" id="replycomm-@c.CommentId">
                                 <div class="col-xs-12 col-sm-12 col-md-12 input-group">
@@ -233,10 +234,10 @@
                         </div>
                     </div>
 
-                                            }
+                                                                }
 
-                                            previousDate = currentDate;
-                                        }
+                                                                previousDate = currentDate;
+                                                            }
         }
 
         <div class="row-eq-height" id="new-comment">
@@ -262,3 +263,43 @@
 <script type="text/javascript" src="~/js/background-selector.js"></script>
 <script type="text/javascript" src="~/js/ajaxOpenSlider.js"></script>
 <script type="text/javascript" src="~/js/ajaxThumbs.js"></script>
+
+<script>
+
+    $(document).ready(function () {
+        @{ 
+            for (var u = 0; u < Model.Reviewees.Count; u++)
+            {
+                if (Model.Reviewees[u].UserId == Model.Review.CreatorId)
+                {
+                    continue;
+                }
+
+                var user = await UserManager.FindByIdAsync(Model.Reviewees[u].UserId);
+                var current = Model.screenData.UserVotes.Where(s => s.ScreenId == Model.screenData.Screen.ScreenId && s.UserId == user.Id).FirstOrDefault();
+                var ratingClass = "";
+                switch (current.Status)
+                {
+                    case ScreenStatus.PossibleStatus.Approved:
+                        ratingClass = "fa fa-thumbs-o-up";
+                        break;
+                    case ScreenStatus.PossibleStatus.NeedsWork:
+                        ratingClass = "fa fa-thumbs-o-up fa-rotate-90";
+                        break;
+                    case ScreenStatus.PossibleStatus.Rejected:
+                        ratingClass = "fa fa-thumbs-o-down";
+                        break;
+                    case ScreenStatus.PossibleStatus.Undecided:
+                        ratingClass = "fa fa-question-circle-o";
+                        break;
+                    default:
+                        ratingClass = "fa fa-question-circle-o";
+                        break;
+                }
+
+                @:$("#reviewers-section-rating"+@u).className = "";
+                @:$("#reviewers-section-rating"+@u).addClass('@ratingClass');
+            }
+        }
+    });
+</script>

@@ -73,22 +73,6 @@ namespace Inspicio.Controllers
             return View(Reviews);
         }
 
-        // GET: Images/Details/5
-        public async Task<IActionResult> Details(int? Id)
-        {
-            if (Id == null)
-            {
-                return NotFound();
-            }
-
-            var Screen = await _context.Screens.SingleOrDefaultAsync(m => m.ScreenId == Id);
-            if (Screen == null)
-            {
-                return NotFound();
-            }
-
-            return View(Screen);
-        }
         // GET: Images/Create
         public IActionResult Create()
         {
@@ -318,11 +302,20 @@ namespace Inspicio.Controllers
         public async Task<JsonResult> Delete(int Id)
         {
             var Screen = await _context.Screens.SingleOrDefaultAsync(m => m.ScreenId == Id);
-            var reviewId = Screen.ReviewId;
             _context.Screens.Remove(Screen);
             await _context.SaveChangesAsync();
 
             return Json( "deleted:"+Id );
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> DeleteReview(int Id)
+        {
+            var review = await _context.Review.SingleOrDefaultAsync(m => m.ReviewId == Id);
+            _context.Review.Remove(review);
+            await _context.SaveChangesAsync();
+
+            return Json(Url.Action("Index", "Images"));
         }
 
         private bool ImageExists(int Id)
@@ -419,11 +412,14 @@ namespace Inspicio.Controllers
         public async Task<JsonResult> Update_Reviewers([FromBody] UpdatingUser users)
         {
             var accessList = _context.Access.Where(r => r.ReviewId == users.ReviewId).ToList();
-
+            var userScreenList = _context.ScreenStatus.Where(s => s.ScreenId == users.ScreenId).ToList();
             foreach (var uId in users.ToRemove)
             {
                 var user = accessList.Find(r => r.UserId == uId);
                 _context.Access.Remove(user);
+                
+                var status = userScreenList.Find(r => r.UserId == uId);
+                _context.ScreenStatus.Remove(status);
             }
 
             foreach (var uId in users.ToAdd)
@@ -433,6 +429,12 @@ namespace Inspicio.Controllers
                 ReviewerEntry.UserId = uId;
                 ReviewerEntry.ReviewId = users.ReviewId;
                 _context.Access.Add(ReviewerEntry);
+
+                var ScreenStatus = new ScreenStatus();
+                ScreenStatus.ScreenId = users.ScreenId;
+                ScreenStatus.UserId = uId;
+                ScreenStatus.Status = ScreenStatus.PossibleStatus.Undecided;
+                _context.Add(ScreenStatus);
             }
 
             await _context.SaveChangesAsync();
