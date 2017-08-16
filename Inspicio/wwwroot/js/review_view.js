@@ -94,7 +94,27 @@
                 $("#reviewees-section").html("");
                 var author = $("#authour-section > #reviewers-name")[0];
                 for (i = 0; i < objCount; i++) {
-                    if (obj[i].profileName != author.textContent) {
+                    if (obj[i].profileName != author.textContent)
+                    {
+
+                        var ratingClass = "";
+                        switch (obj[i].rating) {
+                            case "Approved":
+                                ratingClass = "fa fa-thumbs-o-up";
+                                break;
+                            case "NeedsWork":
+                                ratingClass = "fa fa-thumbs-o-up fa-rotate-90";
+                                break;
+                            case "Rejected":
+                                ratingClass = "fa fa-thumbs-o-down";
+                                break;
+                            case "Undecided":
+                                ratingClass = "fa fa-question-circle-o";
+                                break;
+                            default:
+                                ratingClass = "fa fa-question-circle-o";
+                        }
+
                         $('<img />', {
                             id: 'reviewers-avatar',
                             src: obj[i].avatar,
@@ -108,7 +128,7 @@
                         }).appendTo("#reviewees-section");
 
                         $('<i />', {
-                            class: 'fa fa-thumbs-o-up',
+                            class: ratingClass,
                         }).appendTo("#reviewees-section");
                     }
                 }

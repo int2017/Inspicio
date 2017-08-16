@@ -45,7 +45,9 @@
             if (Model.Review.CreatorId == User.GetProfileId())
             {
                 <button class="lightbox-button btn" id="screen-state-toggle"><span id="screen-state-icon"></span></button>
-                <button title="Delete this screen from the review." type="button" id="delete" class="lightbox-button btn"><i class="fa fa-trash"></i></button>
+                @if (Model.ScreenIds.Count > 1) {
+                    <button title="Delete this screen from the review." type="button" id="delete" class="lightbox-button btn"><i class="fa fa-trash"></i></button>
+                }
                 <button title="Upload a new verison of this screen." type="button" id="new_version" class="lightbox-button btn"><i class="fa fa-plus-square"></i></button>
                 <script>
                     @if (Model.screenData.Screen.ScreenState == Screen.States.Closed)

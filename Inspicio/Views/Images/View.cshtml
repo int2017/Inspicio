@@ -85,16 +85,19 @@
     }
         <div class="reviewers-section">
             <div>
-                <div class="reviewers-section-row" id="authour-section">
-
-                </div>
-                <div id="reviewees-section">
-
-                </div>
-
                 <div id="new-reviewees-section">
-                    <i title="Add new reviewer to this review." class="fa fa-user-plus" aria-hidden="true" style="cursor:pointer;font-size: 24px;padding-top: 4%;"></i>
+                    <button title="Select review reviewers." type="button" id="select_reviewers" class="lightbox-button btn" style="width:100%;">Select Reviewers</button>
                 </div>
+
+                <div class="reviewers-section-row" id="authour-section" style="display:inline-flex;">
+                </div>
+
+                <hr style="margin:5px;" />
+
+                <div id="reviewees-section">
+                </div>
+
+                
 
                 <!-- modal -->
                 <div id="add-reviewees-modal" class="add-reviewees-modal">
@@ -166,7 +169,7 @@
                     {
                         var user = await UserManager.FindByIdAsync(Model.Reviewees[u].UserId);
                         <script>
-                            $("#authour-section").html('<img id="reviewers-avatar" src="@user.ProfilePicture" style="width:20px;height:20px;" /><p id="reviewers-name">@user.ProfileName</p><hr style="margin:5px;"/>');
+                            $("#authour-section").html('<img id="reviewers-avatar" src="@user.ProfilePicture" style="width:20px;height:20px;" /><p id="reviewers-name">@user.ProfileName</p>');
                         </script>
                     }
 

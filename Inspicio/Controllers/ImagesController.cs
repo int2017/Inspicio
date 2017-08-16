@@ -442,11 +442,12 @@ namespace Inspicio.Controllers
             foreach (var u in accessList)
             {
                 var user = (await _userManager.FindByIdAsync(u.UserId));
+                var currentrating = _context.ScreenStatus.Where(s => s.ScreenId == users.ScreenId && s.UserId == u.UserId).FirstOrDefault();
                 reviewers.Add(new
                 {
                     profileName = user.ProfileName,
                     avatar = user.ProfilePicture,
-                    rating = _context.ScreenStatus.Where(s => s.ScreenId == users.ScreenId && s.UserId == u.UserId).FirstOrDefault()
+                    rating = (currentrating == null ? "null" : currentrating.Status.ToString())
                 });
             }
 
