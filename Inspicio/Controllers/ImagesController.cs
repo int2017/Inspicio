@@ -215,8 +215,10 @@ namespace Inspicio.Controllers
 
             ViewModel.ScreenIds = _context.Screens.Where( s => s.ReviewId == Id ).Select(s => s.ScreenId).ToList();
 
-            ViewModel.screenData.UserVotes = _context.ScreenStatus.Where(s => s.ScreenId == ViewModel.screenData.Screen.ScreenId).ToList();
-
+            if (ViewModel.screenData != null)
+            {
+                ViewModel.screenData.UserVotes = _context.ScreenStatus.Where(s => s.ScreenId == ViewModel.screenData.Screen.ScreenId).ToList();
+            }
             ViewModel.FullPage = true;
             return View(ViewModel);
         }
@@ -310,51 +312,17 @@ namespace Inspicio.Controllers
             }
             return Json(comments);
         }
-        // POST: Images/View/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> View(int Id, [Bind("ScreenId,Content,DownRating,UpRating,Description,Title")] Screen Screen)
-        {
-
-            if (Id != Screen.ScreenId)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(Screen);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ImageExists(Screen.ScreenId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction("Index");
-            }
-            return View(Screen);
-        }
 
         // POST: Images/Delete/5
         [HttpPost]
-        public async Task<IActionResult> Delete(int Id)
+        public async Task<JsonResult> Delete(int Id)
         {
             var Screen = await _context.Screens.SingleOrDefaultAsync(m => m.ScreenId == Id);
+            var reviewId = Screen.ReviewId;
             _context.Screens.Remove(Screen);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("Index");
+            return Json( "deleted:"+Id );
         }
 
         private bool ImageExists(int Id)

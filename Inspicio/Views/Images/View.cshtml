@@ -25,6 +25,8 @@
      
     style="padding-top:0px">
 
+    <input id="ReviewId" type="hidden" asp-for="@Model.Review.ReviewId" />
+
     <!-- Trigger/Open The Modal -->
     <h2>@Model.Review.Title <span id="toggle_review_info" class="fa fa-info-circle" aria-hidden="true" title="See Review information" style="cursor:pointer;"></span></h2>
 
@@ -62,9 +64,10 @@
         </div>
     </div>
 
+
+<div class="row">
     @if (Model.ScreenIds.Count > 1)
     {
-    <div class="row">
 
         <div class="col-lg-12 col-md-10">
             <div class="cover-container" style="border:solid;">
@@ -79,7 +82,7 @@
                 }
             </div>
         </div>
-
+    }
         <div class="reviewers-section">
             <div>
                 <div class="reviewers-section-row" id="authour-section">
@@ -100,7 +103,7 @@
                     <div class="add-reviewees-modal-content">
 
                         <h4>Select Reviewers </h4>
-                        
+
                         <div id="all-users">
                             @{
                                 var userList = UserManager.Users.ToList();
@@ -108,10 +111,10 @@
                                 {
                                     <div class="row-eq-height">
                                         <div class="col-xs-1 col-md-1 text-center">
-                                            
+
                                         </div>
                                         <div class="col-xs-2 col-md-2 text-left">
-                                           
+
                                         </div>
                                         <div class="col-xs-4 col-md-4 text-left">
                                             <label> Profile name </label>
@@ -127,15 +130,9 @@
                                         {
                                             <div class="row-eq-height reviewer-info" style="padding-bottom: 5px;">
                                                 <div class="col-xs-1 col-md-1 text-center">
-                                                    <input id="reviewer-@i" type="checkbox" 
-                                                        @{
-                                                            var match = Model.Reviewees.Select(u => u.UserId).ToList().FirstOrDefault(uList => uList.Contains(userList[i].Id));
-                                                            if (match != null)
-                                                            {
-                                                                @:checked
-                                                            }
-                                                        }
-                                                    />
+                                                    <input id="reviewer-@i" type="checkbox"
+                                                           @{ var match = Model.Reviewees.Select(u => u.UserId).ToList().FirstOrDefault(uList => uList.Contains(userList[i].Id)); if (match != null) { @: checked
+                                                                                                                       } } />
                                                 </div>
 
                                                 <div class="col-xs-2 col-md-2">
@@ -145,13 +142,13 @@
                                                     <label id="profilename-@i" for="reviewer-@i"> @userList[i].ProfileName</label>
                                                 </div>
                                                 <div id="email-@i" class="col-xs-4 col-md-4">
-                                                    <label id="email-@i" for="reviewer-@i"> @userList[i].Email</label><input type="hidden" id="id-@i"  value="@userList[i].Id" />
+                                                    <label id="email-@i" for="reviewer-@i"> @userList[i].Email</label><input type="hidden" id="id-@i" value="@userList[i].Id" />
                                                 </div>
 
                                             </div>
-                                        }
-                                    }
-                                }
+                                                                   }
+                                                               }
+                                                               }
                             }
                         </div>
 
@@ -161,22 +158,22 @@
 
                     </div>
                 </div>
-                
-                @for( var u = 0; u < Model.Reviewees.Count; u++ )
+
+                @for (var u = 0; u < Model.Reviewees.Count; u++)
                 {
 
                     if (Model.Reviewees[u].UserId == Model.Review.CreatorId)
                     {
                         var user = await UserManager.FindByIdAsync(Model.Reviewees[u].UserId);
-                                <script>
+                        <script>
                             $("#authour-section").html('<img id="reviewers-avatar" src="@user.ProfilePicture" style="width:20px;height:20px;" /><p id="reviewers-name">@user.ProfileName</p><hr style="margin:5px;"/>');
-                                </script>
-                            }
+                        </script>
+                    }
 
-                            else
-                            {
-                                var user = await UserManager.FindByIdAsync(Model.Reviewees[u].UserId);
-                                <script>
+                    else
+                    {
+                        var user = await UserManager.FindByIdAsync(Model.Reviewees[u].UserId);
+                        <script>
                             $('<img />', {
                                 id: 'reviewers-avatar',
                                 src: '@user.ProfilePicture',
@@ -193,18 +190,20 @@
                                 class: 'fa fa-thumbs-o-up',
                             }).appendTo("#reviewees-section");
 
-                                </script>
-                            }
-                        }
-                    </div>
-                </div>
+                        </script>
+                    }
+                }
             </div>
-    }
+        </div>
+    </div>
+
 
     <hr />
 <div id="screen-container">
     @{
-        Html.RenderPartial("_ScreenPartial.cshtml");
+        if (Model.screenData != null) {
+            Html.RenderPartial("_ScreenPartial.cshtml");
+        }
     }
 </div>
 
@@ -228,7 +227,6 @@
 }
 
 <script type="text/javascript" src="~/js/filter.js"></script>
-<script type="text/javascript" src="~/js/ajaxThumbs.js"></script>
 <script type="text/javascript" src="~/js/widgetControl.js"></script>
 <script type="text/javascript" src="~/js/sort-comments.js"></script>
 <script type="text/javascript" src="~/js/ajaxComments.js"></script>

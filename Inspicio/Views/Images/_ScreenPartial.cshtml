@@ -6,9 +6,8 @@
 @inject IJsonHelper Json;
 @inject UserManager<ApplicationUser> UserManager
 
-<input id="ReviewId" type="hidden" asp-for="@Model.Review.ReviewId" />
-<input id="ScreenId" type="hidden" asp-for="@Model.screenData.Screen.ScreenId" />
 
+<input id="ScreenId" type="hidden" asp-for="@Model.screenData.Screen.ScreenId" />
 
 <div class="image-controls text-center">
     <div class="container-fluid reviewer-container">
@@ -260,3 +259,4 @@
 <script type="text/javascript" src="~/js/pinComments.js"></script>
 <script type="text/javascript" src="~/js/background-selector.js"></script>
 <script type="text/javascript" src="~/js/ajaxOpenSlider.js"></script>
+<script type="text/javascript" src="~/js/ajaxThumbs.js"></script>
