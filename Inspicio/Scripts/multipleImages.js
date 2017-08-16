@@ -114,21 +114,29 @@ function reviewClass() {
     }
 
     $(this.addScreenButton).click(function () {
+
         if ($(this).hasClass("ready")) {
-            $("#hide-pop").addClass("disabled");
-            $("#hide-pop").off();
+            //Removing "Edit" listeners
             $(self.screenTitleField).off();
             $(self.screenDescriptionField).off();
+
+            //New screen object
             var newScreen = new screenClass(self.projectScreens.length, $(self.screenTitleField).val(), $(self.screenDescriptionField).val(), $(self.screenDropzone.b64input).val());
             var screenCommentList = [];
+
+            //Adding comments
             $(self.screenDropzone.map.markersArray).each(function () {
-                $(this.popupObject.commentList).each(function(){
+                var loc = this.location;
+                $(this.popupObject.commentList).each(function (i) {
+                    this.location = loc;
                     screenCommentList.push(this);
                 } )
             })
-            self.screenDropzone.destroyMap();
+            
             newScreen.commentList = screenCommentList;
             self.projectScreens.push(newScreen);
+            //Clearing the fields
+            self.screenDropzone.destroyMap();
             self.clearScreenFields();
             self.addThumbnailListeners(newScreen);
             newScreen.deleteScreen.click(function () {
@@ -143,10 +151,16 @@ function reviewClass() {
 
     //Function to change the values of fields 
     this.changeValues = function (screen) {
+        
         $(self.addScreenButton).removeClass("ready");
         $(self.screenTitleField).val(screen.screenTitle);
         $(self.screenDescriptionField).val(screen.screenDescription);
         self.screenDropzone.addFile(screen.screenContent, screen.screenTitle);
+        setTimeout(function () {
+            $(screen.commentList).each(function () {
+                self.screenDropzone.map.createMarker(this.message, this.user, this.location.lat, this.location.lng, this.parent, this.isInitial, this.urgency)
+            })
+        },1700)
         
     }
 

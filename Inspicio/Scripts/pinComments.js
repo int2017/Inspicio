@@ -96,7 +96,9 @@ function popupClass(location, id) {
         var newComment = {
             user: user,
             message: message,
-            parent: parent
+            parent: parent,
+            isInitial: isInitial,
+            urgency:urgency
         }
         self.commentList.push(newComment);
         
@@ -288,6 +290,7 @@ function mapClass(mapArea) {
             }
         })
     }
+
     //Create markers programmaticaly
     this.createMarker = function (message, username, lat, lng, parent,isInitial ,urgency) {
         var latlng = new L.latLng(lat, lng);
