@@ -85,7 +85,7 @@ function dropzoneClass(area, mapRequired, mapArea, addImageButton , titleField,h
                     if (self.addImageButton && (!$(self.addImageButton).hasClass("ready"))) {
                         $(self.addImageButton).addClass("ready");
                     }
-                    if (self.screenTitleField) {
+                    if (self.screenTitleField.val() == "" ) {
                         $(self.screenTitleField).val(file.name.split(".")[0] );
                     }
                 }
