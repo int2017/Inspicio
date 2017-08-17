@@ -82,10 +82,19 @@ namespace Inspicio.Controllers
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                 var result = await _signInManager.PasswordSignInAsync(model.Login.Email, model.Login.Password, model.Login.RememberMe, lockoutOnFailure: false);
-                if (result.Succeeded)
+
+                var userLgn = await _userManager.FindByEmailAsync(model.Login.Email);
+                if (!(await _userManager.IsEmailConfirmedAsync(userLgn)))
+                {
+                    ViewBag.errorMessage = "You must have a confirmed email to log on.";
+                    return View("LoginOrRegister", model);
+                }
+
+
+                    if (result.Succeeded)
                 {
                     _logger.LogInformation(1, "User logged in.");
-                    var user = new ApplicationUser { UserName = model.Register.Email, Email = model.Register.Email };
+                    var user = new ApplicationUser { UserName = model.Login.Email, Email = model.Login.Email };
                     user.NotificationFlag = true;
                     user.TimeOfLastNotification = System.DateTime.Now;
                     return RedirectToLocal(returnUrl);
