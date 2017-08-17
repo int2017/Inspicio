@@ -13,6 +13,18 @@ namespace Inspicio.Models.ReviewViewModels
         public string ReviewThumbnail { get; set; }
 
         public List<ApplicationUser> Reviewers { get; set; }
-        public List<Screen> Screens { get; set; }
+
+        
+
+        public class ScreenList
+        {
+
+            public List<Comment> CommentList { get; set; }
+            public Screen Screen { get; set; }
+
+        }
+
+        public List<ScreenList> CommentsAndScreens { get; set; }
+
     }
 }

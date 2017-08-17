@@ -60,6 +60,8 @@ function popupClass(location, id) {
     //A collection for all the comments
     this.commentList = [];
 
+    this.location = location;
+
     //Parent id
     this.parentId;
 
@@ -96,7 +98,10 @@ function popupClass(location, id) {
         var newComment = {
             user: user,
             message: message,
-            parent: parent
+            parent: parent,
+            isInitial: isInitial,
+            urgency: urgency,
+            location:self.location
         }
         self.commentList.push(newComment);
         
@@ -118,14 +123,32 @@ function popupClass(location, id) {
         }
         $(row).appendTo($(wrapper).find(".popup-comment-container"));
         self.popupLeaf.setContent($(wrapper).html());
+
+        //Custom event for adding a comment
+        var addedComment = new CustomEvent(
+            "commentAdded",
+            {
+                detail: {
+                    comment: newComment
+                },
+                bubbles: true,
+                cancelable: true
+            }
+        );
+
+        //dispatching added comment event
+        document.dispatchEvent(addedComment);
     }
 }
 
 //Marker class
-function markerClass(location,id) {
+//isLocal - boolean to check if the current container must be updated in the database
+function markerClass(location,id,isLocal) {
 
     //Separate variable to be used in functions
     var self = this;
+
+    this.isLocal = isLocal;
 
     //Creates custom pin icons
     this.customPin = L.icon({
@@ -157,7 +180,34 @@ function markerClass(location,id) {
         if (self.popupObject.commentList.length > 0) {
             parent = self.popupObject.parentId;
             self.location = self.markerLeaf.getLatLng();
-            self.updateMarker(self.location, parent);
+
+            //If map is required to be updated to the database, call updateMarker(), which contains the ajax call
+            if (self.isLocal === false || self.isLocal === undefined) {
+                self.updateMarker(self.location, parent);
+            }
+            else {
+                self.popupObject.location = self.location;
+                $(self.popupObject.commentList).each(function () {
+                    this.location = self.location;
+
+                })
+            }
+
+            //Custom event for the document that indicates that a (any)  marker is being dragged
+            var draggedMarker = new CustomEvent(
+                "draggedMarker",
+                {
+                    detail: {
+                        marker: this
+                    },
+                    bubbles: true,
+                    cancelable: true
+                }
+            );
+
+            //dispatching added comment event
+            document.dispatchEvent(draggedMarker);
+           
         }
         
     })
@@ -199,16 +249,18 @@ function markerClass(location,id) {
 
 
 //Map class
-function mapClass() {
+function mapClass(mapArea, width,height,isLocal) {
 
     //Separate variable to be used in functions
     var self = this;
 
-    var h = $("#image-container img").height();
-    var w = $("#image-container img").width();
+    this.mapArea = mapArea
 
+        var h = $("#" + mapArea).parent().find("img").height();
+        var w = $("#" + mapArea).parent().find("img").width();
+ 
     //Creating the map
-    this.mapLeaf = L.map("imageMap", {
+    this.mapLeaf = L.map(mapArea, {
         crs: L.CRS.Simple,
         zoomControl: false,
         maxBounds: [
@@ -216,6 +268,20 @@ function mapClass() {
             [0,h]
         ]
     });
+    this.mapLeaf.invalidateSize(true);
+    $(window).resize(function () {
+        $("#" + mapArea).height($("#" + mapArea).parent().children("img").height());
+        $("#" + mapArea).width($("#" + mapArea).parent().children("img").width());
+        self.mapLeaf.maxBounds = [[$("#" + mapArea).width(), 0], [$("#" + mapArea).height(), 0]]
+        setTimeout(function () {
+            
+            self.mapLeaf.invalidateSize(true);
+        }, 1000)
+        
+    })
+    
+
+    this.isLocal = isLocal;
 
     //Additional variables
     this.markersArray = [];
@@ -239,13 +305,9 @@ function mapClass() {
     this.mapLeaf.setView([0, 0]);
     if (this.mapLeaf.tap) this.mapLeaf.tap.disable();
 
-
-
-   
-
     //Map on click listener
     this.mapLeaf.on('click', function (e) {
-        var markerObject = new markerClass(e.latlng, self.markersArray.length);
+        var markerObject = new markerClass(e.latlng, self.markersArray.length,self.isLocal);
         self.addMarkerToMap(markerObject);
         markerObject.openPopup();
     });
@@ -285,13 +347,14 @@ function mapClass() {
             }
         })
     }
+
     //Create markers programmaticaly
-    this.createMarker = function (message, username, lat, lng, parent,isInitial ,urgency) {
+    this.createMarker = function (message, username, lat, lng, parent,isInitial ,urgency,isLocal) {
         var latlng = new L.latLng(lat, lng);
         var markerObject;
         //Checks if the message is an initial comment in the popup, if it is = new marker, else, get the existing marker
         if (isInitial) { 
-            markerObject = new markerClass(latlng, self.markersArray.length);
+            markerObject = new markerClass(latlng, self.markersArray.length, isLocal);
             self.addMarkerToMap(markerObject);
 
             //Enabling dragging, because this marker will naturally have a comment inside
@@ -309,34 +372,49 @@ function mapClass() {
         markerObject.popupObject.addRow(username, message, parent, isInitial, urgency);
     }
 
-    //Hide/show popups listener
-    this.popupState = function () {
-        if ($("#map-pane").hasClass("hidden")) {
-            $("#map-pane").fadeIn(300);
-            $("#map-pane").removeClass("hidden");
+    //Hide/show popups function
+    //hideButton - optional button object. If passed in, the method will add / remove the appropriate classes and change it's text
+    this.popupState = function (hideButton) {
+        if ($("#" +self.mapArea).hasClass("hidden")) {
+            $("#" + self.mapArea).fadeIn(300);
+            $("#" + self.mapArea).removeClass("hidden");
             self.mapLeaf.on('click', function (e) {
                 var markerObject = new markerClass(e.latlng, self.markersArray.length);
                 self.addMarkerToMap(markerObject);
                 markerObject.openPopup();
             });
+            if (hideButton) {
+                $(hideButton).removeClass("disabled");
+            }
         }
         else {
-            $("#map-pane").fadeOut(500);
+            $("#" + self.mapArea).fadeOut(500);
             self.mapLeaf.off('click');
             setTimeout(function () {
-                $("#map-pane").addClass("hidden");
+                $("#" +mapArea).addClass("hidden");
             },600)
-            
+            if (hideButton) {
+                $(hideButton).addClass("disabled");
+            }
         }
     }
 
 }
 
 //Resizing the map according to the image and exporting map
-var newMap = function(){
-    var map = new mapClass();
-    $("#imageMap").width($("#image-container >img").width());
-    $("#imageMap").height($("#image-container >img").height());
+var newMap = function(mapArea,width,height,isLocal){
+    var map = new mapClass(mapArea, width, height, isLocal);
+    //If image has not yet loaded, wait 1.5 sec and try again
+    if ($("#" + mapArea).parent().find(".dz-image").width() != 0) {
+        $("#" + mapArea).width($("#" + mapArea).parent().find("img").width());
+        $("#" + mapArea).height($("#" + mapArea).parent().find("img").height());
+    }
+    else {
+        setTimeout(function () {
+            $("#" + mapArea).width($("#" + mapArea).parent().find("img").width());
+            $("#" + mapArea).height($("#" + mapArea).parent().find("img").height());
+        },900)
+    }
     return map;
 }
 module.exports.newMap = newMap;

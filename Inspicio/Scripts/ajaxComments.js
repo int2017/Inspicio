@@ -225,7 +225,7 @@ function commentClick(id, chosenState) {
                     id: id
                 },
                 success: function (data) {
-                    self.map = pins.newMap();
+                    self.map = pins.newMap("imageMap");
                     $(data).each(function () {
                         //Check if the comment has a pin or not. (Impossible to put a comment at coords 0,0 because the map bounds start at 1,1)
                         if(this.lat!==0 && this.lng!==0){

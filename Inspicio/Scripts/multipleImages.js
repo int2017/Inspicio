@@ -1,5 +1,6 @@
 ﻿var dropzone = require("./createDropzone.js")
 
+
 //Thumbnail class
 function thumbnailClass(title, content,id,deleteScreen) {
 
@@ -18,11 +19,11 @@ function thumbnailClass(title, content,id,deleteScreen) {
 
     //Adding thumbnails in the thumbnail
     this.init = function () {
+        //Add a #thumbnail-container div where you want for the big thumbnails, #review-thumbnail-container for the small ones. 
         $(self.outerContainer).appendTo("#thumbnail-container");
         $(self.overviewContainer).appendTo("#review-thumbnail-container");
     }
     this.init();
-
     this.remove = function () {
         $(self.outerContainer).remove();
         $(self.overviewContainer).remove();
@@ -56,6 +57,9 @@ function screenClass(id,title,description,content) {
         self.screenDescription = description;
         $(".thumbnail-inner." + self.thumbnail.id).prop("title", title);
     }
+
+    //Comment list belonging to that screen
+    this.commentList =[]
 }
 
 //Review class
@@ -76,12 +80,14 @@ function reviewClass() {
 
     this.resetButton = $("#reset").click(function () {
         self.clearScreenFields();
+        
     });
 
     //Variables for controlling the fields
     this.screenTitleField = $("#Image_Title");
     this.screenDescriptionField = $("#Image_Description_UserInput");
-    this.screenDropzone = dropzone.createDropzone("screenDropzone", this.addScreenButton, this.screenTitleField);
+    // "True" - mapRequired
+    this.screenDropzone = dropzone.createDropzone("screenDropzone", true, "screenMap", this.addScreenButton, this.screenTitleField, $("#hide-pop"));
     this.thumbnailDropzone = dropzone.createDropzone("projectThumbnailDropzone");
     
     this.projectTitleField = $("#project-title").on("blur", function () {
@@ -92,19 +98,43 @@ function reviewClass() {
     });
    
     this.clearScreenFields = function () {
-        $(self.screenDescriptionField).off();
         $(self.screenTitleField).off();
+        $(self.screenDescriptionField).off();
+        $(self.saveChangesButton).slideUp();
+        $(document).off("draggedMarker");
+        $(document).off("commentAdded");
+        $("#hide-pop").addClass("disabled");
+        $("#hide-pop").off();
+        $(self.screenTitleField).unbind("keydown");
+        $(self.screenDescriptionField).unbind("keydown");
         self.screenDropzone.clearDropzone();
+        self.screenDropzone.destroyMap();
         this.screenTitleField.val("");
         this.screenDescriptionField.val("");
+        $(self.addScreenButton).removeClass("ready");
     }
 
     $(this.addScreenButton).click(function () {
+
         if ($(this).hasClass("ready")) {
-            $(self.screenTitleField).off();
-            $(self.screenDescriptionField).off();
+            //Removing "Edit" listeners
+           
+
+            //New screen object
             var newScreen = new screenClass(self.projectScreens.length, $(self.screenTitleField).val(), $(self.screenDescriptionField).val(), $(self.screenDropzone.b64input).val());
+            var screenCommentList = [];
+
+            //Adding comments
+            $(self.screenDropzone.map.markersArray).each(function () {
+                $(this.popupObject.commentList).each(function (i) {
+                    screenCommentList.push(this);
+                } )
+            })
+            
+            newScreen.commentList = screenCommentList;
             self.projectScreens.push(newScreen);
+            //Clearing the fields
+            self.screenDropzone.destroyMap();
             self.clearScreenFields();
             self.addThumbnailListeners(newScreen);
             newScreen.deleteScreen.click(function () {
@@ -119,10 +149,17 @@ function reviewClass() {
 
     //Function to change the values of fields 
     this.changeValues = function (screen) {
-        $(self.addScreenButton).removeClass("ready");
+        self.clearScreenFields();
         $(self.screenTitleField).val(screen.screenTitle);
         $(self.screenDescriptionField).val(screen.screenDescription);
         self.screenDropzone.addFile(screen.screenContent, screen.screenTitle);
+        setTimeout(function () {
+            $(screen.commentList).each(function () {
+                //isLocal - true
+                self.screenDropzone.map.createMarker(this.message, this.user, this.location.lat, this.location.lng, this.parent, this.isInitial, this.urgency, true);  
+
+            })
+        }, 1000)
         
     }
 
@@ -133,8 +170,7 @@ function reviewClass() {
         $(".thumbnail-inner." + screen.id).on("click", function () {
             $(".screen").click();
             self.currentScreen = screen.id;
-            $(self.screenTitleField).unbind("keydown");
-            $(self.screenDescriptionField).unbind("keydown");
+
             self.changeValues(screen);
             $(self.screenTitleField).on("change", function () {
                 self.fieldListeners(screen)
@@ -142,16 +178,30 @@ function reviewClass() {
             $(self.screenDescriptionField).on("change", function () {
                 self.fieldListeners(screen)
             })
+            setTimeout(function () {
+                $(document).on("commentAdded", function (e) {
+                    self.fieldListeners(screen)
+                })
+            },1200)
+            $(document).on("draggedMarker", function (e) {
+                self.fieldListeners(screen)
+            })
+            
         })
     }
-    this.fieldListeners = function (screen) {
+    this.fieldListeners = function (screen ,newComments) {
        if ($(self.saveChangesButton).slideDown().is(":hidden") && (!screen.screenDescription.equals($(self.screenDescriptionField).val()) || !screen.screenTitle.equals($(self.screenTitleField).val()))) {
             $(self.saveChangesButton).slideDown();
         }
        $(self.saveChangesButton).click(function () {
-           self.projectScreens[screen.id].updateScreen($(self.screenTitleField).val(), $(self.screenDescriptionField).val());
-            $(self.saveChangesButton).slideUp();
-            $(this).unbind("click");
+           screen.commentList = [];
+           $(self.screenDropzone.map.markersArray).each(function () {
+               $(this.popupObject.commentList).each(function () {
+                   screen.commentList.push(this);
+               })
+           })
+           self.projectScreens[screen.id].updateScreen($(self.screenTitleField).val(), $(self.screenDescriptionField).val());        
+           $(this).unbind("click");
             self.clearScreenFields();
         })
        
@@ -161,15 +211,30 @@ function reviewClass() {
     this.submit = function () {
 
         //Removing deleted screens
-        var finalScreenList =[];
+        var finalScreenList = [];
+        
         $(self.projectScreens).each(function () {
             if (this.id > -1) {
+                
                 var finalScreen = {
                     Title: this.screenTitle,
                     Description: convertToHTML(this.screenDescription),
                     Content: this.screenContent
                 }
-                finalScreenList.push(finalScreen);
+                $(this.commentList).each(function () {
+                    this.lat = this.location.lat;
+                    this.lng = this.location.lng;
+                    this.location = null;
+                    if (this.isInitial) {
+                        this.commentId = this.parent;
+                        this.parent = null;
+                    }
+                });
+                var screenWithComments = {
+                    CommentList: this.commentList,
+                    Screen: finalScreen
+                }
+                finalScreenList.push(screenWithComments);
             }
         })
         //Adding all selected reviewers to the list
@@ -190,7 +255,7 @@ function reviewClass() {
 
         })
         var CreatePageModel = {
-            Screens: finalScreenList,
+            CommentsAndScreens: finalScreenList,
             Reviewers: reviewers,
             ReviewTitle: self.projectTitle,
             ReviewDescription: convertToHTML(self.projectDescription),
@@ -258,5 +323,6 @@ $(document).ready(function () {
     $(document).on("click", "#submit-images", function () {
         review.submit();
     })
+
 
 })
