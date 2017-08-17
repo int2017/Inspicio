@@ -53,6 +53,7 @@ namespace Inspicio.Controllers
                 var approvals = 0;
                 var needsWorks = 0;
                 var rejections = 0;
+                var screenCount = 0;
 
                 var screenIds = _context.Screens.Where(x => x.ReviewId == a.ReviewId).Select(s => s.ScreenId).ToList();
                 foreach( var i in screenIds )
@@ -60,6 +61,7 @@ namespace Inspicio.Controllers
                     approvals += _context.ScreenStatus.Count(x => (x.ScreenId == i) && x.Status == ScreenStatus.PossibleStatus.Approved);
                     needsWorks += _context.ScreenStatus.Count(x => (x.ScreenId == i) && x.Status == ScreenStatus.PossibleStatus.NeedsWork);
                     rejections += _context.ScreenStatus.Count(x => (x.ScreenId == i) && x.Status == ScreenStatus.PossibleStatus.Rejected);
+                    screenCount++;
                 }
 
                 Reviews.Add(new IndexModel
@@ -67,7 +69,8 @@ namespace Inspicio.Controllers
                     Review = a,
                     approvals = approvals,
                     needsWorks = needsWorks,
-                    rejections = rejections
+                    rejections = rejections,
+                    screenCount = screenCount
                 });
             }
             return View(Reviews);
@@ -102,7 +105,7 @@ namespace Inspicio.Controllers
                 }
                 else
                 {
-                    Review.Title = CreatePageModel.Screens[0].Title;
+                    Review.Title = CreatePageModel.CommentsAndScreens[0].Screen.Title;
                 }
                 Review.Description = CreatePageModel.ReviewDescription;
                 if (CreatePageModel.ReviewThumbnail != null)
@@ -111,18 +114,38 @@ namespace Inspicio.Controllers
                 }
                 else
                 {
-                    Review.Thumbnail = CreatePageModel.Screens[0].Content;
+                    Review.Thumbnail = CreatePageModel.CommentsAndScreens[0].Screen.Content;
                 }
                 
                 _context.Add(Review);
 
-                foreach( var s in CreatePageModel.Screens )
+                foreach( var s in CreatePageModel.CommentsAndScreens)
                 {
-                        // Screen creation
-                    s.OwnerId = _userManager.GetUserId(HttpContext.User);
-                    s.ScreenState = Screen.States.Open;
-                    s.ReviewId = Review.ReviewId;
-                    _context.Add(s);
+                    // Screen creation
+                    s.Screen.OwnerId = _userManager.GetUserId(HttpContext.User);
+                    s.Screen.ScreenState = Screen.States.Open;
+                    s.Screen.ReviewId = Review.ReviewId;
+                    _context.Add(s.Screen);
+                    foreach(var c in s.CommentList)
+                    {
+                        var comment = new Comment();
+                        comment.ParentId = c.ParentId;
+                        comment.Message = c.Message;
+                        var userId = _userManager.GetUserId(HttpContext.User);
+                        comment.OwnerId = userId;
+
+                        comment.ScreenId = s.Screen.ScreenId;
+                        comment.Timestamp = System.DateTime.Now;
+                        comment.Lat = c.Lat;
+                        comment.Lng = c.Lng;
+                        /* if (DataFromBody.CommentUrgency == Urgency.Urgent)
+                         {
+                             comment.CommentUrgency = Models.Comment.Urgency.Urgent;
+                         }
+                         else*/
+                        comment.CommentUrgency = Models.Comment.Urgency.Default;
+                        _context.Add(comment);
+                    }
                 }
 
                 // Access creation
@@ -141,10 +164,10 @@ namespace Inspicio.Controllers
                         ReviewerEntry.ReviewId = Review.ReviewId;
                         _context.Add(ReviewerEntry);
 
-                        foreach (var s in CreatePageModel.Screens)
+                        foreach (var s in CreatePageModel.CommentsAndScreens)
                         {
                             var ScreenStatus = new ScreenStatus();
-                            ScreenStatus.ScreenId = s.ScreenId;
+                            ScreenStatus.ScreenId = s.Screen.ScreenId;
                             ScreenStatus.UserId = u.Id;
                             ScreenStatus.Status = ScreenStatus.PossibleStatus.Undecided;
                             _context.Add(ScreenStatus);
@@ -155,7 +178,7 @@ namespace Inspicio.Controllers
                 await _context.SaveChangesAsync();
                 return Json(Url.Action("Index", "Images"));
             }
-            return View(CreatePageModel.Screens);
+            return View(CreatePageModel.CommentsAndScreens);
         }
 
 
@@ -342,13 +365,32 @@ namespace Inspicio.Controllers
             }
             else comment.CommentUrgency = Models.Comment.Urgency.Default;
             _context.Add(comment);
-
             await _context.SaveChangesAsync();
-            return Ok(1);
+            return PartialView("_CommentPartial",comment);
+        }
+        [HttpPost]
+        public async Task<IActionResult> UpdateCommentLocation([FromBody] CommentUpdateModel CommentUpdateModel)
+        {
+            var parentComment = _context.Comments.Where(c => c.CommentId.ToString().Equals(CommentUpdateModel.ParentId)).SingleOrDefault();
+            if (CommentUpdateModel.Message != null)
+            {
+                parentComment.Message = CommentUpdateModel.Message;
+            }
+            else if (CommentUpdateModel.Lat != 0) { 
+                var childComments = _context.Comments.Where(c => c.ParentId == CommentUpdateModel.ParentId).ToList();
+                parentComment.Lat = CommentUpdateModel.Lat;
+                parentComment.Lng = CommentUpdateModel.Lng;
+                foreach(var c in childComments)
+                {
+                    c.Lat= CommentUpdateModel.Lat;
+                    c.Lng= CommentUpdateModel.Lng;
+                }
+            }
+            await _context.SaveChangesAsync();
+            return Ok();
         }
 
 
-       
         [HttpPost]
         public async Task<IActionResult> ChangeRating([FromBody] RatingBody data)
         {

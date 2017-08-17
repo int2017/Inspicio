@@ -1,5 +1,9 @@
 ﻿var section = 2;
+$(document).on("click", "#choice-feature", function () {
+    $("#action-choice").fadeOut(300);
+    $("#feature-demo").delay(300).fadeIn(300);
 
+})
 function switchSection() {
 
     $("#section" + (section - 1) + " .success").slideDown(500);
@@ -176,10 +180,7 @@ function enablePins() {
         var marker = new L.marker(latlng, {
             icon: customPin
         }).addTo(markerGroup);
-        var popup = new L.responsivePopup({
-            offset: [10, 10],
-            autoPanPadding: [10, 10]
-        });
+        var popup = new L.Rrose();
         //Removes marker if popup is empty
         marker.on('popupclose', function (e) {
             if (($("#popup" + uniqID).html().indexOf("popup-comment")) === -1) {

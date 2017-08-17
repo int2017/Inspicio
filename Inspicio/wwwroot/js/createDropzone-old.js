@@ -5,6 +5,8 @@ converts it to base64encoding.This is then used to
 set a temp input tag value.This is then sent to 
 the server when create new is pressed.
 */
+
+
     function encodeBase64(file,area) {
 
         if (file) {
@@ -43,7 +45,7 @@ the server when create new is pressed.
         autoProcessQueue: false,
         init: function () {
             this.on("addedfile", function (file) {
-                if (this.files[1] != null) {
+                if (this.files[1] ) {
                     try {
                         this.removeFile(this.files[0]);
                     }
@@ -65,7 +67,7 @@ the server when create new is pressed.
         autoProcessQueue: false,
         init: function () {
             this.on("addedfile", function (file) {
-                if (this.files[1] != null) {
+                if (this.files[1]) {
                     try {
                         this.removeFile(this.files[0]);
                     }

@@ -24,6 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="Scripts\ajaxScreens.js" />
     <Content Include="Scripts\multipleImages.js" />
     <Content Include="Scripts\to-markdown.js" />
     <Content Include="wwwroot\css\create.css" />
@@ -39,8 +40,6 @@
     <Content Include="wwwroot\images\thumbdown.jpg" />
     <Content Include="wwwroot\images\thumbmid.jpg" />
     <Content Include="wwwroot\images\thumbup.jpg" />
-    <Content Include="wwwroot\js\ajaxComments.js" />
-    <Content Include="wwwroot\js\ajaxScreens.js" />
     <Content Include="wwwroot\js\background-selector.js" />
     <Content Include="wwwroot\js\chatBot.js" />
     <Content Include="wwwroot\js\createDropzone.js" />
@@ -49,6 +48,7 @@
     <Content Include="wwwroot\js\less\animated.less" />
     <Content Include="wwwroot\js\less\bordered-pulled.less" />
     <Content Include="wwwroot\js\less\core.less" />
+    <Content Include="wwwroot\js\less\dropdown.js" />
     <Content Include="wwwroot\js\less\fixed-width.less" />
     <Content Include="wwwroot\js\less\font-awesome.less" />
     <Content Include="wwwroot\js\less\icons.less" />
@@ -63,8 +63,6 @@
     <Content Include="wwwroot\js\login_register.js" />
     <Content Include="wwwroot\js\markdownConverter.js" />
     <Content Include="wwwroot\js\homepageScripts.js" />
-    <Content Include="wwwroot\js\multipleImages.js" />
-    <Content Include="wwwroot\js\pinComments.js" />
     <Content Include="wwwroot\js\ajaxThumbs.js" />
     <Content Include="wwwroot\js\quickCreate.js" />
     <Content Include="wwwroot\js\review_view.js" />

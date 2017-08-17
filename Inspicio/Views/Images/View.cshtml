@@ -4,7 +4,7 @@
 @inject UserManager<ApplicationUser> UserManager
 
 
-<script type="text/javascript" src="~/js/ajaxScreens.js"></script>
+
 <link rel="stylesheet" href="~/css/review_information.css" />
 <script type="text/javascript" src="~/js/review_view.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/2.5.1/css/bootstrap-colorpicker.min.css" />
@@ -80,9 +80,6 @@
                     <div class="cover-item" id="@id" onclick="screenSelector(@Model.Review.ReviewId, @id)" style="cursor: pointer;">
                         <span id="@id" class="state"></span>
                     </div>
-                    <script>
-                        screenContent( @id);
-                    </script>
                 }
             </div>
         </div>
@@ -239,8 +236,7 @@
 <script type="text/javascript" src="~/js/filter.js"></script>
 <script type="text/javascript" src="~/js/widgetControl.js"></script>
 <script type="text/javascript" src="~/js/sort-comments.js"></script>
-<script type="text/javascript" src="~/js/ajaxComments.js"></script>
-<script type="text/javascript" src="~/dist/images_view.bundle.js"></script>
+<script type="text/javascript" src="~/dist/ajaxScreens.bundle.js"></script>
 
 
 
@@ -269,7 +265,7 @@
             addComDates();
         });
     });
-   
+
 
 </script>
 <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">

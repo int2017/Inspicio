@@ -9,8 +9,26 @@
     <div id="home-header">
         <img src="~/images/InspicioOstrich.svg" class="img-responsive" alt="Inspicio" />
     </div>
+    <div id="action-choice">
+        <div class="row-eq-height">
+            <div class="col-xs-12 col-md-6 text-center">
+                <h2 class="select" id="choice-feature"> Feature demo </h2>
+            </div>
+            <div class="col-xs-12 col-md-6 text-center">
+                @if (SignInManager.IsSignedIn(User))
+                 {
+                    <a asp-controller="Images" asp-action="Create" class="select" id="choice-begin"><h2  > Begin <i class="fa fa-plus" aria-hidden="true"></i></h2> </a>
+                }
+                else
+                {
+                    <a asp-controller="Account" asp-action="LoginOrRegister" class="select" id="choice-begin"><h2> Begin <i class="fa fa-sign-in" aria-hidden="true"></i></h2> </a>
 
-    
+                }
+                
+            </div>
+        </div>
+    </div>
+    <div id="feature-demo">
         <div class="progress">
             <div id="progr1" class="progress-bar progress-bar-info progress-bar-striped active" role="progressbar" style="width:0%">
                 Upload
@@ -22,79 +40,79 @@
                 Feedback
             </div>
         </div>
-    <div id="img-txt">
-        <div class="row-eq-height" id="section1">
-            <div class="col-md-8">
-                <div id="dropzoneDiv">
-                    <div class="dropzone needsclick dz-clickable" id="uploader">
-                        <div class="dz-message needsclick">
-                            Drop files here or click to upload.
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 feat-col">
-                <img src="~/images/create.svg" class="img-responsive" /> Drop in your images
-                <div class="success">Successfuly uploaded</div>
-            </div>
-        </div>
-        <div class="row-eq-height" id="section2">
-            <div class="col-md-4 feat-col">
-                <img src="~/images/add.svg" class="img-responsive" /> Add teammates to review your images
-                <div class="success">Successfuly added</div>
-            </div>
-            <div class="col-md-8">
-                <div class="panel panel-default">
-                    <div class="panel-heading">Add reviewers</div>
-                    <div class="panel-body">
-
-                        <input type="text" placeholder="Search..." />
-
-                        <div class="row-eq-height">
-                            <div class="col-md-1 col-md-offset-1 text-center">
-                                <input id="chatbot-check" type="checkbox" />
+        <div id="img-txt">
+            <div class="row-eq-height" id="section1">
+                <div class="col-md-8">
+                    <div id="dropzoneDiv">
+                        <div class="dropzone needsclick dz-clickable" id="uploader">
+                            <div class="dz-message needsclick">
+                                Drop files here or click to upload.
                             </div>
-                            <div class="col-md-10 text-left">
-                                <label for="chatbot-check">
-                                    Chatbot
-                                </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 feat-col">
+                    <img src="~/images/create.svg" class="img-responsive" /> Drop in your images
+                    <div class="success">Successfuly uploaded</div>
+                </div>
+            </div>
+            <div class="row-eq-height" id="section2">
+                <div class="col-md-4 feat-col">
+                    <img src="~/images/add.svg" class="img-responsive" /> Add teammates to review your images
+                    <div class="success">Successfuly added</div>
+                </div>
+                <div class="col-md-8">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Add reviewers</div>
+                        <div class="panel-body">
+
+                            <input type="text" placeholder="Search..." />
+
+                            <div class="row-eq-height">
+                                <div class="col-md-1 col-md-offset-1 text-center">
+                                    <input id="chatbot-check" type="checkbox" />
+                                </div>
+                                <div class="col-md-10 text-left">
+                                    <label for="chatbot-check">
+                                        Chatbot
+                                    </label>
+                                </div>
+
                             </div>
 
                         </div>
-
-                    </div>
-                    <div class="panel-footer">
-                        <div class="cold-md-12 text-center">
-                            <button type="button" class="btn btn-success switch-section">Add reviewers</button>
+                        <div class="panel-footer">
+                            <div class="cold-md-12 text-center">
+                                <button type="button" class="btn btn-success switch-section">Add reviewers</button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="row-eq-height" id="section3">
-            <div class="col-md-8 map-col">
-                <div id="image-container">
-                    <div id="homeImageMap"></div>
+            <div class="row-eq-height" id="section3">
+                <div class="col-md-8 map-col">
+                    <div id="image-container">
+                        <div id="homeImageMap"></div>
 
+                    </div>
+                </div>
+                <div class="col-md-4 feat-col">
+                    <img src="~/images/feedback.svg" class="img-responsive" /> Interactive feedback on your work
+                    @if (SignInManager.IsSignedIn(User))
+            {
+                        <a asp-controller="Images" asp-action="Create"><div class="success">Begin now <i class="fa fa-sign-in" aria-hidden="true"></i></div></a>
+                    }
+                    else
+                    {
+                        <a asp-controller="Account" asp-action="LoginOrRegister"><div class="success">Begin now <i class="fa fa-sign-in" aria-hidden="true"></i></div></a>
+
+                    }
                 </div>
             </div>
-            <div class="col-md-4 feat-col">
-                <img src="~/images/feedback.svg" class="img-responsive" /> Interactive feedback on your work
-            @if (SignInManager.IsSignedIn(User))
-            {
-                <a asp-controller="Images" asp-action="Create"><div class="success">Begin now <i class="fa fa-sign-in" aria-hidden="true"></i></div></a>
-            }
-            else
-            {
-                <a asp-controller="Account" asp-action="LoginOrRegister"><div class="success">Begin now <i class="fa fa-sign-in" aria-hidden="true"></i></div></a>
 
-            }
-            </div>
         </div>
 
     </div>
-
-
 </div>
 
 <link rel="stylesheet" href="~/css/home.css">

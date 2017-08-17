@@ -1,4 +1,4 @@
-﻿.btn {
+﻿.btn:not(.popup-btn) {
     min-width: 120px;
     padding: 6px;
     font-size: 1.3em;
@@ -33,7 +33,9 @@ ul {
     list-style: none;
     float: left;
 }
-
+.btn.popup-btn{
+    min-width:initial;
+}
 #Image_DescriptionHTML {
     display: none;
 }

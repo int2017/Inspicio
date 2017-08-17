@@ -1,4 +1,43 @@
-﻿.blur {
+﻿#action-choice > div {
+    flex-flow:wrap;
+    margin: 50px 0;
+    padding: 20px;
+    color: rgba(255, 255, 255, 0.65);
+}
+#feature-demo{
+    display:none;
+}
+.select {
+    display: inline-block;
+    width: 60%;
+    cursor: pointer;
+    padding: 20px;
+    border-radius: 3px;
+    border: 1px solid #616161;
+    opacity:0.9;
+    transition:all 0.3s;
+    -webkit-transition:all 0.3s;
+}
+    .select:hover {
+        opacity: 1;
+        border-color: rgba(255, 255, 255, 0.25);
+        width: 80%;
+    }
+#choice-feature {
+    background-color: #406d7a;
+}
+a#choice-begin {
+    background-color: #b7a35c;
+    color: rgba(255, 255, 255, 0.65);
+}
+#choice-begin:hover {
+    outline:none;
+    text-decoration:none;
+}
+#choice-begin h2{
+    margin:0;
+}
+.blur {
     position: absolute;
     height: 100%;
     width: 100%;
@@ -72,9 +111,8 @@
     overflow:visible;
 }
 #section3 a:hover .success{
-    
     opacity:1;
-    transition:all 0,3s;
+    transition:all 0.3s;
 }
 #section3 a, #section3 a:hover {
     color: white;
