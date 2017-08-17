@@ -47,6 +47,7 @@
     <Content Include="wwwroot\js\less\animated.less" />
     <Content Include="wwwroot\js\less\bordered-pulled.less" />
     <Content Include="wwwroot\js\less\core.less" />
+    <Content Include="wwwroot\js\less\dropdown.js" />
     <Content Include="wwwroot\js\less\fixed-width.less" />
     <Content Include="wwwroot\js\less\font-awesome.less" />
     <Content Include="wwwroot\js\less\icons.less" />
