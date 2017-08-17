@@ -418,7 +418,7 @@ namespace Inspicio.Controllers
             }
 
             await _context.SaveChangesAsync();
-            return Ok(1);
+            return Json((await _userManager.FindByIdAsync(userId)).ProfileName);
         }
 
         [HttpPost]

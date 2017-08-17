@@ -1,13 +1,17 @@
 
 .screen-open {
-    color: green;
+    color: red;
     font-size: 50px;
     opacity: 1.0;
+    margin-right: -7px;
+    margin-bottom: -11px
 }
 .screen-closed {
-    color: red;
+    color: green;
     font-size: 100px;
-    opacity: 0.5;
+    opacity: 0.99;
+    margin-right: -7px;
+    margin-bottom: -11px
 }
 
 #loginsection,
@@ -716,8 +720,11 @@ input:focus {
     -moz-transition: all 0.3s ease-in-out;
     -webkit-transition: all 0.3s ease-in-out;
     border: 1px solid #cccccc;
-    width: 80px;
-    margin: 0 10px 10px 0;
+    margin: 0 0px 5px 0
+}
+
+.screen_btn {
+    margin: -5px 0 0px;
 }
 
     .lightbox-button:hover,.clicked {

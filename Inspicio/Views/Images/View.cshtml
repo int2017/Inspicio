@@ -77,7 +77,7 @@
             <div class="cover-container" style="border:solid;">
                 @foreach (var id in Model.ScreenIds)
                 {
-                    <div class="cover-item" id="@id" onclick="screenSelector(@Model.Review.ReviewId, @id)" style="cursor: pointer;">
+                    <div class="cover-item" id="@id" style="cursor: pointer;">
                         <span id="@id" class="state"></span>
                     </div>
                 }
