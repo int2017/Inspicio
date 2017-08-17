@@ -85,7 +85,9 @@ namespace Inspicio.Controllers
                 if (result.Succeeded)
                 {
                     _logger.LogInformation(1, "User logged in.");
-                    
+                    var user = new ApplicationUser { UserName = model.Register.Email, Email = model.Register.Email };
+                    user.NotificationFlag = true;
+                    user.TimeOfLastNotification = System.DateTime.Now;
                     return RedirectToLocal(returnUrl);
                 }
                 if (result.RequiresTwoFactor)
