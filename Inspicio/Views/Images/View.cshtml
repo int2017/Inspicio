@@ -25,7 +25,7 @@
      
     style="padding-top:0px">
 
-    <input id="ReviewId" type="hidden" asp-for="@Model.Review.ReviewId" />
+    <input id="ReviewId" type="hidden" asp-for="@Model.Review.ReviewId" /> 
 
     <!-- Trigger/Open The Modal -->
     <h2 id="review-title">@Model.Review.Title <span id="toggle_review_info" class="fa fa-info-circle" aria-hidden="true" title="See Review information" style="cursor:pointer;"></span></h2>
@@ -70,6 +70,8 @@
 
 
 <div class="row">
+    <button class="lightbox-button btn" id="new-Screen">New Screen</button>
+
     @if (Model.ScreenIds.Count > 1)
     {
 
@@ -204,7 +206,6 @@
         </div>
     </div>
 
-
     <hr />
 <div id="screen-container">
     @{
@@ -237,6 +238,7 @@
 <script type="text/javascript" src="~/js/widgetControl.js"></script>
 <script type="text/javascript" src="~/js/sort-comments.js"></script>
 <script type="text/javascript" src="~/dist/ajaxScreens.bundle.js"></script>
+
 
 
 

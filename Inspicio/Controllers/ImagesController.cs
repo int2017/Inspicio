@@ -188,7 +188,12 @@ namespace Inspicio.Controllers
             return View(CreatePageModel.CommentsAndScreens);
         }
 
-
+        public PartialViewResult _CreatePartial()
+        {
+            var CreatePageModel = new CreatePageModel();
+            CreatePageModel.Reviewers = _context.Users.Where(u => u.Id != _userManager.GetUserId(HttpContext.User)).ToList();
+            return PartialView("_CreatePartial", CreatePageModel);
+        }
 
         // GET: Images/View/5
         public async Task<IActionResult> View(int? Id)
@@ -244,12 +249,7 @@ namespace Inspicio.Controllers
             var screenState = _context.Screens.Where(s => s.ScreenId == id).Select(c => c.ScreenState).SingleOrDefault();
             return Json(new { content = screen, title = screenTitle, state = screenState });
         }
-        public PartialViewResult _CreatePartial()
-        {
-            var CreatePageModel = new CreatePageModel();
-            CreatePageModel.Reviewers = _context.Users.Where(u => u.Id != _userManager.GetUserId(HttpContext.User)).ToList();
-            return PartialView("_CreatePartial", CreatePageModel);
-        }
+
         // GET: Images/View/?/screen
 
         public async Task<IActionResult> _ScreenPartial(int RId, int SId, int CommentVisibiltyState)

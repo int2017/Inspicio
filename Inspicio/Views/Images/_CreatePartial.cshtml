@@ -1,0 +1,111 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+
+@model Inspicio.Models.ReviewViewModels.CreatePageModel
+
+
+
+
+    <div class="panel image-upload-container">
+        <script type="text/javascript" src="https://cdn.rawgit.com/showdownjs/showdown/1.7.1/dist/showdown.min.js"></script>
+        <script type="text/javascript" src="~/js/markdownConverter.js"></script>
+        <script type="text/javascript" src="~/js/quickCreate.js"></script>
+        <link rel="stylesheet" href="~/css/create.css" />
+        <div class="panel-heading">
+            <h3>Add screens</h3>
+        </div>
+        <div class="panel-body">
+            <div class="form-group">
+                <!-- Review Title -->
+                <input type="text" id="Quick_Image_Title" class="form-control" placeholder="Screen Title">
+
+                <span class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <!-- Review Description -->
+                <textarea class="form-control" id="Quick_Image_Description_UserInput" rows="4" placeholder="Screen Description &lt;markdown supported&gt;"></textarea>
+                <span class="text-danger"></span>
+                <span class="text-danger"></span>
+
+                <textarea id="Image_DescriptionHTML"></textarea>
+            </div>
+
+
+
+            <div class="form-group">
+
+                <!--input below will be used to temp store the base64 encoding of the image-->
+                <input id="b64quickUploader" type="hidden" />
+
+                <!-- Dropzone Image Upload-->
+                <div id="dropzoneDiv">
+                    <div class="dropzone needsclick dz-clickable" id="quickUploader">
+                        <div class="dz-message needsclick">
+                            <i class="fa fa-upload fa-5x" aria-hidden="true"></i>
+                            <h4>Drag and drop your screens here or click to upload</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-left">
+                <a id="reset">Reset all fields</a>
+            </div>
+            <div class="text-center">
+                <button type="button" class="btn btn-success" id="edit-img">Save changes</button>
+            </div>
+
+
+            <h3>Add reviewers</h3>
+            <input id="filter_reviewees_id" name="filter_reviewees" onkeyup="filterUsers()" type="text" placeholder="&#xf002; " />
+            @{
+                if (Model.Reviewers.Count > 0)
+                {
+                    <div class="row-eq-height">
+                        <div class="col-xs-1 col-md-1 text-center">
+                            <input id="check-all" type="checkbox" />
+                        </div>
+                        <div class="col-xs-3 col-md-3 text-left">
+                            <label for="check-all">Check all</label>
+                        </div>
+                        <div class="col-xs-4 col-md-4 text-left">
+                            <label> Profile name </label>
+                        </div>
+                        <div class="col-xs-4 col-md-4">
+                            <label> Email</label>
+                        </div>
+
+                    </div>
+
+                    @for (var i = 0; i < Model.Reviewers.Count; i++)
+                    {
+                        <div class="row-eq-height reviewer-info">
+                            <div class="col-xs-1 col-md-1 text-center">
+                                <input id="reviewer-@i" type="checkbox" />
+                            </div>
+                            <div class="col-xs-3 col-md-3">
+                                <img height="40" alt="@Model.Reviewers[i].ProfileName" src="@Model.Reviewers[i].ProfilePicture" />
+                            </div>
+                            <div id="profilename-@i" class="col-xs-3 col-md-4 text-left">
+                                <label for="reviewer-@i"> @Model.Reviewers[i].ProfileName</label>
+                            </div>
+                            <div id="email-@i" class="col-xs-3 col-md-4">
+                                <label for="reviewer-@i"> @Model.Reviewers[i].Email</label><input type="hidden" asp-for="@Model.Reviewers[i].Id" />
+                            </div>
+
+                        </div>
+                    }
+                }
+            }
+        </div>
+        <div class="panel-footer">
+            <div class="text-center">
+                <!-- Submit Button -->
+                <button type="button" id="create-quick-review" class="btn btn-success">Create review</button>
+            </div>
+        </div>
+    </div>
