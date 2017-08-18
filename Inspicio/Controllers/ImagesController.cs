@@ -119,32 +119,39 @@ namespace Inspicio.Controllers
                 
                 _context.Add(Review);
 
-                foreach( var s in CreatePageModel.CommentsAndScreens)
+                if (CreatePageModel.CommentsAndScreens != null)
                 {
-                    // Screen creation
-                    s.Screen.OwnerId = _userManager.GetUserId(HttpContext.User);
-                    s.Screen.ScreenState = Screen.States.Open;
-                    s.Screen.ReviewId = Review.ReviewId;
-                    _context.Add(s.Screen);
-                    foreach(var c in s.CommentList)
+                    foreach (var s in CreatePageModel.CommentsAndScreens)
                     {
-                        var comment = new Comment();
-                        comment.ParentId = c.ParentId;
-                        comment.Message = c.Message;
-                        var userId = _userManager.GetUserId(HttpContext.User);
-                        comment.OwnerId = userId;
+                        // Screen creation
+                        s.Screen.OwnerId = _userManager.GetUserId(HttpContext.User);
+                        s.Screen.ScreenState = Screen.States.Open;
+                        s.Screen.ReviewId = Review.ReviewId;
+                        _context.Add(s.Screen);
 
-                        comment.ScreenId = s.Screen.ScreenId;
-                        comment.Timestamp = System.DateTime.Now;
-                        comment.Lat = c.Lat;
-                        comment.Lng = c.Lng;
-                        /* if (DataFromBody.CommentUrgency == Urgency.Urgent)
-                         {
-                             comment.CommentUrgency = Models.Comment.Urgency.Urgent;
-                         }
-                         else*/
-                        comment.CommentUrgency = Models.Comment.Urgency.Default;
-                        _context.Add(comment);
+                        if (s.CommentList != null)
+                        {
+                            foreach (var c in s.CommentList)
+                            {
+                                var comment = new Comment();
+                                comment.ParentId = c.ParentId;
+                                comment.Message = c.Message;
+                                var userId = _userManager.GetUserId(HttpContext.User);
+                                comment.OwnerId = userId;
+
+                                comment.ScreenId = s.Screen.ScreenId;
+                                comment.Timestamp = System.DateTime.Now;
+                                comment.Lat = c.Lat;
+                                comment.Lng = c.Lng;
+                                /* if (DataFromBody.CommentUrgency == Urgency.Urgent)
+                                 {
+                                     comment.CommentUrgency = Models.Comment.Urgency.Urgent;
+                                 }
+                                 else*/
+                                comment.CommentUrgency = Models.Comment.Urgency.Default;
+                                _context.Add(comment);
+                            }
+                        }
                     }
                 }
 
