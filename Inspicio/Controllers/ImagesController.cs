@@ -84,7 +84,36 @@ namespace Inspicio.Controllers
             return View(CreatePageModel);
         }
 
-         
+        // POST: Images/NewScreen
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> NewScreen(CreatePageModel CreatePageModel)
+        {
+            if (ModelState.IsValid)
+            {
+                CreatePageModel.CommentsAndScreens[0].Screen.ScreenState = Screen.States.Open;
+
+                var currentUserId = _userManager.GetUserId(HttpContext.User);
+                CreatePageModel.CommentsAndScreens[0].Screen.OwnerId = currentUserId;
+                _context.Screens.Add(CreatePageModel.CommentsAndScreens[0].Screen);
+                var reviewers = _context.Access.Where(r => r.ReviewId == CreatePageModel.CommentsAndScreens[0].Screen.ReviewId).ToList();
+                foreach (var r in reviewers)
+                {
+                    if (!(r.UserId == currentUserId))
+                    {
+                        var ScreenStatus = new ScreenStatus();
+                        ScreenStatus.ScreenId = CreatePageModel.CommentsAndScreens[0].Screen.ScreenId;
+                        ScreenStatus.UserId = r.UserId;
+                        ScreenStatus.Status = ScreenStatus.PossibleStatus.Undecided;
+                        _context.Add(ScreenStatus);
+                    }
+                }
+
+                await _context.SaveChangesAsync();
+                return Json( "true" );
+            }
+            return Json( "false" );
+        }
 
         // POST: Images/Create
         [HttpPost]
@@ -93,7 +122,7 @@ namespace Inspicio.Controllers
         {
             if (ModelState.IsValid)
             {
-                    // Review creation
+                // Review creation
                 var Review = new Review();
                 //Review.ReviewId = ?
                 Review.CreatorId = _userManager.GetUserId(HttpContext.User);
