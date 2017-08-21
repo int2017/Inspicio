@@ -28,7 +28,17 @@
     <input id="ReviewId" type="hidden" asp-for="@Model.Review.ReviewId" />
 
     <!-- Trigger/Open The Modal -->
-    <h2 id="review-title">@Model.Review.Title <span id="toggle_review_info" class="fa fa-info-circle" aria-hidden="true" title="See Review information" style="cursor:pointer;"></span></h2>
+    <h2 id="review-title">
+        @Model.Review.Title
+    <button type="button" class="btn lightbox-button" aria-label="project-info" id="project-info-btn">
+        <div class="col-md-2">
+            <span id="toggle_review_info" style ="font-size: 40px; padding-left:0px; cursor:pointer;" class="fa fa-info-circle" aria-hidden="true" title="See Review information"></span>
+        </div>
+        <div class="col-md-10" style="padding-top:10px; padding-left: 30px; margin-left: -4px; font-size:14px;">
+            Project Details
+        </div>
+    </button>
+</h2>
 
     <!-- The Modal -->
     <div id="myModal" class="modal">
@@ -62,7 +72,7 @@
                                 @:$("#review-state-icon").removeClass("fa fa-toggle-on");
                             }
                     </script>
-                    <button title="Delete review." type="button" id="delete-review" class="lightbox-button btn"><i class="fa fa-trash"></i></button>
+                    <button title="Delete review." type="button" id="delete-review" class="lightbox-button btn"><i class="fa fa-trash" id="review-delete"></i></button>
                 }
             </div>
         </div>

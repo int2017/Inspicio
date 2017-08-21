@@ -1,17 +1,63 @@
 
 .screen-open {
-    color: red;
+    color: #5cb85c;
+    border-color: #4cae4c;
     font-size: 50px;
     opacity: 1.0;
     margin-right: -7px;
     margin-bottom: -11px
 }
 .screen-closed {
-    color: green;
+    color: #d9534f;
+    border-color: #d43f3a;
     font-size: 100px;
     opacity: 0.99;
     margin-right: -7px;
     margin-bottom: -11px
+}
+
+#project-info-btn{
+    margin-left: 467px;
+}
+
+i.glyphicon.glyphicon-map-marker {
+    font-size: 20px;
+}
+
+i.fa, span#screen-state-icon {
+    font-size: 20px;
+}
+
+.modal-content{
+    height: auto;
+}
+
+button#screen-state-toggle {
+    height: 51px;
+}
+
+button#review-state-toggle {
+    font-size: 25px;
+    width: 170px;
+}
+
+button#delete-review {
+    background-color: #d9534f;
+    border-color:#d43f3a 
+}
+
+button#delete {
+    background-color: #d9534f;
+    border-color: #d43f3a
+}
+
+
+i.fa.fa-trash {
+    font-size: 20px;
+}
+
+#review-delete{
+    font-size: 40px;
 }
 
 #loginsection,
@@ -831,6 +877,7 @@ transition: all 0.3s linear;
 
     .view-container.wide .img-wrapper {
         width: 100%;
+        height:100%;
     }
 
 .view-container {
