@@ -1,4 +1,7 @@
 ﻿$(document).ready(function () {
+
+    $('body').addClass('modal-open');
+
     function encodeBase64(file, area) {
         if (file) {
             var FR = new FileReader();
@@ -43,14 +46,9 @@
     $(".overlay").click(function (event) {
         if (event.defaultPrevented) return;
         if (!($(event.target).closest('.panel').length) && !($(event.target).closest('.dropzone').length)) {
-             $(this).hide().remove();
+            $(this).hide().remove();
+            $('body').removeClass('modal-open');
         }
-    })
-    $("#quick-reset").click(function () {
-        quickDropzone.removeAllFiles();
-        $("#Quick_Image_Title").val('').off();
-        $("#Quick_Image_Description_UserInput").val('').off();
-        $("#quickUploader").animate({ width: "100%" }, 300)
     })
     //Sending the quick review data to the DB
     $(document).on("click", "#create-quick-review", function () {
@@ -114,23 +112,3 @@
             });
     })
 })
-
-//filtering function
-function filterUsers() {
-    // Declare variables
-        input = document.getElementById("filter_reviewees_id");
-        filter = input.value.toLowerCase();
-        // Loop through all list items, and hide those who don't match the search query
-        $(".reviewer-info").each(function () {
-            if ($(this).find("label").html().toLowerCase().indexOf(filter) < 0) {
-                $(this).hide();
-            }
-            else $(this).show();
-        })
-}
-
-$("#quick-check-all").change(function () {
-    var checkBoxes = $(".quick-create-overlay .reviewer-info input[type='checkbox']");
-    checkBoxes.prop("checked", !checkBoxes.prop("checked"));
-})
-

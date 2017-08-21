@@ -131,9 +131,4 @@
             }
         })
     });
-
-    $("#new-Screen").on('click', function () {
-
-        alert("new screen");
-    });
 });
