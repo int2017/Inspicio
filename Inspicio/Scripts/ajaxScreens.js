@@ -32,14 +32,16 @@ function screenContent(id) {
 
 }
 function screenSelector(reviewid, id) {
-    var Id = [reviewid, id];
+
+    var CommentsVisibiltyState = $(".flex-sidebar").hasClass("side-hide");
     $.ajax(
         {
             type: "GET", //HTTP GET Method
             url: "../_ScreenPartial", // Controller/View
             data: {
                 RId: reviewid,
-                SId: id
+                SId: id,
+                CommentVisibiltyState: (CommentsVisibiltyState == true) ? 1 : 0
             },
             success: function (response) {
                 imageMap.remove();
