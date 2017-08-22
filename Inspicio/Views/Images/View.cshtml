@@ -52,18 +52,18 @@
                 {
                     <button class="lightbox-button btn" id="review-state-toggle"><span id="review-state-icon"></span></button>
                     <script>
-                            @if (Model.Review.ReviewState == Review.States.Closed)
-                            {
-                               @:$("#review-state-toggle").attr("title", "Re-open Review");
-                               @:$("#review-state-icon").addClass("fa fa-toggle-on");
-                               @:$("#review-state-icon").removeClass("fa fa-toggle-off");
-                            }
-                            else
-                            {
-                                @:$("#review-state-toggle").attr("title", "Close Review");
-                                @:$("#review-state-icon").addClass("fa fa-toggle-off");
-                                @:$("#review-state-icon").removeClass("fa fa-toggle-on");
-                            }
+                        @if (Model.Review.ReviewState == Review.States.Closed)
+                        {
+                            @:$("#review-state-toggle").attr("title", "Re-open Review");
+                            @:$("#review-state-icon").addClass("fa fa-toggle-on");
+                            @:$("#review-state-icon").removeClass("fa fa-toggle-off");
+                        }
+                        else
+                        {
+                            @:$("#review-state-toggle").attr("title", "Close Review");
+                            @:$("#review-state-icon").addClass("fa fa-toggle-off");
+                            @:$("#review-state-icon").removeClass("fa fa-toggle-on");
+                        }
                     </script>
                     <button title="Delete review." type="button" id="delete-review" class="lightbox-button btn"><i class="fa fa-trash"></i></button>
                 }
@@ -105,12 +105,12 @@
                 <div class="version-cover-container" style="border:solid;">
                     
                     @{
-                        @*foreach( var sID in Model.Children )
+                        foreach( var sID in Model.PreviousVersions )
                         {
                             <div class="version-cover-item" id="@sID" style="cursor: pointer;">
                                 <span id="@sID" class="state"></span>
                             </div>
-                        }*@
+                        }
                     }
                 </div>
             </div>

@@ -47,7 +47,7 @@ function screenSelector(reviewid, id) {
                 imageMap.remove();
                 $(".colorpicker").remove();
                 $("#screen-container").html(response);
-                $("version-cover-container").html("");
+                $(".version-cover-container").html("");
 
                 disableThumb(false);
                 reloadMarkers();

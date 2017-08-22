@@ -292,12 +292,22 @@ namespace Inspicio.Controllers
 
             ViewModel.ScreenIds = _context.Screens.Where( s => s.ReviewId == Id && s.ParentId == 0 ).Select(s => s.ScreenId).ToList();
 
+            ViewModel.PreviousVersions = new List<int>();
             for( int i = 0; i < ViewModel.ScreenIds.Count; i++ )
             {
                 var children = _context.Screens.Where(s => s.ParentId == ViewModel.ScreenIds[i]).ToList();
                 if (children.Count > 0)
                 {
+                    foreach( var child in children )
+                    {
+                        if (!(children[children.Count - 1] == child))
+                        {
+                            ViewModel.PreviousVersions.Insert( 0, child.ScreenId);
+                        }
+                    }
                     ViewModel.ScreenIds[i] = children[children.Count - 1].ScreenId;
+
+                    ViewModel.PreviousVersions.Add(children[children.Count - 1].ParentId);
                 }
             }
 
