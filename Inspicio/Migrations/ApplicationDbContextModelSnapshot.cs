@@ -152,11 +152,9 @@ namespace Inspicio.Migrations
 
                     b.Property<string>("Description");
 
-                    b.Property<int>("NextScreenId");
-
-                    b.Property<int>("NextVersionId");
-
                     b.Property<string>("OwnerId");
+
+                    b.Property<int>("ParentId");
 
                     b.Property<int>("ReviewId");
 

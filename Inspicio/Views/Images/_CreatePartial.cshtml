@@ -1,5 +1,5 @@
 ﻿
-@model Inspicio.Models.ReviewViewModels.CreatePageModel
+@model Inspicio.Models.ReviewViewModels.CreatePartialInfo
 
 <div id="new-screen-upload" class="panel image-upload-container">
    
@@ -19,7 +19,12 @@
 
             <!-- Review Title -->
             <input type="text" id="Quick_Image_Title" class="form-control" placeholder="Screen Title">
-
+            <script>
+            @if (!Model.newScreen)
+            {
+                @:$("#Quick_Image_Title").val("@Model.Screen.Title");
+            }
+            </script>
             <span class="text-danger"></span>
         </div>
 
@@ -54,6 +59,11 @@
         </div>
     </div>
     
+    <input id="isNewScreen" type="hidden" />
+    <script>
+        $("#isNewScreen").val( "@Model.newScreen" );
+    </script>
+
     <div class="panel-footer">
         <div class="text-center">
             <!-- Submit Button -->

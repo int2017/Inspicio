@@ -87,30 +87,64 @@ namespace Inspicio.Controllers
         // POST: Images/NewScreen
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> NewScreen(CreatePageModel CreatePageModel)
+        public async Task<IActionResult> NewScreen(CreatePageModel CreatePageModel, bool newScreen)
         {
             if (ModelState.IsValid)
             {
-                CreatePageModel.CommentsAndScreens[0].Screen.ScreenState = Screen.States.Open;
-
-                var currentUserId = _userManager.GetUserId(HttpContext.User);
-                CreatePageModel.CommentsAndScreens[0].Screen.OwnerId = currentUserId;
-                _context.Screens.Add(CreatePageModel.CommentsAndScreens[0].Screen);
-                var reviewers = _context.Access.Where(r => r.ReviewId == CreatePageModel.CommentsAndScreens[0].Screen.ReviewId).ToList();
-                foreach (var r in reviewers)
+                if (newScreen)
                 {
-                    if (!(r.UserId == currentUserId))
-                    {
-                        var ScreenStatus = new ScreenStatus();
-                        ScreenStatus.ScreenId = CreatePageModel.CommentsAndScreens[0].Screen.ScreenId;
-                        ScreenStatus.UserId = r.UserId;
-                        ScreenStatus.Status = ScreenStatus.PossibleStatus.Undecided;
-                        _context.Add(ScreenStatus);
-                    }
-                }
+                    CreatePageModel.CommentsAndScreens[0].Screen.ScreenState = Screen.States.Open;
 
-                await _context.SaveChangesAsync();
-                return Json( "true" );
+                    var currentUserId = _userManager.GetUserId(HttpContext.User);
+                    CreatePageModel.CommentsAndScreens[0].Screen.OwnerId = currentUserId;
+                    _context.Screens.Add(CreatePageModel.CommentsAndScreens[0].Screen);
+                    var reviewers = _context.Access.Where(r => r.ReviewId == CreatePageModel.CommentsAndScreens[0].Screen.ReviewId).ToList();
+                    foreach (var r in reviewers)
+                    {
+                        if (!(r.UserId == currentUserId))
+                        {
+                            var ScreenStatus = new ScreenStatus();
+                            ScreenStatus.ScreenId = CreatePageModel.CommentsAndScreens[0].Screen.ScreenId;
+                            ScreenStatus.UserId = r.UserId;
+                            ScreenStatus.Status = ScreenStatus.PossibleStatus.Undecided;
+                            _context.Add(ScreenStatus);
+                        }
+                    }
+
+                    await _context.SaveChangesAsync();
+                    return Json("true");
+                }
+                else
+                {
+                    var currentUserId = _userManager.GetUserId(HttpContext.User);
+                    CreatePageModel.CommentsAndScreens[0].Screen.OwnerId = currentUserId;
+
+                    var parent = _context.Screens.Where(s => s.ScreenId == CreatePageModel.ParentId).FirstOrDefault();
+                    while ( parent.ParentId != 0)
+                    {
+                        parent = _context.Screens.Where(s => s.ScreenId == parent.ParentId).FirstOrDefault();
+                    }
+
+                    CreatePageModel.CommentsAndScreens[0].Screen.ParentId = parent.ScreenId;
+                    _context.Screens.Add(CreatePageModel.CommentsAndScreens[0].Screen);
+     
+                    var reviewers = _context.Access.Where(r => r.ReviewId == CreatePageModel.CommentsAndScreens[0].Screen.ReviewId).ToList();
+                    foreach (var r in reviewers)
+                    {
+                        if (!(r.UserId == currentUserId))
+                        {
+                            var ScreenStatus = new ScreenStatus();
+                            ScreenStatus.ScreenId = CreatePageModel.CommentsAndScreens[0].Screen.ScreenId;
+                            ScreenStatus.UserId = r.UserId;
+                            ScreenStatus.Status = ScreenStatus.PossibleStatus.Undecided;
+                            _context.Add(ScreenStatus);
+                        }
+                    }
+
+                    await _context.SaveChangesAsync();
+
+                    return Json("true");
+                }
             }
             return Json( "false" );
         }
@@ -217,11 +251,22 @@ namespace Inspicio.Controllers
             return View(CreatePageModel.CommentsAndScreens);
         }
 
-        public PartialViewResult _CreatePartial()
+        public PartialViewResult _CreatePartial(bool newScreen, int screenId)
         {
-            var CreatePageModel = new CreatePageModel();
-            CreatePageModel.Reviewers = _context.Users.Where(u => u.Id != _userManager.GetUserId(HttpContext.User)).ToList();
-            return PartialView("_CreatePartial", CreatePageModel);
+            var CreatePartialInfo = new CreatePartialInfo();
+            CreatePartialInfo.newScreen = newScreen;
+
+            if (newScreen)
+            {
+                return PartialView("_CreatePartial", CreatePartialInfo);
+            }
+
+            else
+            {
+                var screen = _context.Screens.Where(s => s.ScreenId == screenId).FirstOrDefault();
+                CreatePartialInfo.Screen = screen;
+                return PartialView("_CreatePartial", CreatePartialInfo);
+            }
         }
 
         // GET: Images/View/5
@@ -243,30 +288,41 @@ namespace Inspicio.Controllers
 
             ViewModel.Review = Review;
 
-            // TODO: Does this work correctly, order may be off! :|
-            ViewModel.screenData = (from screen in _context.Screens
-                              where screen.ReviewId == Id
-                              select new ScreenData()
-                              {
-                                  Screen = screen,
-                                  Comments = (from comment in _context.Comments
-                                              where comment.ScreenId == screen.ScreenId
-                                              select comment).ToList(),
-
-                                  Num_Approvals = _context.ScreenStatus.Count(x => (x.ScreenId == screen.ScreenId) && x.Status == ScreenStatus.PossibleStatus.Approved),
-                                  Num_NeedsWorks = _context.ScreenStatus.Count(x => (x.ScreenId == screen.ScreenId) && x.Status == ScreenStatus.PossibleStatus.NeedsWork),
-                                  Num_Rejections = _context.ScreenStatus.Count(x => (x.ScreenId == screen.ScreenId) && x.Status == ScreenStatus.PossibleStatus.Rejected)
-                                   
-        }).FirstOrDefault();
-
             ViewModel.Reviewees = _context.Access.Where(u => u.ReviewId == Id).ToList();
 
-            ViewModel.ScreenIds = _context.Screens.Where( s => s.ReviewId == Id ).Select(s => s.ScreenId).ToList();
+            ViewModel.ScreenIds = _context.Screens.Where( s => s.ReviewId == Id && s.ParentId == 0 ).Select(s => s.ScreenId).ToList();
+
+            for( int i = 0; i < ViewModel.ScreenIds.Count; i++ )
+            {
+                var children = _context.Screens.Where(s => s.ParentId == ViewModel.ScreenIds[i]).ToList();
+                if (children.Count > 0)
+                {
+                    ViewModel.ScreenIds[i] = children[children.Count - 1].ScreenId;
+                }
+            }
+
+            //ViewModel.PreviousVersions = null;
+            ViewModel.screenData = 
+                (from screen in _context.Screens
+                 where screen.ScreenId == ViewModel.ScreenIds[0]
+                 select new ScreenData()
+                {
+                    Screen = screen,
+                    Comments = (from comment in _context.Comments
+                                where comment.ScreenId == screen.ScreenId
+                                select comment).ToList(),
+
+                    Num_Approvals = _context.ScreenStatus.Count(x => (x.ScreenId == screen.ScreenId) && x.Status == ScreenStatus.PossibleStatus.Approved),
+                    Num_NeedsWorks = _context.ScreenStatus.Count(x => (x.ScreenId == screen.ScreenId) && x.Status == ScreenStatus.PossibleStatus.NeedsWork),
+                    Num_Rejections = _context.ScreenStatus.Count(x => (x.ScreenId == screen.ScreenId) && x.Status == ScreenStatus.PossibleStatus.Rejected)
+
+                }).FirstOrDefault();
 
             if (ViewModel.screenData != null)
             {
                 ViewModel.screenData.UserVotes = _context.ScreenStatus.Where(s => s.ScreenId == ViewModel.screenData.Screen.ScreenId).ToList();
             }
+
             ViewModel.FullPage = true;
             return View(ViewModel);
         }
@@ -490,14 +546,24 @@ namespace Inspicio.Controllers
         public async Task<JsonResult> Update_Reviewers([FromBody] UpdatingUser users)
         {
             var accessList = _context.Access.Where(r => r.ReviewId == users.ReviewId).ToList();
-            var userScreenList = _context.ScreenStatus.Where(s => s.ScreenId == users.ScreenId).ToList();
+            var allScreensInReview = _context.Screens.Where(s => s.ReviewId == users.ReviewId).ToList();
+
+            var userScreenList = new List<ScreenStatus>();
+            foreach ( var s in allScreensInReview)
+            {
+                userScreenList.Add(_context.ScreenStatus.Where(x => x.ScreenId == s.ScreenId).FirstOrDefault());
+            }
+
             foreach (var uId in users.ToRemove)
             {
-                var user = accessList.Find(r => r.UserId == uId);
-                _context.Access.Remove(user);
-                
-                var status = userScreenList.Find(r => r.UserId == uId);
-                _context.ScreenStatus.Remove(status);
+                var access = accessList.Find(r => r.UserId == uId && r.ReviewId == users.ReviewId);
+                _context.Access.Remove(access);
+
+                foreach (var s in allScreensInReview)
+                {
+                    var status = userScreenList.Find(r => r.UserId == uId && r.ScreenId == s.ScreenId);
+                    _context.ScreenStatus.RemoveRange(status);
+                }
             }
 
             foreach (var uId in users.ToAdd)
@@ -508,11 +574,14 @@ namespace Inspicio.Controllers
                 ReviewerEntry.ReviewId = users.ReviewId;
                 _context.Access.Add(ReviewerEntry);
 
-                var ScreenStatus = new ScreenStatus();
-                ScreenStatus.ScreenId = users.ScreenId;
-                ScreenStatus.UserId = uId;
-                ScreenStatus.Status = ScreenStatus.PossibleStatus.Undecided;
-                _context.Add(ScreenStatus);
+                foreach (var s in allScreensInReview)
+                {
+                    var ScreenStatus = new ScreenStatus();
+                    ScreenStatus.ScreenId = s.ScreenId;
+                    ScreenStatus.UserId = uId;
+                    ScreenStatus.Status = ScreenStatus.PossibleStatus.Undecided;
+                    _context.Add(ScreenStatus);
+                }
             }
 
             await _context.SaveChangesAsync();

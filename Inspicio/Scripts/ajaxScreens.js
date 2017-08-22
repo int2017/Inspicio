@@ -47,6 +47,8 @@ function screenSelector(reviewid, id) {
                 imageMap.remove();
                 $(".colorpicker").remove();
                 $("#screen-container").html(response);
+                $("version-cover-container").html("");
+
                 disableThumb(false);
                 reloadMarkers();
             }
@@ -55,6 +57,13 @@ function screenSelector(reviewid, id) {
 
 $(document).ready(function () {
     $(".cover-item").each(function () {
+        screenContent($(this).attr("id"));
+        $(this).click(function () {
+            screenSelector($("#ReviewId").val(), $(this).attr("id"));
+        })
+    })
+
+    $(".version-cover-item").each(function () {
         screenContent($(this).attr("id"));
         $(this).click(function () {
             screenSelector($("#ReviewId").val(), $(this).attr("id"));

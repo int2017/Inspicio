@@ -72,11 +72,11 @@
     </div>
 
 
-<div class="row">
-    <button class="lightbox-button btn" id="new-Screen">New Screen</button>
-    <script>
+    <div class="row">
+        <button class="lightbox-button btn" id="new-Screen">New Screen</button>
+        <script>
         $(document).ready(function () {
-            var url = '@Url.Action("_CreatePartial", "Images")'
+            var url = '@Url.Action("_CreatePartial", "Images", new { newScreen = true, screenId = -1 })'
             $('#new-Screen').on('click', function () {
 
                 var mainDiv = document.createElement("div");
@@ -85,26 +85,40 @@
                 $(mainDiv).appendTo(".body-content");
             });
         });
-    </script>
+        </script>
 
-    @if (Model.ScreenIds.Count > 1)
-    {
+        @if (Model.ScreenIds.Count > 1)
+        {
 
-        <div class="col-lg-12 col-md-10">
-            <div class="cover-container" style="border:solid;">
-                @foreach (var id in Model.ScreenIds)
-                {
-                    <div class="cover-item" id="@id" style="cursor: pointer;">
-                        <span id="@id" class="state"></span>
-                    </div>
-                }
+            <div class="col-lg-12 col-md-10">
+                <div class="cover-container" style="border:solid;">
+                    @foreach (var id in Model.ScreenIds)
+                    {
+                        <div class="cover-item" id="@id" style="cursor: pointer;">
+                            <span id="@id" class="state"></span>
+                        </div>
+                    }
+                </div>
             </div>
-        </div>
-    }
+
+            <div class="col-lg-12 col-md-10">
+                <div class="version-cover-container" style="border:solid;">
+                    
+                    @{
+                        @*foreach( var sID in Model.Children )
+                        {
+                            <div class="version-cover-item" id="@sID" style="cursor: pointer;">
+                                <span id="@sID" class="state"></span>
+                            </div>
+                        }*@
+                    }
+                </div>
+            </div>
+                        }
         <div class="reviewers-section">
             <div>
                 @if (Model.Review.CreatorId == User.GetProfileId())
-                { 
+                {
                     <div id="new-reviewees-section">
                         <button title="Select review reviewers." type="button" id="select_reviewers" class="lightbox-button btn" style="width:100%;">Select Reviewers</button>
                     </div>
@@ -118,7 +132,7 @@
                 <div id="reviewees-section">
                 </div>
 
-                
+
 
                 <!-- modal -->
                 <div id="add-reviewees-modal" class="add-reviewees-modal">
@@ -156,7 +170,7 @@
                                                 <div class="col-xs-1 col-md-1 text-center">
                                                     <input id="reviewer-@i" type="checkbox"
                                                            @{ var match = Model.Reviewees.Select(u => u.UserId).ToList().FirstOrDefault(uList => uList.Contains(userList[i].Id)); if (match != null) { @: checked
-                                                                                                                       } } />
+                                                                                                                                                                                                                                             } } />
                                                 </div>
 
                                                 <div class="col-xs-2 col-md-2">
@@ -170,9 +184,9 @@
                                                 </div>
 
                                             </div>
-                                                                   }
-                                                               }
-                                                               }
+        }
+    }
+    }
                             }
                         </div>
 
@@ -220,6 +234,8 @@
             </div>
         </div>
     </div>
+
+
 
     <hr />
 <div id="screen-container">

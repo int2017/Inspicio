@@ -5,6 +5,7 @@ namespace Inspicio.Models.ReviewViewModels
 {
     public class CreatePageModel
     {
+        public int ParentId { get; set; }
 
         public string ReviewTitle { get; set; }
 
