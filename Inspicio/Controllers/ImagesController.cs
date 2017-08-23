@@ -293,25 +293,27 @@ namespace Inspicio.Controllers
             ViewModel.ScreenIds = _context.Screens.Where( s => s.ReviewId == Id && s.ParentId == 0 ).Select(s => s.ScreenId).ToList();
 
             ViewModel.PreviousVersions = new List<int>();
-            for( int i = 0; i < ViewModel.ScreenIds.Count; i++ )
+            for (int i = 0; i < ViewModel.ScreenIds.Count; i++)
             {
                 var children = _context.Screens.Where(s => s.ParentId == ViewModel.ScreenIds[i]).ToList();
                 if (children.Count > 0)
                 {
-                    foreach( var child in children )
+                    foreach (var child in children)
                     {
-                        if (!(children[children.Count - 1] == child))
+                        if (!(children[children.Count - 1] == child) && i == 0 )
                         {
-                            ViewModel.PreviousVersions.Insert( 0, child.ScreenId);
+                            ViewModel.PreviousVersions.Insert(0, child.ScreenId);
                         }
                     }
                     ViewModel.ScreenIds[i] = children[children.Count - 1].ScreenId;
 
-                    ViewModel.PreviousVersions.Add(children[children.Count - 1].ParentId);
+                    if (i == 0)
+                    {
+                        ViewModel.PreviousVersions.Add(children[children.Count - 1].ParentId);
+                    }
                 }
             }
 
-            //ViewModel.PreviousVersions = null;
             ViewModel.screenData = 
                 (from screen in _context.Screens
                  where screen.ScreenId == ViewModel.ScreenIds[0]
@@ -345,9 +347,10 @@ namespace Inspicio.Controllers
             return Json(new { content = screen, title = screenTitle, state = screenState });
         }
 
-        // GET: Images/View/?/screen
 
-        public async Task<IActionResult> _ScreenPartial(int RId, int SId, int CommentVisibiltyState)
+
+        // GET: Images/View/?/screen
+        public async Task<IActionResult> _ScreenPartial(int RId, int SId, int CommentVisibiltyState, bool previousVersion)
         {
             var ViewModel = new ViewModel();
 
@@ -358,33 +361,57 @@ namespace Inspicio.Controllers
             }
 
             ViewModel.Review = Review;
+            ViewModel.ScreenId = SId;
 
-            // TODO: Does this work correctly, order may be off! :|
-            ViewModel.screenData = (from screen in _context.Screens
-                                    where screen.ReviewId == RId
-                                    select new ScreenData()
-                                    {
-                                        Screen = screen,
-                                        Comments = (from comment in _context.Comments
-                                                    where comment.ScreenId == screen.ScreenId
-                                                    select comment).ToList(),
+            ViewModel.screenData = 
+                    (from screen in _context.Screens
+                     where screen.ReviewId == RId
+                     select new ScreenData()
+                     {
+                        Screen = screen,
+                        Comments = (from comment in _context.Comments
+                                    where comment.ScreenId == screen.ScreenId
+                                    select comment).ToList(),
 
-                                        Num_Approvals = _context.ScreenStatus.Count(x => (x.ScreenId == screen.ScreenId) && x.Status == ScreenStatus.PossibleStatus.Approved),
-                                        Num_NeedsWorks = _context.ScreenStatus.Count(x => (x.ScreenId == screen.ScreenId) && x.Status == ScreenStatus.PossibleStatus.NeedsWork),
-                                        Num_Rejections = _context.ScreenStatus.Count(x => (x.ScreenId == screen.ScreenId) && x.Status == ScreenStatus.PossibleStatus.Rejected)
-                                    }).Where(s => s.Screen.ScreenId == SId).Single();
+                        Num_Approvals = _context.ScreenStatus.Count(x => (x.ScreenId == screen.ScreenId) && x.Status == ScreenStatus.PossibleStatus.Approved),
+                        Num_NeedsWorks = _context.ScreenStatus.Count(x => (x.ScreenId == screen.ScreenId) && x.Status == ScreenStatus.PossibleStatus.NeedsWork),
+                        Num_Rejections = _context.ScreenStatus.Count(x => (x.ScreenId == screen.ScreenId) && x.Status == ScreenStatus.PossibleStatus.Rejected)
+                    }).Where(s => s.Screen.ScreenId == SId).Single();
 
             ViewModel.Reviewees = _context.Access.Where(u => u.ReviewId == RId).ToList();
-
             ViewModel.ScreenIds = _context.Screens.Where(s => s.ReviewId == RId).Select(s => s.ScreenId).ToList();
-            ViewModel.screenData.UserVotes = _context.ScreenStatus.Where(s => s.ScreenId == ViewModel.screenData.Screen.ScreenId).ToList();
-            ViewModel.ScreenId = SId;
+
+            if (ViewModel.screenData != null)
+            {
+                ViewModel.screenData.UserVotes = _context.ScreenStatus.Where(s => s.ScreenId == ViewModel.screenData.Screen.ScreenId).ToList();
+            }
+
+            ViewModel.PreviousVersions = new List<int>();
 
             ViewModel.FullPage = (CommentVisibiltyState == 0) ? false : true;
             return PartialView(ViewModel);
         }
 
 
+        public JsonResult GetVersions(int id)
+        {
+            var PreviousVersions = new List<int>();
+            var parentId = _context.Screens.Where(s => s.ScreenId == id).FirstOrDefault().ParentId;
+            var children = _context.Screens.Where(s => s.ParentId == parentId).ToList();
+            if (children.Count > 0)
+            {
+                foreach (var child in children)
+                {
+                    if (!(children[children.Count - 1] == child))
+                    {
+                        PreviousVersions.Insert(0, child.ScreenId);
+                    }
+                }
+                PreviousVersions.Add(children[children.Count - 1].ParentId);
+            }
+
+            return Json(PreviousVersions);
+        }
 
 
         public JsonResult GetRating(int? id)

@@ -64,7 +64,7 @@
 
         //Screen object
         var ScreenList = [];
-        var parentid = -1;
+        var parentid = 0;
         if ($("#isNewScreen").val() == "False") {
             parentid = $("#ScreenId").val();
         }
