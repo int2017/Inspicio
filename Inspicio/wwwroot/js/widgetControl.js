@@ -12,12 +12,14 @@ $(document).on("click", ".reply", function () {
 });
 
 //Controlling the sidebar
-$(document).on("click", "#close-side", function () {
+var upScaling = $(document).on("click", "#close-side", function () {
+    upScaling = new Boolean();
 
     if ($(".flex-sidebar").hasClass("side-hide")) {
-
         $(".view-container").removeClass("wide");
         $(".flex-sidebar").removeClass("side-hide");
+        upScaling = false;
+        
     }
     else {
 
@@ -25,10 +27,12 @@ $(document).on("click", "#close-side", function () {
         $(".sidebar-menu").css("display", "");
         $(".flex-sidebar").addClass("side-hide");
         $(".view-container").addClass("wide");
-    }
+        upScaling = true;
+     }
+    return upScaling;
 });
 
-$(".view-container").bind("transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd", function () {
+var scalingFactor = $(".view-container").bind("transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd", function () {
     if ($(".flex-sidebar").hasClass("side-hide")) {
         $("#comment-section").css("display", "none");
         $("#comment-date").css("display", "none");
@@ -38,9 +42,23 @@ $(".view-container").bind("transitionend webkitTransitionEnd oTransitionEnd MSTr
         $("#comment-date").css("display", "");
     }
 
+    var originalWidth = $("#imageMap").width();
     var imagemapping = $("#imageMap");
     var screencontent = $("#screenContent");
 
     imagemapping.width(screencontent.width());
+    var newWidth = $("#imageMap").width();
     imagemapping.height(screencontent.height());
+
+    scalingFactor = 1;
+
+    // If image will be increased in size (sidebar hidden)
+    if (upScaling == true) {
+        scalingFactor = 1 / (originalWidth / newWidth);
+    }
+
+    else if (upScaling == false) {
+        scalingFactor = originalWidth / newWidth;
+    }
+    return scalingFactor;
 });
