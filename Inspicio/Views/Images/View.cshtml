@@ -31,17 +31,17 @@
     <input id="ReviewId" type="hidden" asp-for="@Model.Review.ReviewId" /> 
 
     <!-- Trigger/Open The Modal -->
-    <h2 id="review-title">
+    <h2 id="toggle_review_info">
         @Model.Review.Title
-    <button type="button" class="btn lightbox-button" aria-label="project-info" id="project-info-btn">
-        <div class="col-md-2">
-            <span id="toggle_review_info" style ="font-size: 40px; padding-left:0px; cursor:pointer;" class="fa fa-info-circle" aria-hidden="true" title="See Review information"></span>
-        </div>
-        <div class="col-md-10" style="padding-top:10px; padding-left: 30px; margin-left: -4px; font-size:14px;">
-            Project Details
-        </div>
-    </button>
-</h2>
+        <button type="button" class="btn lightbox-button" aria-label="project-info" id="project-info-btn">
+            <div class="col-md-2">
+                <span style ="font-size: 40px; padding-left:0px; cursor:pointer;" class="fa fa-info-circle" aria-hidden="true" title="See Review information"></span>
+            </div>
+            <div class="col-md-10" style="padding-top:10px; padding-left: 30px; margin-left: -4px; font-size:14px;">
+                Project Details
+            </div>
+        </button>
+    </h2>
 
     <!-- The Modal -->
     <div id="myModal" class="modal">

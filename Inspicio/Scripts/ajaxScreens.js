@@ -54,7 +54,7 @@ function screenSelector(reviewid, id, previousScreen) {
                     GetVersions(id);
                 }
                 disableThumb(false);
-                reloadMarkers();
+                ajaxComments.reloadMarkers();
             }
         });
 }
