@@ -70,7 +70,7 @@
         }
         var Screen = {
             Title: $("#Quick_Image_Title").val(),
-            Description: $("#Quick_Image_Description_UserInput").val(),
+            Description: convertToHTML($("#Quick_Image_Description_UserInput").val()),
             Content: $("#b64quickUploader").val(),
             ReviewId: $("#ReviewId").val(),
             ParentId: parentid

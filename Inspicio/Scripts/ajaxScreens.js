@@ -41,8 +41,8 @@ function screenSelector(reviewid, id, previousScreen) {
             data: {
                 RId: reviewid,
                 SId: id,
-                CommentVisibiltyState: (CommentsVisibiltyState === true) ? 1 : 0,
-                previousVersion: previousScreen
+                 CommentVisibiltyState: (CommentsVisibiltyState === true) ? 1 : 0,
+                 previousVersion: previousScreen
             },
             success: function (response) {
                 imageMap.remove();
@@ -54,7 +54,7 @@ function screenSelector(reviewid, id, previousScreen) {
                     GetVersions(id);
                 }
                 disableThumb(false);
-                reloadMarkers();
+                ajaxComments.reloadMarkers();
             }
         });
 }
