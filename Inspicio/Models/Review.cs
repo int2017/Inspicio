@@ -9,28 +9,29 @@ namespace Inspicio.Models
 {
     public class Review
     {
-        [Key]
-        [Column(Order = 1)]
-        public string OwnerId { get; set; }
+        public int ReviewId { get; set; }
 
-        [Key]
-        [Column(Order = 2)]
-        public int ImageId { get; set; }
+        public string CreatorId { get; set; }
+
+        [Required]
+        [StringLength(150, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 5)]
+        public string Title { get; set; }
+
+        public string Description { get; set; }
+
+        public string Thumbnail { get; set; }
 
         [EnumDataType(typeof(States))]
-        public States State { get; set; }
+        public States ReviewState { get; set; }
+        public enum States { Open, Closed };
 
-        public enum States { Approved,
-                            NeedsWork,
-                            Rejected,
-                            Undecided};
+        [EnumDataType(typeof(Status))]
+        public Status ReviewStatus { get; set; }
+        public enum Status { Approved, NeedsWork, Rejected, Undecided };
 
-        public bool NeedsWork { get; set; }
+        public ICollection<Access> Access { get; set; }
 
-        [ForeignKey("OwnerId")]
+        [ForeignKey("CreatorId")]
         public ApplicationUser ApplicationUsers { get; set; }
-
-        [ForeignKey("ImageId")]
-        public Image Images { get; set; }
     }
 }

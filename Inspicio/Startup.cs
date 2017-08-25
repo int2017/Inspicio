@@ -57,8 +57,19 @@ namespace Inspicio
                 
             });
 
-            // Add application services.
-            services.AddTransient<IEmailSender, AuthMessageSender>();
+
+            services.Configure<IdentityOptions>(options =>
+            {
+                // Password settings
+                options.Password.RequireDigit = false;
+                options.Password.RequiredLength = 8;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireLowercase = false;
+            });
+
+                // Add application services.
+                services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
 
             // Jack Lloyd [06/07/17]
@@ -92,10 +103,19 @@ namespace Inspicio
             app.UseStaticFiles();
 
             app.UseIdentity();
+            app.Use((ctx, next) =>
+            {
+                if (!string.IsNullOrWhiteSpace(basePath) && string.IsNullOrEmpty(ctx.Request.PathBase.Value))
+                {
+                    throw new Exception();
+                }
+
+                return next();
+            });
 
             //app.Use((ctx, next) =>
             //{
-                
+
             //    return next();
             //});
 

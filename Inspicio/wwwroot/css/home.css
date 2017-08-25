@@ -1,4 +1,43 @@
-﻿.blur {
+﻿#action-choice > div {
+    flex-flow:wrap;
+    margin: 50px 0;
+    padding: 20px;
+    color: rgba(255, 255, 255, 0.65);
+}
+#feature-demo{
+    display:none;
+}
+.select {
+    display: inline-block;
+    width: 60%;
+    cursor: pointer;
+    padding: 20px;
+    border-radius: 3px;
+    border: 1px solid #616161;
+    opacity:0.9;
+    transition:all 0.3s;
+    -webkit-transition:all 0.3s;
+}
+    .select:hover {
+        opacity: 1;
+        border-color: rgba(255, 255, 255, 0.25);
+        width: 80%;
+    }
+#choice-feature {
+    background-color: #406d7a;
+}
+a#choice-begin {
+    background-color: #b7a35c;
+    color: rgba(255, 255, 255, 0.65);
+}
+#choice-begin:hover {
+    outline:none;
+    text-decoration:none;
+}
+#choice-begin h2{
+    margin:0;
+}
+.blur {
     position: absolute;
     height: 100%;
     width: 100%;
@@ -26,9 +65,7 @@
     background-size: cover;
     filter: blur(5px);
 }
-.dropzone{
-    width:100%;
-}
+
 #home-header {
     font-family: 'KG Summer Sunshine Blackout';
     margin: 75px 0px 0px;
@@ -48,17 +85,18 @@
     justify-content: center;
     
 }
-#image-container{
-    padding:0px;
-}
+
 
 .progress {
     height: 30px;
     background-color: rgba(255, 255, 255, 0);
     border: 2px solid rgba(255, 255, 255, 0.26);
 }
+#image-container {
+    padding: 0px;
+}
 #section1 .success {
-    background-color: #417686;
+    background-color: #437888;
 }
 #section2 .success {
     background-color: #3d593f;
@@ -66,10 +104,15 @@
 #section3 .success {
     background-color: #be9f4e;
 }
+#homeImageMap.leaflet-container {
+    overflow: visible;
+}
+#section3{
+    overflow:visible;
+}
 #section3 a:hover .success{
-    
     opacity:1;
-    transition:all 0,3s;
+    transition:all 0.3s;
 }
 #section3 a, #section3 a:hover {
     color: white;
@@ -99,29 +142,6 @@
 .dz-progress{
     display:none;
 }
-.dropzone {
-    padding: 0px;
-    background-color: rgba(33, 33, 33, 0.46);
-}
-/*Panels may be reused for the Create page later on*/
-.panel > [class^='panel']:not(.panel-body) {
-    background-color: rgba(245, 245, 245, 0.35);
-}
-.panel {
-    background-color: rgba(255, 255, 255, 0.53);
-}
-.panel-body {
-    color:black;
-}
-    .panel-body .row-eq-height {
-        margin: 10px auto;
-        padding: 5px;
-        border-top: 1px solid rgb(221, 221, 221);
-    }
-    .panel-body >*:nth-child(even) {
-        background-color: rgba(2, 2, 2, 0.35);
-    }
-
 
     .map-col > div {
         background-color: rgba(214, 214, 214, 0.8);

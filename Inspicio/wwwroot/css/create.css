@@ -1,0 +1,58 @@
+﻿
+input[type='text'], textarea.form-control {
+    border-radius: 2px;
+    border: none;
+    border-bottom: 2px solid #9d9d9d;
+    -webkit-transition: all 0.2s linear;
+    -moz-transition: all 0.2s linear;
+    -o-transition: all 0.2s linear;
+    transition: all 0.2s linear;
+}
+
+    input[type='text']:focus, textarea.form-control:focus {
+        background-color: rgba(0, 0, 0, 0.1);
+        -webkit-transition: all 0.2s linear;
+        -moz-transition: all 0.2s linear;
+        -o-transition: all 0.2s linear;
+        transition: all 0.2s linear;
+        outline: none;
+        border-color: #437888;
+        box-shadow: none;
+    }
+
+.main-edit {
+    display: none;
+}
+ul {
+    margin: 0;
+    list-style: none;
+    float: left;
+}
+.btn.popup-btn{
+    min-width:initial;
+}
+#Image_DescriptionHTML {
+    display: none;
+}
+
+.quick-create-overlay *, .quick-create-overlay {
+    z-index: 50000;
+}
+.quick-create-overlay {
+    display: flex;
+    align-items: center;
+}
+    .quick-create-overlay .image-upload-container {
+        display: block;
+        width: 65%;
+        background-color: #ffffff;
+    }
+.image-upload-container .panel-body {
+    max-height: 500px;
+    overflow-y: auto;
+    padding: 20px;
+}
+.image-upload-container .panel-heading {
+    background-color: rgba(67, 120, 136, 0.68) !important;
+}
+

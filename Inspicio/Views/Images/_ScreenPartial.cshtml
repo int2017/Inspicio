@@ -1,0 +1,317 @@
+﻿
+@model Inspicio.Models.ReviewViewModels.ViewModel
+@using Microsoft.AspNetCore.Identity
+@using Inspicio.Extensions
+
+@inject IJsonHelper Json;
+@inject UserManager<ApplicationUser> UserManager
+
+<script type="text/javascript" src="~/js/ajaxThumbs.js"></script>
+
+<input id="ScreenId" type="hidden" asp-for="@Model.screenData.Screen.ScreenId" />
+
+<div class="image-controls text-center">
+    <div class="container-fluid reviewer-container">
+        <div id="thumb-container">
+
+            <!--If the user has already voted either thumbs up or down,change the fill to black-->
+            <div class="row">
+                <button type="button" id="thumbs-up" class="btn btn-success thumb"> <i class="fa fa-thumbs-o-up " aria-hidden="true"></i> : <span class="rating">@Model.screenData.Num_Approvals</span><br />Approve</button>
+                <button type="button" id="thumbs-middle" class="btn btn-warning thumb"> <i class="fa fa-thumbs-o-up fa-rotate-90" aria-hidden="true"></i> : <span class="rating">@Model.screenData.Num_NeedsWorks</span><br />Request Changes</button>
+                <button type="button" id="thumbs-down" class="btn btn-danger thumb"><i class="fa fa-thumbs-o-down " aria-hidden="true"></i> : <span class="rating">@Model.screenData.Num_Rejections</span><br />Reject</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h3 id="current_screen_title" ><u>@Model.screenData.Screen.Title</u></h3>
+
+<div id="image-description">
+    <div id="description-section">
+        @Html.Raw(Model.screenData.Screen.Description)
+    </div>
+    <hr />
+</div>
+
+<div class="img-wrapper">
+    <div id="img-btn-container">
+        <h4>Screen Controls</h4>
+        <button title="Show/Hide Pins" type="button" class="btn lightbox-button " id="hide-pop" disabled ><i class="glyphicon glyphicon-map-marker"></i><p class="screen_btn">Toggle Pins</p></button>
+        <button title="Fullscreen View" class="lightbox-button btn" href="@Url.Content(Model.screenData.Screen.Content)" data-lity data-lity-desc="@Model.screenData.Screen.Title"><i class="fa fa-expand" aria-hidden="true"></i><p class="screen_btn">Fullscreen</p></button>
+        <button title="Change Background Colour" class="lightbox-button btn" id="color-picker"><i class="fa fa-paint-brush" aria-hidden="true"></i><p class="screen_btn">Border Color</p></button>
+        @{
+            if (Model.Review.CreatorId == User.GetProfileId())
+            {
+                <script>ownerState()</script>
+                <button class="lightbox-button btn" id="screen-state-toggle"><span id="screen-state-icon"></span><p class="screen_btn">Open/Close Screen</p></button>
+                @if (Model.ScreenIds.Count > 1)
+                {
+                    <button title="Delete this screen from the review." type="button" id="delete" class="lightbox-button btn"><i class="fa fa-trash"></i><p class="screen_btn">Delete</p></button>
+                }
+                <button title="TODO!! Upload a new verison of this screen." type="button" id="new_version" class="lightbox-button btn"><i class="fa fa-plus-square"></i><p class="screen_btn">New version</p></button>
+                <script>
+                    $(document).ready(function () {
+                        var url = '@Url.Action("_CreatePartial", "Images")?newScreen=' + false + '&screenId=' + $("#ScreenId").val();
+                        $('#new_version').on('click', function () {
+                        var mainDiv = document.createElement("div");
+                            $(mainDiv).addClass("quick-create-overlay overlay");
+                            $(mainDiv).load(url);
+                            $(mainDiv).appendTo(".body-content");
+                        });
+                    });
+                </script>
+
+                <script>
+                    @if (Model.screenData.Screen.ScreenState == Screen.States.Closed)
+                    {
+                       @:$("#screen-state-toggle").attr("title", "Re-open Screen");
+                       @:$("#screen-state-icon").addClass("fa fa-toggle-on");
+                       @:$("#screen-state-icon").removeClass("fa fa-toggle-off");
+                    }
+                    else
+                    {
+                        @:$("#screen-state-toggle").attr("title", "Close Screen");
+                        @:$("#screen-state-icon").addClass("fa fa-toggle-off");
+                        @:$("#screen-state-icon").removeClass("fa fa-toggle-on");
+                    }
+                </script>
+            }
+        }
+       
+    </div>
+    <div id="image-container">
+        <div id="background-selector"></div>
+        <div id="imageMap"></div>
+
+        <img id="screenContent" src="@Url.Content(Model.screenData.Screen.Content)" style="max-width: 100%;" title="@Model.screenData.Screen.Title" alt="@Model.screenData.Screen.Title" />
+    </div>
+</div>
+
+
+<div class="flex-sidebar  
+     
+     @{ 
+         if (Model.FullPage)
+         {
+             @: side-hide"
+         }
+         else
+         {
+             @: N\A"
+         }
+     } >
+
+    <div class="sidebar-menu">
+        <select id="comment-date" class="form-control" style="display:none;">
+            <option value="" disabled selected>Filter by Date</option>
+            <option value="all">All Dates</option>
+        </select>
+        <ul>
+            <li id="close-side"><i class="glyphicon glyphicon-menu-left"></i></li>
+        </ul>
+
+    </div>
+    <div id="comment-section"  style=" @{ 
+        if (Model.FullPage)
+        {
+             @:display:none"
+         }
+        else
+        {
+             @:display:block"
+         }
+     }>
+
+        <!-- comments go here -->
+        <h3 class="text-center">Comment section</h3>
+        <div class="comment-container">
+            @{
+
+                String previousDate = ("Jan 1, 0000");
+                var dateClass = "date-comment";
+                foreach (var c in Model.screenData.Comments)
+                {
+                    String currentDate = @c.Timestamp.ToString("MMM d");
+
+                    if (c.ParentId == null)
+                    {
+                        @if (currentDate != previousDate)
+                    {
+                            <div class="date-header">
+                                @if (currentDate == DateTime.Today.ToString("MMM d"))
+                            {
+                                    <p data-value="Today">Today </p>
+                                    dateClass = "today";
+
+                                }
+                                else if (currentDate == DateTime.Today.AddDays(-1).ToString("MMM d"))
+                                {
+                                    <p data-value="Yesterday">Yesterday </p>
+                                    dateClass = "yesterday";
+                                }
+                                else
+                                {
+                                    <p data-value="@c.Timestamp.ToString("MMM d").Replace(" ","-")"> @c.Timestamp.ToString("MMM d")</p>
+                                    dateClass = c.Timestamp.ToString("MMM d");
+                                }
+                            </div>
+                        }
+
+                        <div class="comment @dateClass.Replace(" ","-").ToLower()">
+                            <div class="row ">
+                                <div class="comment-user row-eq-height">
+                                    <div class="col-md-4 col-sm-4 col-xs-4">
+                                        @{
+                                            var UserName = (await UserManager.FindByIdAsync(c.OwnerId)).ProfileName;
+                                        }
+                                        <h5 class="username">@UserName</h5>
+                                    </div>
+                                    <div class="col-md-4 col-sm-4 col-xs-4">
+                                        <p>@c.Timestamp.ToString("h:mm tt")</p>
+                                    </div>
+                                    <div class="col-md-4 text-right col-sm-4 col-xs-4">
+                                        @if (c.Lat != 0 && c.Lng != 0)
+                                        {
+                                            <p><a id="loc-@c.CommentId" class="open-pin" data-location="@c.Lat  @c.Lng">Open pin</a></p>
+                                        }
+                                        <p><a class="reply" data-target="@c.CommentId">Reply</a></p>
+                                    </div>
+                                </div>
+                                <div class="row-eq-height comment-msg">
+                                    <div class="col-xs-12 col-sm-12 col-md-12">
+                                        <p>@c.Message</p>
+                                        @if (c.CommentUrgency == Comment.Urgency.Urgent)
+                                        {
+                                            <div class='urgent text-right'>
+                                                <span title="Urgent!" class="glyphicon glyphicon-star" aria-hidden="true"></span>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="replied-section" id="replies-@c.CommentId">
+                                <div class="comment-container">
+                                    @foreach (var x in Model.screenData.Comments)
+                                    {
+                                        if (x.ParentId != null && c.CommentId.ToString().Equals(x.ParentId))
+                                        {
+                                            <div class="comment">
+                                                <div class="row">
+                                                    <div class='row-eq-height comment-user'>
+                                                        <div class='col-md-6  col-sm-6 col-xs-6'>
+                                                            @{
+                                                                var ReplyUserName = (await UserManager.FindByIdAsync(x.OwnerId)).ProfileName;
+                                                            }
+                                                            <h5 class='username'> @ReplyUserName</h5>
+                                                        </div>
+                                                        <div class="col-md-6  col-sm-6 col-xs-6">
+                                                            @if (((DateTime.Now.Date - x.Timestamp.Date).TotalDays) <= 0)
+                                                            {
+                                                                <p>Today</p>
+
+                                                            }
+                                                            else if (((DateTime.Now.Date - x.Timestamp.Date).TotalDays) <= 1)
+                                                            {
+                                                                <p>Yesterday</p>
+
+                                                            }
+                                                            else
+                                                            {
+                                                                <p> @((DateTime.Now.Date - x.Timestamp.Date).TotalDays) days ago</p>
+
+                                                            }
+                                                            <p>@x.Timestamp.ToString("h:mm tt")</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class='row-eq-height comment-msg'>
+                                                        <div class='col-xs-8 col-sm-8 col-md-8'>
+                                                            <p> @x.Message</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                    }
+                                }
+                                </div>
+                                <div class="row-eq-height reply-comment" id="replycomm-@c.CommentId">
+                                    <div class="col-xs-12 col-sm-12 col-md-12 input-group">
+                                        <textarea class="form-control reply-textarea" id="text-@c.CommentId" rows="5" placeholder="Reply..."></textarea>
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-success reply-button" type="submit" id="button-@c.CommentId" data-parent="@c.CommentId">
+                                                <i class="glyphicon glyphicon-share-alt"></i>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                                            }
+
+                                            previousDate = currentDate;
+                                        }
+            }
+        </div>
+        <div class="row-eq-height" id="new-comment">
+            <div class="col-xs-12 col-sm-12 col-md-12 input-group">
+                <textarea class="form-control" id="comment-textarea" rows="5" placeholder="Comment..."></textarea>
+                <div class="comment-status">
+                    <label><input type="checkbox" id="urgent-main" value="">Urgent</label>
+                </div>
+                <span class="input-group-btn">
+                    <button class="btn btn-success" type="submit" id="submit-comment">
+                        <i class="glyphicon glyphicon-share-alt"></i>
+                    </button>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<br />
+
+
+<script type="text/javascript" src="~/js/background-selector.js"></script>
+<script type="text/javascript" src="~/js/ajaxOpenSlider.js"></script>
+
+<script>
+
+    $(document).ready(function () {
+        @{ 
+            for (var u = 0; u < Model.Reviewees.Count; u++)
+            {
+                if (Model.Reviewees[u].UserId == Model.Review.CreatorId)
+                {
+                    continue;
+                }
+
+                var user = await UserManager.FindByIdAsync(Model.Reviewees[u].UserId);
+                var current = Model.screenData.UserVotes.Where(s => s.ScreenId == Model.screenData.Screen.ScreenId && s.UserId == user.Id).FirstOrDefault();
+                var ratingClass = "";
+                switch (current.Status)
+                {
+                    case ScreenStatus.PossibleStatus.Approved:
+                        ratingClass = "fa fa-thumbs-o-up";
+                        break;
+                    case ScreenStatus.PossibleStatus.NeedsWork:
+                        ratingClass = "fa fa-thumbs-o-up fa-rotate-90";
+                        break;
+                    case ScreenStatus.PossibleStatus.Rejected:
+                        ratingClass = "fa fa-thumbs-o-down";
+                        break;
+                    case ScreenStatus.PossibleStatus.Undecided:
+                        ratingClass = "fa fa-question-circle-o";
+                        break;
+                    default:
+                        ratingClass = "fa fa-question-circle-o";
+                        break;
+                }
+
+                @:$("#reviewers-section-rating"+@u).className = "";
+                @:$("#reviewers-section-rating"+@u).addClass('@ratingClass');
+            }
+        }
+    });
+</script>

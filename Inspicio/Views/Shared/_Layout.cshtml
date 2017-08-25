@@ -20,10 +20,6 @@
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
     </environment>
     @Html.Raw(JavaScriptSnippet.FullScript)
-
-    
-  
-
     <script src="~/lib/jquery/dist/jquery.js"></script>
     <script type="text/javascript" src="~/js/dropzone.js"></script>
     <link rel="stylesheet" href="~/css/font-awesome.min.css">
@@ -33,9 +29,32 @@
     <script src="https://unpkg.com/leaflet@1.1.0/dist/leaflet.js"
             integrity="sha512-mNqn2Wg7tSToJhvHcqfzLMU6J4mkOImSPTxVZAdo+lcPlk+GhZmYgACEe0x35K7YzW1zJ7XyJV/TT1MrdXvMcA=="
             crossorigin=""></script>
+    <script src="~/js/leaflet.rrose-src.js"></script>
+    <link rel="stylesheet" href="~/css/leaflet.rrose.css" />
     <script src="~/js/lity.js"></script>
 </head>
 <body>
+
+    <script>
+        /*
+         * The following is intentional, to force Chrome to run 
+         * this JS snippet after a history invoked back/forward navigation.
+         * Fixing the issue with Chrome using the BFCache, and displaying out-of-date content.
+         * https://stackoverflow.com/questions/9071838/force-reload-refresh-when-pressing-the-back-button
+         */
+        if (window.history.state != null && window.history.state.hasOwnProperty('historic')) {
+            if (window.history.state.historic == true) {
+                document.body.style.display = 'none';
+                window.history.replaceState({ historic: false }, '');
+                window.location.reload();
+            } else {
+                window.history.replaceState({ historic: true }, '');
+            }
+        } else {
+            window.history.replaceState({ historic: true }, '');
+        }
+    </script>
+
     <nav class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
@@ -78,11 +97,13 @@
                 crossorigin="anonymous"
                 integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa">
         </script>
+        
         <script src="~/js/site.min.js" asp-append-version="true"></script>
+        
     </environment>
 
     @RenderSection("Scripts", required: false)    
 
-
+    <script type="text/javascript" src="~/js/clearValidation.js"></script>
 </body>
 </html>

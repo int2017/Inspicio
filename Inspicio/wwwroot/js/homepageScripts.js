@@ -1,128 +1,46 @@
 ﻿var section = 2;
+$(document).on("click", "#choice-feature", function () {
+    $("#action-choice").fadeOut(300);
+    $("#feature-demo").delay(300).fadeIn(300);
 
+})
 function switchSection() {
-    var height = $("#homeImg").height();
-    $("#homeImg").height(height);
+
     $("#section" + (section - 1) + " .success").slideDown(500);
     setTimeout(function () {
         $("#progr" + (section - 1)).css("display", "flex");
         $("#progr" + (section - 1)).width("33%");
-        $("[id^='section'").fadeOut(500);
-        
-        $("#section" + section).delay(600).css("display", "flex").hide().fadeIn(400);
+        $("[id^='section'").fadeOut(400);
+
+        $("#section" + section).delay(400).css("display", "flex").hide().fadeIn(400);
         section++;
     }, 1500)
-    
+
+
 }
- 
+
 $(".switch-section").click(function () {
     if ($("#chatbot-check").is(":checked")) {
         switchSection();
-    }
-    else alert("Select people for your review first!")
+        enablePins();
+
+    } else alert("Select people for your review first!")
 })
 //Pins
-
-    var commentEnum = {
-        Default: 0,
-        Urgent: 1
-    };
-    function commentClick(uniqID) {
-        var urgent = $(".urgency-popup").is(":checked");
-        var urgency;
-        if (urgent) {
-            urgency = commentEnum.Urgent;
-        }
-        else urgency = commentEnum.Default;
-        createCommentRowHome($(".popup-textarea").val(), uniqID, urgency);
-
-    }  
-var imageMap = L.map("homeImageMap", {
-    crs: L.CRS.Simple,
-    zoomControl: false,
-    unitsPer1000px: 1000
-});
-//Creates custom pin
-var customPin = L.icon({
-    iconUrl: "../../images/pin.svg",
-    shadowUrl: "../../images/pinshadow.svg",
-    iconSize: [38, 58], // size of the icon
-    shadowSize: [80, 120], // size of the shadow
-    iconAnchor: [15, 58], // point of the icon which will correspond to marker's location
-    shadowAnchor: [11, 62],  // the same for the shadow
-    popupAnchor: [3, -45]
-});
-
-
-$(window).resize(function () {
-    setTimeout(
-        function () {
-            imageMap.invalidateSize();
-        }, 1000);
-
-});
-
-var markerGroup = L.featureGroup().addTo(imageMap);
-//Setting the bounds
-var height = $("#image-container img").height();
-var width = $("#image-container img").width();
-var bound = [[1, 1], [height, width]];
-
-//Disabling all the controls for the map
-imageMap.fitBounds(bound);
-imageMap.dragging.disable();
-imageMap.touchZoom.disable();
-imageMap.doubleClickZoom.disable();
-imageMap.scrollWheelZoom.disable();
-imageMap.boxZoom.disable();
-imageMap.keyboard.disable();
-imageMap.setView([0, 0]);
-if (imageMap.tap) imageMap.tap.disable();
-
-imageMap.on('click', function (e) {
-    mapOnClick(e);
-});
-
-//Button control
-$(".leaflet-map-pane").attr("id", "map-pane");
-
-function mapOnClick(e) {
-    createMarker(e.latlng);
+function commentClick(uniqID) {
+    var urgent = $(".urgency-popup").is(":checked");
+    var urgency;
+    if (urgent) {
+        urgency = commentEnum.Urgent;
+    } else urgency = commentEnum.Default;
+    createCommentRowHome($(".popup-textarea").val(), uniqID, urgency);
 }
-//Creating individual markers
+var commentEnum = {
+    Default: 0,
+    Urgent: 1
+};
 var markersArray = new Array();
 var popupsArray = new Array();
-var locations = [[]];
-function createMarker(latlng) {
-    var uniqID = Math.round(new Date().getTime() + (Math.random() * 100));
-    var marker = new L.marker(latlng, { icon: customPin }).addTo(markerGroup);
-    var popup = new L.Popup();
-    //Removes marker if popup is empty
-    marker.on('popupclose', function (e) {
-        if (($("#popup" + uniqID).html().indexOf("popup-comment")) === -1) {
-            imageMap.removeLayer(marker);
-        }
-    });
-    popup.options.autoPan = false;
-    popup.options.closeOnClick = true;
-    //Focusing the textarea of the popup
-    marker.on("click", function () {
-        setTimeout(
-            function () {
-                $("#popuptext" + uniqID).focus();
-            }, 50);
-
-    });
-    popup.myData = { id: uniqID };
-    popupsArray.push(popup);
-    markersArray.push(marker);
-    locations.push(latlng);
-    marker.bindPopup(popup);
-    marker.myData = { id: uniqID };
-    popup.setContent(createBtn(uniqID));
-    marker.openPopup();
-    $(".popup-textarea").focus();
-}
 
 //Creates initial text
 function createBtn(uniqID) {
@@ -134,7 +52,7 @@ function createBtn(uniqID) {
 }
 
 //Creating a new comment row
-function createCommentRowHome(comment, uniqID,  urgency) {
+function createCommentRowHome(comment, uniqID, urgency) {
     if ($("#progr3").width() === 0) {
         $("#section" + (section - 1) + " .success").slideDown(500);
         $("#progr3").css("display", "flex").width("34%");
@@ -142,12 +60,11 @@ function createCommentRowHome(comment, uniqID,  urgency) {
     var urgencyEl; //Urgency element
     if (urgency === 1) {
         urgencyEl = "<div class='urgent'><span class='glyphicon glyphicon-star' aria-hidden='true'></span></div>";
-    }
-    else urgencyEl = "";
+    } else urgencyEl = "";
     var row = "<div class='row-eq-height popup-comment'> <div class='col-xs-4 col-sm-4 col-md-4'><p> You </p></div><div class='col-xs-8 col-sm-8 col-md-8'>" + comment + "</div>" + urgencyEl + "</div>";
     popupX = popupsArray[popupsArray.findIndex(x => parseInt(x.myData.id) === parseInt(uniqID))];
     popupX.setContent(appendRow(row, uniqID, popupX.getContent()));
-   
+
 
 }
 
@@ -188,31 +105,167 @@ function replyComment(area) {
     var uniqID = $(area).attr("id").slice(9);
     createCommentRowHome($(".popup-textarea").val(), uniqID);
     $(area).val("");
-            
+
 }
 
-//Live listeners
-$(document).ready(function () {
-    $(document).on("keypress", ".reply-textarea", function (e) {
-        if (e.which === 13) {
-            var parent = $(this).attr("id").slice(5);
-            $("#button-" + parent).click();
-            // prevent duplicate submission
-            return false;
+function enablePins() {
+    var imageMap = L.map("homeImageMap", {
+        crs: L.CRS.Simple,
+        zoomControl: false,
+        unitsPer1000px: 1000
+    });
+
+    //Creates custom pin
+    var customPin = L.icon({
+        iconUrl: "../../images/pinNormal.svg",
+        shadowUrl: "../../images/pinshadow.svg",
+        iconSize: [38, 58], // size of the icon
+        shadowSize: [80, 120], // size of the shadow
+        iconAnchor: [15, 58], // point of the icon which will correspond to marker's location
+        shadowAnchor: [11, 62], // the same for the shadow
+        popupAnchor: [3, -45]
+    });
+
+
+    $(window).resize(function () {
+        setTimeout(
+            function () {
+                imageMap.invalidateSize();
+            }, 1000);
+
+    });
+    //Disabling all the controls for the map
+    var markerGroup = L.featureGroup().addTo(imageMap);
+    imageMap.dragging.disable();
+    imageMap.touchZoom.disable();
+    imageMap.doubleClickZoom.disable();
+    imageMap.scrollWheelZoom.disable();
+    imageMap.boxZoom.disable();
+    imageMap.keyboard.disable();
+    imageMap.setView([0, 0]);
+    //Setting the bounds
+    setTimeout(function () {
+        var height = $("#image-container img").height();
+        var width = $("#image-container img").width();
+        var bound = [
+            [0, 0],
+            [height, width]
+        ];
+        imageMap.fitBounds(bound);
+        activateChatBot();
+    }, 3000)
+
+    if (imageMap.tap) imageMap.tap.disable();
+
+    imageMap.on('click', function (e) {
+
+        mapOnClick(e);
+    });
+
+    //Button control
+    $(".leaflet-map-pane").attr("id", "map-pane");
+
+    function mapOnClick(e) {
+        alert(e.latlng);
+        createMarker(e.latlng);
+    }
+    //Creating individual markers
+
+    var locations = [
+        []
+    ];
+
+    function createMarker(latlng) {
+        var uniqID = Math.round(new Date().getTime() + (Math.random() * 100));
+        var marker = new L.marker(latlng, {
+            icon: customPin
+        }).addTo(markerGroup);
+        var popup = new L.Rrose();
+        //Removes marker if popup is empty
+        marker.on('popupclose', function (e) {
+            if (($("#popup" + uniqID).html().indexOf("popup-comment")) === -1) {
+                imageMap.removeLayer(marker);
+            }
+        });
+        popup.options.autoPan = false;
+        popup.options.closeOnClick = true;
+        //Focusing the textarea of the popup
+        marker.on("click", function () {
+            setTimeout(
+                function () {
+                    $("#popuptext" + uniqID).focus();
+                }, 50);
+
+        });
+        popup.myData = {
+            id: uniqID
+        };
+        popupsArray.push(popup);
+        markersArray.push(marker);
+        locations.push(latlng);
+        marker.bindPopup(popup);
+        marker.myData = {
+            id: uniqID
+        };
+        popup.setContent(createBtn(uniqID));
+        marker.openPopup();
+        $(".popup-textarea").focus();
+        return uniqID;
+    }
+
+
+
+    //Live listeners
+    $(document).ready(function () {
+        $(document).on("keypress", ".reply-textarea", function (e) {
+            if (e.which === 13) {
+                var parent = $(this).attr("id").slice(5);
+                $("#button-" + parent).click();
+                // prevent duplicate submission
+                return false;
+            }
+        });
+        $(document).on("click", ".reply-button", function () {
+            var area;
+            var parent = $(this).data("parent");
+            area = $(".popup-textarea");
+            replyComment(area);
+
+        });
+    });
+
+
+
+
+    //Chatbot
+    function activateChatBot() {
+        setTimeout(function () {
+            var width = $("#homeImageMap").width();
+            var height = $("#homeImageMap").height();
+            var loc = new L.latLng(Math.random(),Math.random());
+            var uniqID = createMarker(loc);
+            
+            setTimeout(function () {
+                createCommentRowHome(lineGenerator("first"), uniqID, commentEnum.Default);
+            },1000)
+            
+        }, 1000);
+    }
+    function lineGenerator(whatResponse) {
+        var firstLines = [
+            "These are great colors!",
+            "I like your taste :)",
+            "Did you actually create this?",
+            "When will this be functional?",
+            "To be honest, this is pretty horrible. Why not add some life to the interface?",
+            "This is why we are about to become bankrupt.",
+            "I like this more than your last design!",
+            "I hope you actually get this finished by next week"
+        ];
+        if (whatResponse === "first") {
+            var rnd = Math.random() * firstLines.length;
+            return firstLines[parseInt(rnd, 10)];
         }
-    });
-    $(document).on("click", ".reply-button", function () {
-        var area;
-        var parent = $(this).data("parent");
-        area = $(".popup-textarea");
-        replyComment(area);
-
-    });
-});
-
-
-
-
-
-
-
+        
+    }
+}

@@ -1,0 +1,60 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@inject UserManager<ApplicationUser> UserManager
+@model Inspicio.Models.Comment
+
+<div class="row">
+    <div class="comment-user row-eq-height">
+        <div class="col-md-4 col-sm-4 col-xs-4">
+            @{
+                var UserName = (await UserManager.FindByIdAsync(@Model.OwnerId)).ProfileName;
+            }
+            <h5 class="username">@UserName</h5>
+        </div>
+        <div class="col-md-4 col-sm-4 col-xs-4">
+            <p>@Model.Timestamp.ToString("h:mm tt")</p>
+        </div>
+        <div class="col-md-4 col-sm-4 col-xs-4 text-right">
+            @if (Model.Lat != 0 && Model.Lng != 0 && Model.ParentId==null)
+            {
+                <p><a id="loc-@Model.CommentId" class="open-pin" data-location="@Model.Lat  @Model.Lng">Open pin</a></p>
+            }
+            @if (Model.ParentId == null)
+            {
+            <p><a class="reply" data-target="@Model.CommentId">Reply</a></p>
+            }
+        </div>
+    </div>
+    <div class="row-eq-height comment-msg">
+        <div class="col-xs-12 col-sm-12 col-md-12">
+            <p>@Model.Message</p>
+            @if (Model.CommentUrgency == Comment.Urgency.Urgent)
+            {
+                <div class='urgent text-right'>
+                    <span title="Urgent!" class="glyphicon glyphicon-star" aria-hidden="true"></span>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+@if (Model.ParentId == null)
+{
+    <div class="replied-section" id="replies-@Model.CommentId">
+        <div class="comment-container">
+
+        </div>
+        <div class="row-eq-height reply-comment" id="replycomm-@Model.CommentId">
+            <div class="col-xs-12 col-sm-12 col-md-12 input-group">
+                <textarea class="form-control reply-textarea" id="text-@Model.CommentId" rows="5" placeholder="Reply..."></textarea>
+                <span class="input-group-btn">
+                    <button class="btn btn-success reply-button" type="submit" id="button-@Model.CommentId" data-parent="@Model.CommentId">
+                        <i class="glyphicon glyphicon-share-alt"></i>
+                    </button>
+                </span>
+            </div>
+        </div>
+    </div>
+}
