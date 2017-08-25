@@ -156,14 +156,13 @@ h4, .h4 {
     width: 270px;
     cursor: pointer;
     text-align: center;
-    padding: 5px;
-    color:white;
-    border:3px solid;
-    border-color: white;
+    border: 1px solid black;
+    border-bottom: none;
 }
 
 #loginsection {
-    background-color: black;
+    color: black;
+    background-color: white;
 }
 
 #registersection{
@@ -216,13 +215,30 @@ div.colorpicker {
     padding: 5px 0;
 }
 
+
+
+#registersection:hover {
+    background-color: grey;
+}
+
+
+
+#registersection {
+    color: lightgrey;
+    background-color: #404040;
+    padding: 5px;
+}
+
 #loginformmain {
+    border: 1px solid black;
     display: block;
-    align-self: center;
 }
 
 #registerform {
     display: none;
+    background-color: #404040;
+    color: lightgrey;
+    border: 1px solid black;
 }
 
 #reg-btn, #login-btn {
