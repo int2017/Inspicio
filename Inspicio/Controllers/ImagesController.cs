@@ -120,11 +120,11 @@ namespace Inspicio.Controllers
                     CreatePageModel.CommentsAndScreens[0].Screen.OwnerId = currentUserId;
 
                     var parent = _context.Screens.Where(s => s.ScreenId == CreatePageModel.ParentId).FirstOrDefault();
-                    while ( parent.ParentId != 0)
-                    {
+
+                    while (parent.ParentId != 0)
+                    {              
                         parent = _context.Screens.Where(s => s.ScreenId == parent.ParentId).FirstOrDefault();
                     }
-
                     CreatePageModel.CommentsAndScreens[0].Screen.ParentId = parent.ScreenId;
                     _context.Screens.Add(CreatePageModel.CommentsAndScreens[0].Screen);
      
@@ -397,7 +397,13 @@ namespace Inspicio.Controllers
         {
             var PreviousVersions = new List<int>();
             var parentId = _context.Screens.Where(s => s.ScreenId == id).FirstOrDefault().ParentId;
-            var children = _context.Screens.Where(s => s.ParentId == parentId).ToList();
+
+            var children = new List<Screen>();
+            if (parentId != 0)
+            {
+                children = _context.Screens.Where(s => s.ParentId == parentId).ToList();
+            }
+
             if (children.Count > 0)
             {
                 foreach (var child in children)

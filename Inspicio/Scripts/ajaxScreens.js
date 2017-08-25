@@ -70,7 +70,6 @@ function GetVersions(id) {
         },
         success: function (response) {
 
-            alert(response);
             for (var i = 0; i < response.length; i++){
 
                 $(".version-cover-container").html($(".version-cover-container").html() +
@@ -81,7 +80,21 @@ function GetVersions(id) {
 
                 screenContent(response[i]);
                 $(".version-cover-item").click(function () {
+                    $(".version-cover-item").css({
+                        "border": "none",
+                        "box-shadow": "none",
+                        "height": "50px",
+                        "width": "50px"
+                    });
                     screenSelector($("#ReviewId").val(), $(this).attr("id"), true);
+                    $(this).css({
+                        "border-color": "white",
+                        "border-width": "4px",
+                        "border-style": "solid",
+                        "box-shadow": "2px 2px 4px #676767",
+                        "height": "60px",
+                        "width": "60px"
+                    });
                 });
             }
         }
@@ -89,17 +102,61 @@ function GetVersions(id) {
 }
 
 $(document).ready(function () {
+    $(".cover-item:first-child").css({
+        "border-color": "white",
+        "border-width": "6px",
+        "border-style": "solid",
+        "box-shadow": "2px 2px 4px #676767",
+        "height": "110px",
+        "width": "110px"
+    })
+
+    $(".version-cover-item:first-child").css({
+        "border": "none",
+        "box-shadow": "none",
+        "height": "50px",
+        "width": "50px"
+    })
+
     $(".cover-item").each(function () {
         screenContent($(this).attr("id"));
         $(this).click(function () {
+            $(".cover-item").css({
+                "border": "none",
+                "box-shadow": "none",
+                "height": "100px",
+                "width": "100px"
+            });
             screenSelector($("#ReviewId").val(), $(this).attr("id"), false);
+            $(this).css({
+                "border-color": "white",
+                "border-width": "6px",
+                "border-style": "solid",
+                "box-shadow": "2px 2px 4px #676767",
+                "height": "110px",
+                "width": "110px"
+            });
         })
     })
 
     $(".version-cover-item").each(function () {
         screenContent($(this).attr("id"));
         $(this).click(function () {
+            $(".version-cover-item").css({
+                "border": "none",
+                "box-shadow": "none",
+                "height": "50px",
+                "width" : "50px"
+            });
             screenSelector($("#ReviewId").val(), $(this).attr("id"), true);
+            $(this).css({
+                "border-color": "white",
+                "border-width": "4px",
+                "border-style": "solid",
+                "box-shadow": "2px 2px 4px #676767",
+                "height": "60px",
+                "width": "60px"
+            });
         })
     })
 })
