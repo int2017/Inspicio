@@ -138,9 +138,26 @@ div.colorpicker {
 
 .cover-container {
     width: 100%;
+    border: none;
     white-space: nowrap;
     overflow-x: auto;
     overflow-y: hidden;
+}
+
+.version-cover-item {
+    position: relative;
+    display: inline-flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    margin: 8px 8px;
+    /*box-shadow: 2px 2px 4px black;*/
+    border-radius: 6px;
+    width: 50px;
+    height: 50px;
+    vertical-align: bottom;
+    background-position: top left;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 .cover-item {
@@ -149,8 +166,8 @@ div.colorpicker {
     justify-content: flex-end;
     align-items: flex-end;
     margin: 8px 8px;
-    box-shadow: 2px 2px 4px #bbb;
-    border-top-right-radius: 4px;
+    /*box-shadow: 2px 2px 4px black;*/
+    border-radius: 10px;
     width: 100px;
     height: 100px;
     vertical-align: bottom;

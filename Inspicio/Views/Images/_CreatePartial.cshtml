@@ -1,0 +1,74 @@
+﻿
+@model Inspicio.Models.ReviewViewModels.CreatePartialInfo
+
+<div id="new-screen-upload" class="panel image-upload-container">
+   
+    <script type="text/javascript" src="https://cdn.rawgit.com/showdownjs/showdown/1.7.1/dist/showdown.min.js"></script>
+    <script type="text/javascript" src="~/js/markdownConverter.js"></script>
+    <script type="text/javascript" src="~/js/quickCreate.js"></script>
+    <link rel="stylesheet" href="~/css/create.css" />
+
+    
+    <div class="panel-heading">
+        <h3>Add new screens</h3>
+    </div>
+
+    <div class="panel-body">
+       
+        <div class="form-group">
+
+            <!-- Review Title -->
+            <input type="text" id="Quick_Image_Title" class="form-control" placeholder="Screen Title">
+            <script>
+            @if (!Model.newScreen)
+            {
+                @:$("#Quick_Image_Title").val("@Model.Screen.Title");
+            }
+            </script>
+            <span class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+
+            <!-- Review Description -->
+            <textarea class="form-control" id="Quick_Image_Description_UserInput" rows="4" placeholder="Screen Description &lt;markdown supported&gt;"></textarea>
+            <span class="text-danger"></span>
+            <span class="text-danger"></span>
+
+            <textarea id="Image_DescriptionHTML"></textarea>
+        </div>
+
+        <div class="form-group">
+
+            <!--input below will be used to temp store the base64 encoding of the image-->
+            <input id="b64quickUploader" type="hidden" />
+
+            <!-- Dropzone Image Upload-->
+            <div id="dropzoneDiv">
+                <div class="dropzone needsclick dz-clickable" id="quickUploader">
+                    <div class="dz-message needsclick">
+                        <i class="fa fa-upload fa-5x" aria-hidden="true"></i>
+                        <h4>Drag and drop your screens here or click to upload</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center">
+            <button type="button" class="btn btn-success" id="edit-img">Save changes</button>
+        </div>
+    </div>
+    
+    <input id="isNewScreen" type="hidden" />
+    <script>
+        $("#isNewScreen").val( "@Model.newScreen" );
+    </script>
+
+    <div class="panel-footer">
+        <div class="text-center">
+            <!-- Submit Button -->
+            <button type="button" id="create-quick-review" class="btn btn-success">Create new screen</button>
+        </div>
+    </div>
+
+</div>

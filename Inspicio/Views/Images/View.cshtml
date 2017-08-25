@@ -10,6 +10,9 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/2.5.1/css/bootstrap-colorpicker.min.css" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/2.5.1/js/bootstrap-colorpicker.min.js"></script>
 <script type="text/javascript" src="~/js/background-selector.js"></script>
+
+<input id="is-parital-view-active" style="display:none" value="no" />
+
 <div class="view-container
      
      @{ 
@@ -25,7 +28,7 @@
      
     style="padding-top:0px">
 
-    <input id="ReviewId" type="hidden" asp-for="@Model.Review.ReviewId" />
+    <input id="ReviewId" type="hidden" asp-for="@Model.Review.ReviewId" /> 
 
     <!-- Trigger/Open The Modal -->
     <h2 id="review-title">
@@ -59,18 +62,18 @@
                 {
                     <button class="lightbox-button btn" id="review-state-toggle"><span id="review-state-icon"></span></button>
                     <script>
-                            @if (Model.Review.ReviewState == Review.States.Closed)
-                            {
-                               @:$("#review-state-toggle").attr("title", "Re-open Review");
-                               @:$("#review-state-icon").addClass("fa fa-toggle-on");
-                               @:$("#review-state-icon").removeClass("fa fa-toggle-off");
-                            }
-                            else
-                            {
-                                @:$("#review-state-toggle").attr("title", "Close Review");
-                                @:$("#review-state-icon").addClass("fa fa-toggle-off");
-                                @:$("#review-state-icon").removeClass("fa fa-toggle-on");
-                            }
+                        @if (Model.Review.ReviewState == Review.States.Closed)
+                        {
+                            @:$("#review-state-toggle").attr("title", "Re-open Review");
+                            @:$("#review-state-icon").addClass("fa fa-toggle-on");
+                            @:$("#review-state-icon").removeClass("fa fa-toggle-off");
+                        }
+                        else
+                        {
+                            @:$("#review-state-toggle").attr("title", "Close Review");
+                            @:$("#review-state-icon").addClass("fa fa-toggle-off");
+                            @:$("#review-state-icon").removeClass("fa fa-toggle-on");
+                        }
                     </script>
                     <button title="Delete review." type="button" id="delete-review" class="lightbox-button btn"><i class="fa fa-trash" id="review-delete"></i></button>
                 }
@@ -79,25 +82,57 @@
     </div>
 
 
-<div class="row">
-    @if (Model.ScreenIds.Count > 1)
-    {
+    <div class="row">
+        <button class="lightbox-button btn" id="new-Screen">New Screen</button>
+        <script>
+        $(document).ready(function () {
+            var url = '@Url.Action("_CreatePartial", "Images", new { newScreen = true, screenId = -1 })'
+            $('#new-Screen').on('click', function () {
 
-        <div class="col-lg-12 col-md-10">
-            <div class="cover-container" style="border:solid;">
-                @foreach (var id in Model.ScreenIds)
-                {
-                    <div class="cover-item" id="@id" style="cursor: pointer;">
-                        <span id="@id" class="state"></span>
-                    </div>
-                }
+                var mainDiv = document.createElement("div");
+                $(mainDiv).addClass("quick-create-overlay overlay");
+                $(mainDiv).load(url);
+                $(mainDiv).appendTo(".body-content");
+            });
+        });
+        </script>
+
+        @if (Model.ScreenIds.Count > 1 || Model.PreviousVersions.Count > 0)
+        {
+
+            <div class="col-lg-12 col-md-10">
+                <div class="cover-container">
+                    @foreach (var id in Model.ScreenIds)
+                    {
+                        <div class="cover-item" id="@id" style="cursor: pointer;">
+                            <span id="@id" class="state"></span>
+                        </div>
+                    }
+                </div>
             </div>
-        </div>
-    }
+        }
+
+        @if (Model.PreviousVersions.Count > 0)
+        {
+            <div class="col-lg-12 col-md-10">
+                <div class="version-cover-container">
+
+                    @{
+                        foreach (var sID in Model.PreviousVersions)
+                        {
+                            <div class="version-cover-item" id="@sID" style="cursor: pointer;">
+                                <span id="@sID" class="state"></span>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+       }
+
         <div class="reviewers-section">
             <div>
                 @if (Model.Review.CreatorId == User.GetProfileId())
-                { 
+                {
                     <div id="new-reviewees-section">
                         <button title="Select review reviewers." type="button" id="select_reviewers" class="lightbox-button btn" style="width:100%;">Select Reviewers</button>
                     </div>
@@ -111,7 +146,7 @@
                 <div id="reviewees-section">
                 </div>
 
-                
+
 
                 <!-- modal -->
                 <div id="add-reviewees-modal" class="add-reviewees-modal">
@@ -149,7 +184,7 @@
                                                 <div class="col-xs-1 col-md-1 text-center">
                                                     <input id="reviewer-@i" type="checkbox"
                                                            @{ var match = Model.Reviewees.Select(u => u.UserId).ToList().FirstOrDefault(uList => uList.Contains(userList[i].Id)); if (match != null) { @: checked
-                                                                                                                       } } />
+                                                                                                                                                                                                                                             } } />
                                                 </div>
 
                                                 <div class="col-xs-2 col-md-2">
@@ -163,9 +198,9 @@
                                                 </div>
 
                                             </div>
-                                                                   }
-                                                               }
-                                                               }
+        }
+    }
+    }
                             }
                         </div>
 
@@ -215,6 +250,7 @@
     </div>
 
 
+
     <hr />
 <div id="screen-container">
     @{
@@ -250,6 +286,7 @@
 
 
 
+
 <script>
 
     function createViewModels(id) {
@@ -275,9 +312,8 @@
             addComDates();
         });
     });
-
-
 </script>
+
 <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
 <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 

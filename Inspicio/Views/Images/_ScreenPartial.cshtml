@@ -24,7 +24,7 @@
     </div>
 </div>
 
-<h3><u>@Model.screenData.Screen.Title</u></h3>
+<h3 id="current_screen_title" ><u>@Model.screenData.Screen.Title</u></h3>
 
 <div id="image-description">
     <div id="description-section">
@@ -49,6 +49,18 @@
                     <button title="Delete this screen from the review." type="button" id="delete" class="lightbox-button btn"><i class="fa fa-trash"></i><p class="screen_btn">Delete</p></button>
                 }
                 <button title="TODO!! Upload a new verison of this screen." type="button" id="new_version" class="lightbox-button btn"><i class="fa fa-plus-square"></i><p class="screen_btn">New version</p></button>
+                <script>
+                    $(document).ready(function () {
+                        var url = '@Url.Action("_CreatePartial", "Images")?newScreen=' + false + '&screenId=' + $("#ScreenId").val();
+                        $('#new_version').on('click', function () {
+                        var mainDiv = document.createElement("div");
+                            $(mainDiv).addClass("quick-create-overlay overlay");
+                            $(mainDiv).load(url);
+                            $(mainDiv).appendTo(".body-content");
+                        });
+                    });
+                </script>
+
                 <script>
                     @if (Model.screenData.Screen.ScreenState == Screen.States.Closed)
                     {

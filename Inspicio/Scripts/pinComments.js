@@ -414,7 +414,7 @@ var newMap = function(mapArea,width,height,isLocal){
     else {
         setTimeout(function () {
             $("#" + mapArea).width($("#" + mapArea).parent().find("img").width());
-            $("#" + mapArea).height($("#" + mapArea).parent().find("img").height());
+            $("#" + mapArea).height( - $("#" + mapArea).parent().find("img").height());
         },900)
     }
     return map;
