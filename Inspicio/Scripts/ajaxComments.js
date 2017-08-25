@@ -158,6 +158,13 @@ $(document).ready(function () {
 
                 // remove map listener
                 self.map.mapLeaf.removeEventListener();
+
+                // hide pins
+                $("#" + self.map.mapArea).fadeOut(500);
+                self.map.mapLeaf.off('click');
+
+                // disable buton
+                $('#hide-pop').prop('disabled', true);
             }
 
             else {
@@ -168,6 +175,21 @@ $(document).ready(function () {
                     self.map.addMarkerToMap(markerObject);
                     markerObject.openPopup();
                 });
+
+                // show pins
+                if (!$("#hide-pop").hasClass("clicked")) {
+
+                    $("#" + self.map.mapArea).fadeIn(300);
+                    $("#" + self.map.mapArea).removeClass("hidden");
+                    self.map.mapLeaf.on('click', function (e) {
+                        var markerObject = new self.map.markerClass(e.latlng, self.markersArray.length);
+                        self.addMarkerToMap(markerObject);
+                        markerObject.openPopup();
+                    });
+                }
+
+                // enable button
+                $('#hide-pop').prop('disabled', false);
             }
         });
     });
@@ -267,6 +289,9 @@ var reloadMarkers = function () {
                     $("#loc-" + parent).attr("data-marker", self.map.markersArray.length);
                 }
             });
+
+            $("#" + self.map.mapArea).fadeOut(500);
+            self.map.mapLeaf.off('click');
         }
     });
 }
