@@ -149,6 +149,28 @@ $(document).ready(function () {
         $(this).toggleClass("clicked");
         self.map.popupState();
     })
+
+    $(document).on("click", "#close-side", function () {
+
+        $(".view-container").one("transitionend", function () {
+
+            if ($(".flex-sidebar").hasClass("side-hide")) {
+
+                // remove map listener
+                self.map.mapLeaf.removeEventListener();
+            }
+
+            else {
+
+                // add listerner back
+                self.map.mapLeaf.on('click', function (e) {
+                    var markerObject = new self.map.markerClass(e.latlng, self.markersArray.length, self.isLocal);
+                    self.map.addMarkerToMap(markerObject);
+                    markerObject.openPopup();
+                });
+            }
+        });
+    });
 });
 
 function replyComment(parent, area, id) {
@@ -215,40 +237,38 @@ var reloadMarkers = function () {
         method = path[1] + "/Images/GetComments";
     }
     var id = $("#ScreenId").val();
-    $.ajax(
-        {
-            type: "GET", //HTTP GET Method  
-            url: "/" + method, // Controller/View  
-            contentType: "application/json;",
-            dataType: "json",
-            data: {
-                id: id
-            },
-            success: function (data) {
-                self.map = pins.newMap("imageMap");
-                $(data).each(function () {
-                    //Check if the comment has a pin or not. (Impossible to put a comment at coords 0,0 because the map bounds start at 1,1)
-                    if (this.lat !== 0 && this.lng !== 0) {
-                        var parent;
-                        var isInitial;
-                        if (this.parentId === undefined) {
-                            parent = this.commentId;
-                            isInitial = true;
-                        }
+    $.ajax({
 
-                        else {
-                            parent = this.parentId;
-                            isInitial = false;
-                        }
-                        self.map.createMarker(this.message, this.posterProfileName, this.lat, this.lng, parent, isInitial, this.commentUrgency);
-                        //Adding a data attribute to the open pin link
-                        $("#loc-" + parent).attr("data-marker", self.map.markersArray.length);
+        type: "GET", //HTTP GET Method  
+        url: "/" + method, // Controller/View  
+        contentType: "application/json;",
+        dataType: "json",
+        data: {
+            id: id
+        },
+        success: function (data) {
+            self.map = pins.newMap("imageMap");
+            $(data).each(function () {
+                //Check if the comment has a pin or not. (Impossible to put a comment at coords 0,0 because the map bounds start at 1,1)
+                if (this.lat !== 0 && this.lng !== 0) {
+                    var parent;
+                    var isInitial;
+                    if (this.parentId === undefined) {
+                        parent = this.commentId;
+                        isInitial = true;
                     }
-                });
 
-            }
-        });
+                    else {
+                        parent = this.parentId;
+                        isInitial = false;
+                    }
+                    self.map.createMarker(this.message, this.posterProfileName, this.lat, this.lng, parent, isInitial, this.commentUrgency);
+                    //Adding a data attribute to the open pin link
+                    $("#loc-" + parent).attr("data-marker", self.map.markersArray.length);
+                }
+            });
+        }
+    });
 }
-
 
 module.exports.reloadMarkers = reloadMarkers;
