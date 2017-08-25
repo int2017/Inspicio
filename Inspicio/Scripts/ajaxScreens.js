@@ -12,12 +12,26 @@ function screenContent(id) {
                 id: id
             },
             success: function (response) {
-                $('#' + id).css("background-image", "url('" + response + "')");
+                $('#' + id).css("background-image", "url('" + response.content + "')");
+                $('#' + id).attr("title", "'" + response.title + "'");
+                if (response.state == 0) {
+                    $('#' + id + '.state').removeClass("screen-closed");
+                    $('#' + id + '.state').removeClass("fa fa-lock");
+                    $('#' + id + '.state').addClass("screen-open");
+                    $('#' + id + '.state').addClass("fa fa-unlock fa-3x");
+                }
+                else {
+                    $('#' + id).css("opacity", "0.80");
+                    $('#' + id + '.state').removeClass("fa fa-unlock");
+                    $('#' + id + '.state').removeClass("screen-open");
+                    $('#' + id + '.state').addClass("screen-closed");
+                    $('#' + id + '.state').addClass("fa fa-lock fa-3x");
+                }
             }
         });
 
 }
-function screenSelector( reviewid, id) {
+function screenSelector(reviewid, id) {
     var Id = [reviewid, id];
     $.ajax(
         {
@@ -32,9 +46,7 @@ function screenSelector( reviewid, id) {
                 $(".colorpicker").remove();
                 $("#screen-container").html(response);
                 disableThumb(false);
-                ajaxComments.reloadMarkers();
-                $(".view-container").removeClass("wide");
-                
+                reloadMarkers();
             }
         });
 }

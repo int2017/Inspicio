@@ -305,12 +305,12 @@ function mapClass(mapArea, width,height,isLocal) {
     this.mapLeaf.setView([0, 0]);
     if (this.mapLeaf.tap) this.mapLeaf.tap.disable();
 
-    //Map on click listener
-    this.mapLeaf.on('click', function (e) {
-        var markerObject = new markerClass(e.latlng, self.markersArray.length,self.isLocal);
-        self.addMarkerToMap(markerObject);
-        markerObject.openPopup();
-    });
+    ////Map on click listener
+    //this.mapLeaf.on('click', function (e) {
+    //    var markerObject = new markerClass(e.latlng, self.markersArray.length,self.isLocal);
+    //    self.addMarkerToMap(markerObject);
+    //    markerObject.openPopup();
+    //});
 
     //Required to fix the bounding of the map and stop the user from dragging the markers out of the map
     setTimeout(
@@ -374,6 +374,7 @@ function mapClass(mapArea, width,height,isLocal) {
 
     //Hide/show popups function
     //hideButton - optional button object. If passed in, the method will add / remove the appropriate classes and change it's text
+
     this.popupState = function (hideButton) {
         if ($("#" +self.mapArea).hasClass("hidden")) {
             $("#" + self.mapArea).fadeIn(300);
@@ -388,6 +389,7 @@ function mapClass(mapArea, width,height,isLocal) {
             }
         }
         else {
+
             $("#" + self.mapArea).fadeOut(500);
             self.mapLeaf.off('click');
             setTimeout(function () {

@@ -76,22 +76,6 @@ namespace Inspicio.Controllers
             return View(Reviews);
         }
 
-        // GET: Images/Details/5
-        public async Task<IActionResult> Details(int? Id)
-        {
-            if (Id == null)
-            {
-                return NotFound();
-            }
-
-            var Screen = await _context.Screens.SingleOrDefaultAsync(m => m.ScreenId == Id);
-            if (Screen == null)
-            {
-                return NotFound();
-            }
-
-            return View(Screen);
-        }
         // GET: Images/Create
         public IActionResult Create()
         {
@@ -118,12 +102,10 @@ namespace Inspicio.Controllers
                 if (CreatePageModel.ReviewTitle != null)
                 {
                     Review.Title = CreatePageModel.ReviewTitle;
-                    Review.ReviewType = Review.Type.Project;
                 }
                 else
                 {
                     Review.Title = CreatePageModel.CommentsAndScreens[0].Screen.Title;
-                    Review.ReviewType = Review.Type.Quick;
                 }
                 Review.Description = CreatePageModel.ReviewDescription;
                 if (CreatePageModel.ReviewThumbnail != null)
@@ -141,7 +123,7 @@ namespace Inspicio.Controllers
                 {
                     // Screen creation
                     s.Screen.OwnerId = _userManager.GetUserId(HttpContext.User);
-                    s.Screen.ScreenStatus = Screen.Status.Undecided;
+                    s.Screen.ScreenState = Screen.States.Open;
                     s.Screen.ReviewId = Review.ReviewId;
                     _context.Add(s.Screen);
                     foreach(var c in s.CommentList)
@@ -240,16 +222,20 @@ namespace Inspicio.Controllers
 
             ViewModel.ScreenIds = _context.Screens.Where( s => s.ReviewId == Id ).Select(s => s.ScreenId).ToList();
 
-            ViewModel.screenData.UserVotes = _context.ScreenStatus.Where(s => s.ScreenId == ViewModel.screenData.Screen.ScreenId).ToList();
-            
+            if (ViewModel.screenData != null)
+            {
+                ViewModel.screenData.UserVotes = _context.ScreenStatus.Where(s => s.ScreenId == ViewModel.screenData.Screen.ScreenId).ToList();
+            }
+            ViewModel.FullPage = true;
             return View(ViewModel);
         }
 
         public JsonResult GetScreenContentFor(int? id)
         {
             var screen = _context.Screens.Where(s => s.ScreenId == id).Select( c => c.Content).SingleOrDefault();
-
-            return Json(screen);
+            var screenTitle = _context.Screens.Where(s => s.ScreenId == id).Select(c => c.Title).SingleOrDefault();
+            var screenState = _context.Screens.Where(s => s.ScreenId == id).Select(c => c.ScreenState).SingleOrDefault();
+            return Json(new { content = screen, title = screenTitle, state = screenState });
         }
         public PartialViewResult _CreatePartial()
         {
@@ -257,8 +243,9 @@ namespace Inspicio.Controllers
             CreatePageModel.Reviewers = _context.Users.Where(u => u.Id != _userManager.GetUserId(HttpContext.User)).ToList();
             return PartialView("_CreatePartial", CreatePageModel);
         }
-            // GET: Images/View/?/screen
-            public async Task<IActionResult> _ScreenPartial(int RId,int SId)
+        // GET: Images/View/?/screen
+
+        public async Task<IActionResult> _ScreenPartial(int RId, int SId, int CommentVisibiltyState)
         {
             var ViewModel = new ViewModel();
 
@@ -290,6 +277,8 @@ namespace Inspicio.Controllers
             ViewModel.ScreenIds = _context.Screens.Where(s => s.ReviewId == RId).Select(s => s.ScreenId).ToList();
             ViewModel.screenData.UserVotes = _context.ScreenStatus.Where(s => s.ScreenId == ViewModel.screenData.Screen.ScreenId).ToList();
             ViewModel.ScreenId = SId;
+
+            ViewModel.FullPage = (CommentVisibiltyState == 0) ? false : true;
             return PartialView(ViewModel);
         }
 
@@ -330,68 +319,26 @@ namespace Inspicio.Controllers
             }
             return Json(comments);
         }
-        // POST: Images/View/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> View(int Id, [Bind("ScreenId,Content,DownRating,UpRating,Description,Title")] Screen Screen)
-        {
-
-            if (Id != Screen.ScreenId)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(Screen);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ImageExists(Screen.ScreenId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction("Index");
-            }
-            return View(Screen);
-        }
-
-        // GET: Images/Delete/5
-        public async Task<IActionResult> Delete(int? Id)
-        {
-            if (Id == null)
-            {
-                return NotFound();
-            }
-
-            var Screen = await _context.Screens.SingleOrDefaultAsync(m => m.ScreenId == Id);
-            if (Screen == null)
-            {
-                return NotFound();
-            }
-
-            return View(Screen);
-        }
 
         // POST: Images/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int Id)
+        [HttpPost]
+        public async Task<JsonResult> Delete(int Id)
         {
             var Screen = await _context.Screens.SingleOrDefaultAsync(m => m.ScreenId == Id);
             _context.Screens.Remove(Screen);
             await _context.SaveChangesAsync();
-            return RedirectToAction("Index");
+
+            return Json( "deleted:"+Id );
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> DeleteReview(int Id)
+        {
+            var review = await _context.Review.SingleOrDefaultAsync(m => m.ReviewId == Id);
+            _context.Review.Remove(review);
+            await _context.SaveChangesAsync();
+
+            return Json(Url.Action("Index", "Images"));
         }
 
         private bool ImageExists(int Id)
@@ -471,27 +418,85 @@ namespace Inspicio.Controllers
             }
 
             await _context.SaveChangesAsync();
-            return Ok(1);
+            return Json((await _userManager.FindByIdAsync(userId)).ProfileName);
         }
 
         [HttpPost]
-        public async Task<IActionResult> CloseReview([FromBody] DataFromToggle data)
+        public JsonResult CloseReview([FromBody] DataFromToggle data)
         {
-            var userId = _userManager.GetUserId(HttpContext.User);
+            var review = _context.Review.SingleOrDefault(s => s.ReviewId == data.ReviewId );
+            review.ReviewState = (review.ReviewState == Review.States.Open) ? Review.States.Closed : Review.States.Open;
 
-            int id = data.ReviewId;
-            var review = await _context.Review.SingleOrDefaultAsync(m => m.ReviewId == id);
-
-            if (data.Open)
-            {
-                review.ReviewState = Review.States.Open;
-            }
-            else
-            {
-                review.ReviewState = Review.States.Closed;
-            }
-            await _context.SaveChangesAsync();
-            return Ok(1);
+            _context.SaveChangesAsync();
+            return Json(review.ReviewState);
         }
+
+        [HttpPost]
+        public JsonResult Toggle_ScreenState(int? id)
+        {
+            var screen = _context.Screens.SingleOrDefault(s => s.ScreenId == id);
+            screen.ScreenState = (screen.ScreenState == Screen.States.Open) ? Screen.States.Closed : Screen.States.Open;
+
+            _context.SaveChangesAsync();
+            return Json( screen.ScreenState );
+        }
+
+
+
+        public class UpdatingUser
+        {
+            public int ScreenId { get; set; }
+            public int ReviewId { get; set; }
+            public string[] ToRemove { get; set; }
+            public string[] ToAdd { get; set; }
+        }
+        [HttpPost]
+        public async Task<JsonResult> Update_Reviewers([FromBody] UpdatingUser users)
+        {
+            var accessList = _context.Access.Where(r => r.ReviewId == users.ReviewId).ToList();
+            var userScreenList = _context.ScreenStatus.Where(s => s.ScreenId == users.ScreenId).ToList();
+            foreach (var uId in users.ToRemove)
+            {
+                var user = accessList.Find(r => r.UserId == uId);
+                _context.Access.Remove(user);
+                
+                var status = userScreenList.Find(r => r.UserId == uId);
+                _context.ScreenStatus.Remove(status);
+            }
+
+            foreach (var uId in users.ToAdd)
+            {
+                var ReviewerEntry = new Access();
+
+                ReviewerEntry.UserId = uId;
+                ReviewerEntry.ReviewId = users.ReviewId;
+                _context.Access.Add(ReviewerEntry);
+
+                var ScreenStatus = new ScreenStatus();
+                ScreenStatus.ScreenId = users.ScreenId;
+                ScreenStatus.UserId = uId;
+                ScreenStatus.Status = ScreenStatus.PossibleStatus.Undecided;
+                _context.Add(ScreenStatus);
+            }
+
+            await _context.SaveChangesAsync();
+
+            accessList = _context.Access.Where(r => r.ReviewId == users.ReviewId).ToList();
+            var reviewers = new List<object>();
+            foreach (var u in accessList)
+            {
+                var user = (await _userManager.FindByIdAsync(u.UserId));
+                var currentrating = _context.ScreenStatus.Where(s => s.ScreenId == users.ScreenId && s.UserId == u.UserId).FirstOrDefault();
+                reviewers.Add(new
+                {
+                    profileName = user.ProfileName,
+                    avatar = user.ProfilePicture,
+                    rating = (currentrating == null ? "null" : currentrating.Status.ToString())
+                });
+            }
+
+            return Json(reviewers);
+        }
+
     }
 }

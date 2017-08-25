@@ -1,3 +1,65 @@
+
+.screen-open {
+    color: #5cb85c;
+    border-color: #4cae4c;
+    font-size: 50px;
+    opacity: 1.0;
+    margin-right: -7px;
+    margin-bottom: -11px
+}
+.screen-closed {
+    color: #d9534f;
+    border-color: #d43f3a;
+    font-size: 100px;
+    opacity: 0.99;
+    margin-right: -7px;
+    margin-bottom: -11px
+}
+
+#project-info-btn{
+    margin-left: 467px;
+}
+
+i.glyphicon.glyphicon-map-marker {
+    font-size: 20px;
+}
+
+i.fa, span#screen-state-icon {
+    font-size: 20px;
+}
+
+.modal-content{
+    height: auto;
+}
+
+button#screen-state-toggle {
+    height: 51px;
+}
+
+button#review-state-toggle {
+    font-size: 25px;
+    width: 170px;
+}
+
+button#delete-review {
+    background-color: #d9534f;
+    border-color:#d43f3a 
+}
+
+button#delete {
+    background-color: #d9534f;
+    border-color: #d43f3a
+}
+
+
+i.fa.fa-trash {
+    font-size: 20px;
+}
+
+#review-delete{
+    font-size: 40px;
+}
+
 #loginsection,
 #registersection {
     font-size: 30px;
@@ -75,7 +137,6 @@ div.colorpicker {
 }
 
 .cover-container {
-    height: 180px;
     width: 100%;
     white-space: nowrap;
     overflow-x: auto;
@@ -84,7 +145,9 @@ div.colorpicker {
 
 .cover-item {
     position: relative;
-    display: inline-block;
+    display: inline-flex;
+    justify-content: flex-end;
+    align-items: flex-end;
     margin: 8px 8px;
     box-shadow: 2px 2px 4px #bbb;
     border-top-right-radius: 4px;
@@ -96,6 +159,9 @@ div.colorpicker {
     background-size: cover;
 }
 
+.reviewers-item {
+
+}
 
 hr {
     border-color: #e6e6e6;
@@ -514,7 +580,7 @@ body .dropzone .dz-preview .dz-image {
 }
 
 #thumb-container {
-    padding: 15px 0;
+
 }
 
     #thumb-container i,#view-project-info i {
@@ -528,7 +594,7 @@ body .dropzone .dz-preview .dz-image {
     position: relative;
 }
 
-body div.mapContainer {
+#imageMap {
     position: absolute;
     background: transparent;
     overflow: visible;
@@ -613,8 +679,7 @@ nav.navbar.navbar-inverse.navbar-fixed-top {
     }
 
 .image-controls {
-    background-color: rgb(62, 62, 62);
-    z-index: 5000;
+    z-index: 5;
     margin: 0 auto;
     border-radius: 3px;
     max-width: 700px;
@@ -652,8 +717,9 @@ nav.navbar.navbar-inverse.navbar-fixed-top {
 
 .image-controls .btn {
     margin: 5px auto;
-    width: 30%;
-    height: 40px;
+    margin-left:-17%;
+    width: 100%;
+    display:block;
     -webkit-box-shadow: 0px 0px 41px -6px rgba(0, 0, 0, 0.5);
     -moz-box-shadow: 0px 0px 41px -6px rgba(0, 0, 0, 0.5);
     box-shadow: 0px 0px 41px -6px rgba(0, 0, 0, 0.5);
@@ -689,7 +755,7 @@ input:focus {
     position: absolute;
     width: 72%;
     right: 0;
-    padding: 40px;
+    padding: 15%;
     margin: auto;
 }
 
@@ -700,8 +766,11 @@ input:focus {
     -moz-transition: all 0.3s ease-in-out;
     -webkit-transition: all 0.3s ease-in-out;
     border: 1px solid #cccccc;
-    width: 80px;
-    margin: 0 10px 10px 0;
+    margin: 0 0px 5px 0
+}
+
+.screen_btn {
+    margin: -5px 0 0px;
 }
 
     .lightbox-button:hover,.clicked {
@@ -725,7 +794,8 @@ input:focus {
 }
 
 select#comment-date {
-    max-width: 150px;
+    max-width: 75%;
+    align-content:center;
     display: inline;
 }
 
@@ -746,10 +816,6 @@ select#comment-date {
         transform: rotate(0deg);
     }
 
-.side-hide #comment-section {
-    display: none;
-}
-
 .side-hide li#close-side i {
     transform: rotate(180deg);
     transition: all 0.3s linear;
@@ -763,19 +829,60 @@ select#comment-date {
     -webkit-transition: width 0.3s linear;
 }
 
+.image-controls {
+    position: fixed;
+    right: 0;
+    margin-bottom: 1%;
+    bottom: 0
+}
+
+
+
+.reviewers-section {
+    right: 0;
+    position: fixed;
+    width: 12%;
+    margin-right: 1.8%;
+    top: 9.5%;
+}
+
+#reviewees-section {
+    overflow-y: auto;
+    height: 175px;
+}
+
+.reviewers-section-row {
+    margin: 1px;
+   
+}
+
+.reviewers-section-names {
+    display: inline-table;
+    margin: 0 0 5px 0;
+    width: 66%;
+}
+#reviewers-avatar {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+    
 .view-container.wide {
-    padding-left:75px;
-    width: 100%;
-    transition: all 0.3s linear;
-    -moz-transition: all 0.3s linear;
-    -webkit-transition: all 0.3s linear;
+padding-left: 75px;
+width: 100%;
+height: 100%;
+transition: all 0.3s linear;
+-moz-transition: all 0.3s linear;
+-webkit-transition: all 0.3s linear;
 }
 
     .view-container.wide .img-wrapper {
         width: 100%;
+        height:100%;
     }
 
 .view-container {
+    width: 85%;
+    height:100%;
     transition: all 0.3s linear;
     -moz-transition: all 0.3s linear;
     -webkit-transition: all 0.3s linear;
@@ -816,10 +923,6 @@ select#comment-date {
 
 .comment-msg {
     min-height: 60px;
-}
-
-.container-fluid.reviewer-container .row {
-    padding: 10px;
 }
 
 .lity-close {
@@ -1061,4 +1164,8 @@ body .dropzone .dz-preview.dz-image-preview {
     .review-container{
         margin-top:100px;
     }
+}
+
+.modal-open {
+    overflow: hidden;
 }

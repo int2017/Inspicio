@@ -2,7 +2,7 @@
 
 
 //Thumbnail class
-function thumbnailClass(title, content,id,deleteScreen) {
+function thumbnailClass(title, content, id, deleteScreen) {
 
     var self = this;
 
@@ -13,7 +13,7 @@ function thumbnailClass(title, content,id,deleteScreen) {
     //Creating element vars
     this.overviewContainer = $(document.createElement('div')).addClass("col-xs-4 col-md-4").attr('id', "image-rev-" + this.id);
     this.deleteScreen = deleteScreen;
-    this.innerContainer = $(document.createElement('div')).addClass("col-xs-12 col-md-12 thumbnail-inner "+this.id).appendTo(this.overviewContainer).prop("title", this.title);
+    this.innerContainer = $(document.createElement('div')).addClass("col-xs-12 col-md-12 thumbnail-inner " + this.id).appendTo(this.overviewContainer).prop("title", this.title);
     this.img = $(document.createElement('img')).attr('src', this.content).appendTo(self.innerContainer);
     this.outerContainer = $(document.createElement("div")).addClass("col-xs-4 col-md-3").attr("id", "image-" + this.id).append($(this.innerContainer).clone().append(this.deleteScreen));
 
@@ -31,7 +31,7 @@ function thumbnailClass(title, content,id,deleteScreen) {
 }
 
 //Screen class
-function screenClass(id,title,description,content) {
+function screenClass(id, title, description, content) {
 
     var self = this;
 
@@ -39,8 +39,8 @@ function screenClass(id,title,description,content) {
     this.id = id;
 
     //Variables required for a screen
-    this.screenContent=content;
-    this.screenTitle=title;
+    this.screenContent = content;
+    this.screenTitle = title;
     this.screenDescription = description;
     this.deleteScreen = $(document.createElement('a')).addClass("delete-screen").html("<i class='fa fa-trash-o' aria-hidden='true'></i>");
 
@@ -59,7 +59,7 @@ function screenClass(id,title,description,content) {
     }
 
     //Comment list belonging to that screen
-    this.commentList =[]
+    this.commentList = []
 }
 
 //Review class
@@ -80,7 +80,7 @@ function reviewClass() {
 
     this.resetButton = $("#reset").click(function () {
         self.clearScreenFields();
-        
+
     });
 
     //Variables for controlling the fields
@@ -89,14 +89,14 @@ function reviewClass() {
     // "True" - mapRequired
     this.screenDropzone = dropzone.createDropzone("screenDropzone", true, "screenMap", this.addScreenButton, this.screenTitleField, $("#hide-pop"));
     this.thumbnailDropzone = dropzone.createDropzone("projectThumbnailDropzone");
-    
+
     this.projectTitleField = $("#project-title").on("blur", function () {
         self.projectTitle = this.value;
     });
     this.projectDescriptionField = $("#project-description").on("blur", function () {
         self.projectDescription = this.value;
     });
-   
+
     this.clearScreenFields = function () {
         $(self.screenTitleField).off();
         $(self.screenDescriptionField).off();
@@ -118,7 +118,7 @@ function reviewClass() {
 
         if ($(this).hasClass("ready")) {
             //Removing "Edit" listeners
-           
+
 
             //New screen object
             var newScreen = new screenClass(self.projectScreens.length, $(self.screenTitleField).val(), $(self.screenDescriptionField).val(), $(self.screenDropzone.b64input).val());
@@ -128,9 +128,9 @@ function reviewClass() {
             $(self.screenDropzone.map.markersArray).each(function () {
                 $(this.popupObject.commentList).each(function (i) {
                     screenCommentList.push(this);
-                } )
+                })
             })
-            
+
             newScreen.commentList = screenCommentList;
             self.projectScreens.push(newScreen);
             //Clearing the fields
@@ -156,16 +156,16 @@ function reviewClass() {
         setTimeout(function () {
             $(screen.commentList).each(function () {
                 //isLocal - true
-                self.screenDropzone.map.createMarker(this.message, this.user, this.location.lat, this.location.lng, this.parent, this.isInitial, this.urgency, true);  
+                self.screenDropzone.map.createMarker(this.message, this.user, this.location.lat, this.location.lng, this.parent, this.isInitial, this.urgency, true);
 
             })
         }, 1000)
-        
+
     }
 
     //Adding listeners to the thumbnail of a screen. Had to be put here because access to the fields is neccessary.
     this.addThumbnailListeners = function (screen) {
-       
+
         $(self.saveChangesButton).off();
         $(".thumbnail-inner." + screen.id).on("click", function () {
             $(".screen").click();
@@ -182,29 +182,29 @@ function reviewClass() {
                 $(document).on("commentAdded", function (e) {
                     self.fieldListeners(screen)
                 })
-            },1200)
+            }, 1200)
             $(document).on("draggedMarker", function (e) {
                 self.fieldListeners(screen)
             })
-            
+
         })
     }
-    this.fieldListeners = function (screen ,newComments) {
-       if ($(self.saveChangesButton).slideDown().is(":hidden") && (!screen.screenDescription.equals($(self.screenDescriptionField).val()) || !screen.screenTitle.equals($(self.screenTitleField).val()))) {
+    this.fieldListeners = function (screen, newComments) {
+        if ($(self.saveChangesButton).slideDown().is(":hidden") && (!screen.screenDescription.equals($(self.screenDescriptionField).val()) || !screen.screenTitle.equals($(self.screenTitleField).val()))) {
             $(self.saveChangesButton).slideDown();
         }
-       $(self.saveChangesButton).click(function () {
-           screen.commentList = [];
-           $(self.screenDropzone.map.markersArray).each(function () {
-               $(this.popupObject.commentList).each(function () {
-                   screen.commentList.push(this);
-               })
-           })
-           self.projectScreens[screen.id].updateScreen($(self.screenTitleField).val(), $(self.screenDescriptionField).val());        
-           $(this).unbind("click");
+        $(self.saveChangesButton).click(function () {
+            screen.commentList = [];
+            $(self.screenDropzone.map.markersArray).each(function () {
+                $(this.popupObject.commentList).each(function () {
+                    screen.commentList.push(this);
+                })
+            })
+            self.projectScreens[screen.id].updateScreen($(self.screenTitleField).val(), $(self.screenDescriptionField).val());
+            $(this).unbind("click");
             self.clearScreenFields();
         })
-       
+
     }
 
     //Submit review function
@@ -212,10 +212,10 @@ function reviewClass() {
 
         //Removing deleted screens
         var finalScreenList = [];
-        
+
         $(self.projectScreens).each(function () {
             if (this.id > -1) {
-                
+
                 var finalScreen = {
                     Title: this.screenTitle,
                     Description: convertToHTML(this.screenDescription),
@@ -238,7 +238,7 @@ function reviewClass() {
             }
         })
         //Adding all selected reviewers to the list
-        var reviewers =[];
+        var reviewers = [];
         $(".reviewer-info input[type='checkbox']").each(function (index) {
             if ($(this).is(":checked")) {
 

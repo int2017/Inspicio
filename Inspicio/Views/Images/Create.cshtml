@@ -239,5 +239,18 @@
             })
         }
 
+    $('#project-description').on('blur', function (e) {
+
+        $("#Project_DescriptionHTML").html(convertToHTML($("#project-description").val()));
+    });
+
     </script>
     <script type="text/javascript" src="~/dist/multipleImages.bundle.js"></script>
+
+<style>
+
+    #Project_DescriptionHTML, #Image_DescriptionHTML {
+        display:none;
+    }
+
+</style>

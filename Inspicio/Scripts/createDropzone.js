@@ -7,8 +7,8 @@ function dropzoneComments() {
 
 //Dropzone class
 //mapRequired (bool) - determines if the dropzone will implement a map for pinning comments
-function dropzoneClass(area, mapRequired, mapArea, addImageButton , titleField,hidePopupsButton) {
-    
+function dropzoneClass(area, mapRequired, mapArea, addImageButton, titleField, hidePopupsButton) {
+
     //Additional variable to be used in functions
     var self = this;
 
@@ -53,28 +53,28 @@ function dropzoneClass(area, mapRequired, mapArea, addImageButton , titleField,h
     }
 
     //Dropzone element
-    this.dropzoneDrop = new Dropzone("#"+area, {
+    this.dropzoneDrop = new Dropzone("#" + area, {
         maxFiles: 1,
         autoProcessQueue: false,
         thumbnailWidth: null,
         thumbnailHeight: null,
         init: function () {
             this.on("addedfile", function (file) {
-                
+
                 if (this.files[1]) {
                     this.removeFile(this.files[0]);
                 }
                 file.previewElement.addEventListener("click", function () {
-                    $("#"+self.area).click();
+                    $("#" + self.area).click();
                 });
                 $("#" + area).css("width", "auto");
 
                 //If map is required, initialize it
                 if (self.mapRequired) {
                     setTimeout(function () {
-                        self.initMap(file.width,file.height);
+                        self.initMap(file.width, file.height);
                     }, 1000)
-                    
+
                 }
 
                 //If the type is string (b64),the try will fail,  do not convert it and just change the value of b64 input, otherwise convert it and add ready class to the button
@@ -85,14 +85,14 @@ function dropzoneClass(area, mapRequired, mapArea, addImageButton , titleField,h
                     if (self.addImageButton && (!$(self.addImageButton).hasClass("ready"))) {
                         $(self.addImageButton).addClass("ready");
                     }
-                    if (self.screenTitleField.val() == "" ) {
-                        $(self.screenTitleField).val(file.name.split(".")[0] );
+                    if (self.screenTitleField.val() == "") {
+                        $(self.screenTitleField).val(file.name.split(".")[0]);
                     }
                 }
                 catch (e) {
                     self.b64input.value = file;
                 }
-               
+
             });
         },
 
@@ -101,7 +101,7 @@ function dropzoneClass(area, mapRequired, mapArea, addImageButton , titleField,h
     });
 
     //Function to programatically add a file to the dropzone
-    this.addFile = function (file,title) {
+    this.addFile = function (file, title) {
         self.dropzoneDrop.removeAllFiles();
         $(area).html("");
         var myImage = {
@@ -109,8 +109,8 @@ function dropzoneClass(area, mapRequired, mapArea, addImageButton , titleField,h
         }
         self.dropzoneDrop.emit("addedfile", myImage);
         self.dropzoneDrop.emit("thumbnail", myImage, file);
-        self.dropzoneDrop.files.push(myImage); 
-        
+        self.dropzoneDrop.files.push(myImage);
+
     }
 
     //A function to reset the dropzone area to initial state
@@ -134,16 +134,16 @@ function dropzoneClass(area, mapRequired, mapArea, addImageButton , titleField,h
             catch (e) {
 
             }
-            
+
             var clone = $("#" + self.mapArea).clone();
             var parent = $("#" + self.mapArea).parent();
             $("#" + self.mapArea).remove();
-            $(clone).removeClass("leaflet-container leaflet-touch leaflet-fade-anim").prependTo(parent).css("height",0).css("width","0");     
+            $(clone).removeClass("leaflet-container leaflet-touch leaflet-fade-anim").prependTo(parent).css("height", 0).css("width", "0");
         }
     }
 
     //Initializing map
-    this.initMap = function (width,height) {
+    this.initMap = function (width, height) {
         $(document).off("click", ".popup-btn");
         $(self.pinsEnabler).off();
         $(self.pinsEnabler).removeClass("disabled");
@@ -153,11 +153,11 @@ function dropzoneClass(area, mapRequired, mapArea, addImageButton , titleField,h
 
         //Boolean value to determine if updates to the map are being sent to the database
         //isLocal - true
-        self.map = pins.newMap(self.mapArea, width,height,true);
+        self.map = pins.newMap(self.mapArea, width, height, true);
         $(self.pinsEnabler).on("click", function () {
             self.map.popupState(this);
         })
-        $(document).on("click",".popup-btn",function () {
+        $(document).on("click", ".popup-btn", function () {
             var id = $(this).attr("id").slice(4);
             var parent;
             var isInitial = false;
@@ -168,12 +168,12 @@ function dropzoneClass(area, mapRequired, mapArea, addImageButton , titleField,h
             else {
                 isInitial = false;
                 parent = $(this).data("parent");
-               
+
             }
             self.map.markersArray[id].markerLeaf.dragging.enable();
             self.map.markersArray[id].popupObject.addRow($(".main-user").html(), $(".popup-textarea").val(), parent, isInitial, false);
         })
-        
+
     }
 }
 
