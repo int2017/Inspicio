@@ -24,11 +24,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="Scripts\ajaxScreens.js" />
+    <Content Include="Scripts\multipleImages.js" />
+    <Content Include="Scripts\to-markdown.js" />
     <Content Include="wwwroot\css\create.css" />
     <Content Include="wwwroot\css\home.css" />
-    <Content Include="wwwroot\css\JavaScript.js" />
+    <Content Include="wwwroot\css\review_information.css" />
     <Content Include="wwwroot\css\site.css" />
-    <Content Include="wwwroot\css\thumbs.js" />
     <Content Include="wwwroot\images\add.svg" />
     <Content Include="wwwroot\images\create.svg" />
     <Content Include="wwwroot\images\Inspicio.svg" />
@@ -40,8 +42,6 @@
     <Content Include="wwwroot\images\thumbdown.jpg" />
     <Content Include="wwwroot\images\thumbmid.jpg" />
     <Content Include="wwwroot\images\thumbup.jpg" />
-    <Content Include="wwwroot\js\ajaxComments.js" />
-    <Content Include="wwwroot\js\ajaxScreens.js" />
     <Content Include="wwwroot\js\background-selector.js" />
     <Content Include="wwwroot\js\chatBot.js" />
     <Content Include="wwwroot\js\createDropzone.js" />
@@ -52,6 +52,7 @@
     <Content Include="wwwroot\js\less\animated.less" />
     <Content Include="wwwroot\js\less\bordered-pulled.less" />
     <Content Include="wwwroot\js\less\core.less" />
+    <Content Include="wwwroot\js\less\dropdown.js" />
     <Content Include="wwwroot\js\less\fixed-width.less" />
     <Content Include="wwwroot\js\less\font-awesome.less" />
     <Content Include="wwwroot\js\less\icons.less" />
@@ -66,12 +67,9 @@
     <Content Include="wwwroot\js\login_register.js" />
     <Content Include="wwwroot\js\markdownConverter.js" />
     <Content Include="wwwroot\js\homepageScripts.js" />
-    <Content Include="wwwroot\js\multiple-images.js" />
-    <Content Include="wwwroot\js\multipleImages.js" />
-    <Content Include="wwwroot\js\pinComments.js" />
     <Content Include="wwwroot\js\ajaxThumbs.js" />
     <Content Include="wwwroot\js\quickCreate.js" />
-    <Content Include="wwwroot\js\replies.js" />
+    <Content Include="wwwroot\js\review_view.js" />
     <Content Include="wwwroot\js\Search.js" />
     <Content Include="wwwroot\js\sort-comments.js" />
     <Content Include="wwwroot\js\SortTable.js" />

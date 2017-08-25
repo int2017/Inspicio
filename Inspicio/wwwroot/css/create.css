@@ -1,9 +1,4 @@
-﻿.btn {
-    min-width: 120px;
-    padding: 6px;
-    font-size: 1.3em;
-}
-
+﻿
 input[type='text'], textarea.form-control {
     border-radius: 2px;
     border: none;
@@ -33,7 +28,9 @@ ul {
     list-style: none;
     float: left;
 }
-
+.btn.popup-btn{
+    min-width:initial;
+}
 #Image_DescriptionHTML {
     display: none;
 }

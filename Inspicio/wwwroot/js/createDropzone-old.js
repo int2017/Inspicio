@@ -5,6 +5,8 @@ converts it to base64encoding.This is then used to
 set a temp input tag value.This is then sent to 
 the server when create new is pressed.
 */
+
+
     function encodeBase64(file,area) {
 
         if (file) {
@@ -15,7 +17,10 @@ the server when create new is pressed.
                 for (var i = 0; i < l; i++) {
                     $(images[i]).remove();
                 }
-                document.getElementById("b64"+area).value = e.target.result;
+                document.getElementById("b64" + area).value = e.target.result;
+                if ($("#Image_Title").val() == "") {
+                    $("#Image_Title").val((file.name).replace(/\.[^/.]+$/, ""));
+                }
                 var image = document.createElement("img");
                 
                 image.src = e.target.result;
@@ -40,7 +45,7 @@ the server when create new is pressed.
         autoProcessQueue: false,
         init: function () {
             this.on("addedfile", function (file) {
-                if (this.files[1] != null) {
+                if (this.files[1] ) {
                     try {
                         this.removeFile(this.files[0]);
                     }
@@ -62,7 +67,7 @@ the server when create new is pressed.
         autoProcessQueue: false,
         init: function () {
             this.on("addedfile", function (file) {
-                if (this.files[1] != null) {
+                if (this.files[1]) {
                     try {
                         this.removeFile(this.files[0]);
                     }

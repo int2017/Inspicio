@@ -1,3 +1,21 @@
+
+.screen-open {
+    color: #5cb85c;
+    border-color: #4cae4c;
+    font-size: 50px;
+    opacity: 1.0;
+    margin-right: -7px;
+    margin-bottom: -11px
+}
+.screen-closed {
+    color: #d9534f;
+    border-color: #d43f3a;
+    font-size: 100px;
+    opacity: 0.99;
+    margin-right: -7px;
+    margin-bottom: -11px
+    }
+    
 .popover.primary {
     border-color: #337ab7;
 }
@@ -16,9 +34,52 @@
     border-color: #d6e9c6;
 }
 
+#project-info-btn{
+    margin-left: 467px;
+}
     .popover.success > .arrow {
         border-top-color: #d6e9c6;
     }
+
+i.glyphicon.glyphicon-map-marker {
+    font-size: 20px;
+}
+
+i.fa, span#screen-state-icon {
+    font-size: 20px;
+}
+
+.modal-content{
+    height: auto;
+}
+
+button#screen-state-toggle {
+    height: 51px;
+}
+
+button#review-state-toggle {
+    font-size: 25px;
+    width: 170px;
+}
+
+button#delete-review {
+    background-color: #d9534f;
+    border-color:#d43f3a 
+}
+
+button#delete {
+    background-color: #d9534f;
+    border-color: #d43f3a
+}
+
+
+i.fa.fa-trash {
+    font-size: 20px;
+}
+
+#review-delete{
+    font-size: 40px;
+}
 
     .popover.success > .popover-title {
         color: #3c763d;
@@ -95,18 +156,28 @@ h4, .h4 {
     width: 270px;
     cursor: pointer;
     text-align: center;
-    padding: 5px;
-    color:white;
-    border:3px solid;
-    border-color: white;
+    border: 1px solid black;
+    border-bottom: none;
 }
 
 #loginsection {
-    background-color: black;
+    color: black;
+    background-color: white;
 }
 
 #registersection{
     background-color: lightgray;
+}
+
+#view-dropdown{
+    margin-left: 970px;
+    position:absolute;
+    padding: 5px;
+    margin: 10px, 10px,10px,10px;
+}
+
+.hidden{
+    display: none; 
 }
 
     #loginsection:hover {
@@ -124,6 +195,7 @@ h4, .h4 {
 #background-selector {
     position: absolute;
     height: 100%;
+    width:100%;
     top: 0;
     left: 0;
     z-index: -1;
@@ -143,13 +215,30 @@ div.colorpicker {
     padding: 5px 0;
 }
 
+
+
+#registersection:hover {
+    background-color: grey;
+}
+
+
+
+#registersection {
+    color: lightgrey;
+    background-color: #404040;
+    padding: 5px;
+}
+
 #loginformmain {
+    border: 1px solid black;
     display: block;
-    align-self: center;
 }
 
 #registerform {
     display: none;
+    background-color: #404040;
+    color: lightgrey;
+    border: 1px solid black;
 }
 
 #reg-btn, #login-btn {
@@ -164,19 +253,37 @@ div.colorpicker {
 }
 
 .cover-container {
-    height: 180px;
     width: 100%;
+    border: none;
     white-space: nowrap;
     overflow-x: auto;
     overflow-y: hidden;
 }
 
+.version-cover-item {
+    position: relative;
+    display: inline-flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    margin: 8px 8px;
+    /*box-shadow: 2px 2px 4px black;*/
+    border-radius: 6px;
+    width: 50px;
+    height: 50px;
+    vertical-align: bottom;
+    background-position: top left;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
 .cover-item {
     position: relative;
-    display: inline-block;
+    display: inline-flex;
+    justify-content: flex-end;
+    align-items: flex-end;
     margin: 8px 8px;
-    box-shadow: 2px 2px 4px #bbb;
-    border-top-right-radius: 4px;
+    /*box-shadow: 2px 2px 4px black;*/
+    border-radius: 10px;
     width: 100px;
     height: 100px;
     vertical-align: bottom;
@@ -185,6 +292,9 @@ div.colorpicker {
     background-size: cover;
 }
 
+.reviewers-item {
+
+}
 
 hr {
     border-color: #e6e6e6;
@@ -219,6 +329,8 @@ body {
     table-layout: fixed;
     border-collapse:collapse;
 }
+    margin-top:50px;
+    margin-bottom: 50px;
 
 #loginformouter{
     border: 1px solid;
@@ -247,6 +359,7 @@ body {
 #table th {
     padding-bottom: 5px;
     border-collapse: collapse;
+    text-align: center;
 }
 
 loginsection {
@@ -383,17 +496,21 @@ a.delete-screen {
     box-shadow: 0px 0px 19px 5px rgba(0, 0, 0, 0.08);
 }
 .thumbnail-inner {
-    
+    cursor: pointer;
     display: flex;
+    color: #b5b5b5;
     align-items: center;
     justify-content: center;
-    background-color: #e0e0e0;
+    background: rgb(238,238,238); /* Old browsers */
+    background: -moz-linear-gradient(top, rgba(238,238,238,1) 0%, rgba(204,204,204,1) 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top, rgba(238,238,238,1) 0%,rgba(204,204,204,1) 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom, rgba(238,238,238,1) 0%,rgba(204,204,204,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#eeeeee', endColorstr='#cccccc',GradientType=0 ); /* IE6-9 */
     border-radius: 4px;
     padding: 0;
     position: relative;
     margin-bottom: 15px;
     overflow: hidden;
-   
 }
 
     .thumbnail-inner img {
@@ -402,9 +519,29 @@ a.delete-screen {
 #add-img {
     transition: all 0.3s ease-in;
 }
-#add-img.ready {
-        color: #437888;
-        transition:all 0.4s ease-out;
+#add-img .thumbnail-inner{
+    cursor:default;
+}
+.dropzone .dz-preview:hover .dz-image img {
+    -webkit-transform: none !important;
+    -moz-transform: none !important;
+    -ms-transform: none !important;
+    -o-transform: none !important;
+    transform: none !important;
+    -webkit-filter: none !important;
+    filter: none !important;
+}
+.ready-text {
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    text-align: center;
+}
+    #add-img.ready > .thumbnail-inner {
+        cursor:pointer;
+        color: rgb(150, 179, 182);
+        transition: all 0.4s ease-out;
+        border: 2px solid #96b3b6;
     }
 #thumbnail-container > div:nth-child(6n) {
     margin-right: 0;
@@ -426,6 +563,8 @@ body .dropzone .dz-preview .dz-image {
 .dropzone {
     border-radius: 2px !important;
     padding: 0;
+    max-width:100%;
+    position:relative;
     width: 100%;
     background-color: rgba(193, 193, 193, 0.49) !important;
     display: inline-block;
@@ -483,6 +622,7 @@ body .dropzone .dz-preview .dz-image {
 [id^='reviewer-project-']{
     font-size:16px;
 }
+
 .edit-project{
     padding:10px;
     display:inline-block;
@@ -510,12 +650,13 @@ body .dropzone .dz-preview .dz-image {
     margin: auto;
     display: none;
     position: fixed;
-    justify-content:center;
+    justify-content: center;
     height: 100%;
     left: 0;
     top: 0;
     width: 100%;
     background-color: rgba(0, 0, 0, 0.77);
+    z-index: 2000;
 }
 .add-reviewers-overlay h3{
     margin:10px 0;
@@ -523,7 +664,9 @@ body .dropzone .dz-preview .dz-image {
 .reviewer-info:nth-child(even) {
     background-color: #fff;
 }
-
+.reviewer-info{
+    margin:0 auto !important;
+}
 #filter_reviewees_id {
     border: none;
     padding: 3px 5px;
@@ -616,14 +759,20 @@ body .dropzone .dz-preview .dz-image {
     position: absolute;
     background: transparent;
     overflow: visible;
-    z-index: 5000
+    z-index: 5000;
+    left: 0;
+    top: 0;
+    padding: 10px;
 }
 
-.leaflet-popup-content {
+#image-container >img {
+    max-width: 100%;
+}
+.leaflet-rrose-content {
     min-width: 250px;
 }
 
-    .leaflet-popup-content .comment-status {
+    .leaflet-rrose-content .comment-status {
         border: 1px solid #cccccc;
         border-top: none;
         border-radius: 4px;
@@ -691,8 +840,7 @@ nav.navbar.navbar-inverse.navbar-fixed-top {
     }
 
 .image-controls {
-    background-color: rgb(62, 62, 62);
-    z-index: 5000;
+    z-index: 5;
     margin: 0 auto;
     border-radius: 3px;
     max-width: 700px;
@@ -705,7 +853,9 @@ nav.navbar.navbar-inverse.navbar-fixed-top {
 .username {
     font-weight: 700;
 }
-
+.popup-comment > div{
+    margin:15px 0;
+}
 .btn-danger {
     background-color: #a96360;
     border-color: #8c5957;
@@ -728,8 +878,9 @@ nav.navbar.navbar-inverse.navbar-fixed-top {
 
 .image-controls .btn {
     margin: 5px auto;
-    width: 30%;
-    height: 40px;
+    margin-left:-17%;
+    width: 100%;
+    display:block;
     -webkit-box-shadow: 0px 0px 41px -6px rgba(0, 0, 0, 0.5);
     -moz-box-shadow: 0px 0px 41px -6px rgba(0, 0, 0, 0.5);
     box-shadow: 0px 0px 41px -6px rgba(0, 0, 0, 0.5);
@@ -765,7 +916,7 @@ input:focus {
     position: absolute;
     width: 72%;
     right: 0;
-    padding: 40px;
+    padding: 15%;
     margin: auto;
 }
 
@@ -776,11 +927,16 @@ input:focus {
     -moz-transition: all 0.3s ease-in-out;
     -webkit-transition: all 0.3s ease-in-out;
     border: 1px solid #cccccc;
+    margin: 0 0px 5px 0
     width: 80px;
     margin: 0 10px 10px 0;
 }
 
-    .lightbox-button:hover {
+.screen_btn {
+    margin: -5px 0 0px;
+}
+
+    .lightbox-button:hover,.clicked {
         opacity: 1;
         transition: all 0.3s ease-in-out;
         -moz-transition: all 0.3s ease-in-out;
@@ -801,7 +957,8 @@ input:focus {
 }
 
 select#comment-date {
-    max-width: 150px;
+    max-width: 75%;
+    align-content:center;
     display: inline;
 }
 
@@ -839,19 +996,60 @@ select#comment-date {
     -webkit-transition: width 0.3s linear;
 }
 
+.image-controls {
+    position: fixed;
+    right: 0;
+    margin-bottom: 1%;
+    bottom: 0
+}
+
+
+
+.reviewers-section {
+    right: 0;
+    position: fixed;
+    width: 12%;
+    margin-right: 1.8%;
+    top: 9.5%;
+}
+
+#reviewees-section {
+    overflow-y: auto;
+    height: 175px;
+}
+
+.reviewers-section-row {
+    margin: 1px;
+   
+}
+
+.reviewers-section-names {
+    display: inline-table;
+    margin: 0 0 5px 0;
+    width: 66%;
+}
+#reviewers-avatar {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+    
 .view-container.wide {
-    padding-left:75px;
-    width: 100%;
-    transition: all 0.3s linear;
-    -moz-transition: all 0.3s linear;
-    -webkit-transition: all 0.3s linear;
+padding-left: 75px;
+width: 100%;
+height: 100%;
+transition: all 0.3s linear;
+-moz-transition: all 0.3s linear;
+-webkit-transition: all 0.3s linear;
 }
 
     .view-container.wide .img-wrapper {
         width: 100%;
+        height:100%;
     }
 
 .view-container {
+    width: 85%;
+    height:100%;
     transition: all 0.3s linear;
     -moz-transition: all 0.3s linear;
     -webkit-transition: all 0.3s linear;
@@ -892,10 +1090,6 @@ select#comment-date {
 
 .comment-msg {
     min-height: 60px;
-}
-
-.container-fluid.reviewer-container .row {
-    padding: 10px;
 }
 
 .lity-close {
@@ -958,7 +1152,69 @@ select#comment-date {
     color: #e2ca84;
     font-size: 20px;
 }
-
+.create-menu {
+    position: fixed;
+    margin: 20px 0;
+    z-index: 3000;
+    padding: 10px;
+    background-color: white;
+    border-radius: 4px;
+}
+.create-menu ul{
+    padding:0;
+    list-style-type:none;
+}
+.create-a {
+    padding: 15px;
+    padding-left: 30px;
+    display: inline-block;
+    font-size: 16px;
+    color: dimgrey;
+    position: relative;
+    opacity:0.7;
+    transition:all 0.3s;
+    -webkit-transition:all 0.3s;
+}
+.create-a:hover,.create-a:active{
+    text-decoration:none;
+    color:initial;
+}
+    .create-a::before {
+        content: "";
+        position: absolute;
+        left: -1px;
+        height: 20px;
+        width: 20px;
+        top: 50%;
+        margin-top: -10px;
+        border-radius: 25px;
+        filter: saturate(0.4);
+        transition: all 0.3s;
+        -webkit-transition: all 0.3s;
+        border: 2px solid rgba(90, 90, 90, 0);
+    }
+    .create-a.project::before {
+        background-color: #e8d796
+    }
+    .create-a.screen::before {
+        background-color: #70a5b5;
+    }
+    .create-a.overview::before {
+        background-color: #87c587;
+    }
+    .create-a:hover::before {
+        transform: scale(1.2);
+        filter: saturate(0.8);
+        -webkit-filter: saturate(0.8);
+    }
+    .create-a.active{
+        opacity:1;
+    }
+        .create-a.active::before {
+            filter: saturate(1.2);
+            -webkit-filter: saturate(1.2);
+            border: 2px solid rgba(90, 90, 90, 0.31);
+        }
 #comment-section .date-header {
     color: #3c3333;
     display: flex;
@@ -970,12 +1226,16 @@ select#comment-date {
 
 .dz-image {
     border-radius: 0 !important;
+
 }
 
     .dz-image img:hover {
         cursor: pointer;
+        
     }
-
+    .dz-image img {
+        max-width: 100%;
+    }
 body .dropzone .dz-preview.dz-image-preview {
     margin: 0px;
 }
@@ -1048,6 +1308,7 @@ body .dropzone .dz-preview.dz-image-preview {
 
     .flex-sidebar {
         width: 60%;
+        z-index: 5000;
     }
 
         .flex-sidebar.side-hide {
@@ -1062,4 +1323,16 @@ body .dropzone .dz-preview.dz-image-preview {
         width: 100%;
         padding: 20px 20px 20px 75px;
     }
+}
+@media screen and (max-width: 990px) {
+    .create-menu li{
+        float:left;
+    }
+    .review-container{
+        margin-top:100px;
+    }
+}
+
+.modal-open {
+    overflow: hidden;
 }

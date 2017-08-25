@@ -130,8 +130,6 @@ namespace Inspicio.Migrations
 
                     b.Property<int>("ReviewStatus");
 
-                    b.Property<int>("ReviewType");
-
                     b.Property<string>("Thumbnail");
 
                     b.Property<string>("Title")
@@ -154,15 +152,13 @@ namespace Inspicio.Migrations
 
                     b.Property<string>("Description");
 
-                    b.Property<int>("NextScreenId");
-
-                    b.Property<int>("NextVersionId");
-
                     b.Property<string>("OwnerId");
+
+                    b.Property<int>("ParentId");
 
                     b.Property<int>("ReviewId");
 
-                    b.Property<int>("ScreenStatus");
+                    b.Property<int>("ScreenState");
 
                     b.Property<string>("Title")
                         .IsRequired()

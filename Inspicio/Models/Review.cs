@@ -29,10 +29,6 @@ namespace Inspicio.Models
         public Status ReviewStatus { get; set; }
         public enum Status { Approved, NeedsWork, Rejected, Undecided };
 
-        [EnumDataType(typeof(Type))]
-        public Type ReviewType { get; set; }
-        public enum Type { Project,Quick };
-
         public ICollection<Access> Access { get; set; }
 
         [ForeignKey("CreatorId")]

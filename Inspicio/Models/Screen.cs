@@ -14,8 +14,7 @@ namespace Inspicio.Models
 
         public int ReviewId { get; set; }
 
-        public int NextScreenId { get; set; }
-        public int NextVersionId { get; set; }
+        public int ParentId { get; set; }
 
         public string OwnerId { get; set; }
 
@@ -27,10 +26,9 @@ namespace Inspicio.Models
 
         public string Description { get; set; }
 
-        [EnumDataType(typeof(Status))]
-        public Status ScreenStatus { get; set; }
-
-        public enum Status { Approved, NeedsWork, Rejected, Undecided }
+        [EnumDataType(typeof(States))]
+        public States ScreenState { get; set; }
+        public enum States { Open, Closed };
 
         public ICollection<Comment> Comments { get; set; }
 
