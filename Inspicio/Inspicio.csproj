@@ -35,6 +35,8 @@
     <Content Include="wwwroot\images\create.svg" />
     <Content Include="wwwroot\images\Inspicio.svg" />
     <Content Include="wwwroot\images\ostrich.jpg" />
+    <Content Include="wwwroot\images\ostrichHead.svg" />
+    <Content Include="wwwroot\images\ostrichOnly.svg" />
     <Content Include="wwwroot\images\pin.svg" />
     <Content Include="wwwroot\images\searchicon.ico" />
     <Content Include="wwwroot\images\thumbdown.jpg" />
@@ -44,6 +46,8 @@
     <Content Include="wwwroot\js\chatBot.js" />
     <Content Include="wwwroot\js\createDropzone.js" />
     <Content Include="wwwroot\js\filter.js" />
+    <Content Include="wwwroot\js\clearValidation.js" />
+    <Content Include="wwwroot\js\popover.js" />
     <Content Include="wwwroot\js\jquery.initialize.js" />
     <Content Include="wwwroot\js\less\animated.less" />
     <Content Include="wwwroot\js\less\bordered-pulled.less" />
