@@ -26,6 +26,12 @@ $("#close-side").click("click", function () {
             $("#comment-section").css("display", "");
             $("#comment-date").css("display", "");
         }
+
+        var imagemapping = $("#imageMap");
+        var screencontent = $("#screenContent");
+
+        imagemapping.width(screencontent.width());
+        imagemapping.height(screencontent.height());
     })
 });
 
